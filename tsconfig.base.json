@@ -16,7 +16,8 @@
         "baseUrl": ".",
         "paths": {
             "@people-eat/web-components": ["projects/web/components/src/index.ts"],
-            "@people-eat/web-core-components": ["projects/web/core-components/src/index.ts"]
+            "@people-eat/web-core-components": ["projects/web/core-components/src/index.ts"],
+            "@people-eat/web-translations": ["projects/web/translations/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]
