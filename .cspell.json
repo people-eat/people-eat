@@ -1,8 +1,4 @@
 {
-    "ignorePaths": [
-        "node_modules",
-        "dist",
-        ".nx"
-    ],
+    "ignorePaths": ["node_modules", "dist", ".nx"],
     "words": []
 }
