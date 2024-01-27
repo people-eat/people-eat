@@ -8,6 +8,49 @@
         "lint": {
             "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"]
+        },
+        "storybook": {
+            "executor": "@nx/storybook:storybook",
+            "options": {
+                "port": 4400,
+                "configDir": "projects/web/core-components/.storybook"
+            },
+            "configurations": {
+                "ci": {
+                    "quiet": true
+                }
+            }
+        },
+        "build-storybook": {
+            "executor": "@nx/storybook:build",
+            "outputs": ["{options.outputDir}"],
+            "options": {
+                "outputDir": "dist/storybook/web-core-components",
+                "configDir": "projects/web/core-components/.storybook"
+            },
+            "configurations": {
+                "ci": {
+                    "quiet": true
+                }
+            }
+        },
+        "test-storybook": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "test-storybook -c projects/web/core-components/.storybook --url=http://localhost:4400"
+            }
+        },
+        "static-storybook": {
+            "executor": "@nx/web:file-server",
+            "options": {
+                "buildTarget": "web-core-components:build-storybook",
+                "staticFilePath": "dist/storybook/web-core-components"
+            },
+            "configurations": {
+                "ci": {
+                    "buildTarget": "web-core-components:build-storybook:ci"
+                }
+            }
         }
     }
 }
