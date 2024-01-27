@@ -2,7 +2,9 @@
     "name": "@people-eat/source",
     "version": "0.0.0",
     "license": "MIT",
-    "scripts": {},
+    "scripts": {
+        "spell:check": "cspell . --no-progress"
+    },
     "private": true,
     "devDependencies": {
         "@nx/js": "^17.2.8",
