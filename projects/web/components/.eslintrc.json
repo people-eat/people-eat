@@ -4,15 +4,21 @@
     "overrides": [
         {
             "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-            "rules": {}
+            "rules": {
+                "react/jsx-curly-brace-presence": [
+                    "error",
+                    {
+                        "props": "never",
+                        "children": "never"
+                    }
+                ]
+            }
         },
         {
-            "files": ["*.ts", "*.tsx"],
-            "rules": {}
-        },
-        {
-            "files": ["*.js", "*.jsx"],
-            "rules": {}
+            "files": ["*.stories.tsx"],
+            "rules": {
+                "react-hooks/rules-of-hooks": "off"
+            }
         }
     ]
 }
