@@ -1,0 +1,67 @@
+query GetPublicCookPageData($cookId: String!) {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+        }
+    }
+    publicCooks {
+        findOne(cookId: $cookId) {
+            cookId
+            user {
+                userId
+                firstName
+                profilePictureUrl
+            }
+            rank
+            biography
+            location {
+                latitude
+                longitude
+            }
+            city
+            travelExpenses
+            createdAt
+            languages {
+                languageId
+                title
+            }
+            menus {
+                title
+                pricePerChild
+                pricePerAdult
+                preparationTime
+                menuId
+                kitchen {
+                    kitchenId
+                    title
+                }
+                basePrice
+                basePriceCustomers
+                categories {
+                    categoryId
+                    title
+                }
+                imageUrls
+                currencyCode
+                description
+                greetingFromKitchen
+                createdAt
+            }
+        }
+    }
+    categories {
+        findAll {
+            ...CategoryOption
+        }
+    }
+    kitchens {
+        findAll {
+            ...KitchenOption
+        }
+    }
+    allergies {
+        findAll {
+            ...AllergyOption
+        }
+    }
+}

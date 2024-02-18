@@ -1,0 +1,4 @@
+fragment CategoryOption on Category {
+    categoryId
+    title
+}

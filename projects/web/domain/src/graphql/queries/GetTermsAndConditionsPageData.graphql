@@ -1,0 +1,15 @@
+query GetTermsAndConditionsPageData {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+        }
+    }
+    publicTermsUpdates {
+        findLatest {
+            termsUpdateId
+            englishText
+            germanText
+            createdAt
+        }
+    }
+}

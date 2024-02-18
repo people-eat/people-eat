@@ -1,0 +1,36 @@
+query GetPublicMenusPageData($request: FindManyPublicMenusRequest!) {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+        }
+    }
+    publicMenus {
+        findMany(request: $request) {
+            menuId
+            title
+            description
+            kitchen {
+                kitchenId
+                title
+            }
+            cook {
+                cookId
+                rank
+                user {
+                    firstName
+                    profilePictureUrl
+                }
+            }
+            categories {
+                categoryId
+                title
+            }
+            imageUrls
+            basePrice
+            basePriceCustomers
+            pricePerAdult
+            pricePerChild
+            currencyCode
+        }
+    }
+}

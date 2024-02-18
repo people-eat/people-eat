@@ -1,0 +1,4 @@
+fragment AllergyOption on Allergy {
+    allergyId
+    title
+}

@@ -1,0 +1,4 @@
+fragment KitchenOption on Kitchen {
+    kitchenId
+    title
+}

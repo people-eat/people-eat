@@ -1,0 +1,15 @@
+query GetPrivacyPolicyPageData {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+        }
+    }
+    publicPrivacyPolicyUpdates {
+        findLatest {
+            privacyPolicyUpdateId
+            englishText
+            germanText
+            createdAt
+        }
+    }
+}

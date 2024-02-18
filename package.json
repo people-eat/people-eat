@@ -5,10 +5,13 @@
     "scripts": {
         "format": "prettier --write .",
         "format:check": "prettier --check .",
+        "generate:graphql": "graphql-codegen --config projects/web/domain/codegen.ts",
         "spell:check": "cspell . --no-progress"
     },
     "private": true,
     "devDependencies": {
+        "@graphql-codegen/cli": "^5.0.2",
+        "@graphql-codegen/client-preset": "^4.2.2",
         "@nx/eslint": "^17.2.8",
         "@nx/eslint-plugin": "^17.2.8",
         "@nx/jest": "^17.2.8",
