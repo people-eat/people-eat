@@ -1,3 +1,4 @@
+export { PEBookBar, PEBookBarProps } from './book-bar/PEBookBar';
 export { CookCard, CookCardProps } from './cards/cook-card/CookCard';
 export { MenuCard, MenuCardProps } from './cards/menu-card/MenuCard';
 export { RatingCard, RatingCardProps } from './cards/rating-card/RatingCard';
