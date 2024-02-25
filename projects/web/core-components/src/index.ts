@@ -5,4 +5,5 @@ export { PEDatePicker } from './date-picker/PEDatePicker';
 export { PEFullPageSheet } from './full-page-sheet/PEFullPageSheet';
 export { PEIconButton } from './icon-button/PEIconButton';
 export { PELabelButton, PELabelButtonProps } from './label-button/PELabelButton';
+export { PELabelMultiSelection, PELabelMultiSelectionProps } from './label-multi-selection/PELabelMultiSelection';
 export { PELink } from './link/PELink';
