@@ -6,4 +6,5 @@ export { PEFullPageSheet } from './full-page-sheet/PEFullPageSheet';
 export { PEIconButton } from './icon-button/PEIconButton';
 export { PELabelButton, PELabelButtonProps } from './label-button/PELabelButton';
 export { PELabelMultiSelection, PELabelMultiSelectionProps } from './label-multi-selection/PELabelMultiSelection';
+export { PELabelSingleSelection, PELabelSingleSelectionProps } from './label-single-selection/PELabelSingleSelection';
 export { PELink } from './link/PELink';
