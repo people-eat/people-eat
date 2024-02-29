@@ -25,6 +25,9 @@
         "build-storybook": {
             "cache": true,
             "inputs": ["default", "^production", "{projectRoot}/.storybook/**/*", "{projectRoot}/tsconfig.storybook.json"]
+        },
+        "build-custom-server": {
+            "cache": true
         }
     },
     "namedInputs": {
@@ -47,7 +50,7 @@
     "tasksRunnerOptions": {
         "default": {
             "options": {
-                "cacheableOperations": ["build-storybook"]
+                "cacheableOperations": ["build-storybook", "build-custom-server"]
             }
         }
     }

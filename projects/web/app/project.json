@@ -16,23 +16,27 @@
                     "outputPath": "projects/web/app"
                 },
                 "production": {}
-            }
+            },
+            "dependsOn": ["build-custom-server"]
         },
         "serve": {
             "executor": "@nx/next:server",
             "defaultConfiguration": "development",
             "options": {
                 "buildTarget": "web-app:build",
-                "dev": true
+                "dev": true,
+                "customServerTarget": "web-app:serve-custom-server"
             },
             "configurations": {
                 "development": {
                     "buildTarget": "web-app:build:development",
-                    "dev": true
+                    "dev": true,
+                    "customServerTarget": "web-app:serve-custom-server:development"
                 },
                 "production": {
                     "buildTarget": "web-app:build:production",
-                    "dev": false
+                    "dev": false,
+                    "customServerTarget": "web-app:serve-custom-server:production"
                 }
             }
         },
@@ -52,6 +56,36 @@
         "lint": {
             "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"]
+        },
+        "build-custom-server": {
+            "executor": "@nx/js:tsc",
+            "defaultConfiguration": "production",
+            "options": {
+                "outputPath": "dist/projects/web/app",
+                "main": "projects/web/app/server/main.ts",
+                "tsConfig": "projects/web/app/tsconfig.server.json",
+                "clean": false,
+                "assets": []
+            },
+            "configurations": {
+                "development": {},
+                "production": {}
+            }
+        },
+        "serve-custom-server": {
+            "executor": "@nx/js:node",
+            "defaultConfiguration": "production",
+            "options": {
+                "buildTarget": "web-app:build-custom-server"
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "web-app:build-custom-server:development"
+                },
+                "production": {
+                    "buildTarget": "web-app:build-custom-server:production"
+                }
+            }
         }
     },
     "tags": []
