@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "license": "MIT",
     "scripts": {
+        "custom-web-server:build": "nx build-custom-server web-app",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "generate:graphql": "graphql-codegen --config projects/web/domain/codegen.ts",
