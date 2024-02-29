@@ -111,8 +111,6 @@ export function BookForm({
 
     return (
         <form onSubmit={handleSubmit(searchButton.onClick)}>
-            <h1 className="font-bold text-lg">Event Details</h1>
-
             <div className="flex flex-col gap-8">
                 <PEAutoComplete
                     title="Adresse"
@@ -144,7 +142,7 @@ export function BookForm({
                     {...register('occasion', {
                         required: 'This field is required',
                         onChange: (e) => setOccasion(e.target.value),
-                        value: message,
+                        value: occasion,
                     })}
                 />
 
@@ -160,7 +158,7 @@ export function BookForm({
                     })}
                 />
 
-                {categories && (
+                {categories && categories.categoryOptions.length > 0 && (
                     <div className="flex flex-col gap-4">
                         <span className="text-lg font-semibold">Kategorien</span>
                         <PELabelMultiSelection
@@ -173,7 +171,7 @@ export function BookForm({
                     </div>
                 )}
 
-                {kitchens && (
+                {kitchens && kitchens.kitchenOptions.length > 0 && (
                     <div className="flex flex-col gap-4">
                         <span className="text-lg font-semibold">Küche</span>
                         <PELabelSingleSelection
@@ -186,7 +184,7 @@ export function BookForm({
                     </div>
                 )}
 
-                {allergies && (
+                {allergies && allergies.allergyOptions.length > 0 && (
                     <div className="flex flex-col gap-4">
                         <span className="text-lg font-semibold">Allergien</span>
                         <PELabelMultiSelection

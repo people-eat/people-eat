@@ -11,11 +11,11 @@ export function PEDatePicker({ date, setDate, children }: PropsWithChildren<PEDa
     return (
         <Popover className="relative">
             <Popover.Button className="flex flex-col items-stretch rounded-md w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
-                <label htmlFor="name" className="ml-px block pl-4 text-sm font-medium leading-6 text-gray-900 text-left">
-                    Datum
+                <label htmlFor="name" className="ml-px block text-sm font-medium leading-6 text-gray-900 text-left">
+                    Wann?
                 </label>
                 <div className="mt-2">
-                    <div className="block w-full text-left rounded-full border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
+                    <div className="block w-full text-left rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6">
                         {date?.toDateString() ?? 'Datum'}
                     </div>
                 </div>

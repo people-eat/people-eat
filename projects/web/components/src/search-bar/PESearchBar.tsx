@@ -1,13 +1,13 @@
 import { Combobox, Popover, Transition } from '@headlessui/react';
 import { PEAutoComplete, PEButton, PECalendar, PEFullPageSheet, PEIconButton } from '@people-eat/web-core-components';
-import { LocationSearchResult } from '@people-eat/web-domain';
+import { LocationSearchResult, SearchMode } from '@people-eat/web-domain';
 import classNames from 'classnames';
+import { random } from 'lodash';
 import { CheckIcon, SearchIcon } from 'lucide-react';
 import { Fragment, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { SearchModeSwitch } from '../search-mode-switch/SearchModeSwitch';
 import { ParticipantsPicker } from './PEParticipantsPicker';
-import { useForm } from 'react-hook-form';
-import { random } from 'lodash';
 
 export interface PESearchBarProps {
     onLocationSearchTextChange: (changedLocationSearchText: string) => void;
@@ -20,8 +20,11 @@ export interface PESearchBarProps {
     setKids: (changedKids: number) => void;
     date: Date;
     setDate: (changedDate: Date) => void;
+    searchMode: SearchMode;
+    setSearchMode: (changedSearchMode: SearchMode) => void;
 
-    onSearch: () => void;
+    onSearchMenus: () => void;
+    onSearchCooks: () => void;
 }
 
 interface PESearchBarFormInputs {
@@ -39,7 +42,10 @@ export function PESearchBar({
     setKids,
     date,
     setDate,
-    onSearch,
+    searchMode,
+    setSearchMode,
+    onSearchMenus,
+    onSearchCooks,
 }: PESearchBarProps) {
     const [showMobileDialog, setShowMobileDialog] = useState(false);
 
@@ -69,10 +75,16 @@ export function PESearchBar({
                 </button>
 
                 <PEFullPageSheet title="Suche" open={showMobileDialog} onClose={() => setShowMobileDialog(!showMobileDialog)}>
-                    <form className="flex flex-col gap-16" onSubmit={handleSubmit(() => onSearch())}>
+                    <form
+                        className="flex flex-col gap-16"
+                        onSubmit={handleSubmit(() => {
+                            searchMode === 'COOKS' ? onSearchCooks() : onSearchMenus();
+                            setShowMobileDialog(false);
+                        })}
+                    >
                         <div className="flex flex-col gap-4">
                             <h2 className="text-lg font-semibold">Wonach suchst du?</h2>
-                            <SearchModeSwitch activeMode="MENUS" onChange={() => undefined} />
+                            <SearchModeSwitch activeMode={searchMode} onChange={setSearchMode} />
                         </div>
 
                         <PEAutoComplete
@@ -175,7 +187,7 @@ export function PESearchBar({
                         <Popover className="relative">
                             <Popover.Button className="flex flex-col items-start rounded-md px-3 pb-1.5 pt-2.5 w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
                                 <label htmlFor="name" className="block text-xs font-medium text-gray-900">
-                                    Datum
+                                    Wann?
                                 </label>
 
                                 <p className="block w-full text-start text-gray-900 focus:ring-0 sm:text-sm sm:leading-6">
@@ -213,7 +225,7 @@ export function PESearchBar({
                         <Popover className="relative">
                             <Popover.Button className="flex flex-col items-start rounded-md px-3 pb-1.5 pt-2.5 w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
                                 <label htmlFor="name" className="block text-xs font-medium text-gray-900">
-                                    Teilnehmer
+                                    Wer?
                                 </label>
                                 <div className="block w-full text-start text-gray-900 focus:ring-0 sm:text-sm sm:leading-6">
                                     {adults + kids}
@@ -245,7 +257,7 @@ export function PESearchBar({
                         </Popover>
                     </div>
 
-                    <PEIconButton onClick={onSearch}>
+                    <PEIconButton onClick={searchMode === 'COOKS' ? onSearchCooks : onSearchMenus}>
                         <SearchIcon strokeWidth={1.5} />
                     </PEIconButton>
                 </div>

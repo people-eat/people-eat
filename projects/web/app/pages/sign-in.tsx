@@ -1,53 +1,55 @@
-import { LoadingDialog, PEHeader } from '@people-eat/web-components';
-import { AssignOneSessionByEmailAddressDocument, GetPageDataDocument, SignedInUser } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
-import { createApolloClient } from '../network/apolloClients';
-import Image from 'next/image';
-import { useForm } from 'react-hook-form';
-import { PEButton, PETextField } from '@people-eat/web-core-components';
 import { useMutation } from '@apollo/client';
+import { LoadingDialog, PEHeader, SignInForm } from '@people-eat/web-components';
+import { PEAlert } from '@people-eat/web-core-components';
+import { AssignOneSessionByEmailAddressDocument, GetPageDataDocument } from '@people-eat/web-domain';
+import { GetServerSideProps } from 'next';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { createApolloClient } from '../network/apolloClients';
 
-interface ServerSideProps {
-    signedInUser: SignedInUser | null;
-}
+const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
 
-// Todo: if signed maybe in navigate to profile
-
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
+export const getServerSideProps: GetServerSideProps<object> = async ({ req }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
         const result = await apolloClient.query({ query: GetPageDataDocument });
 
-        return {
-            props: {
-                signedInUser: result.data.users.signedInUser ?? null,
-            },
-        };
+        const signedInUser = result.data.users.signedInUser;
+
+        if (signedInUser) {
+            return profilePageRedirect;
+        }
+
+        return { props: {} };
     } catch (error) {
-        throw new Error();
+        return { props: {} };
     }
 };
 
-interface SignInFormInputs {
-    emailAddress: string;
-    password: string;
-}
+export default function SignInPage() {
+    const router = useRouter();
 
-export default function SignInPage({ signedInUser }: ServerSideProps) {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<SignInFormInputs>();
+    const [assignOneSessionByEmailAddress, { loading, data, reset }] = useMutation(AssignOneSessionByEmailAddressDocument);
 
-    const [assignOneSessionByEmailAddress, { loading }] = useMutation(AssignOneSessionByEmailAddressDocument);
+    const showFailedAlert = data ? !data.sessions.success : false;
+
+    if (data?.sessions.success) {
+        router.push('/profile');
+    }
 
     return (
         <div>
-            <PEHeader signedInUser={signedInUser} />
+            <PEHeader signedInUser={null} />
 
             <LoadingDialog active={loading} />
+
+            <PEAlert
+                open={showFailedAlert}
+                title="Leider ist ein Fehler aufgetreten"
+                subtitle="Bitte versuche es später erneut"
+                button={{ title: 'Erneut versuchen', onClick: () => reset() }}
+            />
 
             <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -64,43 +66,15 @@ export default function SignInPage({ signedInUser }: ServerSideProps) {
                     </h2>
                 </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form
-                        className="flex flex-col gap-6"
-                        onSubmit={handleSubmit(({ emailAddress, password }) =>
-                            assignOneSessionByEmailAddress({
-                                variables: { request: { emailAddress: emailAddress, password, platform: 'BROWSER', title: '' } },
-                            }),
-                        )}
-                    >
-                        <PETextField
-                            id="email-address"
-                            labelTitle="E-Mail Adresse"
-                            type="email"
-                            autoComplete="email"
-                            errorMessage={errors.emailAddress?.message}
-                            {...register('emailAddress', { required: 'This field is required' })}
-                        />
-
-                        <PETextField
-                            id="password"
-                            labelTitle="Passwort"
-                            type="password"
-                            autoComplete="current-password"
-                            errorMessage={errors.emailAddress?.message}
-                            {...register('password', { required: 'This field is required' })}
-                        />
-
-                        <PEButton title="Anmelden" type="submit" />
-                    </form>
-
-                    <p className="mt-10 text-center text-sm text-gray-500">
-                        Du hast noch kein Profil?{' '}
-                        <a href="#" className="font-semibold leading-6 text-orange-600 hover:text-orange-500">
-                            Hier registrieren
-                        </a>
-                    </p>
-                </div>
+                <SignInForm
+                    completeTitle="Anmelden"
+                    onSignIn={({ emailAddress, password }) =>
+                        assignOneSessionByEmailAddress({
+                            variables: { request: { emailAddress: emailAddress, password, platform: 'BROWSER', title: '' } },
+                        })
+                    }
+                    onSignUp={() => router.push('/sign-up')}
+                />
             </div>
         </div>
     );

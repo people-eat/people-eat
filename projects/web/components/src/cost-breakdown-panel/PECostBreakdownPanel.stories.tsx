@@ -14,24 +14,24 @@ export const Primary: StoryObj<typeof PECostBreakdownPanel> = {
             lineItems: [
                 {
                     title: 'Line Item 1',
-                    price: { amount: '12.34', currencyCode: 'EUR' },
+                    price: { amount: '12.34', currencyCode: '€' },
                 },
                 {
                     title: 'Line Item 2',
-                    price: { amount: '12.34', currencyCode: 'EUR' },
+                    price: { amount: '12.34', currencyCode: '€' },
                 },
                 {
                     title: 'Line Item 3',
-                    price: { amount: '12.34', currencyCode: 'EUR' },
+                    price: { amount: '12.34', currencyCode: '€' },
                 },
                 {
                     title: 'Line Item 4',
-                    price: { amount: '12.34', currencyCode: 'EUR' },
+                    price: { amount: '12.34', currencyCode: '€' },
                 },
             ],
             total: {
                 title: 'Summe',
-                price: { amount: '12.34', currencyCode: 'EUR' },
+                price: { amount: '12.34', currencyCode: '€' },
             },
         },
     },

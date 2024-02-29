@@ -1,15 +1,18 @@
 import { Dialog, Transition } from '@headlessui/react';
+import classNames from 'classnames';
 import { Fragment, PropsWithChildren } from 'react';
 
 export interface PEDialogProps {
     open: boolean;
-    onClose: () => void;
+    onClose?: () => void;
+    className?: string;
 }
 
-export function PEDialog({ open, onClose, children }: PropsWithChildren<PEDialogProps>) {
+export function PEDialog({ open, onClose, children, className }: PropsWithChildren<PEDialogProps>) {
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={onClose}>
+            {/* static disables the close on click around behavior */}
+            <Dialog as="div" className="relative z-10" static onClose={onClose ?? (() => undefined)}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -33,7 +36,12 @@ export function PEDialog({ open, onClose, children }: PropsWithChildren<PEDialog
                             leaveFrom="opacity-100 translate-y-0 md:scale-100"
                             leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
                         >
-                            <Dialog.Panel className="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
+                            <Dialog.Panel
+                                className={classNames(
+                                    'flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl',
+                                    className,
+                                )}
+                            >
                                 {children}
                             </Dialog.Panel>
                         </Transition.Child>

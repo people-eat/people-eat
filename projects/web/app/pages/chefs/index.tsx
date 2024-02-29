@@ -4,7 +4,11 @@ import {
     GetPublicCooksPageDataQuery,
     LocationSearchResult,
     SearchMode,
+    SearchParams,
     SignedInUser,
+    geoDistance,
+    toQueryParams,
+    toValidatedSearchParams,
 } from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
@@ -13,24 +17,29 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
+import { PELink } from '@people-eat/web-core-components';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
     cooks: NonNullable<GetPublicCooksPageDataQuery['publicCooks']['findMany']>;
+    searchParams: SearchParams;
 }
 
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
+    const searchParams = toValidatedSearchParams(query);
+
+    const location =
+        searchParams.locationLatitude && searchParams.locationLongitude
+            ? { latitude: searchParams.locationLatitude, longitude: searchParams.locationLongitude }
+            : undefined;
 
     try {
         const result = await apolloClient.query({
             query: GetPublicCooksPageDataDocument,
             variables: {
                 request: {
-                    location: {
-                        latitude: 49,
-                        longitude: 8,
-                    },
+                    location,
                     adultParticipants: 4,
                     children: 0,
                     dateTime: new Date(),
@@ -42,6 +51,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             props: {
                 signedInUser: result.data.users.signedInUser ?? null,
                 cooks: result.data.publicCooks.findMany,
+                searchParams,
             },
         };
     } catch (error) {
@@ -49,16 +59,25 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function PublicCooksPage({ signedInUser, cooks }: ServerSideProps) {
+export default function PublicCooksPage({ signedInUser, cooks, searchParams }: ServerSideProps) {
     const router = useRouter();
 
     const [searchMode, setSearchMode] = useState<SearchMode>('COOKS');
-    const [adults, setAdults] = useState(2);
-    const [children, setChildren] = useState(0);
-    const [date, setDate] = useState(new Date());
+    const [adults, setAdults] = useState(searchParams.adults);
+    const [children, setChildren] = useState(searchParams.children);
+    const [date, setDate] = useState(new Date(searchParams.dateString));
 
     const [locationSearchResults, setLocationSearchResults] = useState<LocationSearchResult[]>([]);
-    const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>();
+    const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>(
+        searchParams.locationText && searchParams.locationLatitude && searchParams.locationLongitude
+            ? {
+                  id: '',
+                  text: searchParams.locationText,
+                  latitude: searchParams.locationLatitude,
+                  longitude: searchParams.locationLongitude,
+              }
+            : undefined,
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onLocationSearchTextChange = useCallback(
@@ -84,31 +103,70 @@ export default function PublicCooksPage({ signedInUser, cooks }: ServerSideProps
                         setKids={setChildren}
                         date={date}
                         setDate={setDate}
-                        onSearch={() => router.push({ pathname: searchMode === 'COOKS' ? '/chefs' : '/menus' })}
+                        searchMode={searchMode}
+                        setSearchMode={setSearchMode}
+                        onSearchCooks={() =>
+                            router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                        }
+                        onSearchMenus={() =>
+                            router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                        }
                     />
                     <div className="hidden lg:block">
-                        <SearchModeSwitch activeMode={searchMode} onChange={setSearchMode} />
+                        <SearchModeSwitch
+                            activeMode={searchMode}
+                            onChange={(changedSearchMode) => {
+                                if (changedSearchMode === 'MENUS') {
+                                    router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) });
+                                }
+                            }}
+                        />
                     </div>
                 </div>
             </div>
 
             <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 my-8" aria-label="Global">
-                <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4">
-                    {cooks.map(({ cookId, user, rank, city }) => (
-                        <Link key={cookId} href={'/chefs/' + cookId}>
-                            <CookCard
-                                cookId={cookId}
-                                user={{
-                                    firstName: user.firstName,
-                                    profilePictureUrl: user.profilePictureUrl ?? null,
+                {cooks.length > 0 && (
+                    <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4">
+                        {cooks.map(({ cookId, user, rank, city, location, menuCount }) => (
+                            <Link
+                                key={cookId}
+                                href={{
+                                    pathname: '/chefs/' + cookId,
+                                    query: toQueryParams({ selectedLocation, date, adults, children }),
                                 }}
-                                rank={rank}
-                                menuCount={3}
-                                cityName={city}
-                            />
-                        </Link>
-                    ))}
-                </ul>
+                            >
+                                <CookCard
+                                    user={{
+                                        firstName: user.firstName,
+                                        profilePictureUrl: user.profilePictureUrl ?? null,
+                                    }}
+                                    rank={rank}
+                                    menuCount={menuCount}
+                                    cityName={city}
+                                    travelDistance={
+                                        selectedLocation
+                                            ? geoDistance({ location1: selectedLocation, location2: location }).toFixed(0)
+                                            : undefined
+                                    }
+                                />
+                            </Link>
+                        ))}
+                    </ul>
+                )}
+                {cooks.length < 1 && (
+                    <div className="flex flex-col gap-10 items-center">
+                        <div>Ups, es konnte kein Koch in deiner Nähe gefunden werden :(</div>
+                        <div>Erstelle eine globale Anfrage und wir finden einen Koch für dich der dir ein Angebot macht</div>
+                        <PELink
+                            title={'Globale Anfrage Senden'}
+                            href={{
+                                pathname: '/global-booking-request',
+                                query: toQueryParams({ selectedLocation, date, adults, children }),
+                            }}
+                        />
+                    </div>
+                )}
             </div>
 
             <PEFooter />

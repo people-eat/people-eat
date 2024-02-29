@@ -25,10 +25,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function Index({ signedInUser, latestPrivacyPolicy }: ServerSideProps) {
+export default function PrivacyPolicyPage({ signedInUser, latestPrivacyPolicy }: ServerSideProps) {
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
+
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 my-16">Datenschutzerklärung</h1>
+
+                {latestPrivacyPolicy && <div dangerouslySetInnerHTML={{ __html: latestPrivacyPolicy.germanText }} />}
+
+                {!latestPrivacyPolicy && <>Currently no terms and conditions are available</>}
+            </div>
+
             <PEFooter />
         </div>
     );

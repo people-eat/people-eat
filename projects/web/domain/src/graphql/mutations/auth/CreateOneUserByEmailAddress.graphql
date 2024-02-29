@@ -1,0 +1,5 @@
+mutation CreateOneUserByEmailAddress($request: CreateOneUserByEmailAddressRequest!, $profilePicture: Upload) {
+    users {
+        success: createOneByEmailAddress(request: $request, profilePicture: $profilePicture)
+    }
+}

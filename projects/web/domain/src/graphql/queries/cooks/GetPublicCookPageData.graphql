@@ -20,6 +20,7 @@ query GetPublicCookPageData($cookId: String!) {
             }
             city
             travelExpenses
+            maximumTravelDistance
             createdAt
             languages {
                 languageId

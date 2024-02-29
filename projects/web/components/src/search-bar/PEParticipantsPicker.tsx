@@ -1,17 +1,18 @@
 import { MinusIcon, PlusIcon, Users } from 'lucide-react';
 
 export interface ParticipantsPickerProps {
+    hideLabel?: boolean;
     adults: number;
     setAdults: (changedAdults: number) => void;
     children: number;
     setChildren: (changedChildren: number) => void;
 }
 
-export function ParticipantsPicker({ adults, setAdults, children, setChildren }: ParticipantsPickerProps) {
+export function ParticipantsPicker({ hideLabel, adults, setAdults, children, setChildren }: ParticipantsPickerProps) {
     return (
         <div className="flex flex-col gap-4">
-            <span className="text-lg font-semibold">Wer soll Teilnehmen?</span>
-            <div className="flex justify-between items-center">
+            {!hideLabel && <span className="text-lg font-semibold">Wer soll Teilnehmen?</span>}
+            <div className="flex justify-between items-center gap-8">
                 <div className="flex gap-4">
                     <Users strokeWidth={1.5} />
                     Erwachsene
@@ -38,7 +39,7 @@ export function ParticipantsPicker({ adults, setAdults, children, setChildren }:
                     </button>
                 </div>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-8">
                 <div className="flex gap-4">
                     <Users strokeWidth={1.5} />
                     Kinder (6-12)

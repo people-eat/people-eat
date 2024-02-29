@@ -21,6 +21,7 @@ query GetPublicCooksPageData($request: FindManyPublicCooksRequest!) {
             city
             travelExpenses
             createdAt
+            menuCount
         }
     }
 }

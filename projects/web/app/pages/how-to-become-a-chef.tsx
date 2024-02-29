@@ -92,7 +92,7 @@ const features = [
     { name: 'Schnelle Zahlungsabwicklung', description: 'Erhalte deine Bezahlung einfach und unkompliziert' },
     { name: '24 / 7 für dich da', description: 'Wir helfen dir rund um die Uhr bei jeglichen Fragen weiter' },
     {
-        name: 'Gastgeber stellen Ihre Anfragen direkt bei dir',
+        name: 'Gastgeber stellen ihre Anfragen direkt bei dir',
         description: 'Kunden gelangen direkt über die Profilseite zu deinen Menüvorschlägen',
     },
     {
@@ -106,7 +106,7 @@ interface ServerSideProps {
     signedInUser: SignedInUser | null;
 }
 
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
@@ -146,13 +146,17 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                                     sondern auch die Preisgestaltung für deine Menükreationen und schaffe dabei unvergessliche Genussmomente
                                 </p>
                                 <div className="mt-10 flex items-center gap-x-6">
-                                    <PELink title="Jetzt Registrieren" href="/chef-sign-up" />
+                                    {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
+                                    {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
                                 </div>
                             </div>
-                            <img
+                            <Image
                                 src="/how-to-become-a-chef/chef.jpg"
                                 alt=""
                                 className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36"
+                                width={500}
+                                height={400}
+                                unoptimized
                             />
                         </div>
                     </div>
@@ -219,6 +223,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                     <div>
                         <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                             <Image
+                                unoptimized
                                 src="/how-to-become-a-chef/1.jpg"
                                 alt="Black kettle with long pour spot and angled body on marble counter next to coffee mug and pour-over system."
                                 className="h-full w-full object-cover object-center"
@@ -229,6 +234,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                         <div className="mt-4 grid grid-cols-2 gap-4 sm:mt-6 sm:gap-6 lg:mt-8 lg:gap-8">
                             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                                 <Image
+                                    unoptimized
                                     src="/how-to-become-a-chef/2.jpg"
                                     alt="Detail of temperature setting button on kettle bass with digital degree readout."
                                     className="h-full w-full object-cover object-center"
@@ -238,6 +244,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                             </div>
                             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                                 <Image
+                                    unoptimized
                                     src="/how-to-become-a-chef/3.jpg"
                                     alt="Kettle spout pouring boiling water into coffee grounds in pour-over mug."
                                     className="h-full w-full object-cover object-center"
@@ -258,7 +265,8 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                         Werde Teil des am schnellsten wachsenden Kochnetzwerks.
                     </h2>
                     <div className="mt-10 flex items-center gap-x-6">
-                        <PELink title="Jetzt Registrieren" href="/chef-sign-up" />
+                        {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
+                        {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
                     </div>
                 </div>
             </div>

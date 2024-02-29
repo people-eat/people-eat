@@ -2,13 +2,11 @@ import { ForwardedRef, HTMLInputTypeAttribute, forwardRef } from 'react';
 
 export interface PETextFieldProps {
     id: string;
-    labelTitle: string;
+    labelTitle?: string;
     type: HTMLInputTypeAttribute;
     autoComplete?: string;
     placeholder?: string;
     errorMessage?: string;
-    // value?: string;
-    // onChange?: (changedValue: string) => void;
 }
 
 export const PETextField = forwardRef(function (
@@ -16,21 +14,22 @@ export const PETextField = forwardRef(function (
     ref: ForwardedRef<HTMLInputElement>,
 ) {
     return (
-        <div>
-            <label htmlFor={id} className="text-lg font-semibold block text-sm font-medium leading-6 text-gray-900">
-                {labelTitle}
-            </label>
-            <div className="mt-2">
-                <input
-                    id={id}
-                    type={type}
-                    autoComplete={autoComplete}
-                    placeholder={placeholder}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 focus:ring-orange-600"
-                    ref={ref}
-                    {...rest}
-                />
-            </div>
+        <div className="w-full">
+            {labelTitle && (
+                <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                    {labelTitle}
+                </label>
+            )}
+            <input
+                id={id}
+                type={type}
+                autoComplete={autoComplete}
+                placeholder={placeholder}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 focus:ring-orange-600"
+                ref={ref}
+                {...rest}
+            />
+
             {errorMessage && <span className="ml-2 mt-1 text-sm font-semibold text-red-500">{errorMessage}</span>}
         </div>
     );

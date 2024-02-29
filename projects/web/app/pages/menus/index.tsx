@@ -4,7 +4,12 @@ import {
     GetPublicMenusPageDataQuery,
     LocationSearchResult,
     SearchMode,
+    SearchParams,
     SignedInUser,
+    calculateMenuPrice,
+    formatPrice,
+    toQueryParams,
+    toValidatedSearchParams,
 } from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
@@ -13,24 +18,29 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
+import { PELink } from '@people-eat/web-core-components';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
     menus: NonNullable<GetPublicMenusPageDataQuery['publicMenus']['findMany']>;
+    searchParams: SearchParams;
 }
 
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
+    const searchParams = toValidatedSearchParams(query);
+
+    const location =
+        searchParams.locationLatitude && searchParams.locationLongitude
+            ? { latitude: searchParams.locationLatitude, longitude: searchParams.locationLongitude }
+            : undefined;
 
     try {
         const result = await apolloClient.query({
             query: GetPublicMenusPageDataDocument,
             variables: {
                 request: {
-                    location: {
-                        latitude: 49,
-                        longitude: 8,
-                    },
+                    location,
                     adultParticipants: 4,
                     children: 0,
                     dateTime: new Date(),
@@ -42,6 +52,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             props: {
                 signedInUser: result.data.users.signedInUser ?? null,
                 menus: result.data.publicMenus.findMany,
+                searchParams,
             },
         };
     } catch (error) {
@@ -49,16 +60,25 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function PublicMenusPage({ signedInUser, menus }: ServerSideProps) {
+export default function PublicMenusPage({ signedInUser, menus, searchParams }: ServerSideProps) {
     const router = useRouter();
 
     const [searchMode, setSearchMode] = useState<SearchMode>('MENUS');
-    const [adults, setAdults] = useState(2);
-    const [children, setChildren] = useState(0);
-    const [date, setDate] = useState(new Date());
+    const [adults, setAdults] = useState(searchParams.adults);
+    const [children, setChildren] = useState(searchParams.children);
+    const [date, setDate] = useState(new Date(searchParams.dateString));
 
     const [locationSearchResults, setLocationSearchResults] = useState<LocationSearchResult[]>([]);
-    const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>();
+    const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>(
+        searchParams.locationText && searchParams.locationLatitude && searchParams.locationLongitude
+            ? {
+                  id: '',
+                  text: searchParams.locationText,
+                  latitude: searchParams.locationLatitude,
+                  longitude: searchParams.locationLongitude,
+              }
+            : undefined,
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onLocationSearchTextChange = useCallback(
@@ -84,38 +104,94 @@ export default function PublicMenusPage({ signedInUser, menus }: ServerSideProps
                         setKids={setChildren}
                         date={date}
                         setDate={setDate}
-                        onSearch={() => router.push({ pathname: searchMode === 'COOKS' ? '/chefs' : '/menus' })}
+                        searchMode={searchMode}
+                        setSearchMode={setSearchMode}
+                        onSearchCooks={() =>
+                            router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                        }
+                        onSearchMenus={() =>
+                            router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                        }
                     />
                     <div className="hidden lg:block">
-                        <SearchModeSwitch activeMode={searchMode} onChange={setSearchMode} />
+                        <SearchModeSwitch
+                            activeMode={searchMode}
+                            onChange={(changedSearchMode) => {
+                                if (changedSearchMode === 'COOKS') {
+                                    router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) });
+                                }
+                            }}
+                        />
                     </div>
                 </div>
             </div>
 
             <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 my-8" aria-label="Global">
-                <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4">
-                    {menus.map(
-                        (
-                            { menuId, title, imageUrls, kitchen, cook, categories }, // courseCount, pricePerPerson
-                        ) => (
-                            <Link key={menuId} href={'/menus/' + menuId}>
-                                <MenuCard
-                                    id={menuId}
-                                    title={title}
-                                    imageUrl={imageUrls[0]}
-                                    kitchenTitle={kitchen?.title}
-                                    cook={{
-                                        firstName: cook.user.firstName,
-                                        profilePictureUrl: cook.user.profilePictureUrl ?? null,
+                {menus.length > 0 && (
+                    <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4">
+                        {menus.map(
+                            ({
+                                menuId,
+                                title,
+                                imageUrls,
+                                kitchen,
+                                cook,
+                                categories,
+                                basePrice,
+                                basePriceCustomers,
+                                pricePerAdult,
+                                pricePerChild,
+                                courseCount,
+                            }) => (
+                                <Link
+                                    key={menuId}
+                                    href={{
+                                        pathname: '/menus/' + menuId,
+                                        query: toQueryParams({ selectedLocation, date, adults, children }),
                                     }}
-                                    courseCount={4}
-                                    pricePerPerson={'12.34'}
-                                    categoryTitles={categories.map(({ title }) => title)}
-                                />
-                            </Link>
-                        ),
-                    )}
-                </ul>
+                                >
+                                    <MenuCard
+                                        title={title}
+                                        imageUrls={imageUrls}
+                                        kitchenTitle={kitchen?.title}
+                                        cook={{
+                                            firstName: cook.user.firstName,
+                                            profilePictureUrl: cook.user.profilePictureUrl ?? null,
+                                        }}
+                                        courseCount={courseCount}
+                                        pricePerPerson={formatPrice({
+                                            amount:
+                                                calculateMenuPrice(
+                                                    adults,
+                                                    children,
+                                                    basePrice,
+                                                    basePriceCustomers,
+                                                    pricePerAdult,
+                                                    pricePerChild,
+                                                ) /
+                                                (adults + children),
+                                            currencyCode: '€',
+                                        })}
+                                        categoryTitles={categories.map(({ title }) => title)}
+                                    />
+                                </Link>
+                            ),
+                        )}
+                    </ul>
+                )}
+                {menus.length < 1 && (
+                    <div className="flex flex-col gap-10 items-center">
+                        <div>Ups, leider konnten keine Menüs von Köchen in deiner Nähe gefunden werden</div>
+                        <div>Erstelle eine globale Anfrage und wir finden einen Koch für dich der dir ein Angebot macht</div>
+                        <PELink
+                            title={'Globale Anfrage Senden'}
+                            href={{
+                                pathname: '/global-booking-request',
+                                query: toQueryParams({ selectedLocation, date, adults, children }),
+                            }}
+                        />
+                    </div>
+                )}
             </div>
 
             <PEFooter />

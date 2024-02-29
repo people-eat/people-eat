@@ -2,9 +2,8 @@ import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 
 export interface MenuCardProps {
-    id: string;
     title: string;
-    imageUrl: string;
+    imageUrls: string[];
 
     kitchenTitle?: string;
     cook: {
@@ -17,7 +16,7 @@ export interface MenuCardProps {
     categoryTitles: string[];
 }
 
-export function MenuCard({ title, imageUrl, cook, kitchenTitle, courseCount, pricePerPerson, categoryTitles }: MenuCardProps) {
+export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pricePerPerson, categoryTitles }: MenuCardProps) {
     return (
         <li className="">
             {/* <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
@@ -36,37 +35,37 @@ export function MenuCard({ title, imageUrl, cook, kitchenTitle, courseCount, pri
                                 <span
                                     key={i}
                                     className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'}`}
-                                    onClick={() => setActiveIndex(i)}
+                                    onClick={(e) => {
+                                        setActiveIndex(i);
+                                        e.preventDefault();
+                                    }}
                                 />
                             ))}
                         </div>
                     )}
                     placeholder={undefined}
                 >
-                    <Image
-                        src={
-                            imageUrl ??
-                            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/The_Fat_Duck_%288197181654%29.jpg/640px-The_Fat_Duck_%288197181654%29.jpg'
-                        }
-                        alt="image 1"
-                        className="h-full w-full object-center rounded-xl "
-                        width={500}
-                        height={400}
-                    />
-                    <Image
-                        src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-                        alt="image 2"
-                        className="h-full w-full object-cover rounded-xl "
-                        width={500}
-                        height={400}
-                    />
-                    <Image
-                        src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-                        alt="image 3"
-                        className="h-full w-full object-cover rounded-xl "
-                        width={500}
-                        height={400}
-                    />
+                    {imageUrls.map((imageUrl) => (
+                        <Image
+                            key={imageUrl}
+                            unoptimized
+                            src={imageUrl}
+                            alt="image 1"
+                            className="h-full w-full object-center rounded-xl "
+                            width={500}
+                            height={400}
+                        />
+                    ))}
+                    {imageUrls.length < 1 && (
+                        <Image
+                            unoptimized
+                            src="/placeholders/menu.png"
+                            alt="image 1"
+                            className="h-full w-full object-center rounded-xl "
+                            width={500}
+                            height={400}
+                        />
+                    )}
                 </Carousel>
             </div>
 

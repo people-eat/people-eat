@@ -9,7 +9,7 @@ interface ServerSideProps {
     signedInUser: SignedInUser | null;
 }
 
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
@@ -33,10 +33,6 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
             <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
                     <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Wir sind PeopleEat</h2>
-                    <p className="mt-6 text-lg leading-8 text-gray-600">
-                        Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat
-                        veniam occaecat fugiat aliqua.
-                    </p>
                 </div>
             </div>
 
@@ -45,6 +41,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                     <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                         <div className="lg:pr-4">
                             <Image
+                                unoptimized
                                 src="/about-us/founders.png"
                                 width={1000}
                                 height={800}
@@ -54,7 +51,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                         </div>
                         <div>
                             <div className="text-base leading-7 text-gray-700 lg:max-w-lg">
-                                <p className="text-base font-semibold leading-7 text-orange-600">Der Grundstein</p>
+                                <p className="text-base font-semibold leading-7 text-orange-600">Herzlich Willkommen</p>
                                 <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                                     Wir revolutionieren die Art Gastgeber zu sein
                                 </h1>
@@ -134,6 +131,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                             <div className="mt-16 flow-root sm:mt-24">
                                 <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
                                     <Image
+                                        unoptimized
                                         src="/about-us/team.jpg"
                                         alt="App screenshot"
                                         width={2432}
@@ -147,8 +145,9 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                                     Daniel und Natalia, Co-Founder von PeopleEat, bringen Erfahrungen im Bereich, Sales und Financial
                                     Controlling ein (SAP SE, Raiffeisenbank). Cem (rechts) ist erfahrener Full-Stack Developer mit Expertise
                                     in App- und Webentwicklung (SAP SE) Dirk (links) und Chris (rechts) sind unsere Branchenexperten: Dirk
-                                    bringt jahrelange Erfahrung als Küchenchef in der gehobenen Gastronomie und Chris als Küchenmeister mit
-                                    umfangreicher gastronomischer Expertise mit. Beide Arbeiten seit mehreren Jahren als Privatkoch.
+                                    bringt jahrelange Erfahrung als Küchenchef in der gehobenen Gastronomie und Privatkoch mit. Chris bringt
+                                    als Küchenmeister umfangreiche gastronomische Expertise mit. Des weiteren ist er seit mehreren Jahren
+                                    als Miet- und Privatkoch (Food-Fighter) tätig.
                                 </p>
                             </div>
                         </div>

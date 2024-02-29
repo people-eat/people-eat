@@ -11,7 +11,7 @@ const posts = [
         href: '/blogs/warum-sollte-ich-einen-privatekoch-buchen',
         description:
             'Dass Essen ist weit mehr als nur eine Notwendigkeit. Es ist ein Erlebnis, das unsere Sinne anspricht, uns verbindet und Erinnerungen schafft. Ein Privatkoch ist der Schlüssel zu diesem besonderen kulinarischen Erlebnis, das weit über den gewöhnlichen Restaurantbesuch hinausgeht. In diesem Blogbeitrag erfährst du, warum du einen Privatkoch buchen solltest, um einzigartige Genussmomente in deinen eigenen vier Wänden zu erleben.',
-        imageUrl: '/blogs/privatkoch-köln.jpeg',
+        imageUrl: '/blogs/privatkoch-koeln.jpg',
         date: 'Mar 6, 2024',
         datetime: '2024-03-6',
         category: { title: 'Gastgeber' },
@@ -60,6 +60,7 @@ export default function BlogsPage({ signedInUser }: ServerSideProps) {
                             <article key={post.id} className="flex flex-col items-start justify-between">
                                 <div className="relative w-full">
                                     <Image
+                                        unoptimized
                                         src={post.imageUrl}
                                         alt=""
                                         className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"

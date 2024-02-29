@@ -1,5 +1,13 @@
+import { ParsedUrlQueryInput } from 'querystring';
 import { Dispatch, SetStateAction } from 'react';
-import { AllergyOptionFragment, CategoryOptionFragment, KitchenOptionFragment, SignedInUserFragment } from './graphql/_generated/graphql';
+import {
+    AllergyOptionFragment,
+    CategoryOptionFragment,
+    KitchenOptionFragment,
+    LanguageOptionFragment,
+    MealType,
+    SignedInUserFragment,
+} from './graphql/_generated/graphql';
 
 export * from './graphql/_generated/gql';
 export * from './graphql/_generated/graphql';
@@ -8,6 +16,11 @@ export type SignedInUser = SignedInUserFragment;
 export type AllergyOption = AllergyOptionFragment;
 export type CategoryOption = CategoryOptionFragment;
 export type KitchenOption = KitchenOptionFragment;
+export type LanguageOption = LanguageOptionFragment;
+
+export * from './cookProfileTabs';
+export * from './cookRanks';
+export * from './profileTabs';
 
 export interface LocationSearchResult {
     id: string;
@@ -48,7 +61,8 @@ export function calculateMenuPrice(
 ): number {
     if (adultParticipants + underagedParticipants <= basePriceCustomers) return basePrice;
 
-    if (!pricePerUnderaged) return basePrice + (adultParticipants + underagedParticipants - basePriceCustomers) * pricePerAdult;
+    if (pricePerUnderaged === undefined || pricePerUnderaged === null)
+        return basePrice + (adultParticipants + underagedParticipants - basePriceCustomers) * pricePerAdult;
 
     if (adultParticipants - basePriceCustomers >= 0)
         return basePrice + (adultParticipants - basePriceCustomers) * pricePerAdult + underagedParticipants * pricePerUnderaged;
@@ -90,7 +104,7 @@ export function geoDistance({ location1, location2 }: GeoDistanceProps): number 
 
 //
 
-export const formatPrice = (price: Price): string => (price.amount / 100).toFixed(2) + ' ' + price.currencyCode;
+export const formatPrice = (price: Price): string => (price.amount / 100).toFixed(0) + ' ' + price.currencyCode;
 
 //
 
@@ -102,3 +116,71 @@ export interface Time {
     hours: number;
     minutes: number;
 }
+
+// Date formatting
+
+export function toDBDateString(date: Date): string {
+    const year = date.getUTCFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
+}
+
+// Search Params
+
+export interface SearchParams {
+    locationLatitude: number | null;
+    locationLongitude: number | null;
+    locationText: string | null;
+    dateString: string;
+    adults: number;
+    children: number;
+}
+
+export const defaultSearchParams: SearchParams = {
+    locationLatitude: null,
+    locationLongitude: null,
+    locationText: null,
+    dateString: toDBDateString(new Date()),
+    adults: 2,
+    children: 0,
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function toValidatedSearchParams(query: any): SearchParams {
+    const { locationLatitude, locationLongitude, locationText, dateString, adults, children } = query;
+    if (!locationLatitude || !locationLongitude || !locationText || !dateString || !adults || !children) return defaultSearchParams;
+
+    return { locationLatitude, locationLongitude, locationText, dateString, adults: Number(adults), children: Number(children) };
+}
+
+export interface ToQueryParamsInput {
+    selectedLocation: undefined | LocationSearchResult;
+    date: Date;
+    adults: number;
+    children: number;
+}
+
+export function toQueryParams({ selectedLocation, date, adults, children }: ToQueryParamsInput): ParsedUrlQueryInput {
+    return {
+        locationLatitude: selectedLocation?.latitude ?? null,
+        locationLongitude: selectedLocation?.longitude ?? null,
+        locationText: selectedLocation?.text ?? null,
+        dateString: toDBDateString(date),
+        adults,
+        children,
+    };
+}
+
+export const mealTypes: MealType[] = ['VEGETARIAN', 'VEGAN', 'SOUP', 'MEAT', 'FISH', 'DESSERT', 'SPECIAL'];
+
+export const mealTypeTranslations: Record<MealType, string> = {
+    SOUP: 'Suppe',
+    MEAT: 'Fleisch',
+    FISH: 'Fisch',
+    VEGETARIAN: 'Vegetarisch',
+    VEGAN: 'Vegan',
+    DESSERT: 'Dessert',
+    SPECIAL: 'Spezial',
+};

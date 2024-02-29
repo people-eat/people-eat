@@ -1,22 +1,24 @@
+import { CookRank, translatedCookRanks } from '@people-eat/web-domain';
 import Image from 'next/image';
 
 export interface CookCardProps {
-    cookId: string;
     user: {
         firstName: string;
         profilePictureUrl: string | null;
     };
-    rank: string;
+    rank: CookRank;
     menuCount: number;
     cityName: string;
+    travelDistance?: string;
 }
 
-export function CookCard({ cookId, user, rank, menuCount, cityName }: CookCardProps) {
+export function CookCard({ user, rank, menuCount, cityName, travelDistance }: CookCardProps) {
     return (
         <div className="group relative border-gray-200 p-4 sm:p-6">
             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 group-hover:opacity-75">
                 {user.profilePictureUrl && (
                     <Image
+                        unoptimized
                         src={user.profilePictureUrl}
                         alt={user.firstName}
                         className="object-cover object-center"
@@ -40,11 +42,11 @@ export function CookCard({ cookId, user, rank, menuCount, cityName }: CookCardPr
                     </div>
                 </div>
                 <dt className="text-gray-500 truncate">{menuCount} Menüs</dt>
-                <dt className="text-gray-500 truncate">{rank}</dt>
+                <dt className="text-gray-500 truncate">{translatedCookRanks[rank]}</dt>
 
                 <div className="flex justify-between gap-2">
                     <dt className="text-gray-500 truncate">{cityName}</dt>
-                    <dt className="text-gray-500 truncate">+5km</dt>
+                    {travelDistance && <dt className="text-gray-500 truncate">+{travelDistance}km</dt>}
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@ import { SearchModeSwitch } from './SearchModeSwitch';
 
 const meta: Meta<typeof SearchModeSwitch> = {
     component: SearchModeSwitch,
-    title: 'SearchModeSwitch',
+    title: 'Search Mode Switch',
 };
 
 export default meta;

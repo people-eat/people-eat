@@ -57,7 +57,7 @@ export function PEAlert({ open, title, subtitle, button }: PEAlertProps) {
                                     </div>
                                 </div>
                                 <div className="mt-5 sm:mt-6">
-                                    <PEButton title={button.title} className="w-full" />
+                                    <PEButton title={button.title} className="w-full" onClick={button.onClick} />
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>

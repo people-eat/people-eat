@@ -12,6 +12,24 @@ const nextConfig = {
         // See: https://github.com/gregberge/svgr
         svgr: false,
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '**',
+            },
+            {
+                protocol: 'http',
+                hostname: '**',
+            },
+        ],
+    },
+    rewrites: async () => [
+        {
+            source: '/google-places-api/:path*',
+            destination: 'https://maps.googleapis.com/maps/api/:path*',
+        },
+    ],
 };
 
 const plugins = [

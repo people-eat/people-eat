@@ -25,7 +25,7 @@ const footerNavigation = {
     social: [
         {
             name: 'Facebook',
-            href: '#',
+            href: 'https://www.facebook.com/PeopleEatSharing',
             icon: () => (
                 <svg fill="currentColor" viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path
@@ -38,7 +38,7 @@ const footerNavigation = {
         },
         {
             name: 'Instagram',
-            href: '#',
+            href: 'https://www.instagram.com/peopleeat_official',
             icon: () => (
                 <svg fill="currentColor" viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path
@@ -61,11 +61,11 @@ export function PEFooter() {
             <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
                 <div className="xl:grid xl:grid-cols-3 xl:gap-8">
                     <div className="space-y-8">
-                        <Image src="/people-eat-logo.jpeg" alt="" width={256} height={256} className="h-7 w-auto" />
-                        <p className="text-sm leading-6 text-gray-600">We open doors how people eat in the future.</p>
+                        <Image unoptimized src="/people-eat-logo.jpeg" alt="" width={256} height={256} className="h-7 w-auto" />
+                        <p className="text-sm leading-6 text-gray-600">We open doors to how people eat in the future.</p>
                         <div className="flex space-x-6">
                             {footerNavigation.social.map((item) => (
-                                <Link key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
+                                <Link key={item.name} href={item.href} target="_blank" className="text-gray-400 hover:text-gray-500">
                                     <span className="sr-only">{item.name}</span>
                                     <item.icon />
                                 </Link>

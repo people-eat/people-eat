@@ -1,4 +1,4 @@
-import { PEButton, PETextField } from '@people-eat/web-core-components';
+import { PEButton, PECheckbox, PETextField } from '@people-eat/web-core-components';
 import { useForm } from 'react-hook-form';
 
 export interface SignUpFormInputs {
@@ -94,56 +94,29 @@ export function SignUpForm({ completeTitle, onSignUp, onSignIn }: SignUpFormProp
                     })}
                 />
 
-                <fieldset>
-                    <legend className="sr-only">Notifications</legend>
-                    <div className="space-y-5">
-                        <div className="relative flex items-start">
-                            <div className="flex h-6 items-center">
-                                <input
-                                    id="comments"
-                                    aria-describedby="comments-description"
-                                    type="checkbox"
-                                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
-                                    {...register('acceptedTermsAndConditions', { required: 'This field is required' })}
-                                />
-                            </div>
-                            <div className="ml-3 text-sm leading-6">
-                                <label htmlFor="comments" className="font-medium text-gray-900">
-                                    Allgemeine Geschäftsbedingungen
-                                </label>
-                                <p id="comments-description" className="text-gray-500">
-                                    Ich habe die allgemeinen Geschäftsbedingungen gelesen und akzeptiere sie
-                                </p>
-                                {errors.acceptedTermsAndConditions && (
-                                    <span className="mt-1 text-sm font-semibold text-red-600">
-                                        {errors.acceptedTermsAndConditions.message}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                        <div className="relative flex items-start">
-                            <div className="flex h-6 items-center">
-                                <input
-                                    id="candidates"
-                                    aria-describedby="candidates-description"
-                                    type="checkbox"
-                                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
-                                    {...register('acceptedPrivacyPolicy', { required: 'This field is required' })}
-                                />
-                            </div>
-                            <div className="ml-3 text-sm leading-6">
-                                <label htmlFor="candidates" className="font-medium text-gray-900">
-                                    Datenschutzerklärung
-                                </label>
-                                <p id="candidates-description" className="text-gray-500">
-                                    Ich habe die Datenschutzerklärung gelesen und akzeptiere sie
-                                </p>
-                                {errors.acceptedPrivacyPolicy && (
-                                    <span className="mt-1 text-sm font-semibold text-red-600">{errors.acceptedPrivacyPolicy.message}</span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
+                <fieldset className="space-y-5">
+                    <PECheckbox
+                        id="accepted-terms-and-conditions"
+                        label={{
+                            title: 'Allgemeine Geschäftsbedingungen',
+                            description: 'Ich habe die allgemeinen Geschäftsbedingungen gelesen und akzeptiere sie',
+                        }}
+                        errorMessage={errors.acceptedTermsAndConditions?.message}
+                        {...register('acceptedTermsAndConditions', {
+                            required: 'Die allgemeinen Geschäftsbedingungen müssen akzeptiert werden um fortzufahren',
+                        })}
+                    />
+                    <PECheckbox
+                        id="accepted-privacy-policy"
+                        label={{
+                            title: 'Datenschutzerklärung',
+                            description: 'Ich habe die Datenschutzerklärung gelesen und akzeptiere sie',
+                        }}
+                        errorMessage={errors.acceptedPrivacyPolicy?.message}
+                        {...register('acceptedPrivacyPolicy', {
+                            required: 'Die Datenschutzerklärung muss akzeptiert werden um fortzufahren',
+                        })}
+                    />
                 </fieldset>
 
                 <PEButton title={completeTitle} type="submit" />

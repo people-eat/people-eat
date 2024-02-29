@@ -13,7 +13,7 @@ export function PEButton({ title, type = 'primary', onClick, className }: PEButt
             <input
                 type="submit"
                 className={classNames(
-                    'rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 cursor-pointer',
+                    'rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 cursor-pointer',
                     className,
                 )}
                 value={title}
@@ -39,7 +39,7 @@ export function PEButton({ title, type = 'primary', onClick, className }: PEButt
         <button
             type="button"
             className={classNames(
-                'rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600',
+                'rounded-full bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
                 className,
             )}
             onClick={onClick}

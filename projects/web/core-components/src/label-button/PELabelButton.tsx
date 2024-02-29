@@ -15,7 +15,7 @@ export function PELabelButton({ title, selected, onSelect, onDeselect }: PELabel
                 type="button"
                 className={classNames(
                     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600',
-                    'rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
+                    'rounded-full bg-white px-4 py-2.5 text-sm text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
                 )}
                 onClick={onSelect}
             >

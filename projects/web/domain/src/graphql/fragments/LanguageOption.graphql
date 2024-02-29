@@ -1,0 +1,4 @@
+fragment LanguageOption on Language {
+    languageId
+    title
+}

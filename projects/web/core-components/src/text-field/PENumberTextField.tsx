@@ -6,17 +6,15 @@ export interface PENumberTextFieldProps {
     labelTitle?: string;
     placeholder?: string;
     errorMessage?: string;
-    min?: number;
-    max?: number;
-    step?: number;
+    className?: string;
 }
 
 export const PENumberTextField = forwardRef(function (
-    { id, labelTitle, placeholder, errorMessage, min, max, step, ...rest }: PENumberTextFieldProps,
+    { id, labelTitle, placeholder, errorMessage, className, ...rest }: PENumberTextFieldProps,
     ref: ForwardedRef<HTMLInputElement>,
 ) {
     return (
-        <div className="w-full">
+        <div className={classNames(className)}>
             {labelTitle && (
                 <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900 mb-2">
                     {labelTitle}
@@ -31,9 +29,6 @@ export const PENumberTextField = forwardRef(function (
                     '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
                 )}
                 ref={ref}
-                min={min}
-                max={max}
-                step={step}
                 {...rest}
             />
 

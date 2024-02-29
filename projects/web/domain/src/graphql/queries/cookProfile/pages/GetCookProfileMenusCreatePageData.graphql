@@ -1,0 +1,30 @@
+query GetCookProfileMenusCreatePageData {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+            cook {
+                meals {
+                    mealId
+                    cookId
+                    title
+                    type
+                    description
+                    imageUrl
+                    createdAt
+                }
+            }
+        }
+    }
+    categories {
+        findAll {
+            categoryId
+            title
+        }
+    }
+    kitchens {
+        findAll {
+            kitchenId
+            title
+        }
+    }
+}

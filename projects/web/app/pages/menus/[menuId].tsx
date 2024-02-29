@@ -1,24 +1,21 @@
 import { useMutation } from '@apollo/client';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import {
+    BookBar,
+    BookForm,
     LoadingDialog,
-    MealCard,
-    PEBookBar,
+    MealSelectionCard,
     PECostBreakdownPanel,
     PEFooter,
     PEHeader,
     Payment,
-    SignInDialog,
-    SignUpDialog,
 } from '@people-eat/web-components';
 import { PEButton, PEDialog, PEFullPageSheet } from '@people-eat/web-core-components';
 import {
     AllergyOption,
-    AssignOneSessionByEmailAddressDocument,
     CostBreakdown,
     CreateBookingRequestRequest,
     CreateOneUserBookingRequestDocument,
-    CreateOneUserByEmailAddressDocument,
     GetPublicMenuPageDataDocument,
     GetPublicMenuPageDataQuery,
     LineItem,
@@ -35,10 +32,11 @@ import {
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import debounce from 'lodash/debounce';
-import { CircleUser, HandPlatter, MinusIcon, PlusIcon, ShoppingBasket, Sparkles, Utensils, X } from 'lucide-react';
+import { CheckCircleIcon, Circle, CircleUser, HandPlatter, MinusIcon, PlusIcon, ShoppingBasket, Sparkles, Utensils, X } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { Fragment, useCallback, useEffect, useState } from 'react';
+import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 
@@ -163,7 +161,7 @@ function toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, 
 }
 
 interface ServerSideProps {
-    signedInUser: SignedInUser | null;
+    initialSignedInUser: SignedInUser | null;
     menu: NonNullable<GetPublicMenuPageDataQuery['publicMenus']['findOne']>;
     allergies: AllergyOption[];
     searchParams: SearchParams;
@@ -190,7 +188,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                signedInUser: result.data.users.signedInUser ?? null,
+                initialSignedInUser: result.data.users.signedInUser ?? null,
                 menu,
                 allergies: result.data.allergies.findAll,
                 searchParams,
@@ -202,7 +200,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function PublicMenuPage({ signedInUser, menu, allergies, searchParams, stripePublishableKey }: ServerSideProps) {
+export default function PublicMenuPage({ initialSignedInUser, menu, allergies, searchParams, stripePublishableKey }: ServerSideProps) {
+    const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
+
     const [shopBook, setShowBook] = useState(false);
 
     const [adults, setAdults] = useState(searchParams.adults);
@@ -234,7 +234,13 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
     );
 
     const [selectedMeal, setSelectedMeal] = useState<
-        | Unpacked<Unpacked<Unpacked<NonNullable<GetPublicMenuPageDataQuery['publicMenus']['findOne']>>['courses']>['mealOptions']>['meal']
+        | {
+              courseId: string;
+              index: number;
+              meal: Unpacked<
+                  Unpacked<Unpacked<NonNullable<GetPublicMenuPageDataQuery['publicMenus']['findOne']>>['courses']>['mealOptions']
+              >['meal'];
+          }
         | undefined
     >();
 
@@ -261,11 +267,7 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
 
     const costBreakdown: CostBreakdown = toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, menu });
 
-    const [assignOneSessionByEmailAddress, { loading: assignSessionLoading }] = useMutation(AssignOneSessionByEmailAddressDocument);
-    const [createOneUserByEmailAddress, { loading: createUserLoading }] = useMutation(CreateOneUserByEmailAddressDocument);
-
-    const [showSignIn, setShowSignIn] = useState(false);
-    const [showSignUp, setShowSignUp] = useState(false);
+    const [authDialogOpen, setAuthDialogOpen] = useState(false);
     const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
     // booking request related section
@@ -296,7 +298,7 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
                 preparationTime: 120,
                 configuredMenu: {
                     menuId: menu.menuId,
-                    courses: [],
+                    courses: Object.entries(courseMealSelections).map(([courseId, mealId]) => ({ courseId, mealId })),
                 },
                 travelExpensesAmount: 0,
             },
@@ -315,6 +317,7 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
                     setCompletionState('SUCCESSFUL');
                     setStripeClientSecret(data.users.bookingRequests.createOne.clientSecret);
                     setBookingRequestId(data.users.bookingRequests.createOne.bookingRequestId);
+                    setShowPaymentDialog(true);
                 } else setCompletionState('FAILED');
             })
             .catch(() => setCompletionState('FAILED'))
@@ -324,113 +327,66 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
-            {completionState}
+
+            <LoadingDialog active={loading} />
 
             {completionState === 'SUCCESSFUL' && stripeClientSecret && stripePublishableKey && (
                 <PEDialog open={showPaymentDialog} onClose={() => setShowPaymentDialog(false)}>
-                    <h2>Zahlungsmittel hinterlegen</h2>
+                    <div className="bg-white rounded-2xl p-8 w-full">
+                        <h2 className="text-xl font-semibold">Zahlungsmittel hinterlegen</h2>
 
-                    <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret }}>
-                        <Payment userId={signedInUser!.userId} bookingRequestId={bookingRequestId!}>
-                            <div>
-                                {/* <h3 style={{ lineHeight: 0 }}>{publicMenu.title}</h3>
+                        <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret }}>
+                            <Payment userId={signedInUser!.userId} bookingRequestId={bookingRequestId!}>
+                                <div className="flex flex-col gap-4">
+                                    <h3 className="text-lg font-semibold">{menu.title}</h3>
 
-                                {configuredMenuCoursesForPreview.map(({ courseId, courseTitle, mealTitle }) => (
-                                    <VStack key={courseId}>
-                                        <b>{courseTitle}</b>
-                                        <div>{mealTitle}</div>
-                                    </VStack>
-                                ))}
+                                    {/* {courseMealSelections.map(({ courseId, courseTitle, mealTitle }) => (
+                                        <VStack key={courseId}>
+                                            <b>{courseTitle}</b>
+                                            <div>{mealTitle}</div>
+                                        </VStack>
+                                    ))} */}
 
-                                <Spacer />
+                                    {/* <Spacer /> */}
 
-                                <Divider flexItem /> */}
+                                    {/*<Divider flexItem /> */}
 
-                                <PECostBreakdownPanel costBreakdown={costBreakdown} />
+                                    <PECostBreakdownPanel costBreakdown={costBreakdown} />
 
-                                {/* {moreThanTwoWeeksInTheFuture <= 14 && (
-                                    <div className="text-text-sm" style={{ color: 'gray' }}>
-                                        Der Gesamtbetrag wird erst dann eingezogen wenn der Koch die Anfrage akzeptiert hat.
-                                    </div>
-                                )}
+                                    {/* {moreThanTwoWeeksInTheFuture <= 14 && (
+                                        <div className="text-text-sm" style={{ color: 'gray' }}>
+                                            Der Gesamtbetrag wird erst dann eingezogen wenn der Koch die Anfrage akzeptiert hat.
+                                        </div>
+                                    )}
 
-                                {moreThanTwoWeeksInTheFuture > 14 && (
-                                    <div className="text-text-sm" style={{ color: 'gray' }}>
-                                        Nachdem der Koch die Anfrage akzeptiert hat, wird die Gesamtsumme 2 Wochen vor dem Event eingezogen
-                                        (zuvor wird eine Ankündigungsmail verschickt).
-                                    </div>
-                                )} */}
-                            </div>
-                        </Payment>
-                    </Elements>
+                                    {moreThanTwoWeeksInTheFuture > 14 && (
+                                        <div className="text-text-sm" style={{ color: 'gray' }}>
+                                            Nachdem der Koch die Anfrage akzeptiert hat, wird die Gesamtsumme 2 Wochen vor dem Event eingezogen
+                                            (zuvor wird eine Ankündigungsmail verschickt).
+                                        </div>
+                                    )} */}
+                                </div>
+                            </Payment>
+                        </Elements>
+                    </div>
                 </PEDialog>
             )}
 
-            <SignInDialog
-                open={showSignIn}
-                onClose={() => setShowSignIn(false)}
-                completeTitle="Anfrage Senden"
-                onSignIn={(emailAddress, password) => {
-                    assignOneSessionByEmailAddress({
-                        variables: {
-                            request: {
-                                emailAddress,
-                                password,
-                                platform: 'BROWSER',
-                                title: '',
-                            },
-                        },
-                    }).then((result) => {
-                        if (result.data?.sessions.success) {
-                            setShowSignIn(false);
-                            setShowPaymentDialog(true);
-                            onBook();
-                        }
-                    });
-                }}
-                onSignUp={() => {
-                    setShowSignIn(false);
-                    setShowSignUp(true);
+            <PEAuthDialog
+                open={authDialogOpen}
+                onClose={() => setAuthDialogOpen(false)}
+                signInButtonTitle="Anfrage senden"
+                signUpButtonTitle="Registrieren"
+                onSignedInUserFetched={(changedSignedInUser) => {
+                    setSignedInUser(changedSignedInUser);
+                    setAuthDialogOpen(false);
+                    setShowPaymentDialog(true);
+                    onBook();
                 }}
             />
-
-            <SignUpDialog
-                open={showSignUp}
-                onClose={() => setShowSignUp(false)}
-                completeTitle="Anfrage Senden"
-                onSignUp={(firstName: string, lastName: string, emailAddress: string, phoneNumber: string, password: string) => {
-                    createOneUserByEmailAddress({
-                        variables: {
-                            request: {
-                                firstName,
-                                lastName,
-                                emailAddress,
-                                phoneNumber,
-                                password,
-                                gender: 'NO_INFORMATION',
-                                language: 'GERMAN',
-                            },
-                        },
-                    }).then((result) => {
-                        if (result.data?.users.success) {
-                            setShowSignUp(false);
-                            setShowPaymentDialog(true);
-                            onBook();
-                        }
-                    });
-                }}
-                onSignIn={() => {
-                    setShowSignIn(true);
-                    setShowSignUp(false);
-                }}
-            />
-
-            <LoadingDialog active={assignSessionLoading} />
-            <LoadingDialog active={createUserLoading} />
-            <LoadingDialog active={loading} />
 
             <PEFullPageSheet title="Event Details" open={shopBook} onClose={() => setShowBook(false)}>
-                <PEBookBar
+                <BookForm
                     onLocationSearchTextChange={onLocationSearchTextChange}
                     locationSearchResults={locationSearchResults}
                     selectedLocation={selectedLocation}
@@ -451,7 +407,7 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
                     costBreakdown={costBreakdown}
                     searchButton={{
                         title: 'Anfrage senden',
-                        onClick: () => (signedInUser ? onBook() : setShowSignIn(true)),
+                        onClick: () => (signedInUser ? onBook() : setAuthDialogOpen(true)),
                     }}
                     allergies={{
                         allergyOptions: allergies,
@@ -502,7 +458,7 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
 
                                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
                                     {mealOptions.map(({ index, meal }) => (
-                                        <MealCard
+                                        <MealSelectionCard
                                             key={meal.mealId}
                                             title={meal.title}
                                             description={meal.description}
@@ -513,7 +469,7 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
                                                 map.set(courseId, { index, meal });
                                                 setCourseMealSelections(map);
                                             }}
-                                            onInfoClick={() => setSelectedMeal(meal)}
+                                            onInfoClick={() => setSelectedMeal({ meal, courseId, index })}
                                         />
                                     ))}
                                 </ul>
@@ -521,37 +477,35 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
                         ))}
                     </div>
 
-                    <div className="sticky top-4 float-none h-full hidden lg:block shadow-lg shadow-orange-500/20 rounded-2xl p-6 w-96">
-                        <PEBookBar
-                            onLocationSearchTextChange={onLocationSearchTextChange}
-                            locationSearchResults={locationSearchResults}
-                            selectedLocation={selectedLocation}
-                            setSelectedLocation={setSelectedLocation}
-                            isOutOfTravelRadius={isOutOfCookTravelRadius}
-                            adults={adults}
-                            setAdults={setAdults}
-                            kids={children}
-                            setKids={setChildren}
-                            date={date}
-                            setDate={setDate}
-                            time={time}
-                            setTime={setTime}
-                            message={message}
-                            setMessage={setMessage}
-                            occasion={occasion}
-                            setOccasion={setOccasion}
-                            costBreakdown={costBreakdown}
-                            searchButton={{
-                                title: 'Anfrage senden',
-                                onClick: () => (signedInUser ? onBook() : setShowSignIn(true)),
-                            }}
-                            allergies={{
-                                allergyOptions: allergies,
-                                selectedAllergies: selectedAllergies,
-                                onChange: setSelectedAllergies,
-                            }}
-                        />
-                    </div>
+                    <BookBar
+                        onLocationSearchTextChange={onLocationSearchTextChange}
+                        locationSearchResults={locationSearchResults}
+                        selectedLocation={selectedLocation}
+                        setSelectedLocation={setSelectedLocation}
+                        isOutOfTravelRadius={isOutOfCookTravelRadius}
+                        adults={adults}
+                        setAdults={setAdults}
+                        kids={children}
+                        setKids={setChildren}
+                        date={date}
+                        setDate={setDate}
+                        time={time}
+                        setTime={setTime}
+                        message={message}
+                        setMessage={setMessage}
+                        occasion={occasion}
+                        setOccasion={setOccasion}
+                        costBreakdown={costBreakdown}
+                        searchButton={{
+                            title: 'Anfrage senden',
+                            onClick: () => (signedInUser ? onBook() : setAuthDialogOpen(true)),
+                        }}
+                        allergies={{
+                            allergyOptions: allergies,
+                            selectedAllergies: selectedAllergies,
+                            onChange: setSelectedAllergies,
+                        }}
+                    />
                 </div>
 
                 <div className="mx-auto max-w-7xl py-24 sm:px-2 sm:py-32 lg:px-4 block">
@@ -660,10 +614,10 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
                                             <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                                                 <div className="sm:col-span-4 lg:col-span-5">
                                                     <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
-                                                        {selectedMeal.imageUrl && (
+                                                        {selectedMeal.meal.imageUrl && (
                                                             <Image
                                                                 unoptimized
-                                                                src={selectedMeal.imageUrl}
+                                                                src={selectedMeal.meal.imageUrl}
                                                                 alt=""
                                                                 className="object-cover object-center"
                                                                 width={600}
@@ -673,7 +627,7 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
                                                     </div>
                                                 </div>
                                                 <div className="sm:col-span-8 lg:col-span-7">
-                                                    <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{selectedMeal.title}</h2>
+                                                    <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{selectedMeal.meal.title}</h2>
 
                                                     <section aria-labelledby="information-heading" className="mt-3">
                                                         <h3 id="information-heading" className="sr-only">
@@ -682,12 +636,34 @@ export default function PublicMenuPage({ signedInUser, menu, allergies, searchPa
 
                                                         <div className="mt-6">
                                                             <h4 className="sr-only">Description</h4>
-                                                            <p className="text-sm text-gray-700">{selectedMeal.description}</p>
+                                                            <p className="text-sm text-gray-700">{selectedMeal.meal.description}</p>
                                                         </div>
                                                     </section>
 
                                                     <section aria-labelledby="options-heading" className="mt-6">
-                                                        <PEButton title="Auswählen" onClick={() => undefined} />
+                                                        {courseMealSelections.get(selectedMeal.courseId)?.index === selectedMeal.index && (
+                                                            <div className="inline-flex items-center gap-x-2 rounded-full bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm">
+                                                                <span>Ausgewählt</span>
+                                                                <CheckCircleIcon className="-mr-0.5 h-5 w-5" aria-hidden="true" />
+                                                            </div>
+                                                        )}
+                                                        {courseMealSelections.get(selectedMeal.courseId)?.index !== selectedMeal.index && (
+                                                            <button
+                                                                type="button"
+                                                                className="inline-flex items-center gap-x-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                                                onClick={() => {
+                                                                    const map = new Map(courseMealSelections);
+                                                                    map.set(selectedMeal.courseId, {
+                                                                        index: selectedMeal.index,
+                                                                        meal: selectedMeal.meal,
+                                                                    });
+                                                                    setCourseMealSelections(map);
+                                                                }}
+                                                            >
+                                                                <span>Auswählen</span>
+                                                                <Circle className="-mr-0.5 h-5 w-5" aria-hidden="true" />
+                                                            </button>
+                                                        )}
                                                     </section>
                                                 </div>
                                             </div>

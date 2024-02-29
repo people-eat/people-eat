@@ -29,6 +29,14 @@ export default function Index({ signedInUser, latestTermsAndConditions }: Server
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
+
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 my-16">Allgemeine Geschäftsbedingungen</h1>
+
+                {latestTermsAndConditions && <div dangerouslySetInnerHTML={{ __html: latestTermsAndConditions.germanText }} />}
+                {!latestTermsAndConditions && <>Currently no terms and conditions are available</>}
+            </div>
+
             <PEFooter />
         </div>
     );

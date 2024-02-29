@@ -1,7 +1,15 @@
 import { Disclosure } from '@headlessui/react';
 import { PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
-import { GetPageDataDocument, LocationSearchResult, SignedInUser } from '@people-eat/web-domain';
+import {
+    GetPageDataDocument,
+    LocationSearchResult,
+    SearchMode,
+    SearchParams,
+    SignedInUser,
+    toQueryParams,
+    toValidatedSearchParams,
+} from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import {
     HandPlatter,
@@ -127,13 +135,13 @@ const transferFeatures = [
     {
         id: 2,
         name: 'Servieren der Gerichte',
-        description: 'Lehn dich zurück, lass dich und deine deine Lieben kulinarisch verwöhnen und kreiert Erinnerungen die bleiben.',
+        description: 'Lehn dich zurück, lass dich und deine Lieben kulinarisch verwöhnen und kreiert Erinnerungen die bleiben.',
         icon: HandPlatter,
     },
     {
         id: 3,
         name: 'Saubere Küche',
-        description: 'Lass den Abend ausklingen und mache dir keine Gedanken mehr über das aufräumen der Küche danach.',
+        description: 'Lass den Abend ausklingen und mache dir keine Gedanken mehr über das Aufräumen der Küche danach.',
         icon: Sparkles,
     },
 ];
@@ -157,7 +165,7 @@ const jobOpenings = [
         id: 3,
         role: 'Einfache Kommunikation',
         description:
-            'Vergiss Dutzende von E-Mails oder Telefonanrufen, wir halten deine Bestelldetails an einem Ort fest und sorgen für eine reibungslose Kommunikation mit deinem Koch.',
+            'Vergiss dutzende von E-Mails oder Telefonanrufen, wir halten deine Bestelldetails an einem Ort fest und sorgen für eine reibungslose Kommunikation mit deinem Koch.',
         icon: MessageCircleMore,
     },
 ];
@@ -187,10 +195,12 @@ const features = [
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
+    searchParams: SearchParams;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
+    const searchParams = toValidatedSearchParams(query);
 
     try {
         const result = await apolloClient.query({ query: GetPageDataDocument });
@@ -198,6 +208,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         return {
             props: {
                 signedInUser: result.data.users.signedInUser ?? null,
+                searchParams,
             },
         };
     } catch (error) {
@@ -205,15 +216,25 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function Index({ signedInUser }: ServerSideProps) {
+export default function HomePage({ signedInUser, searchParams }: ServerSideProps) {
     const router = useRouter();
 
-    const [adults, setAdults] = useState(2);
-    const [children, setChildren] = useState(0);
-    const [date, setDate] = useState(new Date());
+    const [searchMode, setSearchMode] = useState<SearchMode>('MENUS');
+    const [adults, setAdults] = useState(searchParams.adults);
+    const [children, setChildren] = useState(searchParams.children);
+    const [date, setDate] = useState(new Date(searchParams.dateString));
 
     const [locationSearchResults, setLocationSearchResults] = useState<LocationSearchResult[]>([]);
-    const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>();
+    const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>(
+        searchParams.locationText && searchParams.locationLatitude && searchParams.locationLongitude
+            ? {
+                  id: '',
+                  text: searchParams.locationText,
+                  latitude: searchParams.locationLatitude,
+                  longitude: searchParams.locationLongitude,
+              }
+            : undefined,
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onLocationSearchTextChange = useCallback(
@@ -229,6 +250,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                 <div className="relative bg-gray-900">
                     <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
                         <Image
+                            unoptimized
                             src="/home/wein-dinner.png"
                             alt=""
                             className="h-full w-full object-cover object-center"
@@ -259,16 +281,29 @@ export default function Index({ signedInUser }: ServerSideProps) {
                             setKids={setChildren}
                             date={date}
                             setDate={setDate}
-                            onSearch={() => router.push({ pathname: '/menus' })}
+                            searchMode={searchMode}
+                            setSearchMode={setSearchMode}
+                            onSearchCooks={() =>
+                                router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                            }
+                            onSearchMenus={() =>
+                                router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                            }
                         />
 
                         <div className="sm:flex mt-8 self-center">
                             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-white ring-1 ring-white hover:ring-gray-900/20">
                                 Du hast kein Menü gefunden oder hast individuelle Präferenzen?{' '}
-                                <a href="/global-booking-request" className="whitespace-nowrap font-semibold text-orange-500">
+                                <Link
+                                    className="whitespace-nowrap font-semibold text-orange-500"
+                                    href={{
+                                        pathname: '/global-booking-request',
+                                        query: toQueryParams({ selectedLocation, date, adults, children }),
+                                    }}
+                                >
                                     <span className="absolute inset-0" aria-hidden="true" />
                                     Anfrage senden <span aria-hidden="true">&rarr;</span>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -282,8 +317,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                             Spare deine Zeit und Energie auf der Suche nach deinem Privatkoch
                         </h2>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Wir haben die talentiertesten Köche und ihre Menüs aus ganz Deutschland und den Buchungsprozess einfach und
-                            bequem für dich gestaltet
+                            Bringe die talentiertesten Köche und ihre Menüs aus ganz Deutschland ganz einfach und bequem zu dir Nachhause.
                         </p>
                     </div>
                     <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -314,17 +348,24 @@ export default function Index({ signedInUser }: ServerSideProps) {
                                 Feiere einzigartige Anlässe und kreiere unvergessliche Momente an jedem Ort
                             </h2>
                             <p className="mt-6 text-xl leading-8 text-gray-600">
-                                Ein Privatkoch ist die ideale Möglichkeit jeden Anlass zu feiern. Egal, ob du ein Treffen mit deinen
+                                Ein Privatkoch ist die ideale Gelegenheit jeden Anlass zu feiern. Egal, ob du ein Treffen mit deinen
                                 Freunden, ein Team-Event, einen Geburtstag planst oder ein Familienessen organisierst, PeopleEat bietet dir
                                 die Plattform auf der du deine Lebensmomente mit kulinarischen Erlebnissen verbindest.
                             </p>
                             <div className="mt-10 flex">
-                                <PELink title="Jetzt Buchen" href="/global-booking-request" />
+                                <PELink
+                                    title="Jetzt Buchen"
+                                    href={{
+                                        pathname: '/global-booking-request',
+                                        query: toQueryParams({ selectedLocation, date, adults, children }),
+                                    }}
+                                />
                             </div>
                         </div>
                         <div className="flex flex-wrap items-start justify-end gap-6 sm:gap-8 lg:contents">
                             <div className="w-0 flex-auto lg:ml-auto lg:w-auto lg:flex-none lg:self-end">
                                 <Image
+                                    unoptimized
                                     src="/home/13.jpg"
                                     alt="Koch für private Feier"
                                     className="aspect-[7/5] w-[37rem] max-w-none rounded-2xl bg-gray-50 object-cover"
@@ -335,6 +376,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                             <div className="contents lg:col-span-2 lg:col-end-2 lg:ml-auto lg:flex lg:w-[37rem] lg:items-start lg:justify-end lg:gap-x-8">
                                 <div className="order-first flex w-64 flex-none justify-end self-end lg:w-auto">
                                     <Image
+                                        unoptimized
                                         src="/home/12.jpg"
                                         alt="Miete einen Koch"
                                         className="aspect-[4/3] w-[24rem] max-w-none flex-none rounded-2xl bg-gray-50 object-cover"
@@ -344,6 +386,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                                 </div>
                                 <div className="flex w-96 flex-auto justify-end lg:w-auto lg:flex-none">
                                     <Image
+                                        unoptimized
                                         src="/home/15.jpg"
                                         alt="Koch zu mieten"
                                         className="aspect-[7/5] w-[37rem] max-w-none flex-none rounded-2xl bg-gray-50 object-cover"
@@ -353,6 +396,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                                 </div>
                                 <div className="hidden sm:block sm:w-0 sm:flex-auto lg:w-auto lg:flex-none">
                                     <Image
+                                        unoptimized
                                         src="/home/14.jpg"
                                         alt="Koch mieten für zuhause"
                                         className="aspect-[4/3] w-[24rem] max-w-none rounded-2xl bg-gray-50 object-cover"
@@ -396,7 +440,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                                 Werde Gastgeber aus Leidenschaft
                             </h2>
-                            <p className="mt-3 text-lg text-gray-500">Dein Gaumen entscheidet das Menü - wir übernehmen die Arbeit</p>
+                            <p className="mt-3 text-lg text-gray-500">Du entscheidest das Menü - wir übernehmen den Rest</p>
 
                             <dl className="mt-10 space-y-10">
                                 {transferFeatures.map((item) => (
@@ -435,7 +479,14 @@ export default function Index({ signedInUser }: ServerSideProps) {
                                 </defs>
                                 <rect width={784} height={404} fill="url(#ca9667ae-9f92-4be7-abcb-9e3d727f2941)" />
                             </svg>
-                            <Image className="relative mx-auto rounded-xl " width={1000} height={600} src="/home/dinner.jpeg" alt="" />
+                            <Image
+                                unoptimized
+                                className="relative mx-auto rounded-xl "
+                                width={1000}
+                                height={600}
+                                src="/home/dinner.jpeg"
+                                alt=""
+                            />
                         </div>
                     </div>
 
@@ -472,6 +523,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                             <div className="mx-auto max-w-md px-6 sm:max-w-3xl lg:max-w-none lg:p-0">
                                 <div className="aspect-h-6 aspect-w-10 sm:aspect-h-1 sm:aspect-w-2 lg:aspect-w-1">
                                     <Image
+                                        unoptimized
                                         className="rounded-3xl object-cover object-center shadow-2xl"
                                         src="/home/diing-2.jpg"
                                         alt=""
@@ -543,7 +595,13 @@ export default function Index({ signedInUser }: ServerSideProps) {
                                     <br />
                                     3. Bestätige und stimme dich direkt via Chat mit deinem PeopleEat Chef ab.
                                 </p>
-                                <PELink href="/global-booking-request" title="Jetzt buchen" />
+                                <PELink
+                                    title="Jetzt Buchen"
+                                    href={{
+                                        pathname: '/global-booking-request',
+                                        query: toQueryParams({ selectedLocation, date, adults, children }),
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
@@ -558,6 +616,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                                 Unsere Stärken liegen in deinem Komfort
                             </h2>
                             <Image
+                                unoptimized
                                 src="/home/dining.png"
                                 alt=""
                                 className="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
@@ -645,6 +704,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                         <div className="mx-auto mt-10 grid grid-cols-4 items-start gap-x-8 gap-y-10 sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:grid-cols-5">
                             <Link href="https://entrepreneurship-centre.fs.de/portfolio/peopleeat" target="_blank">
                                 <Image
+                                    unoptimized
                                     className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
                                     src="/home/frankfurt-school-logo.png"
                                     alt="Frankfurt Business School of Finance"
@@ -654,6 +714,7 @@ export default function Index({ signedInUser }: ServerSideProps) {
                             </Link>
                             <Link href="https://startupverband.de" target="_blank">
                                 <Image
+                                    unoptimized
                                     className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
                                     src="/home/startup-verband.png"
                                     alt="Statamic"

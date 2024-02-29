@@ -1,0 +1,7 @@
+mutation ConfirmOneEmailAddressUpdate($secret: String!) {
+    users {
+        emailAddressUpdate(userId: "") {
+            success: confirm(secret: $secret)
+        }
+    }
+}

@@ -1,10 +1,9 @@
 import { useMutation } from '@apollo/client';
-import { LoadingDialog, PEBookBar, PEFooter, PEHeader, SignInDialog, SignUpDialog } from '@people-eat/web-components';
+import { BookForm, LoadingDialog, PEFooter, PEHeader } from '@people-eat/web-components';
+import { PEAlert } from '@people-eat/web-core-components';
 import {
     AllergyOption,
-    AssignOneSessionByEmailAddressDocument,
     CategoryOption,
-    CreateOneUserByEmailAddressDocument,
     CreateOneUserGlobalBookingRequestDocument,
     GetGlobalBookingRequestPageDataDocument,
     KitchenOption,
@@ -19,12 +18,14 @@ import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { PEAuthDialog } from '../components/PEAuthDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 
 interface ServerSideProps {
-    signedInUser: SignedInUser | null;
+    initialSignedInUser: SignedInUser | null;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
     allergies: AllergyOption[];
@@ -40,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                signedInUser: result.data.users.signedInUser ?? null,
+                initialSignedInUser: result.data.users.signedInUser ?? null,
                 categories: result.data.categories.findAll,
                 kitchens: result.data.kitchens.findAll,
                 allergies: result.data.allergies.findAll,
@@ -52,7 +53,11 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function GlobalBookingRequestPage({ signedInUser, categories, kitchens, allergies, searchParams }: ServerSideProps) {
+export default function GlobalBookingRequestPage({ initialSignedInUser, categories, kitchens, allergies, searchParams }: ServerSideProps) {
+    const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
+
+    const router = useRouter();
+
     const [adults, setAdults] = useState(searchParams.adults);
     const [children, setChildren] = useState(searchParams.children);
     const [date, setDate] = useState(new Date(searchParams.dateString));
@@ -85,111 +90,81 @@ export default function GlobalBookingRequestPage({ signedInUser, categories, kit
         [],
     );
 
-    const [createOneGlobalBookingRequest, { loading }] = useMutation(CreateOneUserGlobalBookingRequestDocument, {
+    const request = {
+        adultParticipants: adults,
+        allergyIds: selectedAllergies.map(({ allergyId }) => allergyId),
+        categoryIds: selectedCategories.map(({ categoryId }) => categoryId),
+        children: children,
+        dateTime: new Date(),
+        duration: 0,
+        kitchenId: selectedKitchen?.kitchenId,
+        location: {
+            latitude: selectedLocation?.latitude ?? 0,
+            longitude: selectedLocation?.longitude ?? 0,
+            text: selectedLocation?.text,
+        },
+        message,
+        occasion: occasion,
+        phoneNumber: undefined,
+        priceClassType: priceClass,
+    };
+
+    const [createOneGlobalBookingRequest, { loading, data, reset }] = useMutation(CreateOneUserGlobalBookingRequestDocument, {
         variables: {
             userId: signedInUser?.userId ?? '',
-            request: {
-                adultParticipants: adults,
-                allergyIds: selectedAllergies.map(({ allergyId }) => allergyId),
-                categoryIds: selectedCategories.map(({ categoryId }) => categoryId),
-                children: children,
-                dateTime: new Date(),
-                duration: 0,
-                kitchenId: selectedKitchen?.kitchenId,
-                location: {
-                    latitude: selectedLocation?.latitude ?? 0,
-                    longitude: selectedLocation?.longitude ?? 0,
-                    text: selectedLocation?.text,
-                },
-                message,
-                occasion: occasion,
-                phoneNumber: undefined,
-                priceClassType: priceClass,
-            },
+            request,
         },
     });
 
-    const [assignOneSessionByEmailAddress, { loading: assignSessionLoading }] = useMutation(AssignOneSessionByEmailAddressDocument);
-    const [createOneUserByEmailAddress, { loading: createUserLoading }] = useMutation(CreateOneUserByEmailAddressDocument);
+    const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
-    const [showSignIn, setShowSignIn] = useState(false);
-    const [showSignUp, setShowSignUp] = useState(false);
+    const showSuccessAlert = data?.users.globalBookingRequests.success ?? false;
+    const showFailedAlert = data ? !data.users.globalBookingRequests.success : false;
 
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
 
+            <PEAlert
+                open={showSuccessAlert}
+                title="Anfrage erfolgreich gesendet"
+                subtitle="In deinem Emailpostfach findest du eine Bestätigung deiner Buchungsnafrage. Wir werden uns bald bei dir melden."
+                button={{ title: 'Fertig', onClick: () => router.push('/') }}
+            />
+
+            <PEAlert
+                open={showFailedAlert}
+                title="Leider ist ein Fehler aufgetreten"
+                subtitle="Bitte versuche es später erneut"
+                button={{ title: 'Erneut versuchen', onClick: () => reset() }}
+            />
+
             <LoadingDialog active={loading} />
 
-            <SignInDialog
-                open={showSignIn}
-                onClose={() => setShowSignIn(false)}
-                completeTitle="Anfrage Senden"
-                onSignIn={(emailAddress, password) => {
-                    assignOneSessionByEmailAddress({
-                        variables: {
-                            request: {
-                                emailAddress,
-                                password,
-                                platform: 'BROWSER',
-                                title: '',
-                            },
-                        },
-                    }).then((result) => {
-                        if (result.data?.sessions.success) {
-                            setShowSignIn(false);
-                            createOneGlobalBookingRequest();
-                        }
-                    });
-                }}
-                onSignUp={() => {
-                    setShowSignIn(false);
-                    setShowSignUp(true);
+            <PEAuthDialog
+                open={authDialogOpen}
+                onClose={() => setAuthDialogOpen(false)}
+                signInButtonTitle="Anfrage senden"
+                signUpButtonTitle="Registrieren"
+                onSignedInUserFetched={(changedSignedInUser) => {
+                    setAuthDialogOpen(false);
+                    setSignedInUser(changedSignedInUser);
+                    createOneGlobalBookingRequest({ variables: { userId: changedSignedInUser.userId, request } });
                 }}
             />
-
-            <SignUpDialog
-                open={showSignUp}
-                onClose={() => setShowSignUp(false)}
-                completeTitle="Anfrage Senden"
-                onSignUp={(firstName: string, lastName: string, emailAddress: string, phoneNumber: string, password: string) => {
-                    createOneUserByEmailAddress({
-                        variables: {
-                            request: {
-                                firstName,
-                                lastName,
-                                emailAddress,
-                                phoneNumber,
-                                password,
-                                gender: 'NO_INFORMATION',
-                                language: 'GERMAN',
-                            },
-                        },
-                    }).then((result) => {
-                        if (result.data?.users.success) {
-                            setShowSignUp(false);
-                            createOneGlobalBookingRequest();
-                        }
-                    });
-                }}
-                onSignIn={() => {
-                    setShowSignIn(true);
-                    setShowSignUp(false);
-                }}
-            />
-
-            <LoadingDialog active={assignSessionLoading} />
-            <LoadingDialog active={createUserLoading} />
-
-            {/* <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                Globale Buchungsanfrage - {searchParams.adults} - {searchParams.children}
-            </div> */}
 
             <div className="bg-white">
-                <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-7xl lg:px-8">
+                <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-7xl lg:px-8 flex flex-col gap-10">
+                    <div className="flex flex-col gap-4">
+                        <h1 className="font-bold text-3xl tracking-tight text-gray-900">Individuelle Anfrage</h1>
+                        <span className="text-gray-500">
+                            Sende uns eine Anfrage mit deinen individuellen Präferenzen. Wir klären die letzten Einzelheiten mit dir ab und
+                            matchen dich mit deinem perfekten Koch.
+                        </span>
+                    </div>
                     <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
                         <div className="lg:col-span-6 lg:col-start-8">
-                            <PEBookBar
+                            <BookForm
                                 onLocationSearchTextChange={onLocationSearchTextChange}
                                 locationSearchResults={locationSearchResults}
                                 selectedLocation={selectedLocation}
@@ -209,7 +184,7 @@ export default function GlobalBookingRequestPage({ signedInUser, categories, kit
                                 setOccasion={setOccasion}
                                 searchButton={{
                                     title: 'Anfrage senden',
-                                    onClick: () => (signedInUser ? createOneGlobalBookingRequest() : setShowSignIn(true)),
+                                    onClick: () => (signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true)),
                                 }}
                                 categories={{
                                     categoryOptions: categories,

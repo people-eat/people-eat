@@ -1,0 +1,11 @@
+mutation CreateOneUserBookingRequest($request: CreateBookingRequestRequest!, $userId: String!) {
+    users {
+        bookingRequests(userId: $userId) {
+            createOne(request: $request) {
+                success
+                clientSecret
+                bookingRequestId
+            }
+        }
+    }
+}
