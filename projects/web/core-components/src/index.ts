@@ -2,11 +2,13 @@ export { default as PEAutoComplete, type PEAutoCompleteProps } from './auto-comp
 export { PEButton } from './button/PEButton';
 export { PECalendar } from './calendar/PECalendar';
 export { PEDatePicker } from './date-picker/PEDatePicker';
+export { PEDialog, type PEDialogProps } from './dialog/PEDialog';
 export { PEFullPageSheet } from './full-page-sheet/PEFullPageSheet';
 export { PEIconButton } from './icon-button/PEIconButton';
 export { PELabelButton, type PELabelButtonProps } from './label-button/PELabelButton';
 export { PELabelMultiSelection, type PELabelMultiSelectionProps } from './label-multi-selection/PELabelMultiSelection';
 export { PELabelSingleSelection, type PELabelSingleSelectionProps } from './label-single-selection/PELabelSingleSelection';
 export { PELink } from './link/PELink';
-export { PETextField } from './text-field/PETextField';
+export { PETextArea, type PETextAreaProps } from './text-area/PETextArea';
+export { PETextField, type PETextFieldProps } from './text-field/PETextField';
 export { PETimePicker } from './time-picker/PETimePicker';
