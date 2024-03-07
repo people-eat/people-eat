@@ -1,3 +1,4 @@
+export { PEAlert, type PEAlertProps } from './alert/PEAlert';
 export { default as PEAutoComplete, type PEAutoCompleteProps } from './auto-complete/PEAutoComplete';
 export { PEButton } from './button/PEButton';
 export { PECalendar } from './calendar/PECalendar';
