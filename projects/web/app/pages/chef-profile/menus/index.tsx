@@ -9,6 +9,7 @@ import {
     formatPrice,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
@@ -73,22 +74,24 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                             pricePerAdult,
                             pricePerChild,
                         }) => (
-                            <MenuCard
-                                key={menuId}
-                                title={title}
-                                imageUrls={imageUrls}
-                                kitchenTitle={kitchen?.title}
-                                cook={{
-                                    firstName: 'Du',
-                                    profilePictureUrl: null,
-                                }}
-                                courseCount={2}
-                                pricePerPerson={formatPrice({
-                                    amount: calculateMenuPrice(2, 0, basePrice, basePriceCustomers, pricePerAdult, pricePerChild) / (2 + 0),
-                                    currencyCode: '€',
-                                })}
-                                categoryTitles={categories.map(({ title }) => title)}
-                            />
+                            <Link key={menuId} href={{ pathname: '/chef-profile/menus/' + menuId }}>
+                                <MenuCard
+                                    title={title}
+                                    imageUrls={imageUrls}
+                                    kitchenTitle={kitchen?.title}
+                                    cook={{
+                                        firstName: 'Du',
+                                        profilePictureUrl: null,
+                                    }}
+                                    courseCount={2}
+                                    pricePerPerson={formatPrice({
+                                        amount:
+                                            calculateMenuPrice(2, 0, basePrice, basePriceCustomers, pricePerAdult, pricePerChild) / (2 + 0),
+                                        currencyCode: '€',
+                                    })}
+                                    categoryTitles={categories.map(({ title }) => title)}
+                                />
+                            </Link>
                         ),
                     )}
                 </ul>

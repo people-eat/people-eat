@@ -1,4 +1,3 @@
-import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 
 export interface MenuCardProps {
@@ -18,15 +17,34 @@ export interface MenuCardProps {
 
 export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pricePerPerson, categoryTitles }: MenuCardProps) {
     return (
-        <li className="">
-            {/* <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
-                <img src={imageUrl} alt="" className="pointer-events-none object-cover group-hover:opacity-75" />
+        <li className="block">
+            <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
+                {imageUrls.length > 0 && (
+                    <Image
+                        unoptimized
+                        src={imageUrls[0]}
+                        alt="image 1"
+                        className="pointer-events-none object-cover group-hover:opacity-75"
+                        width={500}
+                        height={400}
+                    />
+                )}
+                {imageUrls.length < 1 && (
+                    <Image
+                        unoptimized
+                        src="/placeholders/menu.png"
+                        alt="image 1"
+                        className="pointer-events-none object-cover"
+                        width={500}
+                        height={400}
+                    />
+                )}
                 <button type="button" className="absolute inset-0 focus:outline-none">
                     <span className="sr-only">View details for {title}</span>
                 </button>
-            </div> */}
+            </div>
 
-            <div>
+            {/* <div>
                 <Carousel
                     className="overflow-hidden"
                     navigation={({ setActiveIndex, activeIndex, length }) => (
@@ -67,7 +85,7 @@ export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pr
                         />
                     )}
                 </Carousel>
-            </div>
+            </div> */}
 
             <dt className="text-black font-semibold truncate pt-4">{title}</dt>
             {kitchenTitle && (
@@ -76,7 +94,7 @@ export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pr
                 </dt>
             )}
             {!kitchenTitle && <dt className="text-gray-500 truncate">{courseCount} Gänge Menü</dt>}
-            <dt className="text-gray-500 truncate">{categoryTitles.join(', ')}</dt>
+            <dt className="text-gray-500 truncate">{categoryTitles.length > 0 ? categoryTitles.join(', ') : 'Keine Kategorien'}</dt>
             <dt className="text-gray-500 truncate">Koch {cook.firstName}</dt>
             <dt className="text-black truncate flex justify-end">{pricePerPerson} pro Person</dt>
         </li>

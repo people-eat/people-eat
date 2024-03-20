@@ -145,7 +145,8 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
     const {
         fields: courses,
         append,
-        // remove,
+        remove,
+        update,
     } = useFieldArray({
         control,
         name: 'courses',
@@ -365,7 +366,10 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
 
                                 {courses.map((course, index) => (
                                     <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
-                                        <h3>{course.title}</h3>
+                                        <div className="flex justify-between">
+                                            <h3>{course.title}</h3>
+                                            <button onClick={() => remove(index)}>Gang entfernen</button>
+                                        </div>
                                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                             <button
                                                 type="button"
@@ -374,14 +378,23 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                 <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
                                                 <span className="mt-2 block text-sm text-gray-900">Gericht hinzufügen</span>
                                             </button>
-                                            {course.mealOptions.map((meal) => (
+                                            {course.mealOptions.map((meal, mealOptionIndex) => (
                                                 <MealCard
+                                                    type="BUTTON"
                                                     key={meal.mealId}
                                                     title={meal.title}
                                                     description={meal.description}
                                                     imageUrl={meal.imageUrl}
-                                                    onClick={() => undefined}
                                                     onInfoClick={() => undefined}
+                                                    button={{
+                                                        title: 'Entfernen',
+                                                        onClick: () =>
+                                                            update(index, {
+                                                                ...course,
+                                                                mealOptions: course.mealOptions.filter((e, i) => i !== mealOptionIndex),
+                                                            }),
+                                                        type: 'SECONDARY',
+                                                    }}
                                                 />
                                             ))}
                                         </div>

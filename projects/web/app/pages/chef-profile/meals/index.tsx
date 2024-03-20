@@ -10,6 +10,7 @@ import {
     mealTypes,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
@@ -74,14 +75,15 @@ export default function CookProfileMealsPage({ signedInUser, initialMeals }: Ser
 
                 <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
                     {filteredMeals.map(({ mealId, title, description, imageUrl }) => (
-                        <MealCard
-                            key={mealId}
-                            title={title}
-                            description={description}
-                            imageUrl={imageUrl}
-                            onClick={() => undefined}
-                            onInfoClick={() => undefined}
-                        />
+                        <Link key={mealId} href={{ pathname: '/chef-profile/meals/' + mealId }}>
+                            <MealCard
+                                type="SIMPLE"
+                                title={title}
+                                description={description}
+                                imageUrl={imageUrl}
+                                onInfoClick={() => undefined}
+                            />
+                        </Link>
                     ))}
                 </ul>
             </div>
