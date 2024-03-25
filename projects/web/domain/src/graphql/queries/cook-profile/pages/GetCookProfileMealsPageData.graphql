@@ -8,7 +8,6 @@ query GetCookProfileMealsPageData($cookId: String!) {
         meals(cookId: $cookId) {
             findMany {
                 mealId
-                cookId
                 title
                 type
                 description

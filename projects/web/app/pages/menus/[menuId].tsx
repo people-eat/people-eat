@@ -614,16 +614,14 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                             <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                                                 <div className="sm:col-span-4 lg:col-span-5">
                                                     <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
-                                                        {selectedMeal.meal.imageUrl && (
-                                                            <Image
-                                                                unoptimized
-                                                                src={selectedMeal.meal.imageUrl}
-                                                                alt=""
-                                                                className="object-cover object-center"
-                                                                width={600}
-                                                                height={600}
-                                                            />
-                                                        )}
+                                                        <Image
+                                                            unoptimized
+                                                            src={selectedMeal.meal.imageUrl ?? '/placeholders/meal.png'}
+                                                            alt=""
+                                                            className="object-cover object-center"
+                                                            width={600}
+                                                            height={600}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="sm:col-span-8 lg:col-span-7">

@@ -4,7 +4,6 @@ import {
     PECheckbox,
     PELabelMultiSelection,
     PELabelSingleSelection,
-    PENumberTextField,
     PESingleSelection,
     PETextArea,
     PETextField,
@@ -16,14 +15,12 @@ import {
     GetSignedInUserDocument,
     KitchenOption,
     SignedInUser,
-    calculateMenuPrice,
-    formatPrice,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
-import { ArrowDown, ArrowUp, Car, HandCoins, Plus, Rows4, Soup } from 'lucide-react';
+import { HandCoins, Plus, Rows4, Soup } from 'lucide-react';
 import { GetServerSideProps } from 'next';
-import { ParticipantsPicker } from 'projects/web/components/src/search-bar/PEParticipantsPicker';
 import { useState } from 'react';
+import { PEEditMenuPriceForm } from '../../../components/PEEditMenuPriceForm';
 import { createApolloClient } from '../../../network/apolloClients';
 import { useForm } from 'react-hook-form';
 import { CreateMenuFormInputs } from './create';
@@ -40,14 +37,6 @@ const preparationTimeOptions = [
     { value: 60, label: '1h' },
     { value: 90, label: '1h 30min' },
     { value: 120, label: '2h' },
-];
-
-const childrenDiscountOptions = [
-    { value: undefined, title: 'Kein Kinderrabatt' },
-    { value: 25, title: '25%' },
-    { value: 50, title: '50%' },
-    { value: 75, title: ' 75%' },
-    { value: 100, title: 'Kostenlos' },
 ];
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
@@ -98,57 +87,21 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
     const [selectedCategories, setSelectedCategories] = useState<CategoryOption[]>([]);
     const [selectedKitchen, setSelectedKitchen] = useState<KitchenOption | undefined>();
     const [greetingFromKitchenEnabled, setGreetingFromKitchenEnabled] = useState<boolean>(false);
-    const [preparationTime, setPreparationTime] = useState(preparationTimeOptions[1]);
+    const [preparationTime, setPreparationTime] = useState(
+        preparationTimeOptions.find((o) => o.value === menu.preparationTime) ?? preparationTimeOptions[1],
+    );
 
     const [coursesInEditMode, setCoursesInEditMode] = useState(false);
 
-    const [priceInEditMode, setPriceInEditMode] = useState(false);
-
     const {
-        control,
         register,
-        handleSubmit,
-        trigger,
-        setValue,
-        watch,
         formState: { errors },
     } = useForm<CreateMenuFormInputs>({
         defaultValues: {
-            basePrice: menu.basePrice,
-            basePriceCustomers: menu.basePriceCustomers,
-            pricePerAdult: menu.pricePerAdult,
-            isVisible: true,
+            title: menu.title,
+            description: menu.description,
         },
     });
-
-    const { basePrice, basePriceCustomers, pricePerAdult, pricePerChild } = watch();
-
-    const [childrenDiscount, setChildrenDiscount] = useState(childrenDiscountOptions[0]);
-    // useEffect(() => {
-    //     if (childrenDiscount.value === undefined) {
-    //         setValue('pricePerChild', undefined);
-    //     } else {
-    //         setValue('pricePerChild', (pricePerAdult * (100 - childrenDiscount.value)) / 100);
-    //     }
-    // }, [pricePerAdult, childrenDiscount, setValue]);
-
-    const [adults, setAdults] = useState(4);
-    const [children, setChildren] = useState(0);
-    const [costDetailsShown, setCostDetailsShown] = useState(false);
-
-    const price = calculateMenuPrice(
-        Number(adults),
-        Number(children),
-        Number(basePrice) * 100,
-        Number(basePriceCustomers),
-        Number(pricePerAdult) * 100,
-        pricePerChild === undefined ? undefined : Number(pricePerChild) * 100,
-    );
-
-    const cookPrice = price * 0.82;
-    const formattedFee = formatPrice({ amount: price * 0.18, currencyCode: 'EUR' });
-    const formattedPrice = formatPrice({ amount: price, currencyCode: 'EUR' });
-    const formattedCookPrice = formatPrice({ amount: cookPrice, currencyCode: 'EUR' });
 
     return (
         <div>
@@ -168,9 +121,12 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                             name="tabs"
                             className="block w-full rounded-md border-gray-300 focus:border-orange-500 focus:ring-orange-500"
                             defaultValue={selectedTab}
+                            onChange={(event) => setSelectedTab(Number(event.target.value))}
                         >
-                            {tabs.map((tab) => (
-                                <option key={tab.name}>{tab.name}</option>
+                            {tabs.map((tab, index) => (
+                                <option key={tab.name} value={index}>
+                                    {tab.name}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -210,21 +166,21 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                             id="title"
                             labelTitle="Name"
                             type="text"
-                            // errorMessage={errors.title?.message}
-                            // {...register('title', {
-                            //     required: 'Dein Menü braucht noch einen Namen.',
-                            //     minLength: {
-                            //         value: 5,
-                            //         message: 'Der Name deines Menüs ist zu kurz.',
-                            //     },
-                            // })}
+                            errorMessage={errors.title?.message}
+                            {...register('title', {
+                                required: 'Dein Menü braucht noch einen Namen.',
+                                minLength: {
+                                    value: 5,
+                                    message: 'Der Name deines Menüs ist zu kurz.',
+                                },
+                            })}
                         />
 
                         <PETextArea
                             id="description"
                             labelTitle="Beschreibung"
-                            // errorMessage={errors.description?.message}
-                            // {...register('description', { required: 'Dein Menü braucht noch eine Beschreibung.' })}
+                            errorMessage={errors.description?.message}
+                            {...register('description', { required: 'Dein Menü braucht noch eine Beschreibung.' })}
                         />
 
                         <div className="relative">
@@ -274,7 +230,7 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                         <PECheckbox
                             id="isVisible"
                             label={{ title: 'Menü ist privat und nur für dich einsehbar' }}
-                            // {...register('isVisible')}
+                            {...register('isVisible')}
                         />
                     </>
                 )}
@@ -330,175 +286,7 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                     </>
                 )}
 
-                {selectedTab === 2 && (
-                    <>
-                        <div className="flex gap-4 items-start">
-                            <span>Der Menüpreis beträgt</span>
-
-                            {priceInEditMode && (
-                                <PENumberTextField
-                                    id="basePrice"
-                                    className="w-16"
-                                    errorMessage={errors.basePrice?.message}
-                                    {...register('basePrice', {
-                                        required: 'Ungültig',
-                                        min: { value: 25, message: 'Ungültig' },
-                                        max: { value: 10000, message: 'Ungültig' },
-                                    })}
-                                />
-                            )}
-
-                            {!priceInEditMode && <b>{basePrice}</b>}
-                            <span> für</span>
-
-                            {priceInEditMode && (
-                                <PENumberTextField
-                                    className="w-16"
-                                    id="basePriceCustomers"
-                                    errorMessage={errors.basePriceCustomers?.message}
-                                    {...register('basePriceCustomers', {
-                                        required: 'Ungültig',
-                                        min: { value: 1, message: 'Ungültig' },
-                                        max: { value: 100, message: 'Ungültig' },
-                                    })}
-                                />
-                            )}
-
-                            {!priceInEditMode && <b>{basePriceCustomers}</b>}
-
-                            <span>Personen.</span>
-                        </div>
-                        <div className="flex gap-4 items-center">
-                            <span>Für jede weitere Person wird ein Preis in Höhe von</span>
-                            {priceInEditMode && (
-                                <PENumberTextField
-                                    id="pricePerAdult"
-                                    className="w-16"
-                                    errorMessage={errors.pricePerAdult?.message}
-                                    {...register('pricePerAdult', {
-                                        required: 'Ungültig',
-                                        min: { value: 1, message: 'Ungültig' },
-                                        max: { value: 1000, message: 'Ungültig' },
-                                    })}
-                                />
-                            )}
-                            {!priceInEditMode && <b>{pricePerAdult}</b>}
-                            <span> € angesetzt.</span>
-                        </div>
-                        <div className="flex flex-col items-start">
-                            <h3 className="font-semibold text-xl mb-2 md:text-text-m-bold">Möchtest du einen Kinderrabatt anbieten?</h3>
-                            <p>Der Rabatt gilt für Kinder im Alter von 6-12 Jahren.</p>
-                            <div className="flex gap-8 items-center">
-                                <PESingleSelection
-                                    options={childrenDiscountOptions}
-                                    selectedOption={childrenDiscount}
-                                    selectedOptionChanged={(o) => o && setChildrenDiscount(o)}
-                                    optionTitle={({ title }) => title}
-                                    optionIdentifier={({ value }) => `${value}`}
-                                    className="w-full lg:w-[400px]"
-                                />
-                            </div>
-                        </div>
-                        {pricePerChild !== undefined && (
-                            <div className="flex flex-col items-start">
-                                <div className="flex flex-col items-start text-sm leading-6 text-gray-600">
-                                    <span>Beispiel:</span>
-                                    <span>
-                                        Der Kinderrabatt (z.B. 50%) berechnet sich auf Grundlage des angesetzten Betrags den du für jede
-                                        weitere Person (z.B. 50 EUR) angegeben hast.
-                                    </span>
-                                    <span>Mit dem gegebenen Beispielrabatt würde der Preis pro Kind beträgt 25 EUR betragen.</span>
-                                </div>
-                            </div>
-                        )}
-
-                        <p className="text-xl font-semibold">Preissimulation - Dein erwarteter Umsatz</p>
-                        <div className="flex gap-16 w-full items-start flex-wrap">
-                            <ParticipantsPicker
-                                hideLabel
-                                adults={adults}
-                                setAdults={setAdults}
-                                children={children}
-                                setChildren={setChildren}
-                            />
-                            <span className="flex-1" />
-
-                            <div className="flex flex-col gap-8">
-                                <div className="flex flex-col gap-8 bg-white items-start p-16 shadow-xl rounded-2xl">
-                                    {costDetailsShown && (
-                                        <>
-                                            <div className="flex justify-between w-full text-gray-400">
-                                                <span>Menüpreis</span>
-                                                <span>{formattedPrice}</span>
-                                            </div>
-
-                                            <div className="flex justify-between w-full text-gray-400">
-                                                <span>Servicegebühr</span>
-                                                <span>{formattedFee}</span>
-                                            </div>
-
-                                            <div className="relative self-stretch">
-                                                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                                    <div className="w-full border-t border-gray-300" />
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-
-                                    <div
-                                        className="flex text-heading-xl md:text-text-m-bold w-full lg:w-[600px]"
-                                        style={{ justifyContent: 'space-between' }}
-                                    >
-                                        <span className="text-2xl font-semibold">Du erhältst</span>
-                                        <span className="text-2xl font-semibold">{formattedCookPrice}</span>
-                                    </div>
-                                    <span className="text-text-m-bold">Hinzu kommen</span>
-
-                                    <div className="flex gap-4 items-center">
-                                        <div className="flex flex-col justify-center bg-orange w-6 h-6 rounded-6">
-                                            <HandCoins strokeWidth={1} />
-                                        </div>
-
-                                        <p className="my-0 text-text-sm">Trinkgeld</p>
-
-                                        <div className="flex flex-col justify-center bg-orange w-6 h-6 rounded-6">
-                                            <Car strokeWidth={1} />
-                                        </div>
-
-                                        <p className="my-0 text-text-sm">Fahrtkosten</p>
-                                    </div>
-                                    <span className="text-text-sm" style={{ color: 'gray' }}>
-                                        Für Fahrtkosten und Trinkgeld fallen keine Servicegebühren an.
-                                    </span>
-                                </div>
-                                <button className="text-gray-500" onClick={(): void => setCostDetailsShown(!costDetailsShown)}>
-                                    {!costDetailsShown && (
-                                        <div className="flex flex-col items-center">
-                                            <span>Mehr anzeigen</span>
-                                            <ArrowDown />
-                                        </div>
-                                    )}
-                                    {costDetailsShown && (
-                                        <div className="flex flex-col items-center">
-                                            <span>Weniger anzeigen</span>
-                                            <ArrowUp />
-                                        </div>
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-end gap-4">
-                            {!priceInEditMode && <PEButton title="Bearbeiten" onClick={() => setPriceInEditMode(true)} type="secondary" />}
-                            {priceInEditMode && (
-                                <>
-                                    <PEButton title="Abbrechen" type="secondary" onClick={() => setPriceInEditMode(false)} />
-                                    <PEButton title="Speichern" onClick={() => setPriceInEditMode(false)} />
-                                </>
-                            )}
-                        </div>
-                    </>
-                )}
+                {selectedTab === 2 && <PEEditMenuPriceForm menu={menu} onChange={() => undefined} />}
             </div>
         </div>
     );
