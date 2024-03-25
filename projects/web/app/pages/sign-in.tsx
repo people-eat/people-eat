@@ -48,7 +48,7 @@ export default function SignInPage() {
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"
-                button={{ title: 'Erneut versuchen', onClick: () => reset() }}
+                primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
             />
 
             <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

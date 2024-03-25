@@ -239,14 +239,14 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                 open={showSuccessAlert}
                 title="Anfrage erfolgreich gesendet"
                 subtitle="In deinem Emailpostfach findest du eine Bestätigung deiner Buchungsnafrage. Wir werden uns bald bei dir melden."
-                button={{ title: 'Fertig', onClick: () => router.push('/') }}
+                primaryButton={{ title: 'Fertig', onClick: () => router.push('/') }}
             />
 
             <PEAlert
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"
-                button={{ title: 'Erneut versuchen', onClick: () => reset() }}
+                primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
             />
 
             <LoadingDialog active={loading} />

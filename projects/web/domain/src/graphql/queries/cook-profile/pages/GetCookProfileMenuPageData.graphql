@@ -1,0 +1,72 @@
+query GetCookProfileMenuPageData($menuId: String!, $cookId: String!) {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+            cook {
+                meals {
+                    mealId
+                    cookId
+                    title
+                    type
+                    description
+                    imageUrl
+                    createdAt
+                }
+            }
+        }
+    }
+    cooks {
+        menus(cookId: $cookId) {
+            findOne(menuId: $menuId) {
+                menuId
+                isVisible
+                title
+                description
+                basePrice
+                basePriceCustomers
+                pricePerAdult
+                pricePerChild
+                currencyCode
+                greetingFromKitchen
+                preparationTime
+                kitchen {
+                    kitchenId
+                    title
+                }
+                categories {
+                    categoryId
+                    title
+                }
+                courses {
+                    courseId
+                    index
+                    title
+                    mealOptions {
+                        index
+                        meal {
+                            mealId
+                            title
+                            description
+                            imageUrl
+                            type
+                            createdAt
+                        }
+                    }
+                }
+                createdAt
+            }
+        }
+    }
+    categories {
+        findAll {
+            categoryId
+            title
+        }
+    }
+    kitchens {
+        findAll {
+            kitchenId
+            title
+        }
+    }
+}

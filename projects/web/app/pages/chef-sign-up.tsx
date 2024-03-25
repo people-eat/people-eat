@@ -75,21 +75,21 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                 open={showSuccessAlertForNewUser}
                 title="Deine Registirung war erfolgreich"
                 subtitle="Überprüfe deine Email Postfach um deine E-Mail Adresse zu bestätigen und Zugriff auf dein Kochprofil zu erhalten. Dort gibt es einiges zu entdecken. Erstelle Gerichte und Menüs um die Aufmerksamkeit von potentiellen Kunden zu gewinnen."
-                button={{ title: 'Zur Anmeldung', onClick: () => router.push('/sign-in') }}
+                primaryButton={{ title: 'Zur Anmeldung', onClick: () => router.push('/sign-in') }}
             />
 
             <PEAlert
                 open={showSuccessAlertForExistingUser}
                 title="Deine Registirung war erfolgreich"
                 subtitle="Sieh sich jetzt in deinem Kochprofil um, dort gibt es einiges zu entdecken. Erstelle Gerichte und Menüs um die Aufmerksamkeit von potentiellen Kunden zu gewinnen."
-                button={{ title: 'Zu meinem Kochprofil', onClick: () => router.push('/chef-profile') }}
+                primaryButton={{ title: 'Zu meinem Kochprofil', onClick: () => router.push('/chef-profile') }}
             />
 
             <PEAlert
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"
-                button={{
+                primaryButton={{
                     title: 'Erneut versuchen',
                     onClick: () => {
                         resetCreateUser();

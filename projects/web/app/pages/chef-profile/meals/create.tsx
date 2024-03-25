@@ -50,14 +50,14 @@ export default function CookProfileCreateMealPage({ signedInUser }: ServerSidePr
                 open={showSuccessAlert}
                 title="Gericht erfolgreich angelegt"
                 subtitle="Füge es gleich einem neuen oder einem deiner bestehenden Menüs als Option hinzu."
-                button={{ title: 'Zur Gerichtsübersicht', onClick: () => router.push('/chef-profile/meals') }}
+                primaryButton={{ title: 'Zur Gerichtsübersicht', onClick: () => router.push('/chef-profile/meals') }}
             />
 
             <PEAlert
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"
-                button={{ title: 'Erneut versuchen', onClick: () => reset() }}
+                primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
             />
 
             <LoadingDialog active={loading} />

@@ -52,6 +52,7 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
                     minLength: { value: 5, message: 'Der Name des Gerichts muss mindestens 5 Zeichen lang sein' },
                 })}
             />
+
             <PETextArea
                 id="description"
                 labelTitle="Beschreibung"

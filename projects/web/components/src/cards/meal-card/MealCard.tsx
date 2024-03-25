@@ -65,9 +65,11 @@ export function MealCard(props: MealCardProps) {
             </div>
             <div className="p-4">
                 <div className="flex justify-between items-center gap-4">
-                    <p className="pointer-events-none line-clamp-2 text-md md:text-xl font-medium text-gray-900">{title}</p>
+                    <p className="pointer-events-none line-clamp-1 text-md md:text-xl font-medium text-gray-900">{title}</p>
                 </div>
-                <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-medium text-gray-500">{description}</p>
+                <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-medium text-gray-500">
+                    {description === '' ? 'Ohne Beschreibung' : description}
+                </p>
 
                 <div className="mt-4 flex justify-between items-center">
                     {onInfoClick && (

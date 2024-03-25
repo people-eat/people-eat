@@ -97,7 +97,7 @@ export function PEAuthDialog({
                 open={showSignInFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"
-                button={{
+                primaryButton={{
                     title: 'Erneut versuchen',
                     onClick: () => {
                         signInReset();
@@ -141,7 +141,7 @@ export function PEAuthDialog({
                 open={showCreateUserSuccessAlert}
                 title="Deine Registrierung war erfolgreich"
                 subtitle="Bitte überprüfe dein Email Postfach um deine E-Mail Adress zu bestätigen und komme anschießend hierher zurück."
-                button={{
+                primaryButton={{
                     title: 'Zur Anmeldung',
                     onClick: () => {
                         setShowSignUp(false);
@@ -155,7 +155,7 @@ export function PEAuthDialog({
                 open={showCreatesUerFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"
-                button={{ title: 'Erneut versuchen', onClick: () => signUpReset() }}
+                primaryButton={{ title: 'Erneut versuchen', onClick: () => signUpReset() }}
             />
 
             {/* Fetch signed in user */}

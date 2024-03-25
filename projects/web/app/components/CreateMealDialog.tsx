@@ -30,7 +30,7 @@ export function CreateMealDialog({ cookId, open, onClose }: CreateMealDialogProp
                 open={showSuccessAlert}
                 title="Gericht erfolgreich angelegt"
                 subtitle="Füge es gleich einem neuen oder einem deiner bestehenden Menüs als Option hinzu."
-                button={{
+                primaryButton={{
                     title: 'Fertig',
                     onClick: afterSuccessfulCreation,
                 }}
@@ -40,7 +40,7 @@ export function CreateMealDialog({ cookId, open, onClose }: CreateMealDialogProp
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"
-                button={{ title: 'Erneut versuchen', onClick: afterFailedCreation }}
+                primaryButton={{ title: 'Erneut versuchen', onClick: afterFailedCreation }}
             />
 
             <LoadingDialog active={loading} />

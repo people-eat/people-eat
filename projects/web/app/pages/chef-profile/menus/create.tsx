@@ -515,7 +515,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     </div>
                                 )}
 
-                                <p className="text-xl font-semibold">Dein erwarteter Umsatz</p>
+                                <p className="text-xl font-semibold">Preissimulation - Dein erwarteter Umsatz</p>
                                 <div className="flex gap-16 w-full items-start flex-wrap">
                                     <ParticipantsPicker
                                         hideLabel
@@ -571,7 +571,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                 <p className="my-0 text-text-sm">Fahrtkosten</p>
                                             </div>
                                             <span className="text-text-sm" style={{ color: 'gray' }}>
-                                                Für Fahrtkosten und Trinkgeld fallen keine Servicegebühren an
+                                                Für Fahrtkosten und Trinkgeld fallen keine Servicegebühren an.
                                             </span>
                                         </div>
                                         <button className="text-gray-500" onClick={(): void => setCostDetailsShown(!costDetailsShown)}>
@@ -606,6 +606,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     optionIdentifier={({ value }) => `${value}`}
                                     className="w-[400px]"
                                 />
+
                                 <PECheckbox
                                     id="isVisible"
                                     label={{ title: 'Menü bei Fertigstellung veröffentlichen' }}
@@ -654,14 +655,14 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                     open={showSuccessAlert}
                     title="Menü erfolgreich angelegt"
                     subtitle="Füge es gleich einem neuen oder einem deiner bestehenden Menüs als Option hinzu."
-                    button={{ title: 'Zur Menüsübersicht', onClick: () => router.push('/chef-profile/menus') }}
+                    primaryButton={{ title: 'Zur Menüsübersicht', onClick: () => router.push('/chef-profile/menus') }}
                 />
 
                 <PEAlert
                     open={showFailedAlert}
                     title="Leider ist ein Fehler aufgetreten"
                     subtitle="Bitte versuche es später erneut"
-                    button={{ title: 'Erneut versuchen', onClick: () => reset() }}
+                    primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
                 />
 
                 <LoadingDialog active={loading} />

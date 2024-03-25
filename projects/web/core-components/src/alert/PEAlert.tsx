@@ -7,13 +7,13 @@ export interface PEAlertProps {
     open: boolean;
     title: string;
     subtitle?: string;
-    button: {
+    primaryButton: {
         title: string;
         onClick: () => void;
     };
 }
 
-export function PEAlert({ open, title, subtitle, button }: PEAlertProps) {
+export function PEAlert({ open, title, subtitle, primaryButton }: PEAlertProps) {
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => undefined}>
@@ -57,7 +57,7 @@ export function PEAlert({ open, title, subtitle, button }: PEAlertProps) {
                                     </div>
                                 </div>
                                 <div className="mt-5 sm:mt-6">
-                                    <PEButton title={button.title} className="w-full" onClick={button.onClick} />
+                                    <PEButton title={primaryButton.title} className="w-full" onClick={primaryButton.onClick} />
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>

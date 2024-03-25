@@ -45,7 +45,7 @@ export default function SignUpPage() {
                 open={showCreateUserSuccessAlert}
                 title="Deine Registrierung war erfolgreich"
                 subtitle="Bitte überprüfe dein Email Postfach um deine E-Mail Adress zu bestätigen und komme anschießend hierher zurück."
-                button={{
+                primaryButton={{
                     title: 'Zur Anmeldung',
                     onClick: () => router.push('/sign-in'),
                 }}
@@ -55,7 +55,7 @@ export default function SignUpPage() {
                 open={showCreatesUerFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"
-                button={{ title: 'Erneut versuchen', onClick: () => reset() }}
+                primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
             />
 
             <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
