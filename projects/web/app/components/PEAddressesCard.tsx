@@ -16,7 +16,7 @@ export function PEAddressesCard({ addresses }: PEAddressesCardProps) {
             {addresses.length < 1 && (
                 <div className="flex flex-col gap-4">
                     <p>Wie es aussieht hast noch keine Adressen in deinem Profil hinterlegt.</p>
-                    <p>Füge jetzt deine erste Adress hinzu.</p>
+                    <p>Füge jetzt deine erste Adresse hinzu.</p>
                     <div>
                         <PEButton title="Adresse anlegen" onClick={() => setShowCreateAddress(true)} />
                     </div>

@@ -41,6 +41,8 @@ const documents = {
     "query GetPrivacyPolicyPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicPrivacyPolicyUpdates {\n    findLatest {\n      privacyPolicyUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetPrivacyPolicyPageDataDocument,
     "query GetSignedInUser {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetSignedInUserDocument,
     "query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetTermsAndConditionsPageDataDocument,
+    "query CookGetStripeDashboardUrl($cookId: String!) {\n  cooks {\n    getStripeDashboardUrl(cookId: $cookId)\n  }\n}": types.CookGetStripeDashboardUrlDocument,
+    "query CookGetStripeOnboardingUrl($cookId: String!) {\n  cooks {\n    getStripeOnboardingUrl(cookId: $cookId)\n  }\n}": types.CookGetStripeOnboardingUrlDocument,
     "query GetMeals($cookId: String!) {\n  cooks {\n    meals(cookId: $cookId) {\n      findMany {\n        mealId\n        cookId\n        title\n        type\n        description\n        imageUrl\n        createdAt\n      }\n    }\n  }\n}": types.GetMealsDocument,
     "query GetCookProfileBookingsPageData($cookId: String!) {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  cooks {\n    findOne(cookId: $cookId) {\n      hasStripePayoutMethodActivated\n    }\n    bookingRequests(cookId: $cookId) {\n      findMany {\n        bookingRequestId\n        globalBookingRequestId\n        adultParticipants\n        children\n        dateTime\n        status\n        userAccepted\n        cookAccepted\n        kitchenId\n        occasion\n        preparationTime\n        price {\n          amount\n          currencyCode\n        }\n        location {\n          latitude\n          longitude\n          text\n        }\n        duration\n        createdAt\n        cook {\n          cookId\n          rank\n          user {\n            firstName\n            profilePictureUrl\n          }\n        }\n        configuredMenu {\n          title\n        }\n      }\n    }\n  }\n}": types.GetCookProfileBookingsPageDataDocument,
     "query GetCookProfileMealPageData($cookId: String!, $mealId: String!) {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  cooks {\n    meals(cookId: $cookId) {\n      findOne(mealId: $mealId) {\n        mealId\n        title\n        description\n        imageUrl\n        type\n        createdAt\n      }\n    }\n  }\n}": types.GetCookProfileMealPageDataDocument,
@@ -188,6 +190,14 @@ export function gql(source: "query GetSignedInUser {\n  users {\n    signedInUse
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}"): (typeof documents)["query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query CookGetStripeDashboardUrl($cookId: String!) {\n  cooks {\n    getStripeDashboardUrl(cookId: $cookId)\n  }\n}"): (typeof documents)["query CookGetStripeDashboardUrl($cookId: String!) {\n  cooks {\n    getStripeDashboardUrl(cookId: $cookId)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query CookGetStripeOnboardingUrl($cookId: String!) {\n  cooks {\n    getStripeOnboardingUrl(cookId: $cookId)\n  }\n}"): (typeof documents)["query CookGetStripeOnboardingUrl($cookId: String!) {\n  cooks {\n    getStripeOnboardingUrl(cookId: $cookId)\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -49,10 +49,7 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
     const router = useRouter();
 
     const [selectedLanguages, setSelectedLanguages] = useState<LanguageOption[]>([]);
-    const [maximumParticipants, setMaximumParticipants] = useState(12);
     const [rank, setRank] = useState<CookRank>('HOBBY');
-    const [travelExpenses, setTravelExpenses] = useState(50);
-    const [maximumTravelDistance, setMaximumTravelDistance] = useState(15);
 
     const [createOneUserByEmailAddress, { loading, data: createUserData, reset: resetCreateUser }] =
         useMutation(CreateOneUserByEmailAddressDocument);
@@ -114,7 +111,7 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                 <CookSignUpForm
                     signedInUser={signedInUser}
                     completeTitle="Registrieren"
-                    onSignUpForExistingUser={() =>
+                    onSignUpForExistingUser={({ travelExpenses, maximumTravelDistance, maximumParticipants }) =>
                         createOneCook({
                             variables: {
                                 cookId: signedInUser?.userId ?? '',
@@ -133,7 +130,7 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                                     minimumParticipants: undefined,
                                     minimumPrice: undefined,
                                     rank,
-                                    travelExpenses: 0,
+                                    travelExpenses,
                                 },
                             },
                         })
@@ -144,11 +141,16 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                         emailAddress,
                         phoneNumber,
                         password,
+
                         city,
                         postCode,
                         street,
                         houseNumber,
                         country,
+
+                        travelExpenses,
+                        maximumTravelDistance,
+                        maximumParticipants,
                     }) =>
                         createOneUserByEmailAddress({
                             variables: {
@@ -175,7 +177,7 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                                         minimumParticipants: undefined,
                                         minimumPrice: undefined,
                                         rank,
-                                        travelExpenses: 0,
+                                        travelExpenses,
                                     },
                                     addresses: [
                                         {
@@ -202,14 +204,8 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                         selectedOptions: selectedLanguages,
                         onChange: setSelectedLanguages,
                     }}
-                    maximumParticipants={maximumParticipants}
-                    setMaximumParticipants={setMaximumParticipants}
                     rank={rank}
                     setRank={setRank}
-                    travelExpenses={travelExpenses}
-                    setTravelExpenses={setTravelExpenses}
-                    maximumTravelDistance={maximumTravelDistance}
-                    setMaximumTravelDistance={setMaximumTravelDistance}
                 />
             </div>
         </div>

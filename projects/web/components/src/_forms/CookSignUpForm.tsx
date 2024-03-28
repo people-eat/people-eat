@@ -25,6 +25,10 @@ export interface CookSignUpFormInputs {
     street: string;
     houseNumber: string;
     country: string;
+
+    travelExpenses: number;
+    maximumTravelDistance: number;
+    maximumParticipants: number;
 }
 
 export interface CookSignUpFormProps {
@@ -40,14 +44,8 @@ export interface CookSignUpFormProps {
         selectedOptions: LanguageOption[];
         onChange: (changedSelectedOptions: LanguageOption[]) => void;
     };
-    maximumParticipants: number;
-    setMaximumParticipants: (changedMaximumParticipants: number) => void;
     rank: CookRank;
     setRank: (changedRank: CookRank) => void;
-    travelExpenses: number;
-    setTravelExpenses: (changedTravelExpenses: number) => void;
-    maximumTravelDistance: number;
-    setMaximumTravelDistance: (changedMaximumTravelDistance: number) => void;
 }
 
 export function CookSignUpForm({
@@ -57,21 +55,24 @@ export function CookSignUpForm({
     onSignUpForNewUser,
     onSignIn,
     languages,
-    maximumParticipants,
-    setMaximumParticipants,
     rank,
     setRank,
-    travelExpenses,
-    setTravelExpenses,
-    maximumTravelDistance,
-    setMaximumTravelDistance,
 }: CookSignUpFormProps) {
     const {
         register,
         handleSubmit,
-        getValues,
+        watch,
+        setValue,
         formState: { errors },
-    } = useForm<CookSignUpFormInputs>();
+    } = useForm<CookSignUpFormInputs>({
+        defaultValues: {
+            maximumParticipants: 12,
+            travelExpenses: 50,
+            maximumTravelDistance: 15,
+        },
+    });
+
+    const { travelExpenses, maximumTravelDistance, maximumParticipants, password, passwordRepeat } = watch();
 
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -104,26 +105,15 @@ export function CookSignUpForm({
                     </div>
                 )}
 
-                <PESlider
-                    id="travelExpenses"
-                    labelTitle="Reisekosten"
-                    value={travelExpenses}
-                    onChange={setTravelExpenses}
-                    min={0}
-                    max={70}
-                    step={1}
-                >
+                <PESlider id="travelExpenses" labelTitle="Reisekosten" step={1} {...register('travelExpenses', { min: 0, max: 70 })}>
                     {(travelExpenses / 100).toFixed(2)} €
                 </PESlider>
 
                 <PESlider
                     id="maximumTravelDistance"
                     labelTitle="Maximale Reisestrecke"
-                    value={maximumTravelDistance}
-                    onChange={setMaximumTravelDistance}
-                    min={5}
-                    max={200}
                     step={5}
+                    {...register('maximumTravelDistance', { min: 5, max: 200 })}
                 >
                     {maximumTravelDistance} km
                 </PESlider>
@@ -137,7 +127,7 @@ export function CookSignUpForm({
                         <button
                             type="button"
                             className="rounded-full text-gray-500 ring-gray-500 hover:ring-orange-500 focus:ring-orange-500 ring-1 ring-inset p-1 shadow-sm hover:bg-orange-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 focus-visible:text-white focus-visible:bg-orange-500"
-                            onClick={() => setMaximumParticipants(maximumParticipants - 1)}
+                            onClick={() => setValue('maximumParticipants', maximumParticipants - 1)}
                             disabled={maximumParticipants < 2}
                         >
                             <MinusIcon className="h-5 w-5" aria-hidden="true" />
@@ -147,7 +137,7 @@ export function CookSignUpForm({
                         <button
                             type="button"
                             className="rounded-full  text-gray-500 ring-gray-500 hover:ring-orange-500 focus:ring-orange-500 ring-1 ring-inset p-1 shadow-sm hover:bg-orange-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 focus-visible:text-white focus-visible:bg-orange-500"
-                            onClick={() => setMaximumParticipants(maximumParticipants + 1)}
+                            onClick={() => setValue('maximumParticipants', maximumParticipants + 1)}
                             disabled={maximumParticipants > 19}
                         >
                             <PlusIcon className="h-5 w-5" aria-hidden="true" />
@@ -255,8 +245,7 @@ export function CookSignUpForm({
                             errorMessage={errors.password?.message}
                             {...register('password', {
                                 required: 'This field is required',
-                                validate: (value) =>
-                                    value === getValues('passwordRepeat') || 'Passwörter stimmen nicht miteinander überein',
+                                validate: (value) => value === passwordRepeat || 'Passwörter stimmen nicht miteinander überein',
                             })}
                         />
 
@@ -268,7 +257,7 @@ export function CookSignUpForm({
                             errorMessage={errors.passwordRepeat?.message}
                             {...register('passwordRepeat', {
                                 required: 'This field is required',
-                                validate: (value) => value === getValues('password') || 'Passwörter stimmen nicht miteinander überein',
+                                validate: (value) => value === password || 'Passwörter stimmen nicht miteinander überein',
                             })}
                         />
                     </>

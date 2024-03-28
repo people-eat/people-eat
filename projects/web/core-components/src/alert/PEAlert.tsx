@@ -1,19 +1,24 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, Trash, X } from 'lucide-react';
 import { Fragment } from 'react';
 import { PEButton } from '../button/PEButton';
 
 export interface PEAlertProps {
     open: boolean;
+    type?: 'SUCCESS' | 'ERROR' | 'DELETION';
     title: string;
     subtitle?: string;
     primaryButton: {
         title: string;
         onClick: () => void;
     };
+    secondaryButton?: {
+        title: string;
+        onClick: () => void;
+    };
 }
 
-export function PEAlert({ open, title, subtitle, primaryButton }: PEAlertProps) {
+export function PEAlert({ open, type = 'SUCCESS', title, subtitle, primaryButton, secondaryButton }: PEAlertProps) {
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => undefined}>
@@ -42,9 +47,22 @@ export function PEAlert({ open, title, subtitle, primaryButton }: PEAlertProps) 
                         >
                             <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                                 <div>
-                                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                                        <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                                    </div>
+                                    {type === 'SUCCESS' && (
+                                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                                            <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                                        </div>
+                                    )}
+                                    {type === 'ERROR' && (
+                                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+                                            <X className="h-6 w-6 text-red-600" aria-hidden="true" />
+                                        </div>
+                                    )}
+                                    {type === 'DELETION' && (
+                                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+                                            <Trash className="h-6 w-6 text-red-600" aria-hidden="true" />
+                                        </div>
+                                    )}
+
                                     <div className="mt-3 text-center sm:mt-5">
                                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                                             {title}
@@ -56,8 +74,16 @@ export function PEAlert({ open, title, subtitle, primaryButton }: PEAlertProps) 
                                         )}
                                     </div>
                                 </div>
-                                <div className="mt-5 sm:mt-6">
-                                    <PEButton title={primaryButton.title} className="w-full" onClick={primaryButton.onClick} />
+                                <div className="mt-5 sm:mt-6 flex flex-col gap-2">
+                                    <PEButton title={primaryButton.title} onClick={primaryButton.onClick} className="w-full" />
+                                    {secondaryButton && (
+                                        <PEButton
+                                            title={secondaryButton.title}
+                                            onClick={secondaryButton.onClick}
+                                            className="w-full"
+                                            type="secondary"
+                                        />
+                                    )}
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>

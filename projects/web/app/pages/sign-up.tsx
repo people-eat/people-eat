@@ -44,7 +44,7 @@ export default function SignUpPage() {
             <PEAlert
                 open={showCreateUserSuccessAlert}
                 title="Deine Registrierung war erfolgreich"
-                subtitle="Bitte überprüfe dein Email Postfach um deine E-Mail Adress zu bestätigen und komme anschießend hierher zurück."
+                subtitle="Bitte überprüfe dein Email Postfach um deine E-Mail Adresse zu bestätigen und komme anschießend hierher zurück."
                 primaryButton={{
                     title: 'Zur Anmeldung',
                     onClick: () => router.push('/sign-in'),

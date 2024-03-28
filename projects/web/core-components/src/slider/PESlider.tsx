@@ -1,16 +1,15 @@
-import { PropsWithChildren } from 'react';
+import { ForwardedRef, PropsWithChildren, forwardRef } from 'react';
 
 export interface PESliderProps {
     id: string;
     labelTitle?: string;
-    value: number;
-    onChange: (changedValue: number) => void;
-    min: number;
-    max: number;
     step: number;
 }
 
-export function PESlider({ id, labelTitle, value, onChange, min, max, step, children }: PropsWithChildren<PESliderProps>) {
+export const PESlider = forwardRef(function (
+    { id, labelTitle, step, children, ...rest }: PropsWithChildren<PESliderProps>,
+    ref: ForwardedRef<HTMLInputElement>,
+) {
     return (
         <div>
             {labelTitle && (
@@ -23,14 +22,12 @@ export function PESlider({ id, labelTitle, value, onChange, min, max, step, chil
             )}
             <input
                 id={id}
-                value={value}
-                onChange={(event) => onChange(Number(event.target.value))}
                 type="range"
                 className="w-full appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-gray-200 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[12px] [&::-webkit-slider-thumb]:w-[12px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-orange-500"
-                min={min}
-                max={max}
                 step={step}
+                ref={ref}
+                {...rest}
             />
         </div>
     );
-}
+});
