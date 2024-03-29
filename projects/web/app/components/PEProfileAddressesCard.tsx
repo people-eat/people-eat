@@ -107,8 +107,8 @@ export function PEProfileAddressesCard({ userId, addresses, pinnedLocation, onFe
                 </div>
             )}
 
-            <div>
-                <PEButton title="Adresse anlegen" onClick={() => setShowCreateAddress(true)} />
+            <div className="flex justify-end">
+                <PEButton title="Adresse anlegen" type="secondary" onClick={() => setShowCreateAddress(true)} />
             </div>
 
             <CreateAddressDialog
