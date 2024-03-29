@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, PEImagePicker, PEProfileNavigation } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
@@ -6,14 +7,12 @@ import {
     SignedInUser,
     UpdateUserProfilePictureDocument,
 } from '@people-eat/web-domain';
-import { UserCircle } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import { PEEditPasswordCard } from '../../components/PEEditPasswordCard';
 import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
 import { createApolloClient } from '../../network/apolloClients';
-import { useMutation } from '@apollo/client';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
