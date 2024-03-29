@@ -47,6 +47,7 @@ export function PEImagePicker({ onPick, onRemoveDefaultImage, defaultImage }: PE
     return (
         <div className="flex flex-col items-start">
             <button
+                type="button"
                 onClick={openFilePicker}
                 className="rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 focus:ring-orange-600 relative flex overflow-hidden items-center w-[200px] h-[200px] hover:cursor-pointer select-none hover:shadow-primary delay-100 ease-linear transition justify-center"
             >
