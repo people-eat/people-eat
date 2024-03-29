@@ -1,9 +1,10 @@
-import { PEHeader, PEProfileNavigation } from '@people-eat/web-components';
+import { LoadingDialog, PEHeader, PEImagePicker, PEProfileNavigation } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
     GetProfilePersonalInformationPageDataDocument,
     GetProfilePersonalInformationPageDataQuery,
     SignedInUser,
+    UpdateUserProfilePictureDocument,
 } from '@people-eat/web-domain';
 import { UserCircle } from 'lucide-react';
 import { GetServerSideProps } from 'next';
@@ -12,6 +13,7 @@ import { PEEditPasswordCard } from '../../components/PEEditPasswordCard';
 import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
 import { createApolloClient } from '../../network/apolloClients';
+import { useMutation } from '@apollo/client';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
@@ -42,7 +44,18 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function ProfilePersonalInformationPage({ signedInUser, initialProfile }: ServerSideProps) {
+    const userId = signedInUser.userId;
     const [profile] = useState(initialProfile);
+
+    const [updateProfilePicture, { loading: loadingUpdateProfilePicture }] = useMutation(UpdateUserProfilePictureDocument);
+
+    function onUpdateProfilePicture(changedProfilePicture: File | undefined) {
+        updateProfilePicture({ variables: { userId, profilePicture: changedProfilePicture } }).then(({ data }) => {
+            if (data?.users.success) {
+                // updateCookProfile();
+            }
+        });
+    }
 
     return (
         <div>
@@ -51,20 +64,44 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PEProfileNavigation current="PERSONAL_INFORMATION" />
 
-                <PEProfileCard className="flex gap-8 justify-between">
-                    <div className="flex gap-8 items-center">
-                        <UserCircle width={64} height={64} strokeWidth={1} />
-                        <div className="flex flex-col gap-2">
-                            <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{profile.firstName}</span>
-                            <span className="truncate text-sm font-medium text-gray-500">{profile.lastName}</span>
-                        </div>
+                <LoadingDialog active={loadingUpdateProfilePicture} />
+
+                <div className="flex justify-between items-start">
+                    <div className="flex flex-col gap-2 ml-8">
+                        <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Hallo {profile.firstName}!</span>
                     </div>
                     {profile.isCook && (
                         <div>
                             <PELink type="secondary" title="Zum Kochprofil" href="/chef-profile" />
                         </div>
                     )}
-                </PEProfileCard>
+                </div>
+
+                <div className="flex gap-8 flex-col lg:flex-row">
+                    <PEProfileCard className="flex flex-col gap-8 flex-1">
+                        <h3 className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Profilbild</h3>
+
+                        {/* <UserCircle width={64} height={64} strokeWidth={1} /> */}
+
+                        <PEImagePicker
+                            onPick={onUpdateProfilePicture}
+                            defaultImage={profile.profilePictureUrl ?? undefined}
+                            onRemoveDefaultImage={() => onUpdateProfilePicture(undefined)}
+                        />
+                    </PEProfileCard>
+
+                    <PEProfileCard title="Über mich" className="flex flex-col gap-8 flex-1">
+                        <div className="h-full flex flex-col gap-8 justify-between">
+                            <div>
+                                <div>Vorname: {profile.firstName}</div>
+                                <div>Nachname: {profile.lastName}</div>
+                                <div>Email: {profile.emailAddress}</div>
+                                <div>Telefonnummert: {profile.phoneNumber ?? 'Keine Angabe'}</div>
+                                <div>Geburtsdatum: {profile.birthDate ?? 'Keine Angabe'}</div>
+                            </div>
+                        </div>
+                    </PEProfileCard>
+                </div>
 
                 <PEProfileAddressesCard userId={signedInUser.userId} addresses={profile.addresses} onFetchUpdated={() => undefined} />
 

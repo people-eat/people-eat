@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { LoadingDialog, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
+import { LoadingDialog, PECookProfileNavigation, PEHeader, PEImagePicker } from '@people-eat/web-components';
 import { PEButton, PELabelMultiSelection, PELink, PESlider, PETextArea } from '@people-eat/web-core-components';
 import {
     AddOneCookLanguageDocument,
@@ -15,10 +15,11 @@ import {
     UpdateCookMaximumParticipantsDocument,
     UpdateCookMaximumTravelDistanceDocument,
     UpdateCookTravelExpensesDocument,
+    UpdateUserProfilePictureDocument,
     translatedCookRanks,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
-import { MinusIcon, PlusIcon, UserCircle, Users } from 'lucide-react';
+import { MinusIcon, PlusIcon, Users } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -145,8 +146,8 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
         Promise.all(updateRequests).then(updateCookProfile);
     }
 
-    const [removeOneCookLanguage, { loading: removeLanguageLoading }] = useMutation(RemoveOneCookLanguageDocument);
-    const [addOneCookLanguage, { loading: addLanguageLoading }] = useMutation(AddOneCookLanguageDocument);
+    const [removeOneCookLanguage] = useMutation(RemoveOneCookLanguageDocument);
+    const [addOneCookLanguage] = useMutation(AddOneCookLanguageDocument);
 
     const bookingDetailsHasChangesApplied =
         travelExpenses !== cookProfile.travelExpenses ||
@@ -165,13 +166,22 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
         setValue('biography', cookProfile.biography);
     }
 
+    const [updateProfilePicture, { loading: loadingUpdateProfilePicture }] = useMutation(UpdateUserProfilePictureDocument);
+
+    function onUpdateProfilePicture(changedProfilePicture: File | undefined) {
+        updateProfilePicture({ variables: { userId: cookId, profilePicture: changedProfilePicture } }).then(({ data }) => {
+            if (data?.users.success) {
+                updateCookProfile();
+            }
+        });
+    }
+
     const loading =
         loadingUpdatedCookProfile ||
         loadingStripeOnboardingUrl ||
         loadingStripeDashboardUrl ||
         updateBioLoading ||
-        removeLanguageLoading ||
-        addLanguageLoading;
+        loadingUpdateProfilePicture;
 
     return (
         <div>
@@ -182,53 +192,68 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="PERSONAL_INFORMATION" />
 
-                <div className="flex flex-col gap-2">
-                    <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Hallo {cookProfile.user.firstName}!</span>
-                    <span className="truncate text-sm font-medium text-gray-500">{translatedCookRanks[cookProfile.rank]}</span>
+                <div className="flex justify-between items-start">
+                    <div className="flex flex-col gap-2 ml-8">
+                        <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                            Hallo {cookProfile.user.firstName}!
+                        </span>
+                        <span className="truncate text-sm font-medium text-gray-500">{translatedCookRanks[cookProfile.rank]}</span>
+                    </div>
+                    <PELink title="Zum Gastgeberprofil" href="/profile" className="hidden md:block" />
                 </div>
-                <PEProfileCard className="flex gap-8 justify-between">
-                    <div className="flex gap-8 items-center">
-                        <UserCircle width={64} height={64} strokeWidth={1} />
-                        {/* <div className="flex flex-col gap-2">
-                            <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{cookProfile.user.firstName}</span>
-                            <span className="truncate text-sm font-medium text-gray-500">{cookProfile.rank}</span>
-                        </div> */}
-                    </div>
-                    <div>
-                        <PELink type="secondary" title="Zum Gastgeberprofil" href="/profile" className="hidden md:block" />
-                    </div>
-                </PEProfileCard>
 
-                <PEProfileCard title="Finanzen" className="flex justify-between">
-                    {!cookProfile.hasStripePayoutMethodActivated && (
-                        <PEButton
-                            title="Wallet hinzufügen"
-                            onClick={(): void => {
-                                const openEvent = window.open('', '_blank');
-                                void getStripeOnboardingUrl()
-                                    .then(({ data: sData }) => {
-                                        if (sData?.cooks.getStripeOnboardingUrl)
-                                            openEvent!.location.href = sData.cooks.getStripeOnboardingUrl;
-                                    })
-                                    .catch((e) => console.error(e));
-                            }}
+                <div className="flex gap-8 flex-col lg:flex-row">
+                    <PEProfileCard className="flex flex-col gap-8 flex-1">
+                        <h3 className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Profilbild</h3>
+
+                        {/* <UserCircle width={64} height={64} strokeWidth={1} /> */}
+
+                        <PEImagePicker
+                            onPick={onUpdateProfilePicture}
+                            defaultImage={cookProfile.user.profilePictureUrl ?? undefined}
+                            onRemoveDefaultImage={() => onUpdateProfilePicture(undefined)}
                         />
-                    )}
-                    {cookProfile.hasStripePayoutMethodActivated && (
-                        <PEButton
-                            title="Transaktionen Anzeigen"
-                            onClick={(): void => {
-                                const openEvent = window.open('', '_blank');
-                                void getStripeDashboardUrl()
-                                    .then(({ data: sData }) => {
-                                        if (sData?.cooks.getStripeDashboardUrl)
-                                            openEvent!.location.href = sData.cooks.getStripeDashboardUrl;
-                                    })
-                                    .catch((e) => console.error(e));
-                            }}
-                        />
-                    )}
-                </PEProfileCard>
+                    </PEProfileCard>
+
+                    <PEProfileCard title="Finanzen" className="flex flex-col gap-8 flex-1">
+                        <div className="h-full flex flex-col gap-8 justify-between">
+                            <div>
+                                Deine Wallet ist der Ort an dem du die Überischt über all deine Einkünfte und ggf. Ausgaben finden kannst.
+                                Ohne eine Wallet sind keine Auszahlungen auf dein privates Bankkonto möglich.
+                            </div>
+                            <div className="flex justify-end">
+                                {!cookProfile.hasStripePayoutMethodActivated && (
+                                    <PEButton
+                                        title="Wallet hinzufügen"
+                                        onClick={(): void => {
+                                            const openEvent = window.open('', '_blank');
+                                            void getStripeOnboardingUrl()
+                                                .then(({ data: sData }) => {
+                                                    if (sData?.cooks.getStripeOnboardingUrl)
+                                                        openEvent!.location.href = sData.cooks.getStripeOnboardingUrl;
+                                                })
+                                                .catch((e) => console.error(e));
+                                        }}
+                                    />
+                                )}
+                                {cookProfile.hasStripePayoutMethodActivated && (
+                                    <PEButton
+                                        title="Transaktionen Anzeigen"
+                                        onClick={(): void => {
+                                            const openEvent = window.open('', '_blank');
+                                            void getStripeDashboardUrl()
+                                                .then(({ data: sData }) => {
+                                                    if (sData?.cooks.getStripeDashboardUrl)
+                                                        openEvent!.location.href = sData.cooks.getStripeDashboardUrl;
+                                                })
+                                                .catch((e) => console.error(e));
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    </PEProfileCard>
+                </div>
 
                 <PEProfileCard title="Bio" className="flex flex-col gap-4">
                     {!editBioOn && (

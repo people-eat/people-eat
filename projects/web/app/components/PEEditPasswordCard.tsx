@@ -11,11 +11,19 @@ export function PEEditPasswordCard() {
     const {
         register,
         handleSubmit,
-        getValues,
+        watch,
+        setValue,
         formState: { errors },
-    } = useForm<PEEditPasswordFormProps>();
+    } = useForm<PEEditPasswordFormProps>({ defaultValues: { password: '', passwordRepeat: '' } });
 
     function onChange(data: PEEditPasswordFormProps) {}
+
+    const { password, passwordRepeat } = watch();
+
+    function resetForm() {
+        setValue('password', '');
+        setValue('passwordRepeat', '');
+    }
 
     return (
         <PEProfileCard title="Passwort ändern" className="flex flex-col gap-8">
@@ -29,7 +37,7 @@ export function PEEditPasswordCard() {
                         errorMessage={errors.password?.message}
                         {...register('password', {
                             required: 'This field is required',
-                            validate: (value) => value === getValues('passwordRepeat') || 'Passwörter stimmen nicht miteinander überein',
+                            validate: (value) => value === passwordRepeat || 'Passwörter stimmen nicht miteinander überein',
                         })}
                     />
 
@@ -41,13 +49,17 @@ export function PEEditPasswordCard() {
                         errorMessage={errors.passwordRepeat?.message}
                         {...register('passwordRepeat', {
                             required: 'This field is required',
-                            validate: (value) => value === getValues('password') || 'Passwörter stimmen nicht miteinander überein',
+                            validate: (value) => value === password || 'Passwörter stimmen nicht miteinander überein',
                         })}
                     />
                 </div>
-                <div>
-                    <PEButton title="Passwort ändern" type="submit" />
-                </div>
+
+                {(password.length > 0 || passwordRepeat.length > 0) && (
+                    <div className="flex justify-end gap-2">
+                        <PEButton title="Verwerfen" type="secondary" onClick={resetForm} />
+                        <PEButton title="Passwort ändern" type="submit" />
+                    </div>
+                )}
             </form>
         </PEProfileCard>
     );
