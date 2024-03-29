@@ -21,7 +21,7 @@ import { MinusIcon, PlusIcon, UserCircle, Users } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { PEAddressesCard } from '../../components/PEAddressesCard';
+import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
 import { createApolloClient } from '../../network/apolloClients';
 
@@ -314,7 +314,12 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                     )}
                 </PEProfileCard>
 
-                <PEAddressesCard addresses={cookProfile.user.addresses} />
+                <PEProfileAddressesCard
+                    userId={cookId}
+                    addresses={cookProfile.user.addresses}
+                    onFetchUpdated={updateCookProfile}
+                    pinnedLocation={cookProfile.location}
+                />
 
                 <PEProfileCard title="Sprachen" className="flex flex-col gap-4">
                     {!editLanguagesOn && (

@@ -8,7 +8,7 @@ import {
 import { UserCircle } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
-import { PEAddressesCard } from '../../components/PEAddressesCard';
+import { PEProfileAddressesCard } from '../../components/PEAddressesCard';
 import { PEEditPasswordCard } from '../../components/PEEditPasswordCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
 import { createApolloClient } from '../../network/apolloClients';
@@ -66,7 +66,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
                     )}
                 </PEProfileCard>
 
-                <PEAddressesCard addresses={profile.addresses} />
+                <PEProfileAddressesCard addresses={profile.addresses} />
 
                 <PEEditPasswordCard />
             </div>
