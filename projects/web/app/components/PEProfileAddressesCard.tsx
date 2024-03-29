@@ -147,7 +147,7 @@ export function PEProfileAddressesCard({ userId, addresses, pinnedLocation, onFe
 
             <PEAlert
                 open={showPinConfirmation}
-                type="DELETION"
+                type="INFO"
                 title="Adresse als öffentlichen Standort verwenden?"
                 subtitle="Mit dieser Aktion wird diese Adresse als Grundlage für die Berechnung deiner maximalen Reisestrecke zu Kunden verwendet."
                 primaryButton={{

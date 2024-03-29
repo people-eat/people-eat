@@ -1,11 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { CheckIcon, Trash, X } from 'lucide-react';
+import { CheckIcon, Info, Trash, X } from 'lucide-react';
 import { Fragment } from 'react';
 import { PEButton } from '../button/PEButton';
 
 export interface PEAlertProps {
     open: boolean;
-    type?: 'SUCCESS' | 'ERROR' | 'DELETION';
+    type?: 'SUCCESS' | 'ERROR' | 'DELETION' | 'INFO';
     title: string;
     subtitle?: string;
     primaryButton: {
@@ -60,6 +60,11 @@ export function PEAlert({ open, type = 'SUCCESS', title, subtitle, primaryButton
                                     {type === 'DELETION' && (
                                         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
                                             <Trash className="h-6 w-6 text-red-600" aria-hidden="true" />
+                                        </div>
+                                    )}
+                                    {type === 'INFO' && (
+                                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+                                            <Info className="h-6 w-6 text-blue-600" aria-hidden="true" />
                                         </div>
                                     )}
 
