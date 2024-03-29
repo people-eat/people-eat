@@ -2,7 +2,7 @@ import { ForwardedRef, TextareaHTMLAttributes, forwardRef } from 'react';
 
 export interface PETextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     id: string;
-    labelTitle: string;
+    labelTitle?: string;
     placeholder?: string;
     errorMessage?: string;
 }
@@ -13,9 +13,11 @@ export const PETextArea = forwardRef(function (
 ) {
     return (
         <div>
-            <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
-                {labelTitle}
-            </label>
+            {labelTitle && (
+                <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
+                    {labelTitle}
+                </label>
+            )}
             <div className="mt-2">
                 <textarea
                     placeholder={placeholder}

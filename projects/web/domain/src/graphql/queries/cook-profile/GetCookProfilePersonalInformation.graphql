@@ -1,15 +1,4 @@
-query GetCookProfilePersonalInformationPageData($cookId: String!) {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
-    languages {
-        findAll {
-            languageId
-            title
-        }
-    }
+query GetCookProfilePersonalInformation($cookId: String!) {
     cooks {
         findOne(cookId: $cookId) {
             cookId

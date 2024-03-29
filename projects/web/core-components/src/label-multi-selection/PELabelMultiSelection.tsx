@@ -3,7 +3,9 @@ import { PELabelButton } from '../label-button/PELabelButton';
 export interface PELabelMultiSelectionProps<T> {
     options: T[];
     selectedOptions: T[];
-    selectedOptionsChanged: (changedSelectedOptions: T[]) => void;
+    selectedOptionsChanged?: (changedSelectedOptions: T[]) => void;
+    onSelect?: (changedSelectedOptions: T) => void;
+    onDeselect?: (changedSelectedOptions: T) => void;
 
     optionTitle: (option: T) => string;
     optionIdentifier: (option: T) => string;
@@ -13,6 +15,8 @@ export function PELabelMultiSelection<T>({
     options,
     selectedOptions,
     selectedOptionsChanged,
+    onSelect,
+    onDeselect,
     optionTitle,
     optionIdentifier,
 }: PELabelMultiSelectionProps<T>) {
@@ -23,10 +27,14 @@ export function PELabelMultiSelection<T>({
                     key={optionIdentifier(option)}
                     title={optionTitle(option)}
                     selected={selectedOptions.findIndex((o) => optionIdentifier(o) === optionIdentifier(option)) !== -1}
-                    onSelect={() => selectedOptionsChanged([...selectedOptions, option])}
-                    onDeselect={() =>
-                        selectedOptionsChanged(selectedOptions.filter((o) => optionIdentifier(o) !== optionIdentifier(option)))
-                    }
+                    onSelect={() => {
+                        selectedOptionsChanged?.([...selectedOptions, option]);
+                        onSelect?.(option);
+                    }}
+                    onDeselect={() => {
+                        selectedOptionsChanged?.(selectedOptions.filter((o) => optionIdentifier(o) !== optionIdentifier(option)));
+                        onDeselect?.(option);
+                    }}
                 />
             ))}
         </div>

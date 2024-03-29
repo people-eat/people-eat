@@ -1,14 +1,22 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
-import { PEButton, PELink, PESlider } from '@people-eat/web-core-components';
+import { PEButton, PELabelMultiSelection, PELink, PESlider, PETextArea } from '@people-eat/web-core-components';
 import {
+    AddOneCookLanguageDocument,
     CookGetStripeDashboardUrlDocument,
     CookGetStripeOnboardingUrlDocument,
+    GetCookProfilePersonalInformationDocument,
     GetCookProfilePersonalInformationPageDataDocument,
     GetCookProfilePersonalInformationPageDataQuery,
     GetSignedInUserDocument,
+    RemoveOneCookLanguageDocument,
     SignedInUser,
+    UpdateCookBiographyDocument,
+    UpdateCookMaximumParticipantsDocument,
+    UpdateCookMaximumTravelDistanceDocument,
+    UpdateCookTravelExpensesDocument,
 } from '@people-eat/web-domain';
+import classNames from 'classnames';
 import { MinusIcon, PlusIcon, UserCircle, Users } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
@@ -16,12 +24,12 @@ import { useForm } from 'react-hook-form';
 import { PEAddressesCard } from '../../components/PEAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
 import { createApolloClient } from '../../network/apolloClients';
-import classNames from 'classnames';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 export interface EditCookProfileFormInputs {
+    biography: string;
     travelExpenses: number;
     maximumTravelDistance: number;
     maximumParticipants: number;
@@ -30,6 +38,7 @@ export interface EditCookProfileFormInputs {
 interface ServerSideProps {
     signedInUser: SignedInUser;
     initialCookProfile: NonNullable<GetCookProfilePersonalInformationPageDataQuery['cooks']['findOne']>;
+    languages: NonNullable<GetCookProfilePersonalInformationPageDataQuery['languages']['findAll']>;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
@@ -46,10 +55,13 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         const initialCookProfile = result.data.cooks.findOne;
         if (!initialCookProfile) return signInPageRedirect;
 
+        const languages = result.data.languages.findAll;
+
         return {
             props: {
                 signedInUser,
                 initialCookProfile,
+                languages,
             },
         };
     } catch (error) {
@@ -57,11 +69,23 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function CookProfilePage({ signedInUser, initialCookProfile }: ServerSideProps) {
+export default function CookProfilePage({ signedInUser, initialCookProfile, languages }: ServerSideProps) {
     const cookId = initialCookProfile.cookId;
-    const [cookProfile] = useState(initialCookProfile);
+    const [cookProfile, setCookProfile] = useState(initialCookProfile);
     const [editLanguagesOn, setEditLanguagesOn] = useState(false);
     const [editBioOn, setEditBioOn] = useState(false);
+
+    const [getUpdatedCookProfile, { loading: loadingUpdatedCookProfile }] = useLazyQuery(GetCookProfilePersonalInformationDocument, {
+        variables: { cookId },
+    });
+
+    function updateCookProfile() {
+        getUpdatedCookProfile().then(({ data }) => {
+            const cook = data?.cooks.findOne;
+            if (!cook) return;
+            setCookProfile(cook);
+        });
+    }
 
     const [getStripeOnboardingUrl, { loading: loadingStripeOnboardingUrl }] = useLazyQuery(CookGetStripeOnboardingUrlDocument, {
         variables: { cookId },
@@ -74,47 +98,100 @@ export default function CookProfilePage({ signedInUser, initialCookProfile }: Se
         register,
         // handleSubmit,
         watch,
-        reset,
         setValue,
-        // formState: { errors },
     } = useForm<EditCookProfileFormInputs>({
         defaultValues: {
-            travelExpenses: initialCookProfile.travelExpenses,
-            maximumTravelDistance: initialCookProfile.maximumTravelDistance ?? 0,
-            maximumParticipants: initialCookProfile.maximumParticipants ?? 2,
+            biography: cookProfile.biography,
+            travelExpenses: cookProfile.travelExpenses,
+            maximumTravelDistance: cookProfile.maximumTravelDistance ?? 0,
+            maximumParticipants: cookProfile.maximumParticipants ?? 2,
         },
     });
 
-    const { travelExpenses, maximumTravelDistance, maximumParticipants } = watch();
+    const { biography, travelExpenses, maximumTravelDistance, maximumParticipants } = watch();
 
-    const bookingDetailsHasChangesApplied =
-        travelExpenses !== initialCookProfile.travelExpenses ||
-        maximumTravelDistance !== initialCookProfile.maximumTravelDistance ||
-        maximumParticipants !== initialCookProfile.maximumParticipants;
+    const [requestBioUpdate, { loading: updateBioLoading }] = useMutation(UpdateCookBiographyDocument, {
+        variables: { cookId, biography },
+    });
 
-    function resetBookingDetails() {
-        reset({
-            travelExpenses: initialCookProfile.travelExpenses,
-            maximumTravelDistance: initialCookProfile.maximumTravelDistance ?? 0,
-            maximumParticipants: initialCookProfile.maximumParticipants ?? 2,
+    function updateBio() {
+        requestBioUpdate().then(({ data }) => {
+            if (!data?.cooks.success) return;
+            setEditBioOn(false);
+            updateCookProfile();
         });
     }
 
+    const [requestTravelExpensesUpdate] = useMutation(UpdateCookTravelExpensesDocument, {
+        variables: { cookId, travelExpenses: travelExpenses },
+    });
+
+    const [requestMaximumTravelDistanceUpdate] = useMutation(UpdateCookMaximumTravelDistanceDocument, {
+        variables: { cookId, maximumTravelDistance: maximumTravelDistance },
+    });
+
+    const [requestMaximumParticipantsUpdate] = useMutation(UpdateCookMaximumParticipantsDocument, {
+        variables: { cookId, maximumParticipants: maximumParticipants },
+    });
+
+    function updateBookingDetails() {
+        const updateRequests = [];
+
+        if (travelExpenses !== cookProfile.travelExpenses) updateRequests.push(requestTravelExpensesUpdate());
+        if (maximumTravelDistance !== cookProfile.maximumTravelDistance) updateRequests.push(requestMaximumTravelDistanceUpdate());
+        if (maximumParticipants !== cookProfile.maximumParticipants) updateRequests.push(requestMaximumParticipantsUpdate());
+
+        Promise.all(updateRequests).then(updateCookProfile);
+    }
+
+    const [removeOneCookLanguage, { loading: removeLanguageLoading }] = useMutation(RemoveOneCookLanguageDocument);
+    const [addOneCookLanguage, { loading: addLanguageLoading }] = useMutation(AddOneCookLanguageDocument);
+
+    const bookingDetailsHasChangesApplied =
+        travelExpenses !== cookProfile.travelExpenses ||
+        maximumTravelDistance !== cookProfile.maximumTravelDistance ||
+        maximumParticipants !== cookProfile.maximumParticipants;
+
+    function resetBookingDetails() {
+        setValue('travelExpenses', cookProfile.travelExpenses);
+        setValue('maximumTravelDistance', cookProfile.maximumTravelDistance ?? 0);
+        setValue('maximumParticipants', cookProfile.maximumParticipants ?? 2);
+    }
+
+    const biographyHasChangesApplied = biography !== cookProfile.biography;
+
+    function resetBiography() {
+        setValue('biography', cookProfile.biography);
+    }
+
+    const loading =
+        loadingUpdatedCookProfile ||
+        loadingStripeOnboardingUrl ||
+        loadingStripeDashboardUrl ||
+        updateBioLoading ||
+        removeLanguageLoading ||
+        addLanguageLoading;
+
     return (
         <div>
-            <LoadingDialog active={loadingStripeOnboardingUrl || loadingStripeDashboardUrl} />
+            <LoadingDialog active={loading} />
+
             <PEHeader signedInUser={signedInUser} />
 
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="PERSONAL_INFORMATION" />
 
+                <div className="flex flex-col gap-2">
+                    <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Hallo {cookProfile.user.firstName}!</span>
+                    <span className="truncate text-sm font-medium text-gray-500">{cookProfile.rank}</span>
+                </div>
                 <PEProfileCard className="flex gap-8 justify-between">
                     <div className="flex gap-8 items-center">
                         <UserCircle width={64} height={64} strokeWidth={1} />
-                        <div className="flex flex-col gap-2">
+                        {/* <div className="flex flex-col gap-2">
                             <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{cookProfile.user.firstName}</span>
                             <span className="truncate text-sm font-medium text-gray-500">{cookProfile.rank}</span>
-                        </div>
+                        </div> */}
                     </div>
                     <div>
                         <PELink type="secondary" title="Zum Gastgeberprofil" href="/profile" className="hidden md:block" />
@@ -122,7 +199,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile }: Se
                 </PEProfileCard>
 
                 <PEProfileCard title="Finanzen" className="flex justify-between">
-                    {!initialCookProfile.hasStripePayoutMethodActivated && (
+                    {!cookProfile.hasStripePayoutMethodActivated && (
                         <PEButton
                             title="Wallet hinzufügen"
                             onClick={(): void => {
@@ -136,7 +213,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile }: Se
                             }}
                         />
                     )}
-                    {initialCookProfile.hasStripePayoutMethodActivated && (
+                    {cookProfile.hasStripePayoutMethodActivated && (
                         <PEButton
                             title="Transaktionen Anzeigen"
                             onClick={(): void => {
@@ -153,17 +230,43 @@ export default function CookProfilePage({ signedInUser, initialCookProfile }: Se
                 </PEProfileCard>
 
                 <PEProfileCard title="Bio" className="flex flex-col gap-4">
-                    {cookProfile.biography && <span>{cookProfile.biography}</span>}
-                    {!cookProfile.biography && (
-                        <span>
-                            Deine Bio ist noch leer. Füge eine Profilbeschreibung hinzu in der du über dich, deinen Werdegang und deine
-                            besonderen Talente erzählst um die Aufmerksamkeit von Kunden zu gewinnen.
-                        </span>
+                    {!editBioOn && (
+                        <>
+                            <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditBioOn(true)} />
+                            {cookProfile.biography && <span>{cookProfile.biography}</span>}
+                            {!cookProfile.biography && (
+                                <span>
+                                    Deine Bio ist noch leer. Füge eine Profilbeschreibung hinzu in der du über dich, deinen Werdegang und
+                                    deine besonderen Talente erzählst um die Aufmerksamkeit von Kunden zu gewinnen.
+                                </span>
+                            )}
+                        </>
+                    )}
+                    {editBioOn && (
+                        <>
+                            <div className="flex gap-2">
+                                <PEButton
+                                    title="Verwerfen"
+                                    type="secondary"
+                                    onClick={() => {
+                                        resetBiography();
+                                        setEditBioOn(false);
+                                    }}
+                                />
+                                {biographyHasChangesApplied && <PEButton title="Speichern" onClick={updateBio} />}
+                            </div>
+                            <PETextArea id="biography" {...register('biography')} />
+                        </>
                     )}
                 </PEProfileCard>
 
                 <PEProfileCard title="Auftragsdetails" className="flex flex-col gap-4">
-                    <PESlider id="travelExpenses" labelTitle="Reisekosten" step={1} {...register('travelExpenses', { min: 0, max: 70 })}>
+                    <PESlider
+                        id="travelExpenses"
+                        labelTitle="Reisekosten"
+                        step={1}
+                        {...register('travelExpenses', { min: 0, max: 70, valueAsNumber: true })}
+                    >
                         {(travelExpenses / 100).toFixed(2)} €
                     </PESlider>
 
@@ -171,7 +274,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile }: Se
                         id="maximumTravelDistance"
                         labelTitle="Maximale Reisestrecke"
                         step={1}
-                        {...register('maximumTravelDistance', { min: 0, max: 70 })}
+                        {...register('maximumTravelDistance', { min: 0, max: 70, valueAsNumber: true })}
                     >
                         {maximumTravelDistance} km
                     </PESlider>
@@ -206,7 +309,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile }: Se
                     {bookingDetailsHasChangesApplied && (
                         <div className="flex gap-2 justify-end">
                             <PEButton title="Verwerfen" type="secondary" onClick={resetBookingDetails} />
-                            <PEButton title="Änderungen speichern" />
+                            <PEButton title="Änderungen speichern" onClick={updateBookingDetails} />
                         </div>
                     )}
                 </PEProfileCard>
@@ -231,22 +334,16 @@ export default function CookProfilePage({ signedInUser, initialCookProfile }: Se
                         </ul>
                     )}
                     {editLanguagesOn && (
-                        <>
-                            <ul className="flex flex-wrap gap-2">
-                                {cookProfile.languages.map(({ languageId, title }) => (
-                                    <li
-                                        key={languageId}
-                                        className={classNames(
-                                            'px-4 py-2.5',
-                                            'text-sm font-semibold text-white',
-                                            'rounded-full bg-orange-500 shadow-sm',
-                                        )}
-                                    >
-                                        {title}
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
+                        <PELabelMultiSelection
+                            options={languages}
+                            selectedOptions={cookProfile.languages}
+                            onSelect={({ languageId }) => addOneCookLanguage({ variables: { cookId, languageId } }).then(updateCookProfile)}
+                            onDeselect={({ languageId }) =>
+                                removeOneCookLanguage({ variables: { cookId, languageId } }).then(updateCookProfile)
+                            }
+                            optionTitle={({ title }) => title}
+                            optionIdentifier={({ languageId }) => languageId}
+                        />
                     )}
 
                     <div className="flex justify-end">
