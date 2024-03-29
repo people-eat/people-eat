@@ -15,6 +15,7 @@ import {
     UpdateCookMaximumParticipantsDocument,
     UpdateCookMaximumTravelDistanceDocument,
     UpdateCookTravelExpensesDocument,
+    translatedCookRanks,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { MinusIcon, PlusIcon, UserCircle, Users } from 'lucide-react';
@@ -183,7 +184,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
 
                 <div className="flex flex-col gap-2">
                     <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Hallo {cookProfile.user.firstName}!</span>
-                    <span className="truncate text-sm font-medium text-gray-500">{cookProfile.rank}</span>
+                    <span className="truncate text-sm font-medium text-gray-500">{translatedCookRanks[cookProfile.rank]}</span>
                 </div>
                 <PEProfileCard className="flex gap-8 justify-between">
                     <div className="flex gap-8 items-center">
@@ -232,7 +233,6 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                 <PEProfileCard title="Bio" className="flex flex-col gap-4">
                     {!editBioOn && (
                         <>
-                            <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditBioOn(true)} />
                             {cookProfile.biography && <span>{cookProfile.biography}</span>}
                             {!cookProfile.biography && (
                                 <span>
@@ -240,11 +240,15 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                                     deine besonderen Talente erzählst um die Aufmerksamkeit von Kunden zu gewinnen.
                                 </span>
                             )}
+                            <div className="flex justify-end">
+                                <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditBioOn(true)} />
+                            </div>
                         </>
                     )}
                     {editBioOn && (
                         <>
-                            <div className="flex gap-2">
+                            <PETextArea id="biography" {...register('biography')} />
+                            <div className="flex gap-2 justify-end">
                                 <PEButton
                                     title="Verwerfen"
                                     type="secondary"
@@ -255,7 +259,6 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                                 />
                                 {biographyHasChangesApplied && <PEButton title="Speichern" onClick={updateBio} />}
                             </div>
-                            <PETextArea id="biography" {...register('biography')} />
                         </>
                     )}
                 </PEProfileCard>

@@ -368,7 +368,9 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
                                         <div className="flex justify-between">
                                             <h3>{course.title}</h3>
-                                            <button onClick={() => remove(index)}>Gang entfernen</button>
+                                            <button role="button" onClick={() => remove(index)}>
+                                                Gang entfernen
+                                            </button>
                                         </div>
                                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                             <button
@@ -524,6 +526,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         children={children}
                                         setChildren={setChildren}
                                     />
+
                                     <span className="flex-1" />
 
                                     <div className="flex flex-col gap-8">
@@ -574,7 +577,11 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                 Für Fahrtkosten und Trinkgeld fallen keine Servicegebühren an.
                                             </span>
                                         </div>
-                                        <button className="text-gray-500" onClick={(): void => setCostDetailsShown(!costDetailsShown)}>
+                                        <button
+                                            role="button"
+                                            className="text-gray-500"
+                                            onClick={(): void => setCostDetailsShown(!costDetailsShown)}
+                                        >
                                             {!costDetailsShown && (
                                                 <div className="flex flex-col items-center">
                                                     <span>Mehr anzeigen</span>

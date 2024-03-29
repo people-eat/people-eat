@@ -74,6 +74,7 @@ export function MealCard(props: MealCardProps) {
                 <div className="mt-4 flex justify-between items-center">
                     {onInfoClick && (
                         <button
+                            type="button"
                             onClick={onInfoClick}
                             className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
                         >
