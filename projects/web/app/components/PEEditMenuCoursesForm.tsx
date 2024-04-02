@@ -151,7 +151,7 @@ export function PEEditMenuCoursesForm({
             <PEAddMealToCourseDialog
                 open={addMealToCourseDialogOpen}
                 meals={meals}
-                selectedMeals={selectedCourse?.mealOptions ?? []}
+                selectedMeals={selectedCourse?.mealOptions.map(({ meal }) => meal) ?? []}
                 onAdd={(mealId: string) => {
                     onAddMealToCourse(selectedCourse?.courseId ?? '', { mealId, index: selectedCourse?.mealOptions.length ?? 0 });
                     setAddMealToCourseDialogOpen(false);
