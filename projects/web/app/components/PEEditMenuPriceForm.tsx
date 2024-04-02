@@ -95,6 +95,16 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                 setEditModeOn(false);
             })}
         >
+            <div className="flex gap-4">
+                {!editModeOn && <PEButton title="Menüpreise bearbeiten" onClick={() => setEditModeOn(true)} type="secondary" />}
+                {editModeOn && (
+                    <>
+                        <PEButton title="Abbrechen" type="secondary" onClick={onAbort} />
+                        {changesToSave && <PEButton title="Speichern" type="submit" />}
+                    </>
+                )}
+            </div>
+
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
                 <span>Der Menüpreis beträgt</span>
 
@@ -259,16 +269,6 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                         )}
                     </button>
                 </div>
-            </div>
-
-            <div className="flex justify-end gap-4">
-                {!editModeOn && <PEButton title="Bearbeiten" onClick={() => setEditModeOn(true)} type="secondary" />}
-                {editModeOn && (
-                    <>
-                        <PEButton title="Abbrechen" type="secondary" onClick={onAbort} />
-                        {changesToSave && <PEButton title="Speichern" type="submit" />}
-                    </>
-                )}
             </div>
         </form>
     );

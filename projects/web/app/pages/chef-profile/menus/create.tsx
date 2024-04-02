@@ -34,6 +34,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { CreateMealDialog } from '../../../components/CreateMealDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
+import { PEAddMealToCourseDialog } from 'projects/web/app/components/PEAddMealToCourseDialog';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -123,6 +124,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
     const [greetingFromKitchenEnabled, setGreetingFromKitchenEnabled] = useState<boolean>(false);
 
     const [createCourseDialogOpen, setCreateCourseDialogOpen] = useState<boolean>(false);
+    const [courseIndexToAddMealTo, setCourseIndexToAddMealTo] = useState<number | undefined>();
     const [createMealDialogOpen, setCreateMealDialogOpen] = useState<boolean>(false);
     const [preparationTime, setPreparationTime] = useState(preparationTimeOptions[1]);
 
@@ -355,10 +357,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     )}
                                 </div>
 
-                                <div className="flex justify-between">
-                                    <span className="text-xl font-semibold">Gänge</span>
-                                    <PEButton title="Gang hinzufügen" type="secondary" onClick={() => setCreateCourseDialogOpen(true)} />
-                                </div>
+                                <span className="text-xl font-semibold">Gänge</span>
 
                                 {errors.courses?.root?.message && (
                                     <span className="text-sm font-semibold text-red-500">{errors.courses?.root?.message}</span>
@@ -374,8 +373,9 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         </div>
                                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                             <button
-                                                type="button"
+                                                role="button"
                                                 className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                                                onClick={() => setCourseIndexToAddMealTo(index)}
                                             >
                                                 <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
                                                 <span className="mt-2 block text-sm text-gray-900">Gericht hinzufügen</span>
@@ -402,6 +402,15 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         </div>
                                     </div>
                                 ))}
+
+                                <button
+                                    role="button"
+                                    className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                                    onClick={() => setCreateCourseDialogOpen(true)}
+                                >
+                                    <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
+                                    <span className="mt-2 block text-sm text-gray-900">Gang hinzufügen</span>
+                                </button>
 
                                 <div className="relative">
                                     <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -646,6 +655,20 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                         />
                     </div>
                 </PEDialog>
+
+                <PEAddMealToCourseDialog
+                    open={courseIndexToAddMealTo !== undefined}
+                    meals={meals}
+                    selectedMealIds={courseIndexToAddMealTo ? courses[courseIndexToAddMealTo].mealOptions.map(({ mealId }) => mealId) : []}
+                    onAdd={(selectedMeal) => {
+                        const course = courses[courseIndexToAddMealTo!];
+                        update(courseIndexToAddMealTo!, {
+                            ...course,
+                            mealOptions: [selectedMeal, ...course.mealOptions],
+                        });
+                        setCourseIndexToAddMealTo(undefined);
+                    }}
+                />
 
                 <CreateMealDialog
                     cookId={signedInUser.userId}

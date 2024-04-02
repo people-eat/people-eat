@@ -314,7 +314,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                         </div>
                         <div className="flex gap-2 items-center">
                             <button
-                                type="button"
+                                role="button"
                                 className="rounded-full text-gray-500 ring-gray-500 hover:ring-orange-500 focus:ring-orange-500 ring-1 ring-inset p-1 shadow-sm hover:bg-orange-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 focus-visible:text-white focus-visible:bg-orange-500"
                                 onClick={() => setValue('maximumParticipants', maximumParticipants - 1)}
                                 disabled={maximumParticipants < 2}
@@ -324,7 +324,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
 
                             <span className="w-4 text-center">{maximumParticipants}</span>
                             <button
-                                type="button"
+                                role="button"
                                 className="rounded-full  text-gray-500 ring-gray-500 hover:ring-orange-500 focus:ring-orange-500 ring-1 ring-inset p-1 shadow-sm hover:bg-orange-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600 focus-visible:text-white focus-visible:bg-orange-500"
                                 onClick={() => setValue('maximumParticipants', maximumParticipants + 1)}
                                 disabled={maximumParticipants > 19}

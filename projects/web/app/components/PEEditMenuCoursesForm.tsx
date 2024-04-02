@@ -3,10 +3,9 @@ import { PEButton, PEDialog } from '@people-eat/web-core-components';
 import { GetCookProfileMenuPageDataQuery, Unpacked } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
 import { CreateMenuCourseFormInputs } from 'projects/web/components/src/_forms/CreateMenuCourseForm';
+import { useState } from 'react';
+import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
 
 interface PEEditMenuCoursesFormInputs {
     greetingFromKitchen: string;
@@ -37,22 +36,32 @@ export function PEEditMenuCoursesForm({
     const [createCourseDialogOpen, setCreateCourseDialogOpen] = useState(false);
     const [addMealToCourseDialogOpen, setAddMealToCourseDialogOpen] = useState(false);
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        watch,
-        formState: { errors },
-    } = useForm<PEEditMenuCoursesFormInputs>({
-        defaultValues: {
-            greetingFromKitchen: '',
-        },
-    });
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     setValue,
+    //     watch,
+    //     formState: { errors },
+    // } = useForm<PEEditMenuCoursesFormInputs>({
+    //     defaultValues: {
+    //         greetingFromKitchen: '',
+    //     },
+    // });
 
-    const { greetingFromKitchen } = watch();
+    // const { greetingFromKitchen } = watch();
 
     return (
         <>
+            <div className="flex gap-4">
+                {!coursesInEditMode && <PEButton title="Menü bearbeiten" onClick={() => setCoursesInEditMode(true)} type="secondary" />}
+                {coursesInEditMode && (
+                    <>
+                        <PEButton title="Abbrechen" type="secondary" onClick={() => setCoursesInEditMode(false)} />
+                        <PEButton title="Fertig" onClick={() => setCoursesInEditMode(false)} />
+                    </>
+                )}
+            </div>
+
             {menu.courses.map((course, index) => (
                 <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
                     <div className="flex justify-between">
@@ -62,7 +71,7 @@ export function PEEditMenuCoursesForm({
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {coursesInEditMode && (
                             <button
-                                type="button"
+                                role="button"
                                 className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                                 onClick={() => {
                                     setSelectedCourse(course);
@@ -114,7 +123,7 @@ export function PEEditMenuCoursesForm({
 
                     {coursesInEditMode && (
                         <button
-                            type="button"
+                            role="button"
                             className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                             onClick={() => setCreateCourseDialogOpen(true)}
                         >
@@ -124,16 +133,6 @@ export function PEEditMenuCoursesForm({
                     )}
                 </div>
             ))}
-
-            <div className="flex justify-end gap-4">
-                {!coursesInEditMode && <PEButton title="Bearbeiten" onClick={() => setCoursesInEditMode(true)} type="secondary" />}
-                {coursesInEditMode && (
-                    <>
-                        <PEButton title="Abbrechen" type="secondary" onClick={() => setCoursesInEditMode(false)} />
-                        <PEButton title="Speichern" onClick={() => setCoursesInEditMode(false)} />
-                    </>
-                )}
-            </div>
 
             <PEDialog open={createCourseDialogOpen}>
                 <div className="bg-white p-8 rounded-2xl w-full flex flex-col gap-8">
@@ -151,8 +150,8 @@ export function PEEditMenuCoursesForm({
             <PEAddMealToCourseDialog
                 open={addMealToCourseDialogOpen}
                 meals={meals}
-                selectedMeals={selectedCourse?.mealOptions.map(({ meal }) => meal) ?? []}
-                onAdd={(mealId: string) => {
+                selectedMealIds={selectedCourse?.mealOptions.map(({ meal }) => meal.mealId) ?? []}
+                onAdd={({ mealId }) => {
                     onAddMealToCourse(selectedCourse?.courseId ?? '', { mealId, index: selectedCourse?.mealOptions.length ?? 0 });
                     setAddMealToCourseDialogOpen(false);
                 }}

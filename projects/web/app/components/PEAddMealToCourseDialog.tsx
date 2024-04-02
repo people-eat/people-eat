@@ -5,23 +5,25 @@ import { useState } from 'react';
 
 interface Meal {
     mealId: string;
+    cookId: string;
     title: string;
-    description: string;
     type: MealType;
+    description: string;
     imageUrl?: string | null;
+    createdAt: Date;
 }
 
 export interface PEAddMealToCourseDialogProps {
     open: boolean;
     meals: Meal[];
-    selectedMeals: Meal[];
-    onAdd: (selectedMeal: string) => void;
+    selectedMealIds: string[];
+    onAdd: (selectedMeal: Meal) => void;
 }
 
-export function PEAddMealToCourseDialog({ open, meals, selectedMeals, onAdd }: PEAddMealToCourseDialogProps) {
+export function PEAddMealToCourseDialog({ open, meals, selectedMealIds, onAdd }: PEAddMealToCourseDialogProps) {
     const [selectedMealTypes, setSelectedMealTypes] = useState<MealType[]>([]);
     const filteredMeals = (selectedMealTypes.length > 0 ? meals.filter(({ type }) => selectedMealTypes.includes(type)) : meals).filter(
-        (meal) => !selectedMeals.some((selected) => selected.mealId === meal.mealId),
+        (meal) => !selectedMealIds.some((selected) => selected === meal.mealId),
     );
     return (
         <PEDialog open={open}>
@@ -51,7 +53,7 @@ export function PEAddMealToCourseDialog({ open, meals, selectedMeals, onAdd }: P
                             button={{
                                 title: 'Hinzufügen',
                                 type: 'SECONDARY',
-                                onClick: () => onAdd(meal.mealId),
+                                onClick: () => onAdd(meal),
                             }}
                             title={meal.title}
                             description={meal.description}
