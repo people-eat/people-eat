@@ -14,7 +14,7 @@ import {
 } from '@people-eat/web-core-components';
 import {
     CategoryOption,
-    CreateMenuDocument,
+    CreateOneCookMenuDocument,
     GetCookProfileMenusCreatePageDataDocument,
     GetCookProfileMenusCreatePageDataQuery,
     GetMealsDocument,
@@ -189,7 +189,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
 
     const [fetchMeals, { loading: loadingMeals }] = useLazyQuery(GetMealsDocument, { variables: { cookId } });
 
-    const [createMenu, { loading, data, reset }] = useMutation(CreateMenuDocument);
+    const [createMenu, { loading, data, reset }] = useMutation(CreateOneCookMenuDocument);
 
     const showSuccessAlert = data?.cooks.menus.success ?? false;
     const showFailedAlert = data ? !data.cooks.menus.success : false;

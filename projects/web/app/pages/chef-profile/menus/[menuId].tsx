@@ -1,8 +1,7 @@
-import { CreateMenuCourseForm, MealCard, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
 import {
-    PEButton,
     PECheckbox,
-    PEDialog,
     PELabelMultiSelection,
     PELabelSingleSelection,
     PESingleSelection,
@@ -11,21 +10,27 @@ import {
 } from '@people-eat/web-core-components';
 import {
     CategoryOption,
+    GetCookProfileMenuDocument,
     GetCookProfileMenuPageDataDocument,
     GetCookProfileMenuPageDataQuery,
     GetSignedInUserDocument,
     KitchenOption,
     SignedInUser,
+    UpdateCookMenuBasePriceCustomersDocument,
+    UpdateCookMenuBasePriceDocument,
+    UpdateCookMenuPricePerAdultDocument,
+    UpdateCookMenuPricePerChildDocument,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
-import { ArrowLeft, HandCoins, Plus, Rows4, Soup } from 'lucide-react';
+import { ArrowLeft, HandCoins, Rows4, Soup } from 'lucide-react';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { PEEditMenuCoursesForm } from '../../../components/PEEditMenuCoursesForm';
 import { PEEditMenuPriceForm } from '../../../components/PEEditMenuPriceForm';
 import { createApolloClient } from '../../../network/apolloClients';
-import { useForm } from 'react-hook-form';
 import { CreateMenuFormInputs } from './create';
-import Link from 'next/link';
 
 const tabs = [
     { name: 'Allgemeines', icon: Rows4 },
@@ -83,18 +88,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function CookProfileMenuPage({ signedInUser, categories, kitchens, meals, menu }: ServerSideProps) {
+export default function CookProfileMenuPage({ signedInUser, categories, kitchens, meals, menu: initialMenu }: ServerSideProps) {
     const [selectedTab, setSelectedTab] = useState(0);
+
+    const [menu, setMenu] = useState(initialMenu);
+
+    const cookId = signedInUser.userId;
+    const menuId = menu.menuId;
 
     const [selectedCategories, setSelectedCategories] = useState<CategoryOption[]>([]);
     const [selectedKitchen, setSelectedKitchen] = useState<KitchenOption | undefined>();
-    const [greetingFromKitchenEnabled, setGreetingFromKitchenEnabled] = useState<boolean>(false);
     const [preparationTime, setPreparationTime] = useState(
         preparationTimeOptions.find((o) => o.value === menu.preparationTime) ?? preparationTimeOptions[1],
     );
-
-    const [coursesInEditMode, setCoursesInEditMode] = useState(false);
-    const [createCourseDialogOpen, setCreateCourseDialogOpen] = useState(false);
 
     const {
         register,
@@ -105,6 +111,25 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
             description: menu.description,
         },
     });
+
+    const [getUpdatedMenu, { loading: loadingUpdatedMenu }] = useLazyQuery(GetCookProfileMenuDocument, {
+        variables: { cookId, menuId },
+    });
+
+    function updateMenu() {
+        getUpdatedMenu().then(({ data }) => {
+            const updatedMenu = data?.cooks.menus.findOne;
+            if (!updatedMenu) return;
+            setMenu(updatedMenu);
+        });
+    }
+
+    const [requestBasePriceUpdate] = useMutation(UpdateCookMenuBasePriceDocument);
+    const [requestBasePriceCustomersUpdate] = useMutation(UpdateCookMenuBasePriceCustomersDocument);
+    const [requestPricePerAdultUpdate] = useMutation(UpdateCookMenuPricePerAdultDocument);
+    const [requestPricePerChildUpdate] = useMutation(UpdateCookMenuPricePerChildDocument);
+
+    // const [requestPricePerChildUpdate] = useMutation(UpdateCookMenuPricePerChildDocument);
 
     return (
         <div>
@@ -243,96 +268,23 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                     </>
                 )}
 
-                {selectedTab === 1 && (
-                    <>
-                        {menu.courses.map((course, index) => (
-                            <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
-                                <div className="flex justify-between">
-                                    <h3>{course.title}</h3>
-                                    {coursesInEditMode && <button onClick={() => undefined}>Gang entfernen</button>}
-                                </div>
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                    {coursesInEditMode && (
-                                        <button
-                                            type="button"
-                                            className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                                        >
-                                            <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
-                                            <span className="mt-2 block text-sm text-gray-900">Gericht hinzufügen</span>
-                                        </button>
-                                    )}
-                                    {course.mealOptions.map((mealOption) => (
-                                        <div key={mealOption.index}>
-                                            {coursesInEditMode && (
-                                                <MealCard
-                                                    type="BUTTON"
-                                                    key={mealOption.meal.mealId}
-                                                    title={mealOption.meal.title}
-                                                    description={mealOption.meal.description}
-                                                    imageUrl={mealOption.meal.imageUrl}
-                                                    onInfoClick={() => undefined}
-                                                    button={{
-                                                        title: 'Entfernen',
-                                                        onClick: () => undefined,
-                                                        type: 'SECONDARY',
-                                                    }}
-                                                />
-                                            )}
-                                            {!coursesInEditMode && (
-                                                <MealCard
-                                                    type="SIMPLE"
-                                                    key={mealOption.meal.mealId}
-                                                    title={mealOption.meal.title}
-                                                    description={mealOption.meal.description}
-                                                    imageUrl={mealOption.meal.imageUrl}
-                                                    onInfoClick={() => undefined}
-                                                />
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
+                {selectedTab === 1 && <PEEditMenuCoursesForm menu={menu} meals={meals} onAddMealToCourse={(mealId) => alert(mealId)} />}
 
-                                {coursesInEditMode && (
-                                    <button
-                                        type="button"
-                                        className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                                        onClick={() => setCreateCourseDialogOpen(true)}
-                                    >
-                                        <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
-                                        <span className="mt-2 block text-sm text-gray-900">Gang hinzufügen</span>
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-
-                        <div className="flex justify-end gap-4">
-                            {!coursesInEditMode && (
-                                <PEButton title="Bearbeiten" onClick={() => setCoursesInEditMode(true)} type="secondary" />
-                            )}
-                            {coursesInEditMode && (
-                                <>
-                                    <PEButton title="Abbrechen" type="secondary" onClick={() => setCoursesInEditMode(false)} />
-                                    <PEButton title="Speichern" onClick={() => setCoursesInEditMode(false)} />
-                                </>
-                            )}
-                        </div>
-
-                        <PEDialog open={createCourseDialogOpen}>
-                            <div className="bg-white p-8 rounded-2xl w-full flex flex-col gap-8">
-                                <CreateMenuCourseForm
-                                    meals={meals}
-                                    // onCreateMeal={() => setCreateMealDialogOpen(true)}
-                                    onCreate={(data) => {
-                                        // append(data);
-                                        setCreateCourseDialogOpen(false);
-                                    }}
-                                />
-                            </div>
-                        </PEDialog>
-                    </>
+                {selectedTab === 2 && (
+                    <PEEditMenuPriceForm
+                        menu={menu}
+                        onChange={({ basePrice, basePriceCustomers, pricePerAdult, pricePerChild }) => {
+                            Promise.all([
+                                requestBasePriceUpdate({ variables: { cookId, menuId, basePrice: basePrice * 100 } }),
+                                requestBasePriceCustomersUpdate({ variables: { cookId, menuId, basePriceCustomers } }),
+                                requestPricePerAdultUpdate({ variables: { cookId, menuId, pricePerAdult: pricePerAdult * 100 } }),
+                                requestPricePerChildUpdate({
+                                    variables: { cookId, menuId, pricePerChild: pricePerChild ? pricePerChild * 100 : undefined },
+                                }),
+                            ]).then(updateMenu);
+                        }}
+                    />
                 )}
-
-                {selectedTab === 2 && <PEEditMenuPriceForm menu={menu} onChange={() => undefined} />}
             </div>
         </div>
     );

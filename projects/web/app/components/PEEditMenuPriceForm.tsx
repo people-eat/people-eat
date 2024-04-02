@@ -81,6 +81,12 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
         setValue('pricePerChild', menu.pricePerChild ? menu.pricePerChild / 100 : undefined);
     }
 
+    const changesToSave =
+        basePrice !== menu.basePrice / 100 ||
+        basePriceCustomers !== menu.basePriceCustomers ||
+        pricePerAdult !== menu.pricePerAdult / 100 ||
+        pricePerChild !== (menu.pricePerChild ? menu.pricePerChild / 100 : undefined);
+
     return (
         <form
             className="flex flex-col gap-8"
@@ -102,6 +108,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                                 required: 'Ungültig',
                                 min: { value: 25, message: 'Ungültig' },
                                 max: { value: 10000, message: 'Ungültig' },
+                                valueAsNumber: true,
                             })}
                         />
                     )}
@@ -123,6 +130,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                                 required: 'Ungültig',
                                 min: { value: 1, message: 'Ungültig' },
                                 max: { value: 100, message: 'Ungültig' },
+                                valueAsNumber: true,
                             })}
                         />
                     )}
@@ -146,6 +154,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                                 required: 'Ungültig',
                                 min: { value: 1, message: 'Ungültig' },
                                 max: { value: 1000, message: 'Ungültig' },
+                                valueAsNumber: true,
                             })}
                         />
                     )}
@@ -257,7 +266,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                 {editModeOn && (
                     <>
                         <PEButton title="Abbrechen" type="secondary" onClick={onAbort} />
-                        <PEButton title="Speichern" type="submit" />
+                        {changesToSave && <PEButton title="Speichern" type="submit" />}
                     </>
                 )}
             </div>
