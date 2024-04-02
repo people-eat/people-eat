@@ -30,7 +30,7 @@ function isSelectionMealCard(props: MealCardProps): props is MealCardSelectionPr
 
 interface MealCardButtonProps extends MealCardBaseProps {
     type: 'BUTTON';
-    button: {
+    button?: {
         title: string;
         type: 'PRIMARY' | 'SECONDARY';
         onClick: () => void;
@@ -82,7 +82,7 @@ export function MealCard(props: MealCardProps) {
                         </button>
                     )}
 
-                    {isButtonMealCard(props) && (
+                    {isButtonMealCard(props) && props.button && (
                         <PEButton
                             title={props.button.title}
                             type={props.button.type === 'PRIMARY' ? 'primary' : 'secondary'}

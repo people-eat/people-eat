@@ -18,7 +18,7 @@ export interface CreateMenuCourseFormProps {
     onCreate: (data: CreateMenuCourseFormInputs) => void;
 }
 
-interface CreateMenuCourseFormInputs {
+export interface CreateMenuCourseFormInputs {
     title: string;
     mealOptions: {
         mealId: string;

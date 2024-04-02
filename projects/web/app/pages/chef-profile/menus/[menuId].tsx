@@ -10,6 +10,9 @@ import {
 } from '@people-eat/web-core-components';
 import {
     CategoryOption,
+    CreateManyCookMenuCourseMealOptionsDocument,
+    CreateOneCookMenuCourseDocument,
+    DeleteOneCookMenuCourseMealOptionDocument,
     GetCookProfileMenuDocument,
     GetCookProfileMenuPageDataDocument,
     GetCookProfileMenuPageDataQuery,
@@ -25,6 +28,7 @@ import classNames from 'classnames';
 import { ArrowLeft, HandCoins, Rows4, Soup } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEEditMenuCoursesForm } from '../../../components/PEEditMenuCoursesForm';
@@ -50,6 +54,7 @@ const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-i
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
+    initialSelectedTab: number;
     signedInUser: SignedInUser;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
@@ -60,7 +65,7 @@ interface ServerSideProps {
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
-    const { menuId } = query;
+    const { menuId, tab } = query;
 
     if (typeof menuId !== 'string') throw new Error();
 
@@ -76,6 +81,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
+                initialSelectedTab: tab ? Number(tab) ?? 0 : 0,
                 signedInUser,
                 categories: result.data.categories.findAll,
                 kitchens: result.data.kitchens.findAll,
@@ -88,8 +94,26 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function CookProfileMenuPage({ signedInUser, categories, kitchens, meals, menu: initialMenu }: ServerSideProps) {
-    const [selectedTab, setSelectedTab] = useState(0);
+export default function CookProfileMenuPage({
+    initialSelectedTab,
+    signedInUser,
+    categories,
+    kitchens,
+    meals,
+    menu: initialMenu,
+}: ServerSideProps) {
+    const router = useRouter();
+    const [selectedTab, setSelectedTab] = useState(initialSelectedTab);
+
+    function updateSelectedTab(changedTab: number) {
+        if (changedTab === 0) {
+            delete router.query.tab;
+        } else {
+            router.query.tab = String(changedTab);
+        }
+        router.push(router);
+        setSelectedTab(changedTab);
+    }
 
     const [menu, setMenu] = useState(initialMenu);
 
@@ -112,7 +136,8 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
         },
     });
 
-    const [getUpdatedMenu, { loading: loadingUpdatedMenu }] = useLazyQuery(GetCookProfileMenuDocument, {
+    // , { loading: loadingUpdatedMenu }, { loading: loadingUpdatedMenu }
+    const [getUpdatedMenu] = useLazyQuery(GetCookProfileMenuDocument, {
         variables: { cookId, menuId },
     });
 
@@ -129,7 +154,9 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
     const [requestPricePerAdultUpdate] = useMutation(UpdateCookMenuPricePerAdultDocument);
     const [requestPricePerChildUpdate] = useMutation(UpdateCookMenuPricePerChildDocument);
 
-    // const [requestPricePerChildUpdate] = useMutation(UpdateCookMenuPricePerChildDocument);
+    const [requestMealOptionAdditions] = useMutation(CreateManyCookMenuCourseMealOptionsDocument);
+    const [requestMealOptionRemoval] = useMutation(DeleteOneCookMenuCourseMealOptionDocument);
+    const [requestCourseCreation] = useMutation(CreateOneCookMenuCourseDocument);
 
     return (
         <div>
@@ -154,7 +181,7 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                             name="tabs"
                             className="block w-full rounded-md border-gray-300 focus:border-orange-500 focus:ring-orange-500"
                             defaultValue={selectedTab}
-                            onChange={(event) => setSelectedTab(Number(event.target.value))}
+                            onChange={(event) => updateSelectedTab(Number(event.target.value))}
                         >
                             {tabs.map((tab, index) => (
                                 <option key={tab.name} value={index}>
@@ -169,7 +196,7 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                                 {tabs.map((tab, index) => (
                                     <button
                                         key={tab.name}
-                                        onClick={() => setSelectedTab(index)}
+                                        onClick={() => updateSelectedTab(index)}
                                         className={classNames(
                                             selectedTab === index
                                                 ? 'border-orange-500 text-orange-600'
@@ -268,7 +295,33 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
                     </>
                 )}
 
-                {selectedTab === 1 && <PEEditMenuCoursesForm menu={menu} meals={meals} onAddMealToCourse={(mealId) => alert(mealId)} />}
+                {selectedTab === 1 && (
+                    <PEEditMenuCoursesForm
+                        menu={menu}
+                        meals={meals}
+                        onAddMealToCourse={(courseId, mealOption) =>
+                            requestMealOptionAdditions({ variables: { cookId, menuId, courseId, mealOptions: [mealOption] } }).then(
+                                updateMenu,
+                            )
+                        }
+                        onRemoveMealFromCourse={({ mealId, courseId }) =>
+                            requestMealOptionRemoval({ variables: { cookId, menuId, courseId, mealId } }).then(updateMenu)
+                        }
+                        onCreateCourse={({ title, mealOptions }) =>
+                            requestCourseCreation({
+                                variables: {
+                                    cookId,
+                                    menuId,
+                                    request: {
+                                        index: menu.courses.length,
+                                        title,
+                                        mealOptions: mealOptions.map(({ mealId }, index) => ({ index, mealId })),
+                                    },
+                                },
+                            }).then(updateMenu)
+                        }
+                    />
+                )}
 
                 {selectedTab === 2 && (
                     <PEEditMenuPriceForm

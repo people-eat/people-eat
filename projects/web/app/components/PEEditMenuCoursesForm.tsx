@@ -6,6 +6,7 @@ import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
+import { CreateMenuCourseFormInputs } from 'projects/web/components/src/_forms/CreateMenuCourseForm';
 
 interface PEEditMenuCoursesFormInputs {
     greetingFromKitchen: string;
@@ -14,11 +15,18 @@ interface PEEditMenuCoursesFormInputs {
 export interface PEEditMenuCoursesFormProps {
     menu: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>;
     meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['users']['signedInUser']>['cook']>['meals'];
-    onAddMealToCourse: (mealId: string) => void;
-    onRemoveMealFromCourse: (mealId: string) => void;
+    onAddMealToCourse: (courseId: string, mealOption: { mealId: string; index: number }) => void;
+    onRemoveMealFromCourse: (mealOption: { mealId: string; courseId: string }) => void;
+    onCreateCourse: (data: CreateMenuCourseFormInputs) => void;
 }
 
-export function PEEditMenuCoursesForm({ menu, meals, onAddMealToCourse, onRemoveMealFromCourse }: PEEditMenuCoursesFormProps) {
+export function PEEditMenuCoursesForm({
+    menu,
+    meals,
+    onAddMealToCourse,
+    onRemoveMealFromCourse,
+    onCreateCourse,
+}: PEEditMenuCoursesFormProps) {
     const [greetingFromKitchenEnabled, setGreetingFromKitchenEnabled] = useState<boolean>(false);
     const [coursesInEditMode, setCoursesInEditMode] = useState(false);
 
@@ -75,11 +83,19 @@ export function PEEditMenuCoursesForm({ menu, meals, onAddMealToCourse, onRemove
                                         description={mealOption.meal.description}
                                         imageUrl={mealOption.meal.imageUrl}
                                         onInfoClick={() => undefined}
-                                        button={{
-                                            title: 'Entfernen',
-                                            onClick: () => undefined,
-                                            type: 'SECONDARY',
-                                        }}
+                                        button={
+                                            course.mealOptions.length > 1
+                                                ? {
+                                                      title: 'Entfernen',
+                                                      type: 'SECONDARY',
+                                                      onClick: () =>
+                                                          onRemoveMealFromCourse({
+                                                              mealId: mealOption.meal.mealId,
+                                                              courseId: course.courseId,
+                                                          }),
+                                                  }
+                                                : undefined
+                                        }
                                     />
                                 )}
                                 {!coursesInEditMode && (
@@ -125,7 +141,7 @@ export function PEEditMenuCoursesForm({ menu, meals, onAddMealToCourse, onRemove
                         meals={meals}
                         // onCreateMeal={() => setCreateMealDialogOpen(true)}
                         onCreate={(data) => {
-                            // append(data);
+                            onCreateCourse(data);
                             setCreateCourseDialogOpen(false);
                         }}
                     />
@@ -136,7 +152,10 @@ export function PEEditMenuCoursesForm({ menu, meals, onAddMealToCourse, onRemove
                 open={addMealToCourseDialogOpen}
                 meals={meals}
                 selectedMeals={selectedCourse?.mealOptions ?? []}
-                onAdd={onAddMealToCourse}
+                onAdd={(mealId: string) => {
+                    onAddMealToCourse(selectedCourse?.courseId ?? '', { mealId, index: selectedCourse?.mealOptions.length ?? 0 });
+                    setAddMealToCourseDialogOpen(false);
+                }}
             />
         </>
     );
