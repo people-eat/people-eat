@@ -144,19 +144,6 @@ export function CookProfileMealDialog({ meal, onClose }: CookProfileMealDialogPr
                                                 )}
 
                                                 {editSelectedMealOn && (
-                                                    <PETextArea
-                                                        id="description"
-                                                        labelTitle="Beschreibung"
-                                                        errorMessage={errors.description?.message}
-                                                        {...register('description', {
-                                                            required: 'Dein Gericht braucht noch eine Beschreibung.',
-                                                        })}
-                                                    />
-                                                )}
-
-                                                {!editSelectedMealOn && <p>{meal.description}</p>}
-
-                                                {editSelectedMealOn && (
                                                     <div>
                                                         <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">
                                                             Gerichtsart
@@ -174,6 +161,19 @@ export function CookProfileMealDialog({ meal, onClose }: CookProfileMealDialogPr
                                                 )}
 
                                                 {!editSelectedMealOn && <p className="text-gray-500">{mealTypeTranslations[meal.type]}</p>}
+
+                                                {editSelectedMealOn && (
+                                                    <PETextArea
+                                                        id="description"
+                                                        labelTitle="Beschreibung"
+                                                        errorMessage={errors.description?.message}
+                                                        {...register('description', {
+                                                            required: 'Dein Gericht braucht noch eine Beschreibung.',
+                                                        })}
+                                                    />
+                                                )}
+
+                                                {!editSelectedMealOn && <p>{meal.description}</p>}
                                             </div>
 
                                             <section className="flex justify-end gap-2 col-span-full">

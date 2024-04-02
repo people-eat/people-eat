@@ -18,13 +18,14 @@ import {
     SignedInUser,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
-import { HandCoins, Plus, Rows4, Soup } from 'lucide-react';
+import { ArrowLeft, HandCoins, Plus, Rows4, Soup } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import { PEEditMenuPriceForm } from '../../../components/PEEditMenuPriceForm';
 import { createApolloClient } from '../../../network/apolloClients';
 import { useForm } from 'react-hook-form';
 import { CreateMenuFormInputs } from './create';
+import Link from 'next/link';
 
 const tabs = [
     { name: 'Allgemeines', icon: Rows4 },
@@ -111,6 +112,11 @@ export default function CookProfileMenuPage({ signedInUser, categories, kitchens
 
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-16">
                 <PECookProfileNavigation current="MENUS" />
+
+                <Link className="flex gap-2 text-gray-500" href="/chef-profile/menus">
+                    <ArrowLeft strokeWidth={1} />
+                    Zurück zur Menü Übersicht
+                </Link>
 
                 <div>
                     <div className="sm:hidden">

@@ -25,9 +25,11 @@ interface Address {
 export interface PEProfileAddressesCardProps {
     userId: string;
     addresses: Address[];
-    pinnedLocation?: {
-        latitude: number;
-        longitude: number;
+    pin?: {
+        pinnedLocation?: {
+            latitude: number;
+            longitude: number;
+        };
     };
     onFetchUpdated: () => void;
 }
@@ -35,11 +37,13 @@ export interface PEProfileAddressesCardProps {
 interface AddressPreviewCardProps {
     address: Address;
     onDelete: () => void;
-    onPin: () => void;
-    isPinned: boolean;
+    pin?: {
+        onClick: () => void;
+        isPinned: boolean;
+    };
 }
 
-function AddressPreviewCard({ address, onDelete, onPin, isPinned }: AddressPreviewCardProps) {
+function AddressPreviewCard({ address, onDelete, pin }: AddressPreviewCardProps) {
     return (
         <div className="flex gap-4 items-center justify-between">
             <div className="flex gap-4 items-center">
@@ -52,21 +56,28 @@ function AddressPreviewCard({ address, onDelete, onPin, isPinned }: AddressPrevi
                 </div>
             </div>
 
-            <div className="flex gap-2">
-                {!isPinned && (
-                    <button onClick={onDelete}>
-                        <Trash />
+            {pin && (
+                <div className="flex gap-2">
+                    {!pin.isPinned && (
+                        <button onClick={onDelete}>
+                            <Trash />
+                        </button>
+                    )}
+                    <button onClick={pin.onClick}>
+                        <Pin fill={pin.isPinned ? 'black' : 'none'} />
                     </button>
-                )}
-                <button onClick={onPin}>
-                    <Pin fill={isPinned ? 'black' : 'none'} />
+                </div>
+            )}
+            {!pin && (
+                <button onClick={onDelete}>
+                    <Trash />
                 </button>
-            </div>
+            )}
         </div>
     );
 }
 
-export function PEProfileAddressesCard({ userId, addresses, pinnedLocation, onFetchUpdated }: PEProfileAddressesCardProps) {
+export function PEProfileAddressesCard({ userId, addresses, pin, onFetchUpdated }: PEProfileAddressesCardProps) {
     const [selectedAddress, setSelectedAddress] = useState<Address | undefined>();
     const [showCreateAddress, setShowCreateAddress] = useState(false);
     const [showDeletionConfirmation, setShowDeletionConfirmation] = useState(false);
@@ -83,18 +94,22 @@ export function PEProfileAddressesCard({ userId, addresses, pinnedLocation, onFe
                 <AddressPreviewCard
                     key={address.addressId}
                     address={address}
-                    isPinned={
-                        pinnedLocation
-                            ? pinnedLocation.latitude === address.location.latitude &&
-                              pinnedLocation.longitude === address.location.longitude
-                            : false
+                    pin={
+                        pin
+                            ? {
+                                  isPinned: pin.pinnedLocation
+                                      ? pin.pinnedLocation.latitude === address.location.latitude &&
+                                        pin.pinnedLocation.longitude === address.location.longitude
+                                      : false,
+                                  onClick: () => {
+                                      setShowPinConfirmation(true);
+                                      setSelectedAddress(address);
+                                  },
+                              }
+                            : undefined
                     }
                     onDelete={() => {
                         setShowDeletionConfirmation(true);
-                        setSelectedAddress(address);
-                    }}
-                    onPin={() => {
-                        setShowPinConfirmation(true);
                         setSelectedAddress(address);
                     }}
                 />

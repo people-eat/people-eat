@@ -1,7 +1,8 @@
-import { useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, PEImagePicker, PEProfileNavigation } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
+    GetProfilePersonalInformationDocument,
     GetProfilePersonalInformationPageDataDocument,
     GetProfilePersonalInformationPageDataQuery,
     SignedInUser,
@@ -44,17 +45,29 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
 export default function ProfilePersonalInformationPage({ signedInUser, initialProfile }: ServerSideProps) {
     const userId = signedInUser.userId;
-    const [profile] = useState(initialProfile);
+    const [profile, setProfile] = useState(initialProfile);
+
+    const [getUpdatedProfile, { loading: loadingUpdatedProfile }] = useLazyQuery(GetProfilePersonalInformationDocument);
+
+    function updateProfile() {
+        getUpdatedProfile().then(({ data }) => {
+            const userProfile = data?.users.me;
+            if (!userProfile) return;
+            setProfile(userProfile);
+        });
+    }
 
     const [updateProfilePicture, { loading: loadingUpdateProfilePicture }] = useMutation(UpdateUserProfilePictureDocument);
 
     function onUpdateProfilePicture(changedProfilePicture: File | undefined) {
         updateProfilePicture({ variables: { userId, profilePicture: changedProfilePicture } }).then(({ data }) => {
             if (data?.users.success) {
-                // updateCookProfile();
+                updateProfile();
             }
         });
     }
+
+    const loading = loadingUpdatedProfile || loadingUpdateProfilePicture;
 
     return (
         <div>
@@ -63,7 +76,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PEProfileNavigation current="PERSONAL_INFORMATION" />
 
-                <LoadingDialog active={loadingUpdateProfilePicture} />
+                <LoadingDialog active={loading} />
 
                 <div className="flex justify-between items-start">
                     <div className="flex flex-col gap-2 ml-8">
@@ -91,18 +104,43 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
 
                     <PEProfileCard title="Über mich" className="flex flex-col gap-8 flex-1">
                         <div className="h-full flex flex-col gap-8 justify-between">
-                            <div>
-                                <div>Vorname: {profile.firstName}</div>
-                                <div>Nachname: {profile.lastName}</div>
-                                <div>Email: {profile.emailAddress}</div>
-                                <div>Telefonnummert: {profile.phoneNumber ?? 'Keine Angabe'}</div>
-                                <div>Geburtsdatum: {profile.birthDate ?? 'Keine Angabe'}</div>
-                            </div>
+                            <dl className="space-y-6 divide-y divide-gray-100 text-sm leading-6">
+                                <div className="pt-6 sm:flex">
+                                    <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Vorname</dt>
+                                    <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                        <div className="text-gray-900">{profile.firstName}</div>
+                                    </dd>
+                                </div>
+                                <div className="pt-6 sm:flex">
+                                    <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Nachname</dt>
+                                    <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                        <div className="text-gray-900">{profile.lastName}</div>
+                                    </dd>
+                                </div>
+                                <div className="pt-6 sm:flex">
+                                    <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">E-Mail Adresse</dt>
+                                    <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                        <div className="text-gray-900">{profile.emailAddress ?? 'Keine Angabe'}</div>
+                                    </dd>
+                                </div>
+                                <div className="pt-6 sm:flex">
+                                    <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Telefonnummer</dt>
+                                    <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                        <div className="text-gray-900">{profile.phoneNumber ?? 'Keine Angabe'}</div>
+                                    </dd>
+                                </div>
+                                <div className="pt-6 sm:flex">
+                                    <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Geburtsdatum</dt>
+                                    <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                        <div className="text-gray-900">{profile.birthDate ?? 'Keine Angabe'}</div>
+                                    </dd>
+                                </div>
+                            </dl>
                         </div>
                     </PEProfileCard>
                 </div>
 
-                <PEProfileAddressesCard userId={signedInUser.userId} addresses={profile.addresses} onFetchUpdated={() => undefined} />
+                <PEProfileAddressesCard userId={signedInUser.userId} addresses={profile.addresses} onFetchUpdated={updateProfile} />
 
                 <PEEditPasswordCard />
             </div>

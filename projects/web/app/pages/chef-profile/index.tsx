@@ -199,7 +199,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                         </span>
                         <span className="truncate text-sm font-medium text-gray-500">{translatedCookRanks[cookProfile.rank]}</span>
                     </div>
-                    <PELink title="Zum Gastgeberprofil" href="/profile" className="hidden md:block" />
+                    <PELink title="Zum Gastgeberprofil" type="secondary" href="/profile" className="hidden md:block" />
                 </div>
 
                 <div className="flex gap-8 flex-col lg:flex-row">
@@ -217,7 +217,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
 
                     <PEProfileCard title="Finanzen" className="flex flex-col gap-8 flex-1">
                         <div className="h-full flex flex-col gap-8 justify-between">
-                            <div>
+                            <div className="text-gray-600">
                                 Deine Wallet ist der Ort an dem du die Überischt über all deine Einkünfte und ggf. Ausgaben finden kannst.
                                 Ohne eine Wallet sind keine Auszahlungen auf dein privates Bankkonto möglich.
                             </div>
@@ -346,7 +346,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                     userId={cookId}
                     addresses={cookProfile.user.addresses}
                     onFetchUpdated={updateCookProfile}
-                    pinnedLocation={cookProfile.location}
+                    pin={{ pinnedLocation: cookProfile.location }}
                 />
 
                 <PEProfileCard title="Sprachen" className="flex flex-col gap-4">
