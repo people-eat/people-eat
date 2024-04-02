@@ -45,16 +45,14 @@ export function CreateMealDialog({ cookId, open, onClose }: CreateMealDialogProp
 
             <LoadingDialog active={loading} />
 
-            <PEDialog open={open} onClose={() => onClose(false)}>
-                <div className="bg-white p-8 rounded-2xl w-full flex flex-col gap-8">
-                    <h1 className="font-bold text-3xl tracking-tight text-gray-900">Gericht erstellen</h1>
+            <PEDialog open={open} onClose={() => onClose(false)} title="Gericht erstellen">
+                <h1 className="font-bold text-3xl tracking-tight text-gray-900"></h1>
 
-                    <CreateMealForm
-                        onCreate={({ title, description, type, image }) =>
-                            createOneCookMeal({ variables: { cookId, meal: { title, description, type }, image } })
-                        }
-                    />
-                </div>
+                <CreateMealForm
+                    onCreate={({ title, description, type, image }) =>
+                        createOneCookMeal({ variables: { cookId, meal: { title, description, type }, image } })
+                    }
+                />
             </PEDialog>
         </>
     );

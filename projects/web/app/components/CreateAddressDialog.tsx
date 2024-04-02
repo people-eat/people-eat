@@ -41,8 +41,12 @@ export function CreateAddressDialog({ userId, open, onAbort, onComplete }: Creat
     }
 
     return (
-        <PEDialog open={open} onClose={onAbort} className={classNames('flex flex-col gap-8 p-8', 'bg-white rounded-2xl')}>
-            <h1 className="text-xl font-semibold">Adresse hinzufügen</h1>
+        <PEDialog
+            open={open}
+            onClose={onAbort}
+            title="Adresse hinzufügen"
+            className={classNames('flex flex-col gap-8 p-8', 'bg-white rounded-2xl')}
+        >
             <CreateAddressForm onCreate={onCreate} isLoadingSuggestions={false} />
             <LoadingDialog active={loading} />
         </PEDialog>

@@ -1,14 +1,16 @@
 import { Dialog, Transition } from '@headlessui/react';
 import classNames from 'classnames';
+import { X } from 'lucide-react';
 import { Fragment, PropsWithChildren } from 'react';
 
 export interface PEDialogProps {
     open: boolean;
     onClose?: () => void;
+    title?: string;
     className?: string;
 }
 
-export function PEDialog({ open, onClose, children, className }: PropsWithChildren<PEDialogProps>) {
+export function PEDialog({ open, onClose, title, children, className }: PropsWithChildren<PEDialogProps>) {
     return (
         <Transition.Root show={open} as={Fragment}>
             {/* static disables the close on click around behavior */}
@@ -39,9 +41,19 @@ export function PEDialog({ open, onClose, children, className }: PropsWithChildr
                             <Dialog.Panel
                                 className={classNames(
                                     'flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl',
+                                    'bg-white p-8 rounded-2xl w-full flex flex-col gap-8',
                                     className,
                                 )}
                             >
+                                <header className="flex gap-4">
+                                    {title && <h2 className="font-semibold text-xl">{title}</h2>}
+                                    <span className="flex-1" />
+                                    {onClose && (
+                                        <button onClick={onClose}>
+                                            <X />
+                                        </button>
+                                    )}
+                                </header>
                                 {children}
                             </Dialog.Panel>
                         </Transition.Child>

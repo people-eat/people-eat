@@ -48,12 +48,12 @@ export default function EmailAddressUpdateConfirmationPage() {
 
                 <LoadingDialog active={state === 'LOADING'} />
 
-                <PEDialog open={state === 'FAILED'} onClose={() => undefined}>
+                <PEDialog open={state === 'FAILED'}>
                     <h2>Da ist etwas schief gelaufen</h2>
                     <p>Es ist ein unerwarteter Fehler aufgetreten</p>
                 </PEDialog>
 
-                <PEDialog open={state === 'SUCCESSFUL'} onClose={() => undefined}>
+                <PEDialog open={state === 'SUCCESSFUL'}>
                     <div className="bg-white">
                         <h2>Deine Email Adresse wurde erfolgreich bestätigt</h2>
 

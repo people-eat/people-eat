@@ -73,7 +73,7 @@ export function PEImagePicker({ onPick, onRemoveDefaultImage, defaultImage }: PE
             </button>
 
             {base64Image && showImageCropper && (
-                <PEDialog open onClose={() => undefined} className="bg-white rounded-2xl p-8">
+                <PEDialog open>
                     <PEImageClipper
                         imagePath={base64Image}
                         onSuccess={(croppedImage: File, croppedBase64Image: string): void => {

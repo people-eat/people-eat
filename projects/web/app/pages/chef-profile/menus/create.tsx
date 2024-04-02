@@ -404,7 +404,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                 ))}
 
                                 <button
-                                    role="button"
+                                    type="button"
                                     className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                                     onClick={() => setCreateCourseDialogOpen(true)}
                                 >
@@ -643,21 +643,20 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                     </form>
                 </PEProfileCard>
 
-                <PEDialog open={createCourseDialogOpen}>
-                    <div className="bg-white p-8 rounded-2xl w-full flex flex-col gap-8">
-                        <CreateMenuCourseForm
-                            meals={meals}
-                            onCreateMeal={() => setCreateMealDialogOpen(true)}
-                            onCreate={(data) => {
-                                append(data);
-                                setCreateCourseDialogOpen(false);
-                            }}
-                        />
-                    </div>
+                <PEDialog open={createCourseDialogOpen} onClose={() => setCreateCourseDialogOpen(false)}>
+                    <CreateMenuCourseForm
+                        meals={meals}
+                        onCreateMeal={() => setCreateMealDialogOpen(true)}
+                        onCreate={(data) => {
+                            append(data);
+                            setCreateCourseDialogOpen(false);
+                        }}
+                    />
                 </PEDialog>
 
                 <PEAddMealToCourseDialog
                     open={courseIndexToAddMealTo !== undefined}
+                    onClose={() => setCourseIndexToAddMealTo(undefined)}
                     meals={meals}
                     selectedMealIds={courseIndexToAddMealTo ? courses[courseIndexToAddMealTo].mealOptions.map(({ mealId }) => mealId) : []}
                     onAdd={(selectedMeal) => {

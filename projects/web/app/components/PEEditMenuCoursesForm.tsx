@@ -134,21 +134,20 @@ export function PEEditMenuCoursesForm({
                 </div>
             ))}
 
-            <PEDialog open={createCourseDialogOpen}>
-                <div className="bg-white p-8 rounded-2xl w-full flex flex-col gap-8">
-                    <CreateMenuCourseForm
-                        meals={meals}
-                        // onCreateMeal={() => setCreateMealDialogOpen(true)}
-                        onCreate={(data) => {
-                            onCreateCourse(data);
-                            setCreateCourseDialogOpen(false);
-                        }}
-                    />
-                </div>
+            <PEDialog open={createCourseDialogOpen} onClose={() => setCreateCourseDialogOpen(false)}>
+                <CreateMenuCourseForm
+                    meals={meals}
+                    // onCreateMeal={() => setCreateMealDialogOpen(true)}
+                    onCreate={(data) => {
+                        onCreateCourse(data);
+                        setCreateCourseDialogOpen(false);
+                    }}
+                />
             </PEDialog>
 
             <PEAddMealToCourseDialog
                 open={addMealToCourseDialogOpen}
+                onClose={() => setAddMealToCourseDialogOpen(false)}
                 meals={meals}
                 selectedMealIds={selectedCourse?.mealOptions.map(({ meal }) => meal.mealId) ?? []}
                 onAdd={({ mealId }) => {

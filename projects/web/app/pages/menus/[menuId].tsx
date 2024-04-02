@@ -244,7 +244,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
         | undefined
     >();
 
-    const sortedCourses = menu.courses.sort((courseA, courseB) => courseA.index - courseB.index);
+    const sortedCourses = menu.courses; //.sort((courseA, courseB) => courseA.index - courseB.index);
     // const [configuredMenuCourses, setConfiguredMenuCourses] = useState<CreateConfiguredMenuCourseRequest[]>([]);
 
     const [courseMealSelections, setCourseMealSelections] = useState<
@@ -331,29 +331,26 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
             <LoadingDialog active={loading} />
 
             {completionState === 'SUCCESSFUL' && stripeClientSecret && stripePublishableKey && (
-                <PEDialog open={showPaymentDialog} onClose={() => setShowPaymentDialog(false)}>
-                    <div className="bg-white rounded-2xl p-8 w-full">
-                        <h2 className="text-xl font-semibold">Zahlungsmittel hinterlegen</h2>
+                <PEDialog open={showPaymentDialog} onClose={() => setShowPaymentDialog(false)} title="Zahlungsmittel hinterlegen">
+                    <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret }}>
+                        <Payment userId={signedInUser!.userId} bookingRequestId={bookingRequestId!}>
+                            <div className="flex flex-col gap-4">
+                                <h3 className="text-lg font-semibold">{menu.title}</h3>
 
-                        <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret }}>
-                            <Payment userId={signedInUser!.userId} bookingRequestId={bookingRequestId!}>
-                                <div className="flex flex-col gap-4">
-                                    <h3 className="text-lg font-semibold">{menu.title}</h3>
-
-                                    {/* {courseMealSelections.map(({ courseId, courseTitle, mealTitle }) => (
+                                {/* {courseMealSelections.map(({ courseId, courseTitle, mealTitle }) => (
                                         <VStack key={courseId}>
                                             <b>{courseTitle}</b>
                                             <div>{mealTitle}</div>
                                         </VStack>
                                     ))} */}
 
-                                    {/* <Spacer /> */}
+                                {/* <Spacer /> */}
 
-                                    {/*<Divider flexItem /> */}
+                                {/*<Divider flexItem /> */}
 
-                                    <PECostBreakdownPanel costBreakdown={costBreakdown} />
+                                <PECostBreakdownPanel costBreakdown={costBreakdown} />
 
-                                    {/* {moreThanTwoWeeksInTheFuture <= 14 && (
+                                {/* {moreThanTwoWeeksInTheFuture <= 14 && (
                                         <div className="text-text-sm" style={{ color: 'gray' }}>
                                             Der Gesamtbetrag wird erst dann eingezogen wenn der Koch die Anfrage akzeptiert hat.
                                         </div>
@@ -365,10 +362,9 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                             (zuvor wird eine Ankündigungsmail verschickt).
                                         </div>
                                     )} */}
-                                </div>
-                            </Payment>
-                        </Elements>
-                    </div>
+                            </div>
+                        </Payment>
+                    </Elements>
                 </PEDialog>
             )}
 

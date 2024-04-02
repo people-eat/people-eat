@@ -110,7 +110,12 @@ export function BookForm({
     } = useForm<BookFormInputs>();
 
     return (
-        <form onSubmit={handleSubmit(searchButton.onClick)}>
+        <form
+            onSubmit={handleSubmit(() => {
+                console.log('called');
+                searchButton.onClick();
+            })}
+        >
             <div className="flex flex-col gap-8">
                 <PEAutoComplete
                     title="Adresse"
@@ -119,9 +124,12 @@ export function BookForm({
                     onSelectedOptionChange={setSelectedLocation}
                     getOptionIdentifier={(location) => location.id}
                     getLabel={(location) => location.text}
-                    errorMessage={(isOutOfTravelRadius && 'Koch ist zu weit entfernt') || (errors.location && 'This field is required')}
+                    errorMessage={(isOutOfTravelRadius && 'Koch ist zu weit entfernt') || errors.location?.message}
                     {...register('location', {
-                        required: true,
+                        required: {
+                            value: true,
+                            message: 'This field is required',
+                        },
                         onChange: (event) => onLocationSearchTextChange(event.target.value),
                     })}
                 />
