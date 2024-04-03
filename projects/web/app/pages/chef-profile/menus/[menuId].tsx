@@ -1,14 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
 import {
-    PECheckbox,
-    PELabelMultiSelection,
-    PELabelSingleSelection,
-    PESingleSelection,
-    PETextArea,
-    PETextField,
-} from '@people-eat/web-core-components';
-import {
     CategoryOption,
     CreateManyCookMenuCourseMealOptionsDocument,
     CreateOneCookMenuCourseDocument,
@@ -31,24 +23,15 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { PEEditMenuCommon } from '../../../components/PEEditMenuCommon';
 import { PEEditMenuCoursesForm } from '../../../components/PEEditMenuCoursesForm';
 import { PEEditMenuPriceForm } from '../../../components/PEEditMenuPriceForm';
 import { createApolloClient } from '../../../network/apolloClients';
-import { CreateMenuFormInputs } from './create';
 
 const tabs = [
     { name: 'Allgemeines', icon: Rows4 },
     { name: 'Gänge', icon: Soup },
     { name: 'Preis', icon: HandCoins },
-];
-
-const preparationTimeOptions = [
-    { value: 30, label: '30min' },
-    { value: 45, label: '45min' },
-    { value: 60, label: '1h' },
-    { value: 90, label: '1h 30min' },
-    { value: 120, label: '2h' },
 ];
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
@@ -121,26 +104,8 @@ export default function CookProfileMenuPage({
     const cookId = signedInUser.userId;
     const menuId = menu.menuId;
 
-    const [selectedCategories, setSelectedCategories] = useState<CategoryOption[]>([]);
-    const [selectedKitchen, setSelectedKitchen] = useState<KitchenOption | undefined>();
-    const [preparationTime, setPreparationTime] = useState(
-        preparationTimeOptions.find((o) => o.value === menu.preparationTime) ?? preparationTimeOptions[1],
-    );
-
-    const {
-        register,
-        formState: { errors },
-    } = useForm<CreateMenuFormInputs>({
-        defaultValues: {
-            title: menu.title,
-            description: menu.description,
-        },
-    });
-
     // , { loading: loadingUpdatedMenu }, { loading: loadingUpdatedMenu }
-    const [getUpdatedMenu] = useLazyQuery(GetCookProfileMenuDocument, {
-        variables: { cookId, menuId },
-    });
+    const [getUpdatedMenu] = useLazyQuery(GetCookProfileMenuDocument, { variables: { cookId, menuId } });
 
     function updateMenu() {
         getUpdatedMenu().then(({ data }) => {
@@ -222,80 +187,7 @@ export default function CookProfileMenuPage({
                     </div>
                 </div>
 
-                {selectedTab === 0 && (
-                    <>
-                        <PETextField
-                            id="title"
-                            labelTitle="Name"
-                            type="text"
-                            errorMessage={errors.title?.message}
-                            {...register('title', {
-                                required: 'Dein Menü braucht noch einen Namen.',
-                                minLength: {
-                                    value: 5,
-                                    message: 'Der Name deines Menüs ist zu kurz.',
-                                },
-                            })}
-                        />
-
-                        <PETextArea
-                            id="description"
-                            labelTitle="Beschreibung"
-                            errorMessage={errors.description?.message}
-                            {...register('description', { required: 'Dein Menü braucht noch eine Beschreibung.' })}
-                        />
-
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div className="w-full border-t border-gray-300" />
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col gap-4">
-                            <span>Kategorien</span>
-                            <PELabelMultiSelection
-                                options={categories}
-                                selectedOptions={selectedCategories}
-                                selectedOptionsChanged={setSelectedCategories}
-                                optionTitle={({ title }) => title}
-                                optionIdentifier={({ categoryId }) => categoryId}
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-4">
-                            <span>Küche</span>
-                            <PELabelSingleSelection
-                                options={kitchens}
-                                selectedOption={selectedKitchen}
-                                selectedOptionChanged={setSelectedKitchen}
-                                optionTitle={({ title }) => title}
-                                optionIdentifier={({ kitchenId }) => kitchenId}
-                            />
-                        </div>
-
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div className="w-full border-t border-gray-300" />
-                            </div>
-                        </div>
-
-                        <PESingleSelection
-                            labelTitle="Vorbereitungszeit"
-                            options={preparationTimeOptions}
-                            selectedOption={preparationTime}
-                            selectedOptionChanged={(o) => o && setPreparationTime(o)}
-                            optionTitle={({ label }) => label}
-                            optionIdentifier={({ value }) => `${value}`}
-                            className="w-[400px]"
-                        />
-
-                        <PECheckbox
-                            id="isVisible"
-                            label={{ title: 'Menü ist privat und nur für dich einsehbar' }}
-                            {...register('isVisible')}
-                        />
-                    </>
-                )}
+                {selectedTab === 0 && <PEEditMenuCommon menu={menu} categories={categories} kitchens={kitchens} />}
 
                 {selectedTab === 1 && (
                     <PEEditMenuCoursesForm
