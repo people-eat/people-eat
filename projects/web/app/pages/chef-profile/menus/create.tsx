@@ -32,9 +32,9 @@ import { ParticipantsPicker } from 'projects/web/components/src/search-bar/PEPar
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { CreateMealDialog } from '../../../components/CreateMealDialog';
+import { PEAddMealToCourseDialog } from '../../../components/PEAddMealToCourseDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
-import { PEAddMealToCourseDialog } from 'projects/web/app/components/PEAddMealToCourseDialog';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -388,15 +388,21 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                     description={meal.description}
                                                     imageUrl={meal.imageUrl}
                                                     onInfoClick={() => undefined}
-                                                    button={{
-                                                        title: 'Entfernen',
-                                                        onClick: () =>
-                                                            update(index, {
-                                                                ...course,
-                                                                mealOptions: course.mealOptions.filter((e, i) => i !== mealOptionIndex),
-                                                            }),
-                                                        type: 'SECONDARY',
-                                                    }}
+                                                    button={
+                                                        course.mealOptions.length > 1
+                                                            ? {
+                                                                  title: 'Entfernen',
+                                                                  onClick: () =>
+                                                                      update(index, {
+                                                                          ...course,
+                                                                          mealOptions: course.mealOptions.filter(
+                                                                              (e, i) => i !== mealOptionIndex,
+                                                                          ),
+                                                                      }),
+                                                                  type: 'SECONDARY',
+                                                              }
+                                                            : undefined
+                                                    }
                                                 />
                                             ))}
                                         </div>

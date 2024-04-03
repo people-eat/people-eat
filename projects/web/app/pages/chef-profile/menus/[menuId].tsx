@@ -12,6 +12,7 @@ import {
     CategoryOption,
     CreateManyCookMenuCourseMealOptionsDocument,
     CreateOneCookMenuCourseDocument,
+    DeleteOneCookMenuCourseDocument,
     DeleteOneCookMenuCourseMealOptionDocument,
     GetCookProfileMenuDocument,
     GetCookProfileMenuPageDataDocument,
@@ -154,9 +155,10 @@ export default function CookProfileMenuPage({
     const [requestPricePerAdultUpdate] = useMutation(UpdateCookMenuPricePerAdultDocument);
     const [requestPricePerChildUpdate] = useMutation(UpdateCookMenuPricePerChildDocument);
 
+    const [requestCourseCreation] = useMutation(CreateOneCookMenuCourseDocument);
+    const [requestCourseDeletion] = useMutation(DeleteOneCookMenuCourseDocument);
     const [requestMealOptionAdditions] = useMutation(CreateManyCookMenuCourseMealOptionsDocument);
     const [requestMealOptionRemoval] = useMutation(DeleteOneCookMenuCourseMealOptionDocument);
-    const [requestCourseCreation] = useMutation(CreateOneCookMenuCourseDocument);
 
     return (
         <div>
@@ -299,14 +301,6 @@ export default function CookProfileMenuPage({
                     <PEEditMenuCoursesForm
                         menu={menu}
                         meals={meals}
-                        onAddMealToCourse={(courseId, mealOption) =>
-                            requestMealOptionAdditions({ variables: { cookId, menuId, courseId, mealOptions: [mealOption] } }).then(
-                                updateMenu,
-                            )
-                        }
-                        onRemoveMealFromCourse={({ mealId, courseId }) =>
-                            requestMealOptionRemoval({ variables: { cookId, menuId, courseId, mealId } }).then(updateMenu)
-                        }
                         onCreateCourse={({ title, mealOptions }) =>
                             requestCourseCreation({
                                 variables: {
@@ -319,6 +313,15 @@ export default function CookProfileMenuPage({
                                     },
                                 },
                             }).then(updateMenu)
+                        }
+                        onRemoveCourse={(courseId) => requestCourseDeletion({ variables: { cookId, menuId, courseId } }).then(updateMenu)}
+                        onAddMealToCourse={(courseId, mealOption) =>
+                            requestMealOptionAdditions({ variables: { cookId, menuId, courseId, mealOptions: [mealOption] } }).then(
+                                updateMenu,
+                            )
+                        }
+                        onRemoveMealFromCourse={({ mealId, courseId }) =>
+                            requestMealOptionRemoval({ variables: { cookId, menuId, courseId, mealId } }).then(updateMenu)
                         }
                     />
                 )}

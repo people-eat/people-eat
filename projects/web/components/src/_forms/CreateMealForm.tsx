@@ -49,7 +49,7 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
                 errorMessage={errors.title?.message}
                 {...register('title', {
                     required: 'Dein Gericht braucht noch einen Namen.',
-                    minLength: { value: 5, message: 'Der Name des Gerichts muss mindestens 5 Zeichen lang sein' },
+                    minLength: { value: 3, message: 'Der Name des Gerichts muss mindestens 5 Zeichen lang sein' },
                 })}
             />
 

@@ -14,17 +14,19 @@ interface PEEditMenuCoursesFormInputs {
 export interface PEEditMenuCoursesFormProps {
     menu: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>;
     meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['users']['signedInUser']>['cook']>['meals'];
+    onCreateCourse: (data: CreateMenuCourseFormInputs) => void;
+    onRemoveCourse: (courseId: string) => void;
     onAddMealToCourse: (courseId: string, mealOption: { mealId: string; index: number }) => void;
     onRemoveMealFromCourse: (mealOption: { mealId: string; courseId: string }) => void;
-    onCreateCourse: (data: CreateMenuCourseFormInputs) => void;
 }
 
 export function PEEditMenuCoursesForm({
     menu,
     meals,
+    onCreateCourse,
+    onRemoveCourse,
     onAddMealToCourse,
     onRemoveMealFromCourse,
-    onCreateCourse,
 }: PEEditMenuCoursesFormProps) {
     const [greetingFromKitchenEnabled, setGreetingFromKitchenEnabled] = useState<boolean>(false);
     const [coursesInEditMode, setCoursesInEditMode] = useState(false);
@@ -66,7 +68,9 @@ export function PEEditMenuCoursesForm({
                 <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
                     <div className="flex justify-between">
                         <h3>{course.title}</h3>
-                        {coursesInEditMode && <button onClick={() => undefined}>Gang entfernen</button>}
+                        {coursesInEditMode && menu.courses.length > 1 && (
+                            <button onClick={() => onRemoveCourse(course.courseId)}>Gang entfernen</button>
+                        )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {coursesInEditMode && (
