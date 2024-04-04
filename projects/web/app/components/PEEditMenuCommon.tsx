@@ -1,4 +1,6 @@
+import { useMutation } from '@apollo/client';
 import {
+    PEAlert,
     PEButton,
     PECheckbox,
     PELabelMultiSelection,
@@ -7,10 +9,21 @@ import {
     PETextArea,
     PETextField,
 } from '@people-eat/web-core-components';
-import { CategoryOption, GetCookProfileMenuPageDataQuery, KitchenOption } from '@people-eat/web-domain';
+import {
+    CategoryOption,
+    DeleteOneCookMenuDocument,
+    GetCookProfileMenuPageDataQuery,
+    KitchenOption,
+    UpdateCookMenuDescriptionDocument,
+    UpdateCookMenuIsVisibleDocument,
+    UpdateCookMenuKitchenIdDocument,
+    UpdateCookMenuPreparationTimeDocument,
+    UpdateCookMenuTitleDocument,
+} from '@people-eat/web-domain';
 import classNames from 'classnames';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 export interface PEEditMenuCommonFormInputs {
     title: string;
@@ -22,6 +35,8 @@ export interface PEEditMenuCommonFormInputs {
 }
 
 export interface PEEditMenuCommonProps {
+    cookId: string;
+    onChangesApplied: () => void;
     menu: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
@@ -35,7 +50,15 @@ const preparationTimeOptions = [
     { value: 120, label: '2h' },
 ];
 
-export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }: PEEditMenuCommonProps) {
+function compareSets<T>(xs: Set<T>, ys: Set<T>): boolean {
+    return xs.size === ys.size && [...xs].every((x) => ys.has(x));
+}
+
+export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: categoryOptions, kitchens }: PEEditMenuCommonProps) {
+    const menuId = menu.menuId;
+
+    const router = useRouter();
+
     const [editModeOn, setEditModeOn] = useState(false);
 
     const {
@@ -43,7 +66,9 @@ export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }
         watch,
         setValue,
         handleSubmit,
+        reset,
         formState: { errors },
+        control,
     } = useForm<PEEditMenuCommonFormInputs>({
         defaultValues: {
             title: menu.title,
@@ -55,23 +80,62 @@ export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }
         },
     });
 
-    const { title, description, kitchen, categories, preparationTime, isVisible } = watch();
+    const { fields: categories, append, remove } = useFieldArray({ control, name: 'categories' });
 
-    function onSave(data: PEEditMenuCommonFormInputs) {}
+    const { title, description, kitchen, preparationTime, isVisible } = watch();
 
+    const [requestTitleUpdate] = useMutation(UpdateCookMenuTitleDocument);
+    const [requestDescriptionUpdate] = useMutation(UpdateCookMenuDescriptionDocument);
+    // const [] = useMutation(UpdateCookMenuKitchenIdDocument);
+    const [requestKitchenUpdate] = useMutation(UpdateCookMenuKitchenIdDocument);
+    const [requestPreparationTimeUpdate] = useMutation(UpdateCookMenuPreparationTimeDocument);
+    const [requestIsVisibleUpdate] = useMutation(UpdateCookMenuIsVisibleDocument);
+    const [deleteMenu] = useMutation(DeleteOneCookMenuDocument);
+
+    function onSave() {
+        if (title !== menu.title) requestTitleUpdate({ variables: { cookId, menuId, title } }).then(onChangesApplied);
+        if (description !== menu.description)
+            requestDescriptionUpdate({ variables: { cookId, menuId, description } }).then(onChangesApplied);
+        if (kitchen?.kitchenId !== menu.kitchen?.kitchenId)
+            requestKitchenUpdate({ variables: { cookId, menuId, kitchenId: kitchen?.kitchenId } }).then(onChangesApplied);
+        if (preparationTime !== menu.preparationTime)
+            requestPreparationTimeUpdate({ variables: { cookId, menuId, preparationTime } }).then(onChangesApplied);
+        if (isVisible !== menu.isVisible) requestIsVisibleUpdate({ variables: { cookId, menuId, isVisible } }).then(onChangesApplied);
+
+        setEditModeOn(false);
+    }
+
+    const [showDeleteMenuAlert, setShowDeleteMenuAlert] = useState(false);
+
+    async function onDelete() {
+        const { data } = await deleteMenu({ variables: { cookId, menuId } });
+        if (!data?.cooks.menus.success) return;
+        router.push('/chef-profile/menus');
+    }
+
+    const originalCategoryIdSet = new Set(menu.categories.map(({ categoryId }) => categoryId));
+    const categoryIdSet = new Set(categories.map(({ categoryId }) => categoryId));
     const changesToBeSaved =
         title !== menu.title ||
         description !== menu.description ||
         kitchen?.kitchenId !== menu.kitchen?.kitchenId ||
         preparationTime !== menu.preparationTime ||
-        isVisible !== menu.isVisible;
+        isVisible !== menu.isVisible ||
+        !compareSets(originalCategoryIdSet, categoryIdSet);
 
     if (editModeOn) {
         return (
             <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSave)}>
                 <div className="flex gap-4">
-                    <PEButton title="Abbrechen" type="secondary" onClick={() => setEditModeOn(false)} />
-                    {changesToBeSaved && <PEButton title="Speichern" onClick={() => setEditModeOn(false)} />}
+                    <PEButton
+                        title="Abbrechen"
+                        type="secondary"
+                        onClick={() => {
+                            setEditModeOn(false);
+                            reset();
+                        }}
+                    />
+                    {changesToBeSaved && <PEButton title="Speichern" type="submit" />}
                 </div>
 
                 <PETextField
@@ -106,7 +170,8 @@ export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }
                     <PELabelMultiSelection
                         options={categoryOptions}
                         selectedOptions={categories}
-                        selectedOptionsChanged={() => undefined}
+                        onSelect={(o) => append(o)}
+                        onDeselect={(o) => remove(categories.findIndex((c) => c.categoryId === o.categoryId))}
                         optionTitle={({ title }) => title}
                         optionIdentifier={({ categoryId }) => categoryId}
                     />
@@ -117,7 +182,9 @@ export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }
                     <PELabelSingleSelection
                         options={kitchens}
                         selectedOption={kitchen}
-                        selectedOptionChanged={() => undefined}
+                        selectedOptionChanged={(o) => {
+                            setValue('kitchen', o);
+                        }}
                         optionTitle={({ title }) => title}
                         optionIdentifier={({ kitchenId }) => kitchenId}
                     />
@@ -141,8 +208,8 @@ export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }
 
                 <PECheckbox
                     id="isVisible"
-                    label={{ title: 'Menü ist privat und nur für dich einsehbar' }}
-                    {...register('isVisible', { setValueAs: (v) => Boolean(v) })}
+                    label={{ title: isVisible ? 'Menü ist veröffentlicht' : 'Menü ist privat und nur für dich einsehbar' }}
+                    {...register('isVisible')}
                 />
             </form>
         );
@@ -150,8 +217,11 @@ export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }
 
     return (
         <section className="flex flex-col gap-4">
-            <div>
+            <div className="flex gap-4 justify-between">
                 <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditModeOn(true)} />
+                <button className="text-gray-500" onClick={() => setShowDeleteMenuAlert(true)}>
+                    Menü löschen
+                </button>
             </div>
             <h1 className="text-2xl font-bold">{menu.title}</h1>
             {menu.kitchen && <p className="text-gray-500 font-bold">{menu.kitchen.title}</p>}
@@ -168,6 +238,15 @@ export function PEEditMenuCommon({ menu, categories: categoryOptions, kitchens }
                     </li>
                 ))}
             </ul>
+
+            <PEAlert
+                open={showDeleteMenuAlert}
+                type="DELETION"
+                title="Bist du dir sicher dass du dieses Menü löschen möchtest?"
+                subtitle="Diese Aktion kann nicht rückgaängig gemacht werden."
+                primaryButton={{ title: 'Löschen', onClick: onDelete }}
+                secondaryButton={{ title: 'Abbrechen', onClick: () => setShowDeleteMenuAlert(false) }}
+            />
         </section>
     );
 }

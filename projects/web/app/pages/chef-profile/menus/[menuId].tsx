@@ -187,7 +187,15 @@ export default function CookProfileMenuPage({
                     </div>
                 </div>
 
-                {selectedTab === 0 && <PEEditMenuCommon menu={menu} categories={categories} kitchens={kitchens} />}
+                {selectedTab === 0 && (
+                    <PEEditMenuCommon
+                        cookId={cookId}
+                        menu={menu}
+                        categories={categories}
+                        kitchens={kitchens}
+                        onChangesApplied={updateMenu}
+                    />
+                )}
 
                 {selectedTab === 1 && (
                     <PEEditMenuCoursesForm

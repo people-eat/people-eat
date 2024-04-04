@@ -9,10 +9,7 @@ export interface PECheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
     errorMessage?: string;
 }
 
-export const PECheckbox = forwardRef(function (
-    { id, label, errorMessage, value, onChange, ...rest }: PECheckboxProps,
-    ref: ForwardedRef<HTMLInputElement>,
-) {
+export const PECheckbox = forwardRef(function ({ id, label, errorMessage, ...rest }: PECheckboxProps, ref: ForwardedRef<HTMLInputElement>) {
     return (
         <div>
             <div className="flex gap-4 items-start">

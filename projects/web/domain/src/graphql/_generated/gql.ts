@@ -58,7 +58,7 @@ const documents = {
     "mutation UpdateCookMenuDescription($menuId: String!, $description: String!, $cookId: String!) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateDescription(menuId: $menuId, description: $description)\n    }\n  }\n}": types.UpdateCookMenuDescriptionDocument,
     "mutation UpdateCookMenuGreetingFromKitchen($menuId: String!, $cookId: String!, $greetingFromKitchen: String) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateGreetingFromKitchen(\n        menuId: $menuId\n        greetingFromKitchen: $greetingFromKitchen\n      )\n    }\n  }\n}": types.UpdateCookMenuGreetingFromKitchenDocument,
     "mutation UpdateCookMenuIsVisible($menuId: String!, $isVisible: Boolean!, $cookId: String!) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateIsVisible(menuId: $menuId, isVisible: $isVisible)\n    }\n  }\n}": types.UpdateCookMenuIsVisibleDocument,
-    "mutation UpdateCookMenuKitchenId($menuId: String!, $cookId: String!) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateKitchenId(menuId: $menuId)\n    }\n  }\n}": types.UpdateCookMenuKitchenIdDocument,
+    "mutation UpdateCookMenuKitchenId($menuId: String!, $cookId: String!, $kitchenId: String) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateKitchenId(menuId: $menuId, kitchenId: $kitchenId)\n    }\n  }\n}": types.UpdateCookMenuKitchenIdDocument,
     "mutation UpdateCookMenuPreparationTime($menuId: String!, $preparationTime: UnsignedInt!, $cookId: String!) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updatePreparationTime(\n        menuId: $menuId\n        preparationTime: $preparationTime\n      )\n    }\n  }\n}": types.UpdateCookMenuPreparationTimeDocument,
     "mutation UpdateCookMenuPricePerAdult($menuId: String!, $pricePerAdult: UnsignedInt!, $cookId: String!) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updatePricePerAdult(menuId: $menuId, pricePerAdult: $pricePerAdult)\n    }\n  }\n}": types.UpdateCookMenuPricePerAdultDocument,
     "mutation UpdateCookMenuPricePerChild($menuId: String!, $cookId: String!, $pricePerChild: UnsignedInt) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updatePricePerChild(menuId: $menuId, pricePerChild: $pricePerChild)\n    }\n  }\n}": types.UpdateCookMenuPricePerChildDocument,
@@ -296,7 +296,7 @@ export function gql(source: "mutation UpdateCookMenuIsVisible($menuId: String!, 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation UpdateCookMenuKitchenId($menuId: String!, $cookId: String!) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateKitchenId(menuId: $menuId)\n    }\n  }\n}"): (typeof documents)["mutation UpdateCookMenuKitchenId($menuId: String!, $cookId: String!) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateKitchenId(menuId: $menuId)\n    }\n  }\n}"];
+export function gql(source: "mutation UpdateCookMenuKitchenId($menuId: String!, $cookId: String!, $kitchenId: String) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateKitchenId(menuId: $menuId, kitchenId: $kitchenId)\n    }\n  }\n}"): (typeof documents)["mutation UpdateCookMenuKitchenId($menuId: String!, $cookId: String!, $kitchenId: String) {\n  cooks {\n    menus(cookId: $cookId) {\n      success: updateKitchenId(menuId: $menuId, kitchenId: $kitchenId)\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

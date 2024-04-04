@@ -116,7 +116,7 @@ export default function CookProfileMealsPage({ signedInUser, initialMeals }: Ser
                     ))}
                 </ul>
 
-                {selectedMealIndex && (
+                {selectedMealIndex !== undefined && (
                     <CookProfileMealDialog
                         cookId={cookId}
                         meal={meals[selectedMealIndex]}
