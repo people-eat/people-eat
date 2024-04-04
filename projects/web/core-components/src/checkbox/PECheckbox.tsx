@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { ForwardedRef, InputHTMLAttributes, forwardRef } from 'react';
 
 export interface PECheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,10 +10,13 @@ export interface PECheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
     errorMessage?: string;
 }
 
-export const PECheckbox = forwardRef(function ({ id, label, errorMessage, ...rest }: PECheckboxProps, ref: ForwardedRef<HTMLInputElement>) {
+export const PECheckbox = forwardRef(function (
+    { id, label, errorMessage, className, ...rest }: PECheckboxProps,
+    ref: ForwardedRef<HTMLInputElement>,
+) {
     return (
         <div>
-            <div className="flex gap-4 items-start">
+            <div className={classNames('flex gap-4 items-start', className)}>
                 <input
                     id={id}
                     type="checkbox"

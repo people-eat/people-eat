@@ -207,6 +207,7 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
                 />
 
                 <PECheckbox
+                    className="mt-8"
                     id="isVisible"
                     label={{ title: isVisible ? 'Menü ist veröffentlicht' : 'Menü ist privat und nur für dich einsehbar' }}
                     {...register('isVisible')}
@@ -216,15 +217,18 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
     }
 
     return (
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-8">
             <div className="flex gap-4 justify-between">
                 <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditModeOn(true)} />
                 <button className="text-gray-500" onClick={() => setShowDeleteMenuAlert(true)}>
                     Menü löschen
                 </button>
             </div>
-            <h1 className="text-2xl font-bold">{menu.title}</h1>
-            {menu.kitchen && <p className="text-gray-500 font-bold">{menu.kitchen.title}</p>}
+
+            <div className="flex flex-col gap-2">
+                <h1 className="text-2xl font-bold">{menu.title}</h1>
+                {menu.kitchen && <p className="text-gray-500 font-bold">{menu.kitchen.title}</p>}
+            </div>
 
             <p className="text-gray-500">{menu.description}</p>
 
@@ -247,6 +251,12 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
                 primaryButton={{ title: 'Löschen', onClick: onDelete }}
                 secondaryButton={{ title: 'Abbrechen', onClick: () => setShowDeleteMenuAlert(false) }}
             />
+
+            <span className="font-semibold">
+                Vorbereitungszeit von {preparationTimeOptions.find((o) => o.value === menu.preparationTime)?.label}
+            </span>
+
+            <span className="font-semibold">{isVisible ? 'Menü ist veröffentlicht' : 'Menü ist privat und nur für dich einsehbar'}</span>
         </section>
     );
 }
