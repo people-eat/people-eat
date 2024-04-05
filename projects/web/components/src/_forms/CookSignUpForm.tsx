@@ -72,7 +72,15 @@ export function CookSignUpForm({
         },
     });
 
-    const { travelExpenses, maximumTravelDistance, maximumParticipants, password, passwordRepeat } = watch();
+    const {
+        travelExpenses,
+        maximumTravelDistance,
+        maximumParticipants,
+        password,
+        passwordRepeat,
+        acceptedTermsAndConditions,
+        acceptedPrivacyPolicy,
+    } = watch();
 
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -287,6 +295,9 @@ export function CookSignUpForm({
                         })}
                     />
                 </fieldset>
+
+                {acceptedTermsAndConditions ? 'acceptedTermsAndConditions on' : 'acceptedTermsAndConditions off'}
+                {acceptedPrivacyPolicy ? 'acceptedPrivacyPolicy on' : 'acceptedPrivacyPolicy off'}
 
                 <PEButton title={completeTitle} type="submit" />
             </form>

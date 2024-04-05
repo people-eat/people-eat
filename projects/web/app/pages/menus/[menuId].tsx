@@ -327,6 +327,11 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
             .finally(() => setLoading(false));
     }
 
+    useEffect(() => {
+        if (signedInUser) onBook();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [signedInUser]);
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
@@ -379,8 +384,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                 onSignedInUserFetched={(changedSignedInUser) => {
                     setSignedInUser(changedSignedInUser);
                     setAuthDialogOpen(false);
-                    setShowPaymentDialog(true);
-                    onBook();
+                    // setShowPaymentDialog(true);
                 }}
             />
 

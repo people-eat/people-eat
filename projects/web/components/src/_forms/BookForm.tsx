@@ -110,12 +110,7 @@ export function BookForm({
     } = useForm<BookFormInputs>();
 
     return (
-        <form
-            onSubmit={handleSubmit(() => {
-                console.log('called');
-                searchButton.onClick();
-            })}
-        >
+        <form onSubmit={handleSubmit(() => searchButton.onClick())}>
             <div className="flex flex-col gap-8">
                 <PEAutoComplete
                     title="Adresse"

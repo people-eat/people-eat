@@ -33,9 +33,7 @@ export const PECheckbox = forwardRef(function (
                         </label>
                     )}
                     {label?.description && (
-                        <p id="candidates-description" className="text-gray-500 text-sm">
-                            Ich habe die Datenschutzerklärung gelesen und akzeptiere sie
-                        </p>
+                        <p className="text-gray-500 text-sm">Ich habe die Datenschutzerklärung gelesen und akzeptiere sie</p>
                     )}
                     {errorMessage && <span className="text-sm font-semibold text-red-500">{errorMessage}</span>}
                 </div>
