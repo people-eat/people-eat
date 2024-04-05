@@ -1,34 +1,42 @@
 import { CreateMenuCourseForm, MealCard } from '@people-eat/web-components';
-import { PEButton, PEDialog } from '@people-eat/web-core-components';
-import { GetCookProfileMenuPageDataQuery, Unpacked } from '@people-eat/web-domain';
+import { PEButton, PEDialog, PETextField } from '@people-eat/web-core-components';
+import { GetCookProfileMenuPageDataQuery, Unpacked, UpdateCookMenuCourseTitleDocument } from '@people-eat/web-domain';
 import classNames from 'classnames';
-import { Plus } from 'lucide-react';
+import { Plus, Save } from 'lucide-react';
 import { CreateMenuCourseFormInputs } from 'projects/web/components/src/_forms/CreateMenuCourseForm';
 import { useState } from 'react';
 import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useMutation } from '@apollo/client';
 
 interface PEEditMenuCoursesFormInputs {
     greetingFromKitchen: string;
+    courseTitles: {
+        title: string;
+    }[];
 }
 
 export interface PEEditMenuCoursesFormProps {
+    cookId: string;
     menu: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>;
     meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['users']['signedInUser']>['cook']>['meals'];
     onCreateCourse: (data: CreateMenuCourseFormInputs) => void;
     onRemoveCourse: (courseId: string) => void;
     onAddMealToCourse: (courseId: string, mealOption: { mealId: string; index: number }) => void;
     onRemoveMealFromCourse: (mealOption: { mealId: string; courseId: string }) => void;
+    updateNeeded: () => void;
 }
 
 export function PEEditMenuCoursesForm({
+    cookId,
     menu,
     meals,
     onCreateCourse,
     onRemoveCourse,
     onAddMealToCourse,
     onRemoveMealFromCourse,
+    updateNeeded,
 }: PEEditMenuCoursesFormProps) {
-    const [greetingFromKitchenEnabled, setGreetingFromKitchenEnabled] = useState<boolean>(false);
     const [coursesInEditMode, setCoursesInEditMode] = useState(false);
 
     const [selectedCourse, setSelectedCourse] = useState<
@@ -38,19 +46,26 @@ export function PEEditMenuCoursesForm({
     const [createCourseDialogOpen, setCreateCourseDialogOpen] = useState(false);
     const [addMealToCourseDialogOpen, setAddMealToCourseDialogOpen] = useState(false);
 
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     setValue,
-    //     watch,
-    //     formState: { errors },
-    // } = useForm<PEEditMenuCoursesFormInputs>({
-    //     defaultValues: {
-    //         greetingFromKitchen: '',
-    //     },
-    // });
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors },
 
-    // const { greetingFromKitchen } = watch();
+        control,
+    } = useForm<PEEditMenuCoursesFormInputs>({
+        defaultValues: {
+            greetingFromKitchen: '',
+            courseTitles: menu.courses.map(({ title }) => ({ title })),
+        },
+    });
+
+    const { fields: courseTitles, append, remove } = useFieldArray({ control, name: 'courseTitles' });
+
+    const { courseTitles: liveCourseTitles } = watch();
+
+    const [requestCourseTitleUpdate] = useMutation(UpdateCookMenuCourseTitleDocument);
 
     return (
         <>
@@ -67,7 +82,40 @@ export function PEEditMenuCoursesForm({
             {menu.courses.map((course, index) => (
                 <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
                     <div className="flex justify-between">
-                        <h3>{course.title}</h3>
+                        {!coursesInEditMode && <h3>{course.title}</h3>}
+                        {coursesInEditMode && (
+                            <div className="flex gap-4">
+                                <PETextField
+                                    id={`course-title-${index}`}
+                                    type="text"
+                                    key={courseTitles[index].id}
+                                    errorMessage={errors.courseTitles?.[index]?.message}
+                                    {...register(`courseTitles.${index}.title`, { required: '' })}
+                                />
+                                {liveCourseTitles[index].title !== menu.courses[index].title && (
+                                    <div>
+                                        <button>
+                                            <Save
+                                                onClick={async () => {
+                                                    const { data } = await requestCourseTitleUpdate({
+                                                        variables: {
+                                                            cookId,
+                                                            menuId: menu.menuId,
+                                                            courseId: course.courseId,
+                                                            title: liveCourseTitles[index].title,
+                                                        },
+                                                    });
+
+                                                    if (!data?.cooks.menus.courses.updateTitle) return;
+
+                                                    updateNeeded();
+                                                }}
+                                            />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         {coursesInEditMode && menu.courses.length > 1 && (
                             <button onClick={() => onRemoveCourse(course.courseId)}>Gang entfernen</button>
                         )}

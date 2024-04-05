@@ -199,6 +199,7 @@ export default function CookProfileMenuPage({
 
                 {selectedTab === 1 && (
                     <PEEditMenuCoursesForm
+                        cookId={cookId}
                         menu={menu}
                         meals={meals}
                         onCreateCourse={({ title, mealOptions }) =>
@@ -223,6 +224,7 @@ export default function CookProfileMenuPage({
                         onRemoveMealFromCourse={({ mealId, courseId }) =>
                             requestMealOptionRemoval({ variables: { cookId, menuId, courseId, mealId } }).then(updateMenu)
                         }
+                        updateNeeded={updateMenu}
                     />
                 )}
 

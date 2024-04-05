@@ -83,7 +83,7 @@ export function CreateMenuCourseForm({ meals, onCreateMeal, onCreate }: CreateMe
                 optionIdentifier={(mealType) => mealType}
             />
 
-            {selectedMealTypes.length > 0 && (
+            {filteredMeals.length < 1 && (
                 <>
                     <p>Für die ausgewählten Kategorien scheinst du noch keine Gerichte erstellt zu haben.</p>
                     <p>Füge einer dieser Kategorien jetzt dein erstes Gericht hinzu.</p>

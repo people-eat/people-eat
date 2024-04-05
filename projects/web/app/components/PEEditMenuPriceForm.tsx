@@ -106,13 +106,12 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
             </div>
 
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
-                <span>Der Menüpreis beträgt</span>
+                <span>Der Mindestumsatz beträgt</span>
 
                 <div className="flex gap-2">
                     {editModeOn && (
                         <PENumberTextField
                             id="basePrice"
-                            className="w-16"
                             errorMessage={errors.basePrice?.message}
                             {...register('basePrice', {
                                 required: 'Ungültig',
@@ -128,9 +127,8 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                     <span>€</span>
                 </div>
 
-                <span>für</span>
-
                 <div className="flex gap-2">
+                    <span>für</span>
                     {editModeOn && (
                         <PENumberTextField
                             className="w-16"
@@ -152,13 +150,12 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
             </div>
 
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
-                <span>Für jede weitere Person wird ein Preis in Höhe von </span>
+                <span>Jede weitere Personen kostet</span>
 
                 <div className="flex gap-2">
                     {editModeOn && (
                         <PENumberTextField
                             id="pricePerAdult"
-                            className="w-16"
                             errorMessage={errors.pricePerAdult?.message}
                             {...register('pricePerAdult', {
                                 required: 'Ungültig',
@@ -172,8 +169,6 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                     {!editModeOn && <b>{pricePerAdult}</b>}
                     <span> €</span>
                 </div>
-
-                <span> angesetzt.</span>
             </div>
 
             <div className="flex flex-col items-start">

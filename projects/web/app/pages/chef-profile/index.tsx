@@ -291,7 +291,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                 <PEProfileCard title="Auftragsdetails" className="flex flex-col gap-4">
                     <PESlider
                         id="travelExpenses"
-                        labelTitle="Reisekosten"
+                        labelTitle="Reisekosten je gefahrener Kilometer"
                         step={1}
                         {...register('travelExpenses', { min: 0, max: 70, valueAsNumber: true })}
                     >
@@ -302,7 +302,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                         id="maximumTravelDistance"
                         labelTitle="Maximale Reisestrecke"
                         step={1}
-                        {...register('maximumTravelDistance', { min: 0, max: 70, valueAsNumber: true })}
+                        {...register('maximumTravelDistance', { min: 5, max: 200, valueAsNumber: true })}
                     >
                         {maximumTravelDistance} km
                     </PESlider>

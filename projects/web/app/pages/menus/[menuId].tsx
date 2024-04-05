@@ -278,13 +278,16 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
     const [loading, setLoading] = useState(false);
     const [bookingRequestId, setBookingRequestId] = useState<string | undefined>(undefined);
 
+    const dateTime = new Date(date);
+    dateTime.setHours(time.hours);
+    dateTime.setMinutes(time.minutes);
+
     function onBook(): void {
         const menuBookingRequest: CreateBookingRequestRequest = {
             menu: {
                 adultParticipants: adults,
                 children,
-                // todo: combine date and time
-                dateTime: date,
+                dateTime,
                 duration: 120,
                 location: {
                     latitude: selectedLocation?.latitude ?? 0,

@@ -147,21 +147,21 @@ export function CookSignUpForm({
 
                 <div className="flex gap-4 flex-col md:flex-row">
                     <PETextField
-                        id="city"
-                        placeholder="Stadt"
-                        type="text"
-                        autoComplete="city"
-                        errorMessage={errors.city?.message}
-                        {...register('city', { required: 'This field is required' })}
-                    />
-
-                    <PETextField
                         id="postCode"
                         placeholder="Postleitzahl"
                         type="text"
                         // autoComplete=""
                         errorMessage={errors.postCode?.message}
                         {...register('postCode', { required: 'This field is required' })}
+                    />
+
+                    <PETextField
+                        id="city"
+                        placeholder="Stadt"
+                        type="text"
+                        autoComplete="city"
+                        errorMessage={errors.city?.message}
+                        {...register('city', { required: 'This field is required' })}
                     />
                 </div>
 

@@ -188,12 +188,16 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
 
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
+    const dateTime = new Date(date);
+    dateTime.setHours(time.hours);
+    dateTime.setMinutes(time.minutes);
+
     const request = {
         adultParticipants: adults,
         allergyIds: selectedAllergies.map(({ allergyId }) => allergyId),
         categoryIds: selectedCategories.map(({ categoryId }) => categoryId),
         children: children,
-        dateTime: new Date(),
+        dateTime,
         duration: 0,
         kitchenId: selectedKitchen?.kitchenId,
         location: {

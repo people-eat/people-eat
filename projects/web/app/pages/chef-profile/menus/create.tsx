@@ -447,62 +447,63 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                         {currentStepIndex === 2 && (
                             <>
                                 <h3 className="font-semibold text-xl">Wie viel soll das Menü kosten?</h3>
-                                <div className="flex gap-4 items-start">
-                                    <span>Der Menüpreis beträgt</span>
-                                    {/* <PENumberTextField
-                                        min={25}
-                                        max={10000}
-                                        step={10}
-                                        onChange={(changedBasePrice): void => setBasePrice(changedBasePrice * 100)}
-                                        value={basePrice / 100}
-                                        endContent={<p className="text-black">{currencyCode}</p>}
-                                        style={{ width: 120 }}
-                                    /> */}
-                                    <PENumberTextField
-                                        id="basePrice"
-                                        className="w-16"
-                                        errorMessage={errors.basePrice?.message}
-                                        {...register('basePrice', {
-                                            required: 'Ungültig',
-                                            min: { value: 25, message: 'Ungültig' },
-                                            max: { value: 10000, message: 'Ungültig' },
-                                        })}
-                                    />
-                                    <span> für</span>
-                                    {/* <PENumberTextField
-                                        min={1}
-                                        max={100}
-                                        step={1}
-                                        onChange={setBasePriceCustomers}
-                                        value={basePriceCustomers}
-                                        style={{ width: 80 }}
-                                    /> */}
-                                    <PENumberTextField
-                                        className="w-16"
-                                        id="basePriceCustomers"
-                                        errorMessage={errors.basePriceCustomers?.message}
-                                        {...register('basePriceCustomers', {
-                                            required: 'Ungültig',
-                                            min: { value: 1, message: 'Ungültig' },
-                                            max: { value: 100, message: 'Ungültig' },
-                                        })}
-                                    />
-                                    <span>Personen.</span>
+
+                                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
+                                    <span>Der Mindestumsatz beträgt</span>
+
+                                    <div className="flex gap-2">
+                                        <PENumberTextField
+                                            id="basePrice"
+                                            errorMessage={errors.basePrice?.message}
+                                            {...register('basePrice', {
+                                                required: 'Ungültig',
+                                                min: { value: 25, message: 'Ungültig' },
+                                                max: { value: 10000, message: 'Ungültig' },
+                                                valueAsNumber: true,
+                                            })}
+                                        />
+
+                                        <span>€</span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <span>für</span>
+
+                                        <PENumberTextField
+                                            className="w-16"
+                                            id="basePriceCustomers"
+                                            errorMessage={errors.basePriceCustomers?.message}
+                                            {...register('basePriceCustomers', {
+                                                required: 'Ungültig',
+                                                min: { value: 1, message: 'Ungültig' },
+                                                max: { value: 100, message: 'Ungültig' },
+                                                valueAsNumber: true,
+                                            })}
+                                        />
+
+                                        <span>Personen.</span>
+                                    </div>
                                 </div>
-                                <div className="flex gap-4 items-center">
-                                    <span>Für jede weitere Person wird ein Preis in Höhe von</span>
-                                    <PENumberTextField
-                                        id="pricePerAdult"
-                                        className="w-16"
-                                        errorMessage={errors.pricePerAdult?.message}
-                                        {...register('pricePerAdult', {
-                                            required: 'Ungültig',
-                                            min: { value: 1, message: 'Ungültig' },
-                                            max: { value: 1000, message: 'Ungültig' },
-                                        })}
-                                    />
-                                    <span> € angesetzt.</span>
+
+                                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
+                                    <span>Jede weitere Personen kostet</span>
+
+                                    <div className="flex gap-2">
+                                        <PENumberTextField
+                                            id="pricePerAdult"
+                                            errorMessage={errors.pricePerAdult?.message}
+                                            {...register('pricePerAdult', {
+                                                required: 'Ungültig',
+                                                min: { value: 1, message: 'Ungültig' },
+                                                max: { value: 1000, message: 'Ungültig' },
+                                                valueAsNumber: true,
+                                            })}
+                                        />
+
+                                        <span> €</span>
+                                    </div>
                                 </div>
+
                                 <div className="flex flex-col items-start">
                                     <h3 className="font-semibold text-xl mb-2 md:text-text-m-bold">
                                         Möchtest du einen Kinderrabatt anbieten?
@@ -592,8 +593,10 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                 Für Fahrtkosten und Trinkgeld fallen keine Servicegebühren an.
                                             </span>
                                         </div>
+
                                         <button
                                             role="button"
+                                            type="button"
                                             className="text-gray-500"
                                             onClick={(): void => setCostDetailsShown(!costDetailsShown)}
                                         >
