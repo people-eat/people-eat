@@ -17,7 +17,7 @@ export function SignInDialog({ open, onClose, completeTitle, onSignIn, onSignUp 
                 <Image
                     unoptimized
                     className="mx-auto h-10 w-auto"
-                    src="/people-eat-logo.jpeg"
+                    src="/people-eat-logo-title.png"
                     alt="PeopleEat Firmen Logo"
                     width={800}
                     height={240}

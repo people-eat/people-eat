@@ -32,7 +32,7 @@ export function PEHeader({ signedInUser }: PEHeaderProps) {
                 <div className="flex lg:flex-1">
                     <Link href="/">
                         <span className="sr-only">PeopleEat</span>
-                        <Image unoptimized src="/people-eat-logo.jpeg" alt="" width={256} height={256} className="h-8 w-auto" />
+                        <Image unoptimized src="/people-eat-logo-title.png" alt="" width={256} height={256} className="h-8 w-auto" />
                     </Link>
                 </div>
                 <div className="hidden lg:flex lg:gap-x-12">
@@ -135,7 +135,7 @@ export function PEHeader({ signedInUser }: PEHeaderProps) {
                     <div className="flex items-center gap-x-6">
                         <Link href="/" className="-m-1.5 p-1.5">
                             <span className="sr-only">PeopleEat</span>
-                            <Image unoptimized src="/people-eat-logo.jpeg" alt="" width={256} height={256} className="h-8 w-auto" />
+                            <Image unoptimized src="/people-eat-logo-title.png" alt="" width={256} height={256} className="h-8 w-auto" />
                         </Link>
 
                         <span className="ml-auto"></span>
