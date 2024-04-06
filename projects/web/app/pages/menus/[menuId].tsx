@@ -244,7 +244,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
         | undefined
     >();
 
-    const sortedCourses = menu.courses; //.sort((courseA, courseB) => courseA.index - courseB.index);
+    const sortedCourses = [...menu.courses].sort((courseA, courseB) => courseA.index - courseB.index);
     // const [configuredMenuCourses, setConfiguredMenuCourses] = useState<CreateConfiguredMenuCourseRequest[]>([]);
 
     const [courseMealSelections, setCourseMealSelections] = useState<

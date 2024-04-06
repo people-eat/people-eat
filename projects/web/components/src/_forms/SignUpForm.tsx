@@ -63,6 +63,7 @@ export function SignUpForm({ completeTitle, onSignUp, onSignIn }: SignUpFormProp
                     labelTitle="Telefonnummer"
                     type="tel"
                     autoComplete="tel"
+                    placeholder="+49"
                     errorMessage={errors.phoneNumber?.message}
                     {...register('phoneNumber', {
                         required: 'This field is required',
