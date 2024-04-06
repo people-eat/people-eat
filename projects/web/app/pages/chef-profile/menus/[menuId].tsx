@@ -202,16 +202,12 @@ export default function CookProfileMenuPage({
                         cookId={cookId}
                         menu={menu}
                         meals={meals}
-                        onCreateCourse={({ title, mealOptions }) =>
+                        onCreateCourse={({ title, mealOptions }, index) =>
                             requestCourseCreation({
                                 variables: {
                                     cookId,
                                     menuId,
-                                    request: {
-                                        index: menu.courses.length,
-                                        title,
-                                        mealOptions: mealOptions.map(({ mealId }, index) => ({ index, mealId })),
-                                    },
+                                    request: { index, title, mealOptions: mealOptions.map(({ mealId }, index) => ({ index, mealId })) },
                                 },
                             }).then(updateMenu)
                         }

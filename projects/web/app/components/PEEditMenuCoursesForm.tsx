@@ -4,7 +4,7 @@ import { GetCookProfileMenuPageDataQuery, Unpacked, UpdateCookMenuCourseTitleDoc
 import classNames from 'classnames';
 import { Plus, Save } from 'lucide-react';
 import { CreateMenuCourseFormInputs } from 'projects/web/components/src/_forms/CreateMenuCourseForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
@@ -20,7 +20,7 @@ export interface PEEditMenuCoursesFormProps {
     cookId: string;
     menu: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>;
     meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['users']['signedInUser']>['cook']>['meals'];
-    onCreateCourse: (data: CreateMenuCourseFormInputs) => void;
+    onCreateCourse: (data: CreateMenuCourseFormInputs, index: number) => void;
     onRemoveCourse: (courseId: string) => void;
     onAddMealToCourse: (courseId: string, mealOption: { mealId: string; index: number }) => void;
     onRemoveMealFromCourse: (mealOption: { mealId: string; courseId: string }) => void;
@@ -39,6 +39,9 @@ export function PEEditMenuCoursesForm({
 }: PEEditMenuCoursesFormProps) {
     const [coursesInEditMode, setCoursesInEditMode] = useState(false);
 
+    // used for:
+    // 1. store a course to be deleted while the popup is open
+    // 2. store a course to append a new course after
     const [selectedCourse, setSelectedCourse] = useState<
         Unpacked<NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>['courses']> | undefined
     >();
@@ -48,11 +51,9 @@ export function PEEditMenuCoursesForm({
 
     const {
         register,
-        handleSubmit,
-        setValue,
         watch,
         formState: { errors },
-
+        setValue,
         control,
     } = useForm<PEEditMenuCoursesFormInputs>({
         defaultValues: {
@@ -61,11 +62,20 @@ export function PEEditMenuCoursesForm({
         },
     });
 
-    const { fields: courseTitles, append, remove } = useFieldArray({ control, name: 'courseTitles' });
+    const { fields: courseTitles } = useFieldArray({ control, name: 'courseTitles' });
 
     const { courseTitles: liveCourseTitles } = watch();
 
     const [requestCourseTitleUpdate] = useMutation(UpdateCookMenuCourseTitleDocument);
+
+    useEffect(
+        () =>
+            setValue(
+                'courseTitles',
+                menu.courses.map(({ title }) => ({ title })),
+            ),
+        [menu, setValue],
+    );
 
     return (
         <>
@@ -88,11 +98,11 @@ export function PEEditMenuCoursesForm({
                                 <PETextField
                                     id={`course-title-${index}`}
                                     type="text"
-                                    key={courseTitles[index].id}
+                                    key={courseTitles[index]?.id}
                                     errorMessage={errors.courseTitles?.[index]?.message}
                                     {...register(`courseTitles.${index}.title`, { required: '' })}
                                 />
-                                {liveCourseTitles[index].title !== menu.courses[index].title && (
+                                {liveCourseTitles[index]?.title !== menu.courses[index]?.title && (
                                     <div>
                                         <button>
                                             <Save
@@ -102,7 +112,7 @@ export function PEEditMenuCoursesForm({
                                                             cookId,
                                                             menuId: menu.menuId,
                                                             courseId: course.courseId,
-                                                            title: liveCourseTitles[index].title,
+                                                            title: liveCourseTitles[index]?.title,
                                                         },
                                                     });
 
@@ -173,26 +183,44 @@ export function PEEditMenuCoursesForm({
                         ))}
                     </div>
 
-                    {coursesInEditMode && (
+                    {/* {coursesInEditMode && (
                         <button
                             role="button"
                             className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                            onClick={() => setCreateCourseDialogOpen(true)}
+                            onClick={() => {
+                                setCreateCourseDialogOpen(true);
+                                setSelectedCourse(course);
+                            }}
                         >
                             <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
                             <span className="mt-2 block text-sm text-gray-900">Gang hinzufügen</span>
                         </button>
-                    )}
+                    )} */}
                 </div>
             ))}
+
+            {/* TODO: delete this following block after the index topic is fixed on the server side */}
+            {coursesInEditMode && (
+                <button
+                    role="button"
+                    className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                    onClick={() => {
+                        setCreateCourseDialogOpen(true);
+                    }}
+                >
+                    <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
+                    <span className="mt-2 block text-sm text-gray-900">Gang hinzufügen</span>
+                </button>
+            )}
 
             <PEDialog open={createCourseDialogOpen} onClose={() => setCreateCourseDialogOpen(false)}>
                 <CreateMenuCourseForm
                     meals={meals}
                     // onCreateMeal={() => setCreateMealDialogOpen(true)}
                     onCreate={(data) => {
-                        onCreateCourse(data);
+                        onCreateCourse(data, selectedCourse ? selectedCourse.index + 1 : menu.courses.length);
                         setCreateCourseDialogOpen(false);
+                        setSelectedCourse(undefined);
                     }}
                 />
             </PEDialog>
