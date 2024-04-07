@@ -78,8 +78,8 @@ export function CookSignUpForm({
         maximumParticipants,
         password,
         passwordRepeat,
-        acceptedTermsAndConditions,
-        acceptedPrivacyPolicy,
+        // acceptedTermsAndConditions,
+        // acceptedPrivacyPolicy,
     } = watch();
 
     return (
@@ -91,9 +91,7 @@ export function CookSignUpForm({
                         options={cookRanks}
                         selectedOption={rank}
                         selectedOptionChanged={(changedRank) => {
-                            if (changedRank) {
-                                setRank(changedRank);
-                            }
+                            if (changedRank) setRank(changedRank);
                         }}
                         optionTitle={(option) => translatedCookRanks[option]}
                         optionIdentifier={(option) => option}
@@ -113,7 +111,14 @@ export function CookSignUpForm({
                     </div>
                 )}
 
-                <PESlider id="travelExpenses" labelTitle="Reisekosten" step={1} {...register('travelExpenses', { min: 0, max: 70 })}>
+                <PESlider
+                    id="travelExpenses"
+                    labelTitle="Reisekosten je gefahrener Kilometer"
+                    step={1}
+                    min={0}
+                    max={70}
+                    {...register('travelExpenses', { min: 0, max: 70, valueAsNumber: true })}
+                >
                     {(travelExpenses / 100).toFixed(2)} €
                 </PESlider>
 
@@ -121,7 +126,9 @@ export function CookSignUpForm({
                     id="maximumTravelDistance"
                     labelTitle="Maximale Reisestrecke"
                     step={5}
-                    {...register('maximumTravelDistance', { min: 5, max: 200 })}
+                    min={5}
+                    max={200}
+                    {...register('maximumTravelDistance', { min: 5, max: 200, valueAsNumber: true })}
                 >
                     {maximumTravelDistance} km
                 </PESlider>
@@ -296,8 +303,8 @@ export function CookSignUpForm({
                     />
                 </fieldset>
 
-                {acceptedTermsAndConditions ? 'acceptedTermsAndConditions on' : 'acceptedTermsAndConditions off'}
-                {acceptedPrivacyPolicy ? 'acceptedPrivacyPolicy on' : 'acceptedPrivacyPolicy off'}
+                {/* {acceptedTermsAndConditions ? 'acceptedTermsAndConditions on' : 'acceptedTermsAndConditions off'}
+                {acceptedPrivacyPolicy ? 'acceptedPrivacyPolicy on' : 'acceptedPrivacyPolicy off'} */}
 
                 <PEButton title={completeTitle} type="submit" />
             </form>

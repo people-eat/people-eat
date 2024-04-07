@@ -1,9 +1,10 @@
 import { useMutation } from '@apollo/client';
-import { PEButton } from '@people-eat/web-core-components';
+import { PEAlert, PEButton } from '@people-eat/web-core-components';
 import { UserBookingRequestConfirmPaymentSetupDocument } from '@people-eat/web-domain';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/router';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
+import { LoadingDialog } from './loading-dialog/LoadingDialog';
 
 export function Payment({
     children,
@@ -14,6 +15,7 @@ export function Payment({
     const stripe = useStripe();
     const elements = useElements();
     const [resultMessage, setResultMessage] = useState<string | undefined>();
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
     const [confirmPaymentSetup, { loading }] = useMutation(UserBookingRequestConfirmPaymentSetupDocument, {
         variables: { userId, bookingRequestId },
@@ -45,24 +47,37 @@ export function Payment({
         }
 
         confirmPaymentSetup()
-            .then(({ data }) => data?.users.bookingRequests.success && router.push(`/profile/bookings/${bookingRequestId}`))
+            .then(({ data }) => data?.users.bookingRequests.success && setShowSuccessAlert(true))
             .catch(() => undefined);
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            <div className="flex gap-8 w-full">
-                <div className="flex-1">{children}</div>
-                <div className="flex flex-1 items-stretch">
-                    <PaymentElement id="payment-element" />
+        <>
+            <div className="flex flex-col gap-4">
+                <div className="flex gap-8 w-full">
+                    <div className="flex-1">{children}</div>
+                    <div className="flex flex-1 items-stretch">
+                        <PaymentElement id="payment-element" />
+                    </div>
                 </div>
+
+                <PEButton title="Fertig" onClick={(): void => void pay()} />
+
+                {resultMessage && <span>{resultMessage}</span>}
             </div>
 
-            <PEButton title="Fertig" onClick={(): void => void pay()} />
+            <LoadingDialog title="Zahlungsdaten werden verarbeitet." active={loading} />
 
-            {resultMessage && <span>{resultMessage}</span>}
-
-            {loading && 'Loading'}
-        </div>
+            <PEAlert
+                open={showSuccessAlert}
+                type="SUCCESS"
+                title="Buchung erfolgreich"
+                subtitle="Vielen Dank für deine Buchung. Wir werden uns in Kürze mit dir in Verbindung setzen."
+                primaryButton={{
+                    title: 'Zur Buchungsübersicht',
+                    onClick: () => router.push(`/profile/bookings/${bookingRequestId}`),
+                }}
+            />
+        </>
     );
 }
