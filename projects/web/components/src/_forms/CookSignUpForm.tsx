@@ -67,21 +67,14 @@ export function CookSignUpForm({
     } = useForm<CookSignUpFormInputs>({
         defaultValues: {
             phoneNumber: '+49',
+            country: 'Deutschland',
             maximumParticipants: 12,
             travelExpenses: 50,
             maximumTravelDistance: 15,
         },
     });
 
-    const {
-        travelExpenses,
-        maximumTravelDistance,
-        maximumParticipants,
-        password,
-        passwordRepeat,
-        // acceptedTermsAndConditions,
-        // acceptedPrivacyPolicy,
-    } = watch();
+    const { travelExpenses, maximumTravelDistance, maximumParticipants, password, passwordRepeat } = watch();
 
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

@@ -203,10 +203,10 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                 menu: {
                     title,
                     description,
-                    basePrice,
+                    basePrice: basePrice * 100,
                     basePriceCustomers,
-                    pricePerAdult,
-                    pricePerChild,
+                    pricePerAdult: pricePerAdult * 100,
+                    pricePerChild: pricePerChild ? pricePerChild * 100 : undefined,
                     currencyCode: 'EUR',
                     greetingFromKitchen,
                     isVisible,
@@ -448,7 +448,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                             <>
                                 <h3 className="font-semibold text-xl">Wie viel soll das Menü kosten?</h3>
 
-                                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
+                                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2">
                                     <span>Der Mindestumsatz beträgt</span>
 
                                     <div className="flex gap-2">
@@ -485,7 +485,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
+                                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2">
                                     <span>Jede weitere Personen kostet</span>
 
                                     <div className="flex gap-2">
@@ -500,7 +500,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                             })}
                                         />
 
-                                        <span> €</span>
+                                        <span>€.</span>
                                     </div>
                                 </div>
 
@@ -629,7 +629,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     selectedOptionChanged={(o) => o && setPreparationTime(o)}
                                     optionTitle={({ label }) => label}
                                     optionIdentifier={({ value }) => `${value}`}
-                                    className="w-[400px]"
+                                    className="lg:w-[400px]"
                                 />
 
                                 <PECheckbox

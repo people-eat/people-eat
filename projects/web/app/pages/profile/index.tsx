@@ -68,7 +68,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
     }
 
     const loading = loadingUpdatedProfile || loadingUpdateProfilePicture;
-    console.log(profile);
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />

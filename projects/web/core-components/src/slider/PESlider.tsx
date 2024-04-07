@@ -12,8 +12,6 @@ export const PESlider = forwardRef(function (
     { id, labelTitle, step, min, max, children, ...rest }: PropsWithChildren<PESliderProps>,
     ref: ForwardedRef<HTMLInputElement>,
 ) {
-    console.log(rest);
-
     return (
         <div>
             {labelTitle && (

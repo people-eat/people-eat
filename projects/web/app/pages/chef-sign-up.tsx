@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CookSignUpForm, LoadingDialog, PEHeader } from '@people-eat/web-components';
+import { PEAlert } from '@people-eat/web-core-components';
 import {
     CookRank,
     CreateOneCookDocument,
@@ -13,7 +14,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { createApolloClient } from '../network/apolloClients';
-import { PEAlert } from '@people-eat/web-core-components';
+import getLocationSuggestions from '../network/getLocationSuggestions';
 
 const cookProfilePageRedirect = { redirect: { permanent: false, destination: '/chef-profile' } };
 
@@ -111,30 +112,42 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                 <CookSignUpForm
                     signedInUser={signedInUser}
                     completeTitle="Registrieren"
-                    onSignUpForExistingUser={({ travelExpenses, maximumTravelDistance, maximumParticipants }) =>
-                        createOneCook({
-                            variables: {
-                                cookId: signedInUser?.userId ?? '',
-                                request: {
-                                    biography: '',
-                                    isVisible: true,
-                                    languageIds: languages.map(({ languageId }) => languageId),
-                                    location: {
-                                        latitude: 0,
-                                        longitude: 0,
-                                        text: '',
+                    onSignUpForExistingUser={({
+                        travelExpenses,
+                        maximumTravelDistance,
+                        maximumParticipants,
+                        postCode,
+                        city,
+                        street,
+                        houseNumber,
+                        country,
+                    }) => {
+                        getLocationSuggestions(`${postCode} ${city}, ${street} ${houseNumber}, ${country}`, ([firstResult]) => {
+                            console.log({ query: `${postCode} ${city}, ${street} ${houseNumber}, ${country}`, firstResult });
+                            if (!firstResult) return;
+
+                            const { latitude, longitude } = firstResult;
+
+                            createOneCook({
+                                variables: {
+                                    cookId: signedInUser?.userId ?? '',
+                                    request: {
+                                        biography: '',
+                                        isVisible: true,
+                                        languageIds: languages.map(({ languageId }) => languageId),
+                                        location: { latitude, longitude, text: city },
+                                        maximumParticipants,
+                                        maximumPrice: undefined,
+                                        maximumTravelDistance,
+                                        minimumParticipants: undefined,
+                                        minimumPrice: undefined,
+                                        rank,
+                                        travelExpenses,
                                     },
-                                    maximumParticipants,
-                                    maximumPrice: undefined,
-                                    maximumTravelDistance,
-                                    minimumParticipants: undefined,
-                                    minimumPrice: undefined,
-                                    rank,
-                                    travelExpenses,
                                 },
-                            },
-                        })
-                    }
+                            });
+                        });
+                    }}
                     onSignUpForNewUser={({
                         firstName,
                         lastName,
@@ -151,53 +164,55 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                         travelExpenses,
                         maximumTravelDistance,
                         maximumParticipants,
-                    }) =>
-                        createOneUserByEmailAddress({
-                            variables: {
-                                request: {
-                                    firstName,
-                                    lastName,
-                                    emailAddress,
-                                    phoneNumber,
-                                    password,
-                                    gender: 'NO_INFORMATION',
-                                    language: 'GERMAN',
-                                    cook: {
-                                        biography: '',
-                                        isVisible: true,
-                                        languageIds: languages.map(({ languageId }) => languageId),
-                                        location: {
-                                            latitude: 0,
-                                            longitude: 0,
-                                            text: '',
+                    }) => {
+                        getLocationSuggestions(`${postCode} ${city}, ${street} ${houseNumber}, ${country}`, ([firstResult]) => {
+                            console.log({ query: `${postCode} ${city}, ${street} ${houseNumber}, ${country}`, firstResult });
+                            if (!firstResult) return;
+
+                            const { latitude, longitude } = firstResult;
+                            createOneUserByEmailAddress({
+                                variables: {
+                                    request: {
+                                        firstName,
+                                        lastName,
+                                        emailAddress,
+                                        phoneNumber,
+                                        password,
+                                        gender: 'NO_INFORMATION',
+                                        language: 'GERMAN',
+                                        cook: {
+                                            biography: '',
+                                            isVisible: true,
+                                            languageIds: languages.map(({ languageId }) => languageId),
+                                            location: { latitude, longitude, text: city },
+                                            maximumParticipants,
+                                            maximumPrice: undefined,
+                                            maximumTravelDistance,
+                                            minimumParticipants: undefined,
+                                            minimumPrice: undefined,
+                                            rank,
+                                            travelExpenses,
                                         },
-                                        maximumParticipants,
-                                        maximumPrice: undefined,
-                                        maximumTravelDistance,
-                                        minimumParticipants: undefined,
-                                        minimumPrice: undefined,
-                                        rank,
-                                        travelExpenses,
-                                    },
-                                    addresses: [
-                                        {
-                                            title: 'Title',
-                                            city,
-                                            postCode,
-                                            street,
-                                            houseNumber,
-                                            country,
-                                            location: {
-                                                latitude: 0,
-                                                longitude: 0,
-                                                text: '',
+                                        addresses: [
+                                            {
+                                                title: 'Title',
+                                                city,
+                                                postCode,
+                                                street,
+                                                houseNumber,
+                                                country,
+                                                location: {
+                                                    latitude: 0,
+                                                    longitude: 0,
+                                                    text: '',
+                                                },
                                             },
-                                        },
-                                    ],
+                                        ],
+                                    },
                                 },
-                            },
-                        })
-                    }
+                            });
+                        });
+                    }}
                     onSignIn={() => router.push('/sign-in')}
                     languages={{
                         options: languages,

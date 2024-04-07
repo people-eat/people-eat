@@ -105,7 +105,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                 )}
             </div>
 
-            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2">
                 <span>Der Mindestumsatz beträgt</span>
 
                 <div className="flex gap-2">
@@ -149,7 +149,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                 </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-0">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-2">
                 <span>Jede weitere Personen kostet</span>
 
                 <div className="flex gap-2">
@@ -167,7 +167,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                     )}
 
                     {!editModeOn && <b>{pricePerAdult}</b>}
-                    <span> €</span>
+                    <span>€.</span>
                 </div>
             </div>
 
