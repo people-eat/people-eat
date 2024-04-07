@@ -33,7 +33,7 @@ function PEAutoComplete<T>(
             <Combobox.Label className="ml-px block text-lg font-semibold leading-6 text-gray-900">{title}</Combobox.Label>
             <div className="relative">
                 <Combobox.Input
-                    value={selectedOption ? getLabel(selectedOption) : undefined}
+                    defaultValue={selectedOption ? getLabel(selectedOption) : ('' as T)}
                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-orange-600"
                     displayValue={(selection: T) => getLabel(selection)}
                     placeholder="Wo?"
