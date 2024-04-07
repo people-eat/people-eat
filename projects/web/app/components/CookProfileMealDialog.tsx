@@ -1,17 +1,17 @@
 import { useMutation } from '@apollo/client';
+import { PEImagePicker } from '@people-eat/web-components';
 import { PEAlert, PEButton, PEDialog, PELabelSingleSelection, PETextArea, PETextField } from '@people-eat/web-core-components';
 import {
     GetCookProfileMealsPageDataQuery,
     MealType,
     Unpacked,
     UpdateCookMealDescriptionDocument,
+    UpdateCookMealImageDocument,
     UpdateCookMealTitleDocument,
     mealTypeTranslations,
     mealTypes,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
-import { Trash, Upload } from 'lucide-react';
-import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -74,6 +74,16 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
         setEditSelectedMealOn(false);
     }
 
+    const [updateImage] = useMutation(UpdateCookMealImageDocument);
+
+    function onUpdateImage(changedImage: File | undefined) {
+        updateImage({ variables: { cookId, mealId, image: changedImage } }).then(({ data }) => {
+            if (data?.cooks.meals.success) {
+                onChangesApplied();
+            }
+        });
+    }
+
     return (
         <>
             <PEDialog open onClose={editSelectedMealOn || showDeleteMealAlert ? undefined : onClose}>
@@ -85,28 +95,11 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
                     )}
 
                     <div className="flex flex-col md:flex-row gap-8">
-                        <div className="flex-1 flex flex-col gap-4">
-                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
-                                <Image
-                                    unoptimized
-                                    src={meal.imageUrl ?? '/placeholders/meal.png'}
-                                    alt=""
-                                    className="object-cover object-center"
-                                    width={600}
-                                    height={600}
-                                />
-                            </div>
-                            {editSelectedMealOn && (
-                                <div className="flex gap-8 justify-center">
-                                    <button onClick={() => setShowDeleteMealAlert(true)}>
-                                        <Trash color="red" />
-                                    </button>
-                                    <button onClick={() => setShowUpdateImageDialog(true)}>
-                                        <Upload />
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                        <PEImagePicker
+                            onPick={onUpdateImage}
+                            defaultImage={meal.imageUrl ?? undefined}
+                            onRemoveDefaultImage={() => onUpdateImage(undefined)}
+                        />
 
                         <div className={classNames('flex-1', 'flex flex-col gap-6')}>
                             {!editSelectedMealOn && <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{meal.title}</h2>}

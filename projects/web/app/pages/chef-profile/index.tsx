@@ -192,14 +192,14 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="PERSONAL_INFORMATION" />
 
-                <div className="flex justify-between items-start">
-                    <div className="flex flex-col gap-2 ml-8">
+                <div className="ml-8 flex justify-between items-start flex-col md:flex-row gap-4">
+                    <div className="flex flex-col gap-2">
                         <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
                             Hallo {cookProfile.user.firstName}!
                         </span>
                         <span className="truncate text-sm font-medium text-gray-500">{translatedCookRanks[cookProfile.rank]}</span>
                     </div>
-                    <PELink title="Zum Gastgeberprofil" type="secondary" href="/profile" className="hidden md:block" />
+                    <PELink title="Zum Gastgeberprofil" type="secondary" href="/profile" />
                 </div>
 
                 <div className="flex gap-8 flex-col lg:flex-row">
