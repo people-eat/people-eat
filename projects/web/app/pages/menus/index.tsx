@@ -128,7 +128,10 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
 
             <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 my-8" aria-label="Global">
                 {menus.length > 0 && (
-                    <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4">
+                    <ul
+                        role="list"
+                        className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4"
+                    >
                         {menus.map(
                             ({
                                 menuId,
