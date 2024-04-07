@@ -39,6 +39,7 @@ import { Fragment, useCallback, useEffect, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
+import Link from 'next/link';
 
 const faqs = [
     {
@@ -437,10 +438,23 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                             </div>
                         )}
 
-                        <figcaption className="flex items-center gap-x-4">
-                            <CircleUser strokeWidth={1.5} className="text-orange-500 w-10 h-10" />
-                            <span className="text-gray-900 text-2xl">{menu.cook.user.firstName}</span>
-                        </figcaption>
+                        <Link href={'/chefs/' + menu.cook.cookId}>
+                            <figcaption className="flex items-center gap-x-4">
+                                {!menu.cook.user.profilePictureUrl && (
+                                    <CircleUser strokeWidth={1.5} className="text-orange-500 w-10 h-10" />
+                                )}
+                                {menu.cook.user.profilePictureUrl && (
+                                    <Image
+                                        src={menu.cook.user.profilePictureUrl}
+                                        width={100}
+                                        height={100}
+                                        alt=""
+                                        className="object-cover object-center rounded-full w-10"
+                                    />
+                                )}
+                                <span className="text-gray-900 text-2xl">{menu.cook.user.firstName}</span>
+                            </figcaption>
+                        </Link>
 
                         {menu.description && (
                             <div className="flex flex-col gap-2">
