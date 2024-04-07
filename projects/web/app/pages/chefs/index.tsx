@@ -89,7 +89,7 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
         <div>
             <PEHeader signedInUser={signedInUser} />
 
-            <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Köche in deiner Umgebung</h1>
                 <div className="flex flex-col items-stretch gap-8 lg:items-center lg:flex-row">
                     <PESearchBar
@@ -125,9 +125,12 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
                 </div>
             </div>
 
-            <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 my-8" aria-label="Global">
+            <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
                 {cooks.length > 0 && (
-                    <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4">
+                    <ul
+                        role="list"
+                        className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4"
+                    >
                         {cooks.map(({ cookId, user, rank, city, location, menuCount }) => (
                             <Link
                                 key={cookId}
@@ -154,6 +157,7 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
                         ))}
                     </ul>
                 )}
+
                 {cooks.length < 1 && (
                     <div className="flex flex-col gap-10 items-center">
                         <div>Ups, es konnte kein Koch in deiner Nähe gefunden werden :(</div>

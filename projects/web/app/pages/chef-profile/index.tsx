@@ -307,6 +307,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                                     type="checkbox"
                                     className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
                                     checked={false}
+                                    readOnly
                                     onClick={() => updateIsVisible(true)}
                                 />
                             </div>
@@ -319,6 +320,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                                     type="checkbox"
                                     className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
                                     checked
+                                    readOnly
                                     onClick={() => updateIsVisible(false)}
                                 />
                             </div>
