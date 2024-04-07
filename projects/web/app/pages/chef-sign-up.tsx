@@ -134,7 +134,7 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                                     request: {
                                         biography: '',
                                         isVisible: true,
-                                        languageIds: languages.map(({ languageId }) => languageId),
+                                        languageIds: selectedLanguages.map(({ languageId }) => languageId),
                                         location: { latitude, longitude, text: city },
                                         maximumParticipants,
                                         maximumPrice: undefined,
@@ -183,7 +183,7 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                                         cook: {
                                             biography: '',
                                             isVisible: true,
-                                            languageIds: languages.map(({ languageId }) => languageId),
+                                            languageIds: selectedLanguages.map(({ languageId }) => languageId),
                                             location: { latitude, longitude, text: city },
                                             maximumParticipants,
                                             maximumPrice: undefined,
