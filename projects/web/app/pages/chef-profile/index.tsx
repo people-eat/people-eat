@@ -12,6 +12,7 @@ import {
     RemoveOneCookLanguageDocument,
     SignedInUser,
     UpdateCookBiographyDocument,
+    UpdateCookIsVisibleDocument,
     UpdateCookMaximumParticipantsDocument,
     UpdateCookMaximumTravelDistanceDocument,
     UpdateCookTravelExpensesDocument,
@@ -176,11 +177,19 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
         });
     }
 
+    const [requestIsVisibleUpdate, { loading: loadingUpdateIsVisible }] = useMutation(UpdateCookIsVisibleDocument);
+
+    async function updateIsVisible(changedIsVisble: boolean) {
+        await requestIsVisibleUpdate({ variables: { cookId, isVisible: changedIsVisble } });
+        updateCookProfile();
+    }
+
     const loading =
         loadingUpdatedCookProfile ||
         loadingStripeOnboardingUrl ||
         loadingStripeDashboardUrl ||
         updateBioLoading ||
+        loadingUpdateIsVisible ||
         loadingUpdateProfilePicture;
 
     return (
@@ -255,38 +264,67 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                     </PEProfileCard>
                 </div>
 
-                <PEProfileCard title="Bio" className="flex flex-col gap-4">
-                    {!editBioOn && (
-                        <>
-                            {cookProfile.biography && <span>{cookProfile.biography}</span>}
-                            {!cookProfile.biography && (
-                                <span>
-                                    Deine Bio ist noch leer. Füge eine Profilbeschreibung hinzu in der du über dich, deinen Werdegang und
-                                    deine besonderen Talente erzählst um die Aufmerksamkeit von Kunden zu gewinnen.
-                                </span>
-                            )}
-                            <div className="flex justify-end">
-                                <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditBioOn(true)} />
-                            </div>
-                        </>
-                    )}
-                    {editBioOn && (
-                        <>
-                            <PETextArea id="biography" {...register('biography')} />
-                            <div className="flex gap-2 justify-end">
-                                <PEButton
-                                    title="Verwerfen"
-                                    type="secondary"
-                                    onClick={() => {
-                                        resetBiography();
-                                        setEditBioOn(false);
-                                    }}
+                <div className="flex gap-8 flex-col lg:flex-row">
+                    <PEProfileCard title="Bio" className="flex flex-col gap-4 flex-1">
+                        {!editBioOn && (
+                            <>
+                                {cookProfile.biography && <span>{cookProfile.biography}</span>}
+                                {!cookProfile.biography && (
+                                    <span>
+                                        Deine Bio ist noch leer. Füge eine Profilbeschreibung hinzu in der du über dich, deinen Werdegang
+                                        und deine besonderen Talente erzählst um die Aufmerksamkeit von Kunden zu gewinnen.
+                                    </span>
+                                )}
+                                <div className="flex justify-end">
+                                    <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditBioOn(true)} />
+                                </div>
+                            </>
+                        )}
+                        {editBioOn && (
+                            <>
+                                <PETextArea id="biography" {...register('biography')} />
+                                <div className="flex gap-2 justify-end">
+                                    <PEButton
+                                        title="Verwerfen"
+                                        type="secondary"
+                                        onClick={() => {
+                                            resetBiography();
+                                            setEditBioOn(false);
+                                        }}
+                                    />
+                                    {biographyHasChangesApplied && <PEButton title="Speichern" onClick={updateBio} />}
+                                </div>
+                            </>
+                        )}
+                    </PEProfileCard>
+
+                    <PEProfileCard title="Dashboard" className="flex flex-col gap-4 flex-1">
+                        {!cookProfile.isVisible && (
+                            <div className="flex justify-between items-center">
+                                <span>Dein Profil ist aktuell nicht öffentlich</span>
+                                {/* <PEButton title="Veröffentlichen" type="secondary" onClick={() => updateIsVisible(false)} /> */}
+                                <input
+                                    type="checkbox"
+                                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
+                                    checked={false}
+                                    onClick={() => updateIsVisible(true)}
                                 />
-                                {biographyHasChangesApplied && <PEButton title="Speichern" onClick={updateBio} />}
                             </div>
-                        </>
-                    )}
-                </PEProfileCard>
+                        )}
+                        {cookProfile.isVisible && (
+                            <div className="flex justify-between items-center">
+                                <span>Dein Profil ist aktuell öffentlich</span>
+                                {/* <PEButton title="Verstecken" type="secondary" onClick={() => updateIsVisible(true)} /> */}
+                                <input
+                                    type="checkbox"
+                                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
+                                    checked
+                                    onClick={() => updateIsVisible(false)}
+                                />
+                            </div>
+                        )}
+                    </PEProfileCard>
+                </div>
 
                 <PEProfileCard title="Auftragsdetails" className="flex flex-col gap-4">
                     <PESlider
