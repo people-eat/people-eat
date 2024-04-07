@@ -219,7 +219,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 export default function HomePage({ signedInUser, searchParams }: ServerSideProps) {
     const router = useRouter();
 
-    const [searchMode, setSearchMode] = useState<SearchMode>('MENUS');
+    const [searchMode, setSearchMode] = useState<SearchMode>('COOKS');
     const [adults, setAdults] = useState(searchParams.adults);
     const [children, setChildren] = useState(searchParams.children);
     const [date, setDate] = useState(new Date(searchParams.dateString));
