@@ -1,9 +1,8 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEButton, PEDialog } from '@people-eat/web-core-components';
+import { PEAlert } from '@people-eat/web-core-components';
 import { ConfirmOneEmailAddressUpdateDocument } from '@people-eat/web-domain';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -48,28 +47,27 @@ export default function EmailAddressUpdateConfirmationPage() {
 
                 <LoadingDialog active={state === 'LOADING'} />
 
-                <PEDialog open={state === 'FAILED'}>
-                    <h2>Da ist etwas schief gelaufen</h2>
-                    <p>Es ist ein unerwarteter Fehler aufgetreten</p>
-                </PEDialog>
+                <PEAlert
+                    open={state === 'FAILED'}
+                    type="ERROR"
+                    title="Da ist etwas schief gelaufen"
+                    subtitle="Es ist ein unerwarteter Fehler aufgetreten"
+                    primaryButton={{
+                        title: 'Zur Anmeldung',
+                        onClick: () => router.push('/sign-in'),
+                    }}
+                />
 
-                <PEDialog open={state === 'SUCCESSFUL'}>
-                    <div className="bg-white">
-                        <h2>Deine Email Adresse wurde erfolgreich bestätigt</h2>
-
-                        <div className="flex flex-col gap-4">
-                            <Image
-                                unoptimized
-                                src="/email-confirmation.png"
-                                alt=""
-                                width={200}
-                                height={100}
-                                style={{ objectPosition: 'center', objectFit: 'scale-down' }}
-                            />
-                            <PEButton title="Zum Benutzerprofil" onClick={(): void => void router.push('/profile')} />
-                        </div>
-                    </div>
-                </PEDialog>
+                <PEAlert
+                    open={state === 'SUCCESSFUL'}
+                    type="SUCCESS"
+                    title="Deine Email Adresse wurde erfolgreich bestätigt"
+                    subtitle={undefined}
+                    primaryButton={{
+                        title: 'Zum Benutzerprofil',
+                        onClick: () => router.push('/profile'),
+                    }}
+                />
 
                 <PEFooter />
             </div>
