@@ -331,7 +331,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                         {currentStepIndex === 1 && (
                             <>
                                 <span className="text-xl font-semibold">Möchtest du einen Gruß aus der Küche anbieten?</span>
-                                <div className="flex gap-4 items-start">
+                                <div className="flex flex-col gap-4 items-start">
                                     <PELabelSingleSelection
                                         options={['Ja', 'Nein']}
                                         selectedOption={greetingFromKitchenEnabled ? 'Ja' : 'Nein'}
@@ -340,7 +340,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         optionIdentifier={(o) => o}
                                     />
                                     {greetingFromKitchenEnabled && (
-                                        <div>
+                                        <div className="w-full">
                                             <PETextField
                                                 id="greetingFromKitchen"
                                                 type="text"
