@@ -68,7 +68,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
     }
 
     const loading = loadingUpdatedProfile || loadingUpdateProfilePicture;
-
+    console.log(profile);
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
@@ -126,7 +126,13 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
                                 <div className="pt-6 sm:flex">
                                     <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Telefonnummer</dt>
                                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                        <div className="text-gray-900">{profile.phoneNumber ?? 'Keine Angabe'}</div>
+                                        <div className="text-gray-900">
+                                            {profile.phoneNumber ??
+                                                (profile.phoneNumberUpdate?.phoneNumber
+                                                    ? `${profile.phoneNumberUpdate.phoneNumber} (nicht bestätigt)`
+                                                    : undefined) ??
+                                                'Keine Angabe'}
+                                        </div>
                                     </dd>
                                 </div>
                                 <div className="pt-6 sm:flex">

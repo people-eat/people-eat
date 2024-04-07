@@ -66,6 +66,7 @@ export function CookSignUpForm({
         formState: { errors },
     } = useForm<CookSignUpFormInputs>({
         defaultValues: {
+            phoneNumber: '+49',
             maximumParticipants: 12,
             travelExpenses: 50,
             maximumTravelDistance: 15,
@@ -243,6 +244,7 @@ export function CookSignUpForm({
                         <PETextField
                             id="phone-number"
                             labelTitle="Telefonnummer"
+                            placeholder="+49"
                             type="tel"
                             autoComplete="tel"
                             errorMessage={errors.phoneNumber?.message}

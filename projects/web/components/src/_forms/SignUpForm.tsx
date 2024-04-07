@@ -24,7 +24,7 @@ export function SignUpForm({ completeTitle, onSignUp, onSignIn }: SignUpFormProp
         handleSubmit,
         getValues,
         formState: { errors },
-    } = useForm<SignUpFormInputs>();
+    } = useForm<SignUpFormInputs>({ defaultValues: { phoneNumber: '+49' } });
 
     return (
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
