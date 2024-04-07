@@ -95,10 +95,7 @@ export function PESearchBar({
                             getOptionIdentifier={(location) => location.text + random()}
                             getLabel={(location) => location.text}
                             errorMessage={errors.location && 'This field is required'}
-                            {...register('location', {
-                                required: true,
-                                onChange: (event) => onLocationSearchTextChange(event.target.value),
-                            })}
+                            {...register('location', { onChange: (event) => onLocationSearchTextChange(event.target.value) })}
                         />
 
                         <ParticipantsPicker adults={adults} setAdults={setAdults} children={kids} setChildren={setKids} />
