@@ -32,7 +32,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
 
             <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
-                    <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Wir sind PeopleEat</h2>
+                    <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Willkommen bei PeopleEat</h2>
                 </div>
             </div>
 
@@ -51,7 +51,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                         </div>
                         <div>
                             <div className="text-base leading-7 text-gray-700 lg:max-w-lg">
-                                <p className="text-base font-semibold leading-7 text-orange-600">Herzlich Willkommen</p>
+                                <p className="text-base font-semibold leading-7 text-orange-600">Wie wir gestartet haben</p>
                                 <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                                     Wir revolutionieren die Art Gastgeber zu sein
                                 </h1>
