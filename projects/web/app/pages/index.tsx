@@ -16,6 +16,7 @@ import {
     MessageCircleMore,
     MessagesSquare,
     MinusIcon,
+    Phone,
     PlusIcon,
     SearchCheck,
     ShieldCheck,
@@ -153,7 +154,7 @@ const jobOpenings = [
         role: '24 / 7 Support',
         description:
             'Als Gastgeber möchtest du, dass alles perfekt verläuft! Wir reagieren schnell, antworten genau und lösen alle Probleme. Ganz ehrlich. Was auch immer passiert, wir sind für dich da.',
-        icon: MessageCircleMore,
+        icon: Phone,
     },
     {
         id: 2,

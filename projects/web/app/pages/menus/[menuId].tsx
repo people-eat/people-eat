@@ -463,10 +463,18 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                             </div>
                         )}
 
+                        <div className="flex flex-col gap-2">
+                            <div className="font-bold text-gray-900 text-3xl">Stelle dein Wunschmenü zusammen</div>
+                            <span className="textxl text-gray-500">
+                                Klicke auf <i>Auswählen</i> und stelle dein Menü zusammen. Wird nur ein Gericht in einem Gang angezeigt, so
+                                ist dieses automatisch ausgewählt.
+                            </span>
+                        </div>
+
                         {sortedCourses.map(({ courseId, title, mealOptions }) => (
                             <div key={courseId} className="flex flex-col gap-10 mb-8">
                                 <div className="flex flex-col gap-2">
-                                    <h2 className="text-3xl font-bold tracking-tight text-gray-900">{title}</h2>
+                                    <h2 className="text-2xl font-semibold tracking-tight text-gray-900">{title}</h2>
                                     <span className="textxl text-gray-500">
                                         {courseMealSelections.get(courseId)?.meal.title} ausgewählt
                                     </span>
@@ -551,7 +559,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
                         <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
                         <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
