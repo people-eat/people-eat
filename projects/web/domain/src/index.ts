@@ -127,6 +127,12 @@ export function toDBDateString(date: Date): string {
     return `${year}-${month}-${day}`;
 }
 
+export function addDaysToDate(date: Date, days: number): Date {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+}
+
 // Search Params
 
 export interface SearchParams {
@@ -142,7 +148,7 @@ export const defaultSearchParams: SearchParams = {
     locationLatitude: null,
     locationLongitude: null,
     locationText: null,
-    dateString: toDBDateString(new Date()),
+    dateString: toDBDateString(addDaysToDate(new Date(), 14)),
     adults: 2,
     children: 0,
 };

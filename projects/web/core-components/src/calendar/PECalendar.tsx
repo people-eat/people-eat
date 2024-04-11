@@ -7,11 +7,18 @@ interface DateItem {
     isCurrentMonth: boolean;
     isToday: boolean;
     isSelected: boolean;
+    isDisabled: boolean;
 }
 
 type FirstWeekDay = 'MONDAY' | 'SUNDAY';
 
-function getDatesForMonth(year: number, month: number, firstWeekDay: FirstWeekDay = 'SUNDAY', selectedDate?: Date): DateItem[] {
+function getDatesForMonth(
+    year: number,
+    month: number,
+    firstWeekDay: FirstWeekDay = 'SUNDAY',
+    selectedDate?: Date,
+    minDate?: Date,
+): DateItem[] {
     const dates: DateItem[] = [];
     const today = new Date();
     const firstDayOfMonth = new Date(year, month, 1);
@@ -29,6 +36,7 @@ function getDatesForMonth(year: number, month: number, firstWeekDay: FirstWeekDa
             isCurrentMonth: false,
             isToday: date.toDateString() === today.toDateString(),
             isSelected: selectedDate ? date.toDateString() === selectedDate.toDateString() : false,
+            isDisabled: minDate ? date.getTime() < minDate.getTime() : false,
         });
     }
 
@@ -40,6 +48,7 @@ function getDatesForMonth(year: number, month: number, firstWeekDay: FirstWeekDa
             isCurrentMonth: true,
             isToday: date.toDateString() === today.toDateString(),
             isSelected: selectedDate ? date.toDateString() === selectedDate.toDateString() : false,
+            isDisabled: minDate ? date.getTime() < minDate.getTime() : false,
         });
     }
 
@@ -57,6 +66,7 @@ function getDatesForMonth(year: number, month: number, firstWeekDay: FirstWeekDa
                 isCurrentMonth: false,
                 isToday: date.toDateString() === today.toDateString(),
                 isSelected: selectedDate ? date.toDateString() === selectedDate.toDateString() : false,
+                isDisabled: minDate ? date.getTime() < minDate.getTime() : false,
             });
         }
     }
@@ -69,6 +79,7 @@ interface CalendarDay {
     isCurrentMonth?: boolean;
     isToday?: boolean;
     isSelected?: boolean;
+    isDisabled: boolean;
 }
 
 function formatDate(date: Date): string {
@@ -81,6 +92,8 @@ function formatDate(date: Date): string {
 export interface PECalendarProps {
     selectedDate?: Date;
     onSelectDate: (selectedDate: Date) => void;
+
+    minDate?: Date;
 }
 
 const monthName: Record<number, string> = {
@@ -98,7 +111,7 @@ const monthName: Record<number, string> = {
     11: 'Dezember',
 };
 
-export function PECalendar({ selectedDate, onSelectDate }: PECalendarProps) {
+export function PECalendar({ selectedDate, onSelectDate, minDate }: PECalendarProps) {
     const [calendarDays, setCalendarDays] = useState<CalendarDay[]>([]);
     const [displayYear, setDisplayYear] = useState(0);
     const [displayMonth, setDisplayMonth] = useState(0);
@@ -108,9 +121,12 @@ export function PECalendar({ selectedDate, onSelectDate }: PECalendarProps) {
         setDisplayYear(d.getFullYear());
         setDisplayMonth(d.getMonth());
         setCalendarDays(
-            getDatesForMonth(d.getFullYear(), d.getMonth(), 'MONDAY', selectedDate).map((d1) => ({ ...d1, date: formatDate(d1.date) })),
+            getDatesForMonth(d.getFullYear(), d.getMonth(), 'MONDAY', selectedDate, minDate).map((d1) => ({
+                ...d1,
+                date: formatDate(d1.date),
+            })),
         );
-    }, [selectedDate]);
+    }, [selectedDate, minDate]);
 
     function incrementMonth() {
         const newDisplayMonth = displayMonth === 11 ? 0 : displayMonth + 1;
@@ -119,7 +135,10 @@ export function PECalendar({ selectedDate, onSelectDate }: PECalendarProps) {
         setDisplayYear(newDisplayYear);
 
         setCalendarDays(
-            getDatesForMonth(newDisplayYear, newDisplayMonth, 'MONDAY', selectedDate).map((d1) => ({ ...d1, date: formatDate(d1.date) })),
+            getDatesForMonth(newDisplayYear, newDisplayMonth, 'MONDAY', selectedDate, minDate).map((d1) => ({
+                ...d1,
+                date: formatDate(d1.date),
+            })),
         );
     }
 
@@ -130,7 +149,10 @@ export function PECalendar({ selectedDate, onSelectDate }: PECalendarProps) {
         setDisplayYear(newDisplayYear);
 
         setCalendarDays(
-            getDatesForMonth(newDisplayYear, newDisplayMonth, 'MONDAY', selectedDate).map((d1) => ({ ...d1, date: formatDate(d1.date) })),
+            getDatesForMonth(newDisplayYear, newDisplayMonth, 'MONDAY', selectedDate, minDate).map((d1) => ({
+                ...d1,
+                date: formatDate(d1.date),
+            })),
         );
     }
 
@@ -170,23 +192,32 @@ export function PECalendar({ selectedDate, onSelectDate }: PECalendarProps) {
             <div className="mt-2 grid grid-cols-7 text-sm">
                 {calendarDays.map((day, dayIdx) => (
                     <div key={day.date} className={classnames(dayIdx > 6 && 'border-t border-gray-200', 'py-2')}>
-                        <button
-                            type="button"
-                            className={classnames(
-                                day.isSelected && 'text-white',
-                                !day.isSelected && day.isToday && 'text-orange-500',
-                                !day.isSelected && !day.isToday && day.isCurrentMonth && 'text-gray-900',
-                                !day.isSelected && !day.isToday && !day.isCurrentMonth && 'text-gray-400',
-                                day.isSelected && day.isToday && 'bg-orange-500',
-                                day.isSelected && !day.isToday && 'bg-gray-900',
-                                !day.isSelected && 'hover:bg-gray-200',
-                                (day.isSelected || day.isToday) && 'font-semibold',
-                                'mx-auto flex h-8 w-8 items-center justify-center rounded-full',
-                            )}
-                            onClick={() => onSelectDate(new Date(day.date))}
-                        >
-                            <time dateTime={day.date}>{day.date.split('-').pop()?.replace(/^0/, '')}</time>
-                        </button>
+                        {!day.isDisabled && (
+                            <button
+                                type="button"
+                                className={classnames(
+                                    day.isSelected && 'text-white',
+                                    !day.isSelected && day.isToday && 'text-orange-500',
+                                    !day.isSelected && !day.isToday && day.isCurrentMonth && 'text-gray-900',
+                                    !day.isSelected && !day.isToday && !day.isCurrentMonth && 'text-gray-400',
+                                    day.isSelected && day.isToday && 'bg-orange-500',
+                                    day.isSelected && !day.isToday && 'bg-gray-900',
+                                    !day.isSelected && 'hover:bg-gray-200',
+                                    (day.isSelected || day.isToday) && 'font-semibold',
+                                    'mx-auto flex h-8 w-8 items-center justify-center rounded-full',
+                                )}
+                                onClick={() => onSelectDate(new Date(day.date))}
+                            >
+                                <time dateTime={day.date}>{day.date.split('-').pop()?.replace(/^0/, '')}</time>
+                            </button>
+                        )}
+                        {day.isDisabled && (
+                            <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full">
+                                <time className={day.isToday ? 'text-orange-500' : 'text-gray-400'} dateTime={day.date}>
+                                    {day.date.split('-').pop()?.replace(/^0/, '')}
+                                </time>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

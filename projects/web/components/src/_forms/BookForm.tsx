@@ -109,6 +109,9 @@ export function BookForm({
         formState: { errors },
     } = useForm<BookFormInputs>();
 
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 1);
+
     return (
         <form onSubmit={handleSubmit(() => searchButton.onClick())}>
             <div className="flex flex-col gap-8">
@@ -132,7 +135,7 @@ export function BookForm({
                 <ParticipantsPicker adults={adults} setAdults={setAdults} children={kids} setChildren={setKids} />
 
                 <div className="flex gap-4 items-end w-full [&>*:first-child]:flex-1">
-                    <PEDatePicker date={date} setDate={setDate} />
+                    <PEDatePicker date={date} setDate={setDate} minDate={minDate} />
                     <PETimePicker value={time} onChange={setTime} />
                 </div>
 

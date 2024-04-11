@@ -142,7 +142,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                             </h1>
                             <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
                                 <p className="text-lg leading-8 text-gray-600">
-                                    Hier lebst du die volle Freiheit und deine Leidenschaft. Du entscheidest nicht über den Geschmack,
+                                    Hier lebst du die volle Freiheit und deine Leidenschaft. Du entscheidest nicht nur über den Geschmack,
                                     sondern auch die Preisgestaltung für deine Menükreationen und schaffe dabei unvergessliche Genussmomente
                                 </p>
                                 <div className="mt-10 flex items-center gap-x-6">

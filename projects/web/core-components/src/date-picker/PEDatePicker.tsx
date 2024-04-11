@@ -5,9 +5,10 @@ import { PECalendar } from '../calendar/PECalendar';
 export interface PEDatePickerProps {
     date?: Date;
     setDate: (changedDate: Date) => void;
+    minDate?: Date;
 }
 
-export function PEDatePicker({ date, setDate, children }: PropsWithChildren<PEDatePickerProps>) {
+export function PEDatePicker({ date, setDate, minDate, children }: PropsWithChildren<PEDatePickerProps>) {
     return (
         <Popover className="relative">
             <Popover.Button className="flex flex-col items-stretch rounded-md w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
@@ -40,6 +41,7 @@ export function PEDatePicker({ date, setDate, children }: PropsWithChildren<PEDa
                                         setDate(changedDate);
                                         close();
                                     }}
+                                    minDate={minDate}
                                 />
                             </div>
                         </div>

@@ -55,6 +55,9 @@ export function PESearchBar({
         formState: { errors },
     } = useForm<PESearchBarFormInputs>();
 
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 1);
+
     return (
         <div className="bg-white rounded-full shadow-lg shadow-orange-500/20 flex-1">
             {/* Mobile */}
@@ -102,7 +105,7 @@ export function PESearchBar({
 
                         <div className="flex flex-col gap-4">
                             <h2 className="text-lg font-semibold">Wann soll das Event stattfinden?</h2>
-                            <PECalendar selectedDate={date} onSelectDate={setDate} />
+                            <PECalendar selectedDate={date} onSelectDate={setDate} minDate={minDate} />
                         </div>
                         <div className="flex flex-row-reverse mt-4">
                             <PEButton title="Suchen" type="submit" />
@@ -211,6 +214,7 @@ export function PESearchBar({
                                                         setDate(changedDate);
                                                         close();
                                                     }}
+                                                    minDate={minDate}
                                                 />
                                             </div>
                                         </div>
