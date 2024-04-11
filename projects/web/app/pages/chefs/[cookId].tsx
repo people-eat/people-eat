@@ -31,6 +31,8 @@ import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { useRouter } from 'next/router';
 
+const publicCooksRedirect = { redirect: { permanent: false, destination: '/chefs' } };
+
 const faqs = [
     {
         question: 'Wie funktioniert die Menü Buchungsanfrage?',
@@ -116,7 +118,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
     const { cookId } = query;
 
-    if (typeof cookId !== 'string') throw new Error();
+    if (typeof cookId !== 'string') return publicCooksRedirect;
 
     try {
         const result = await apolloClient.query({
@@ -139,7 +141,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         };
     } catch (error) {
-        throw new Error();
+        return publicCooksRedirect;
     }
 };
 

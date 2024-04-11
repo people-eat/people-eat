@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xhtml="http://www.w3.org/1999/xhtml"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <url>
+        <loc>https://www.people-eat.com/</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>1.00</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/menus/</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>1.00</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/menus/" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/chefs/</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>1.00</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/chefs/" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/how-to-become-a-chef</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.80</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/how-to-become-a-chef" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/sign-in</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.80</priority>
+         <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/sign-in" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/global-booking-request</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.80</priority>
+         <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/global-booking-request" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/about-us</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.80</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/about-us" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/terms-and-conditions</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.80</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/terms-and-conditions" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/imprint</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.80</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/imprint" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/privacy-policy</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.80</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/privacy-policy" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/chef-sign-up</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.64</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/chef-sign-up" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/sign-up</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.64</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/sign-up" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/blogs</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.64</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/blogs" />
+    </url>
+    <url>
+        <loc>https://www.people-eat.com/blogs/warum-sollte-ich-einen-privatekoch-buchen</loc>
+        <lastmod>2024-04-11T08:00:00+00:00</lastmod>
+        <priority>0.64</priority>
+        <xhtml:link
+            rel="alternate"
+            hreflang="de"
+            href="https://www.people-eat.com/blogs/warum-sollte-ich-einen-privatekoch-buchen" />
+    </url>
+</urlset>
