@@ -80,7 +80,7 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                                     imageUrls={imageUrls}
                                     kitchenTitle={kitchen?.title}
                                     cook={{
-                                        firstName: 'Du',
+                                        firstName: signedInUser.firstName,
                                         profilePictureUrl: null,
                                     }}
                                     courseCount={2}

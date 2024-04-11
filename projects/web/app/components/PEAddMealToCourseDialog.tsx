@@ -26,6 +26,7 @@ export function PEAddMealToCourseDialog({ open, onClose, meals, selectedMealIds,
     const filteredMeals = (selectedMealTypes.length > 0 ? meals.filter(({ type }) => selectedMealTypes.includes(type)) : meals).filter(
         (meal) => !selectedMealIds.some((selected) => selected === meal.mealId),
     );
+
     return (
         <PEDialog open={open} onClose={onClose} title="Gericht hinzufügen">
             <PELabelMultiSelection
@@ -35,14 +36,12 @@ export function PEAddMealToCourseDialog({ open, onClose, meals, selectedMealIds,
                 optionTitle={(mealType) => mealTypeTranslations[mealType]}
                 optionIdentifier={(mealType) => mealType}
             />
-
             {selectedMealTypes.length > 0 && (
                 <>
                     <p>Für die ausgewählten Kategorien scheinst du noch keine Gerichte erstellt zu haben.</p>
                     <p>Füge einer dieser Kategorien jetzt dein erstes Gericht hinzu.</p>
                 </>
             )}
-
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
                 {filteredMeals.map((meal) => (
                     <MealCard

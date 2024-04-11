@@ -8,13 +8,14 @@ export interface PEDialogProps {
     onClose?: () => void;
     title?: string;
     className?: string;
+    closeOnClickAround?: boolean;
 }
 
-export function PEDialog({ open, onClose, title, children, className }: PropsWithChildren<PEDialogProps>) {
+export function PEDialog({ open, onClose, title, closeOnClickAround, children, className }: PropsWithChildren<PEDialogProps>) {
     return (
         <Transition.Root show={open} as={Fragment}>
             {/* static disables the close on click around behavior */}
-            <Dialog as="div" className="relative z-10" static onClose={onClose ?? (() => undefined)}>
+            <Dialog as="div" className="relative z-10" static onClose={onClose && Boolean(closeOnClickAround) ? onClose : () => undefined}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"

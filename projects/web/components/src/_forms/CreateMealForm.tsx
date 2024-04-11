@@ -32,6 +32,7 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
     return (
         <form className="flex flex-col gap-6" onSubmit={handleSubmit((data) => onCreate({ ...data, image }))}>
             <div className="flex flex-col gap-2">
+                <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">Gerichtsart</label>
                 <PELabelSingleSelection
                     options={mealTypes}
                     selectedOption={getValues().type}

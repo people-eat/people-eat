@@ -667,7 +667,9 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                     open={courseIndexToAddMealTo !== undefined}
                     onClose={() => setCourseIndexToAddMealTo(undefined)}
                     meals={meals}
-                    selectedMealIds={courseIndexToAddMealTo ? courses[courseIndexToAddMealTo].mealOptions.map(({ mealId }) => mealId) : []}
+                    selectedMealIds={
+                        courseIndexToAddMealTo !== undefined ? courses[courseIndexToAddMealTo].mealOptions.map(({ mealId }) => mealId) : []
+                    }
                     onAdd={(selectedMeal) => {
                         const course = courses[courseIndexToAddMealTo!];
                         update(courseIndexToAddMealTo!, {
