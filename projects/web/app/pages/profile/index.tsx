@@ -148,7 +148,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
 
                 <PEProfileAddressesCard userId={signedInUser.userId} addresses={profile.addresses} onFetchUpdated={updateProfile} />
 
-                <PEEditPasswordCard />
+                <PEEditPasswordCard userId={userId} />
             </div>
         </div>
     );
