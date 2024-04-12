@@ -1,10 +1,16 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, SignInForm } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-core-components';
-import { AssignOneSessionByEmailAddressDocument, GetPageDataDocument } from '@people-eat/web-domain';
+import { PEAlert, PEButton, PEDialog, PETextField } from '@people-eat/web-core-components';
+import {
+    AssignOneSessionByEmailAddressDocument,
+    CreateOneOneTimeAccessTokenByEmailAddressDocument,
+    GetPageDataDocument,
+} from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { createApolloClient } from '../network/apolloClients';
 
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
@@ -27,8 +33,20 @@ export const getServerSideProps: GetServerSideProps<object> = async ({ req }) =>
     }
 };
 
+// todo: rename
+interface SignInFormInputs {
+    emailAddress: string;
+}
+
 export default function SignInPage() {
     const router = useRouter();
+    const [showForgotPasswordAlert, setShowForgotPasswordAlert] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignInFormInputs>();
 
     const [assignOneSessionByEmailAddress, { loading, data, reset }] = useMutation(AssignOneSessionByEmailAddressDocument);
 
@@ -38,17 +56,36 @@ export default function SignInPage() {
         router.push('/profile');
     }
 
+    const [createOneTimeAccessToken, { loading: createOneTimeAccessTokenLoading, data: forgotPasswordData, reset: resetForgotPassword }] =
+        useMutation(CreateOneOneTimeAccessTokenByEmailAddressDocument);
+
+    const showForgotPasswordFailedAlert = forgotPasswordData ? !forgotPasswordData.users.oneTimeAccessToken.success : false;
+
     return (
         <div>
             <PEHeader signedInUser={null} />
 
-            <LoadingDialog active={loading} />
+            <LoadingDialog active={loading || createOneTimeAccessTokenLoading} />
 
             <PEAlert
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"
                 primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
+            />
+
+            <PEAlert
+                open={showForgotPasswordFailedAlert}
+                title="Leider ist ein Fehler aufgetreten"
+                subtitle="Bitte versuche es später erneut"
+                primaryButton={{ title: 'Erneut versuchen', onClick: () => resetForgotPassword() }}
+            />
+
+            <PEAlert
+                open={forgotPasswordData?.users.oneTimeAccessToken.success ?? false}
+                title="Email erfolgreich verschickt"
+                subtitle="Überprüfe dein E-Mail Postfach. Dort solltest du eine Email mit einem Link zum zurücksetzen deines Passworts finden."
+                primaryButton={{ title: 'Schließen', onClick: () => resetForgotPassword() }}
             />
 
             <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -74,7 +111,33 @@ export default function SignInPage() {
                         })
                     }
                     onSignUp={() => router.push('/sign-up')}
+                    onForgotPassword={() => setShowForgotPasswordAlert(true)}
                 />
+
+                <PEDialog
+                    open={showForgotPasswordAlert}
+                    onClose={() => setShowForgotPasswordAlert(false)}
+                    closeOnClickAround
+                    title="Passwort vergessen?"
+                >
+                    <form
+                        onSubmit={handleSubmit(({ emailAddress }) => createOneTimeAccessToken({ variables: { emailAddress } }))}
+                        className="flex flex-col gap-4 items-end"
+                    >
+                        <PETextField
+                            id="email-address"
+                            labelTitle="E-Mail Adresse"
+                            type="email"
+                            autoComplete="email"
+                            errorMessage={errors.emailAddress?.message}
+                            {...register('emailAddress', { required: 'This field is required' })}
+                        />
+
+                        <div>
+                            <PEButton title="Email zum Zurücksetzen abschicken" type="submit" />
+                        </div>
+                    </form>
+                </PEDialog>
             </div>
         </div>
     );

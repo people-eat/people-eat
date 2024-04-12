@@ -10,9 +10,10 @@ export interface SignInFormProps {
     completeTitle: string;
     onSignIn: (formData: SignInFormInputs) => void;
     onSignUp: () => void;
+    onForgotPassword?: () => void;
 }
 
-export function SignInForm({ completeTitle, onSignIn, onSignUp }: SignInFormProps) {
+export function SignInForm({ completeTitle, onSignIn, onSignUp, onForgotPassword }: SignInFormProps) {
     const {
         register,
         handleSubmit,
@@ -31,14 +32,25 @@ export function SignInForm({ completeTitle, onSignIn, onSignUp }: SignInFormProp
                     {...register('emailAddress', { required: 'This field is required' })}
                 />
 
-                <PETextField
-                    id="password"
-                    labelTitle="Passwort"
-                    type="password"
-                    autoComplete="current-password"
-                    errorMessage={errors.emailAddress?.message}
-                    {...register('password', { required: 'This field is required' })}
-                />
+                <div className="flex flex-col">
+                    <PETextField
+                        id="password"
+                        labelTitle="Passwort"
+                        type="password"
+                        autoComplete="current-password"
+                        errorMessage={errors.emailAddress?.message}
+                        {...register('password', { required: 'This field is required' })}
+                    />
+                    {onForgotPassword && (
+                        <button
+                            type="button"
+                            className="text-end text-sm font-semibold text-orange-600 hover:text-orange-500"
+                            onClick={onForgotPassword}
+                        >
+                            Passwort vergessen?
+                        </button>
+                    )}
+                </div>
 
                 <PEButton title={completeTitle} type="submit" />
             </form>
