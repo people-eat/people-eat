@@ -49,7 +49,12 @@ export function PEEditPasswordCard({ userId }: PEEditPasswordCard) {
                     },
                 }}
             />
-            <PEAlert open={failed} title="Passwort konnte nicht geändert" primaryButton={{ title: 'Erneut versuchen', onClick: reset }} />
+            <PEAlert
+                open={failed}
+                type="ERROR"
+                title="Passwort konnte nicht geändert"
+                primaryButton={{ title: 'Erneut versuchen', onClick: reset }}
+            />
 
             <form
                 className="flex flex-col gap-4"

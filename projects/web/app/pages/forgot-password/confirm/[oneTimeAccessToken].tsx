@@ -93,16 +93,18 @@ export default function ForgotPasswordConfirmPage() {
     const [getSignedInUser, { data: profileData }] = useLazyQuery(GetSignedInUserDocument);
 
     useEffect(() => {
-        confirmOneTimeAccessToken()
-            .then(({ data }) => {
-                if (!data?.users.oneTimeAccessToken.success) {
-                    setState('FAILED');
-                    return;
-                }
-                setState('SUCCESSFUL');
-                void getSignedInUser();
-            })
-            .catch(() => setState('FAILED'));
+        setTimeout(() => {
+            confirmOneTimeAccessToken()
+                .then(({ data }) => {
+                    if (!data?.users.oneTimeAccessToken.success) {
+                        setState('FAILED');
+                        return;
+                    }
+                    setState('SUCCESSFUL');
+                    void getSignedInUser();
+                })
+                .catch(() => setState('FAILED'));
+        }, 1000);
     }, [confirmOneTimeAccessToken, getSignedInUser]);
 
     const signedInUserId = profileData?.users.signedInUser?.userId;
@@ -141,6 +143,7 @@ export default function ForgotPasswordConfirmPage() {
 
                 <PEAlert
                     open={state === 'FAILED'}
+                    type="ERROR"
                     title="Da ist etwas schief gelaufen"
                     subtitle="Es ist ein unerwarteter Fehler aufgetreten"
                     primaryButton={{
