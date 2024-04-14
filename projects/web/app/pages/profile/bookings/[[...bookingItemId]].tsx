@@ -1,4 +1,4 @@
-import { GlobalBookingRequestRow, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
+import { BookingRequestRow, GlobalBookingRequestRow, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
 import {
     GetProfileBookingsPageDataDocument,
     GetProfileBookingsPageDataQuery,
@@ -46,6 +46,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             ? globalBookingRequests.findIndex(({ globalBookingRequestId }) => globalBookingRequestId === bookingItemId)
             : -1;
 
+        // @todo: fetch full bookings with dedicated queries
         if (bookingItemId) {
             // let selectedBookingRequest;
             // let selectedGlobalBookingRequest;
@@ -55,7 +56,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             //     //
             // }
         }
-        console.log(bookingRequests[bookingRequestIndex]);
+
         return {
             props: {
                 signedInUser,
@@ -87,28 +88,50 @@ export default function ProfileBookingsPage({
             <div className={classNames('mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8', 'flex flex-col gap-8')}>
                 <PEProfileNavigation current="BOOKINGS" />
 
-                {globalBookingRequests.length + bookingRequests.length > 0 && (
-                    <ul>
-                        {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
-                            <GlobalBookingRequestRow
-                                key={globalBookingRequestId}
-                                occasion={occasion}
-                                priceClass={priceClass.type}
-                                dateTime={dateTime}
-                                onSelect={() => router.push(`/profile/bookings/${globalBookingRequestId}`, undefined, { scroll: false })}
-                            />
-                        ))}
-                        {bookingRequests.map(({ occasion }) => occasion)}
-                    </ul>
-                )}
+                <div className="flex gap-4">
+                    <div className={classNames('flex-1', { 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}>
+                        {globalBookingRequests.length + bookingRequests.length > 0 && (
+                            <ul>
+                                {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
+                                    <GlobalBookingRequestRow
+                                        key={globalBookingRequestId}
+                                        occasion={occasion}
+                                        priceClass={priceClass.type}
+                                        dateTime={dateTime}
+                                        selected={globalBookingRequestId === selectedGlobalBookingRequest?.globalBookingRequestId}
+                                        onSelect={() =>
+                                            router.push(`/profile/bookings/${globalBookingRequestId}`, undefined, { scroll: false })
+                                        }
+                                    />
+                                ))}
+                                {bookingRequests.map(({ bookingRequestId, occasion, dateTime, status }) => (
+                                    <BookingRequestRow
+                                        key={bookingRequestId}
+                                        status={status}
+                                        occasion={occasion}
+                                        dateTime={dateTime}
+                                        selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
+                                        onSelect={() => router.push(`/profile/bookings/${bookingRequestId}`, undefined, { scroll: false })}
+                                    />
+                                ))}
+                            </ul>
+                        )}
 
-                {globalBookingRequests.length === 0 && <p>Noch keine Buchungsanfragen</p>}
+                        {globalBookingRequests.length === 0 && <p>Noch keine Buchungsanfragen</p>}
+                    </div>
 
-                {!selectedBookingRequest && !selectedGlobalBookingRequest && 'Wähle eine Buchungsanfrage aus'}
+                    <div
+                        className={classNames('flex-[2]', {
+                            'hidden lg:block': !selectedBookingRequest && !selectedGlobalBookingRequest,
+                        })}
+                    >
+                        {!selectedBookingRequest && !selectedGlobalBookingRequest && 'Wähle eine Buchungsanfrage aus'}
 
-                {selectedGlobalBookingRequest && 'Selected global booking request'}
+                        {selectedGlobalBookingRequest && 'Globale Buchungsanfrage'}
 
-                {selectedBookingRequest && 'Selected booking request'}
+                        {selectedBookingRequest && 'Standard Buchungsanfrage'}
+                    </div>
+                </div>
             </div>
         </div>
     );

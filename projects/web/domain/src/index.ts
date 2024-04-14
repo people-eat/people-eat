@@ -222,3 +222,22 @@ export function toTranslatedFormattedDate(date: Date): string {
     date = new Date(date);
     return `${weekDays[date.getDay()]}, ${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
 }
+
+export function dateDistanceInDays(date1: Date, date2: Date): number {
+    const differenceInTime = date2.getTime() - date1.getTime();
+    return Math.round(differenceInTime / (1000 * 3600 * 24));
+}
+
+export function dateDistanceToToday(date: Date): number {
+    date = new Date(date);
+    return dateDistanceInDays(new Date(), date);
+}
+
+export function translatedDateDistanceToToday(date: Date): string {
+    const numberOfDays = dateDistanceToToday(date);
+    if (numberOfDays === 0) return 'Heute';
+    else if (numberOfDays === 1) return `Morgen`;
+    else if (numberOfDays === -1) return `Gestern`;
+    else if (numberOfDays < 0) return `Vor ${numberOfDays} Tagen`;
+    else return `In ${numberOfDays} Tagen`;
+}

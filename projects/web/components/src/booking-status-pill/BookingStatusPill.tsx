@@ -5,7 +5,7 @@ export interface BookingRequestStatusPillProps {
 export function BookingRequestStatusPill({ status }: BookingRequestStatusPillProps) {
     if (status === 'OPEN') {
         return (
-            <span className="text-green-500 text-center" style={{ padding: '4px 16px', backgroundColor: 'lightgray', borderRadius: 16 }}>
+            <span className="text-green-500 bg-gray-100 text-center" style={{ padding: '4px 16px', borderRadius: 16 }}>
                 Offen
             </span>
         );

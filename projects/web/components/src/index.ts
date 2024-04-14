@@ -24,6 +24,7 @@ export { LoadingDialog, type LoadingDialogProps } from './loading-dialog/Loading
 export { PEPriceClassSelection, type PEPriceClassSelectionProps } from './price-class-selection/PEPriceClassSelection';
 export { PEProfileNavigation, type PEProfileNavigationProps } from './profile-navigation/PEProfileNavigation';
 export { GlobalBookingRequestRow, type GlobalBookingRequestRowProps } from './rows/global-booking-request-row/GlobalBookingRequestRow';
+export { BookingRequestRow, type BookingRequestRowProps } from './rows/booking-request-row/BookingRequestRow';
 export { PESearchBar, type PESearchBarProps } from './search-bar/PESearchBar';
 export { SearchModeSwitch } from './search-mode-switch/SearchModeSwitch';
 export { SignInDialog, type SignInDialogProps } from './sign-in-dialog/SignInDialog';
