@@ -56,6 +56,8 @@ export default function ProfileFavoriteCooksPage({ signedInUser, favoriteCooks }
                         <PELink title="Unsere Köche" href="/chefs" />
                     </div>
                 )}
+
+                {/* @todo: display favorite chefs */}
             </div>
         </div>
     );

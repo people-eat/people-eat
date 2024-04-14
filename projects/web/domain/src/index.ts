@@ -261,3 +261,10 @@ export function translatedDateDistanceToToday(date: Date): string {
     else if (numberOfDays < 0) return `Vor ${-1 * numberOfDays} Tagen`;
     else return `In ${numberOfDays} Tagen`;
 }
+
+export const translatedBookingRequestStatus: Record<BookingRequestStatus, string> = {
+    CANCELED: 'Abgesagt',
+    COMPLETED: 'Abgeschlossen',
+    OPEN: 'Offen',
+    PENDING: 'In Bearbeitung',
+};

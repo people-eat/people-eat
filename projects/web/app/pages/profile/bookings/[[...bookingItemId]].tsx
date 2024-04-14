@@ -10,6 +10,12 @@ import classNames from 'classnames';
 import { Filter } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import {
+    PEProfileBookingRequestDetails,
+    ProfileBookingRequestDetailsTab,
+    toProfileBookingRequestDetailsTab,
+} from '../../../components/PEProfileBookingRequestDetails';
+import { PEProfileGlobalBookingRequestDetails } from '../../../components/PEProfileGlobalBookingRequestDetails';
 import { createApolloClient } from '../../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
@@ -22,6 +28,7 @@ interface ServerSideProps {
     selectedGlobalBookingRequest: Unpacked<
         NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findMany']>
     > | null;
+    tab: ProfileBookingRequestDetailsTab;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
@@ -65,6 +72,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 selectedBookingRequest: bookingRequestIndex !== -1 ? bookingRequests[bookingRequestIndex] : null,
                 globalBookingRequests,
                 selectedGlobalBookingRequest: globalBookingRequestIndex !== -1 ? globalBookingRequests[globalBookingRequestIndex] : null,
+                tab: toProfileBookingRequestDetailsTab(query.tab),
             },
         };
     } catch (error) {
@@ -79,6 +87,7 @@ export default function ProfileBookingsPage({
     selectedBookingRequest,
     globalBookingRequests,
     selectedGlobalBookingRequest,
+    tab,
 }: ServerSideProps) {
     const router = useRouter();
 
@@ -89,10 +98,10 @@ export default function ProfileBookingsPage({
                 className={classNames({ 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}
             />
 
-            <div className={classNames('mx-auto max-w-7xl px-0 lg:px-8', 'flex flex-col gap-8')}>
+            <div className={classNames('mx-auto max-w-7xl px-0 sm:px-8', 'flex flex-col gap-8')}>
                 <PEProfileNavigation
                     current="BOOKINGS"
-                    className={classNames({ 'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest })}
+                    className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest })}
                 />
 
                 <div className="flex gap-4">
@@ -119,13 +128,16 @@ export default function ProfileBookingsPage({
                                         }
                                     />
                                 ))}
-                                {bookingRequests.map(({ bookingRequestId, occasion, dateTime, status }) => (
+                                {bookingRequests.map(({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
                                     <BookingRequestRow
                                         key={bookingRequestId}
                                         status={status}
                                         occasion={occasion}
                                         dateTime={dateTime}
                                         selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
+                                        price={price}
+                                        configuredMenuTitle={configuredMenu?.title}
+                                        cookFirstName={cook.user.firstName}
                                         onSelect={() => router.push(`/profile/bookings/${bookingRequestId}`, undefined, { scroll: false })}
                                     />
                                 ))}
@@ -140,13 +152,15 @@ export default function ProfileBookingsPage({
                             'hidden lg:block': !selectedBookingRequest && !selectedGlobalBookingRequest,
                         })}
                     >
-                        <h2 className="text-2xl"> - Noch in der Entwicklung - </h2>
-
                         {!selectedBookingRequest && !selectedGlobalBookingRequest && 'Wähle eine Buchungsanfrage aus'}
 
-                        {selectedGlobalBookingRequest && 'Globale Buchungsanfrage'}
+                        {selectedGlobalBookingRequest && (
+                            <PEProfileGlobalBookingRequestDetails selectedTab={tab} globalBookingRequest={selectedGlobalBookingRequest} />
+                        )}
 
-                        {selectedBookingRequest && 'Standard Buchungsanfrage'}
+                        {selectedBookingRequest && (
+                            <PEProfileBookingRequestDetails selectedTab={tab} bookingRequest={selectedBookingRequest} />
+                        )}
                     </div>
                 </div>
             </div>

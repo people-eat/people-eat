@@ -1,12 +1,14 @@
+import { BookingRequestStatus, translatedBookingRequestStatus } from '@people-eat/web-domain';
+
 export interface BookingRequestStatusPillProps {
-    status: 'OPEN' | 'PENDING' | 'CANCELED' | 'COMPLETED';
+    status: BookingRequestStatus;
 }
 
 export function BookingRequestStatusPill({ status }: BookingRequestStatusPillProps) {
     if (status === 'OPEN') {
         return (
             <span className="text-green-500 bg-gray-100 text-center" style={{ padding: '4px 16px', borderRadius: 16 }}>
-                Offen
+                {translatedBookingRequestStatus[status]}
             </span>
         );
     }
@@ -14,7 +16,7 @@ export function BookingRequestStatusPill({ status }: BookingRequestStatusPillPro
     if (status === 'PENDING') {
         return (
             <span className="text-blue-400 text-center" style={{ padding: '4px 16px', backgroundColor: 'lightgray', borderRadius: 16 }}>
-                In Bearbeitung
+                {translatedBookingRequestStatus[status]}
             </span>
         );
     }
@@ -22,7 +24,7 @@ export function BookingRequestStatusPill({ status }: BookingRequestStatusPillPro
     if (status === 'CANCELED') {
         return (
             <span className="text-red-400 text-center" style={{ padding: '4px 16px', backgroundColor: 'lightgray', borderRadius: 16 }}>
-                Abgesagt
+                {translatedBookingRequestStatus[status]}
             </span>
         );
     }
@@ -30,7 +32,7 @@ export function BookingRequestStatusPill({ status }: BookingRequestStatusPillPro
     if (status === 'COMPLETED')
         return (
             <span className="text-center" style={{ padding: '4px 16px', backgroundColor: 'lightgray', borderRadius: 16 }}>
-                Abgeschlossen
+                {translatedBookingRequestStatus[status]}
             </span>
         );
 }
