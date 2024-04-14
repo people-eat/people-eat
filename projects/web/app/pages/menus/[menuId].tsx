@@ -266,7 +266,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
     const distance: number | undefined = selectedLocation && geoDistance({ location1: selectedLocation, location2: menu.cook.location });
 
     const isOutOfCookTravelRadius =
-        !!menu.cook.maximumTravelDistance && distance !== undefined && location && distance > menu.cook.maximumTravelDistance;
+        !!menu.cook.maximumTravelDistance && distance !== undefined && distance > menu.cook.maximumTravelDistance;
 
     const costBreakdown: CostBreakdown = toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, menu });
 
