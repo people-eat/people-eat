@@ -212,7 +212,7 @@ export default function GlobalBookingRequestPage({ initialSignedInUser, categori
                             />
                         </div>
 
-                        <div className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
+                        <div className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0 hidden md:block">
                             <h2 className="sr-only">Images</h2>
 
                             <Image
