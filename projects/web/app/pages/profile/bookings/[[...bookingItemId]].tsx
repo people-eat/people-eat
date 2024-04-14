@@ -15,7 +15,10 @@ import {
     ProfileBookingRequestDetailsTab,
     toProfileBookingRequestDetailsTab,
 } from '../../../components/PEProfileBookingRequestDetails';
-import { PEProfileGlobalBookingRequestDetails } from '../../../components/PEProfileGlobalBookingRequestDetails';
+import {
+    PEProfileGlobalBookingRequestDetails,
+    toProfileGlobalBookingRequestDetailsTab,
+} from '../../../components/PEProfileGlobalBookingRequestDetails';
 import { createApolloClient } from '../../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
@@ -155,7 +158,10 @@ export default function ProfileBookingsPage({
                         {!selectedBookingRequest && !selectedGlobalBookingRequest && 'Wähle eine Buchungsanfrage aus'}
 
                         {selectedGlobalBookingRequest && (
-                            <PEProfileGlobalBookingRequestDetails selectedTab={tab} globalBookingRequest={selectedGlobalBookingRequest} />
+                            <PEProfileGlobalBookingRequestDetails
+                                selectedTab={toProfileGlobalBookingRequestDetailsTab(tab)}
+                                globalBookingRequest={selectedGlobalBookingRequest}
+                            />
                         )}
 
                         {selectedBookingRequest && (
