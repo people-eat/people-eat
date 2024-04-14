@@ -126,7 +126,7 @@ const ratings = [
     },
 ];
 
-const transferFeatures = [
+const bulletPointList1 = [
     {
         id: 1,
         name: 'Einkauf der Zutaten',
@@ -147,10 +147,9 @@ const transferFeatures = [
     },
 ];
 
-const jobOpenings = [
+const bulletPointList2 = [
     {
         id: 1,
-
         role: '24 / 7 Support',
         description:
             'Als Gastgeber möchtest du, dass alles perfekt verläuft! Wir reagieren schnell, antworten genau und lösen alle Probleme. Ganz ehrlich. Was auch immer passiert, wir sind für dich da.',
@@ -171,7 +170,7 @@ const jobOpenings = [
     },
 ];
 
-const features = [
+const bulletPointList3 = [
     {
         name: 'Finde einen Koch in deiner Region',
         description: 'Unsere Köche bieten für jeden Geschmack und jedes Budget ein passendes Menü an',
@@ -323,7 +322,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                     </div>
                     <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
                         <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-                            {features.map((feature) => (
+                            {bulletPointList3.map((feature) => (
                                 <div key={feature.name} className="flex flex-col">
                                     <dt className="text-base font-semibold leading-7 text-gray-900">
                                         <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500">
@@ -439,12 +438,12 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                     <div className="relative mt-12 lg:mt-24 lg:grid lg:grid-cols-2 lg:items-center lg:gap-8">
                         <div className="relative">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                                Werde Gastgeber aus Leidenschaft
+                                Du schaffst einzigartige Restaurant Dining Experiences bei dir Zuhause
                             </h2>
                             <p className="mt-3 text-lg text-gray-500">Du entscheidest das Menü - wir übernehmen den Rest</p>
 
                             <dl className="mt-10 space-y-10">
-                                {transferFeatures.map((item) => (
+                                {bulletPointList1.map((item) => (
                                     <div key={item.id} className="relative">
                                         <dt>
                                             <div className="absolute flex h-12 w-12 items-center justify-center rounded-xl text-orange-500">
@@ -627,7 +626,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                         </div>
                         <div className="w-full lg:max-w-xl lg:flex-auto">
                             <ul className="-my-8 divide-y divide-gray-100">
-                                {jobOpenings.map((opening) => (
+                                {bulletPointList2.map((opening) => (
                                     <li key={opening.id} className="py-8">
                                         <dl className="relative flex flex-wrap gap-x-3">
                                             <dd className="w-full flex-none text-lg font-semibold tracking-tight text-gray-900 flex gap-2">
