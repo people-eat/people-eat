@@ -1,17 +1,5 @@
-import { PriceClass } from '@people-eat/web-domain';
+import { PriceClass, priceClassRanges, translatedPriceClasses } from '@people-eat/web-domain';
 import classNames from 'classnames';
-
-const titles: Record<PriceClass, string> = {
-    SIMPLE: 'Einfaches Menü',
-    FINE: 'Fine-Dining Menü',
-    GOURMET: 'Gourmet Menü',
-};
-
-const priceRanges: Record<PriceClass, string> = {
-    SIMPLE: '70.00 - 90.00 EUR',
-    FINE: '90.00 - 130.00 EUR',
-    GOURMET: 'ab 130.00 EUR',
-};
 
 export interface PEPriceClassCardProps {
     priceClass: PriceClass;
@@ -32,8 +20,8 @@ export function PEPriceClassCard({ priceClass, selected, onSelect }: PEPriceClas
                 )}
                 onClick={onSelect}
             >
-                <span>{titles[priceClass]}</span>
-                <span>{priceRanges[priceClass]}</span>
+                <span>{translatedPriceClasses[priceClass]}</span>
+                <span>{priceClassRanges[priceClass]}</span>
             </button>
         );
     }
@@ -49,8 +37,8 @@ export function PEPriceClassCard({ priceClass, selected, onSelect }: PEPriceClas
             )}
             onClick={onSelect}
         >
-            <span>{titles[priceClass]}</span>
-            <span>{priceRanges[priceClass]}</span>
+            <span>{translatedPriceClasses[priceClass]}</span>
+            <span>{priceClassRanges[priceClass]}</span>
         </button>
     );
 }

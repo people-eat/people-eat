@@ -1,6 +1,6 @@
 import { Combobox, Popover, Transition } from '@headlessui/react';
 import { PEAutoComplete, PEButton, PECalendar, PEFullPageSheet, PEIconButton } from '@people-eat/web-core-components';
-import { LocationSearchResult, SearchMode } from '@people-eat/web-domain';
+import { LocationSearchResult, SearchMode, toTranslatedFormattedDate } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { random } from 'lodash';
 import { CheckIcon, SearchIcon } from 'lucide-react';
@@ -121,7 +121,7 @@ export function PESearchBar({
                         as="div"
                         value={selectedLocation}
                         onChange={setSelectedLocation}
-                        className="flex flex-col items-start px-3 pt-2.5 flex-1"
+                        className="flex flex-col items-start px-3 pt-2.5 flex-[3]"
                     >
                         <Combobox.Label className="text-xs font-medium text-gray-900">Adresse</Combobox.Label>
                         <div className="relative w-full">
@@ -183,7 +183,7 @@ export function PESearchBar({
                         </div>
                     </Combobox>
 
-                    <div className="flex-1 flex gap-2 [&>*]:flex-1">
+                    <div className="flex-[2] flex gap-2 [&>*]:flex-1">
                         <Popover className="relative">
                             <Popover.Button className="flex flex-col items-start rounded-md px-3 pb-1.5 pt-2.5 w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
                                 <label htmlFor="name" className="block text-xs font-medium text-gray-900">
@@ -191,7 +191,7 @@ export function PESearchBar({
                                 </label>
 
                                 <p className="block w-full text-start text-gray-900 focus:ring-0 sm:text-sm sm:leading-6">
-                                    {date.toDateString()}
+                                    {toTranslatedFormattedDate(date)}
                                 </p>
                             </Popover.Button>
 
@@ -222,7 +222,9 @@ export function PESearchBar({
                                 </Popover.Panel>
                             </Transition>
                         </Popover>
+                    </div>
 
+                    <div className="flex-1 flex gap-2 [&>*]:flex-1">
                         <Popover className="relative">
                             <Popover.Button className="flex flex-col items-start rounded-md px-3 pb-1.5 pt-2.5 w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
                                 <label htmlFor="name" className="block text-xs font-medium text-gray-900">

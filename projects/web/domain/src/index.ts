@@ -190,3 +190,35 @@ export const mealTypeTranslations: Record<MealType, string> = {
     DESSERT: 'Dessert',
     SPECIAL: 'Spezial',
 };
+
+export { translatedPriceClasses, priceClassRanges } from './priceClass';
+
+const weekDays: Record<number, string> = {
+    0: 'Sonntag',
+    1: 'Montag',
+    2: 'Dienstag',
+    3: 'Mittwoch',
+    4: 'Donnerstag',
+    5: 'Freitag',
+    6: 'Samstag',
+};
+
+const months: Record<number, string> = {
+    0: 'Januar',
+    1: 'Februar',
+    2: 'März',
+    3: 'April',
+    4: 'Mai',
+    5: 'Juni',
+    6: 'Juli',
+    7: 'August',
+    8: 'September',
+    9: 'Oktober',
+    10: 'November',
+    11: 'Dezember',
+};
+
+export function toTranslatedFormattedDate(date: Date): string {
+    date = new Date(date);
+    return `${weekDays[date.getDay()]}, ${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
+}
