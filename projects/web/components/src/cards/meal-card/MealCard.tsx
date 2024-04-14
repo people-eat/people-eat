@@ -50,7 +50,6 @@ export function MealCard(props: MealCardProps) {
         <li className={classNames('flex flex-col gap-2 rounded-xl shadow-md', 'group-hover:opacity-75')}>
             <div className="group aspect-h-5 aspect-w-10 block w-full overflow-hidden rounded-t-xl bg-gray-100 focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
                 <Image
-                    unoptimized
                     src={imageUrl ?? '/placeholders/meal.png'}
                     alt=""
                     width={600}

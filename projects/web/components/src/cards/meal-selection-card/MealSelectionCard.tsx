@@ -19,7 +19,6 @@ export function MealSelectionCard({ title, description, imageUrl, selected, onSe
         <li className={classNames('flex flex-col gap-2 rounded-xl shadow-md')}>
             <div className="group aspect-h-5 aspect-w-10 block w-full overflow-hidden rounded-t-xl bg-gray-100">
                 <Image
-                    unoptimized
                     src={imageUrl ?? '/placeholders/meal.png'}
                     alt=""
                     width={600}

@@ -15,7 +15,6 @@ export function SignUpDialog({ open, onClose, completeTitle, onSignUp, onSignIn 
         <PEDialog open={open} onClose={onClose}>
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <Image
-                    unoptimized
                     className="mx-auto h-10 w-auto hidden md:block mb-10"
                     src="/people-eat-logo-title.png"
                     alt="PeopleEat Firmen Logo"

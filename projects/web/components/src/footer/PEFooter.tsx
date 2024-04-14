@@ -61,7 +61,7 @@ export function PEFooter() {
             <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
                 <div className="xl:grid xl:grid-cols-3 xl:gap-8">
                     <div className="space-y-8">
-                        <Image unoptimized src="/people-eat-logo-title.png" alt="" width={256} height={256} className="h-7 w-auto" />
+                        <Image src="/people-eat-logo-title.png" alt="" width={256} height={256} className="h-7 w-auto" />
                         <p className="text-sm leading-6 text-gray-600">We open doors to how people eat in the future.</p>
                         <div className="flex space-x-6">
                             {footerNavigation.social.map((item) => (

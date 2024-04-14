@@ -18,7 +18,6 @@ export function CookCard({ user, rank, menuCount, cityName, travelDistance }: Co
             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 group-hover:opacity-75">
                 {user.profilePictureUrl && (
                     <Image
-                        unoptimized
                         src={user.profilePictureUrl}
                         alt={user.firstName}
                         className="object-cover object-center"

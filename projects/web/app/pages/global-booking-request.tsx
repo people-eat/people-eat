@@ -221,7 +221,6 @@ export default function GlobalBookingRequestPage({ initialSignedInUser, categori
                                 className={classNames('lg:col-span-2 lg:row-span-2 rounded-2xl')}
                                 width={800}
                                 height={1000}
-                                unoptimized
                             />
                         </div>
                     </div>

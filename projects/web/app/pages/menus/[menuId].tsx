@@ -646,7 +646,6 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                                 <div className="sm:col-span-4 lg:col-span-5">
                                                     <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                                                         <Image
-                                                            unoptimized
                                                             src={selectedMeal.meal.imageUrl ?? '/placeholders/meal.png'}
                                                             alt=""
                                                             className="object-cover object-center"

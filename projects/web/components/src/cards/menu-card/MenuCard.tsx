@@ -21,7 +21,6 @@ export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pr
             <div className="group aspect-h-7 aspect-w-10 block w-full overflow-hidden rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
                 {imageUrls.length > 0 && (
                     <Image
-                        unoptimized
                         src={imageUrls[0]}
                         alt="image 1"
                         className="pointer-events-none object-cover group-hover:opacity-75"
@@ -31,7 +30,6 @@ export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pr
                 )}
                 {imageUrls.length < 1 && (
                     <Image
-                        unoptimized
                         src="/placeholders/menu.png"
                         alt="image 1"
                         className="pointer-events-none object-cover"
@@ -66,7 +64,6 @@ export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pr
                     {imageUrls.map((imageUrl) => (
                         <Image
                             key={imageUrl}
-                            unoptimized
                             src={imageUrl}
                             alt="image 1"
                             className="h-full w-full object-center rounded-xl "
@@ -76,7 +73,6 @@ export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pr
                     ))}
                     {imageUrls.length < 1 && (
                         <Image
-                            unoptimized
                             src="/placeholders/menu.png"
                             alt="image 1"
                             className="h-full w-full object-center rounded-xl "

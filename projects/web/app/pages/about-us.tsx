@@ -41,7 +41,6 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                     <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                         <div className="lg:pr-4">
                             <Image
-                                unoptimized
                                 src="/about-us/founders.png"
                                 width={1000}
                                 height={800}
@@ -131,7 +130,6 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                             <div className="mt-16 flow-root sm:mt-24">
                                 <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
                                     <Image
-                                        unoptimized
                                         src="/about-us/team.jpg"
                                         alt="App screenshot"
                                         width={2432}

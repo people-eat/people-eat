@@ -21,7 +21,6 @@ export default function WarumSollteIchEinenPrivatkochBuchenBlogArticle() {
                     </p>
                     <figure className="mt-16">
                         <Image
-                            unoptimized
                             className="aspect-video rounded-xl bg-gray-50 object-cover"
                             src="/blogs/privatkoch-koeln.jpg"
                             alt=""

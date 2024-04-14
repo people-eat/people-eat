@@ -156,7 +156,6 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                                 className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36"
                                 width={500}
                                 height={400}
-                                unoptimized
                             />
                         </div>
                     </div>
@@ -223,7 +222,6 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                     <div>
                         <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                             <Image
-                                unoptimized
                                 src="/how-to-become-a-chef/1.jpg"
                                 alt="Black kettle with long pour spot and angled body on marble counter next to coffee mug and pour-over system."
                                 className="h-full w-full object-cover object-center"
@@ -234,7 +232,6 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                         <div className="mt-4 grid grid-cols-2 gap-4 sm:mt-6 sm:gap-6 lg:mt-8 lg:gap-8">
                             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                                 <Image
-                                    unoptimized
                                     src="/how-to-become-a-chef/2.jpg"
                                     alt="Detail of temperature setting button on kettle bass with digital degree readout."
                                     className="h-full w-full object-cover object-center"
@@ -244,7 +241,6 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                             </div>
                             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
                                 <Image
-                                    unoptimized
                                     src="/how-to-become-a-chef/3.jpg"
                                     alt="Kettle spout pouring boiling water into coffee grounds in pour-over mug."
                                     className="h-full w-full object-cover object-center"
