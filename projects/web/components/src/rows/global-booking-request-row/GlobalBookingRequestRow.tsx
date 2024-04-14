@@ -9,7 +9,7 @@ export interface GlobalBookingRequestRowProps {
 
 export function GlobalBookingRequestRow({ occasion, priceClass }: GlobalBookingRequestRowProps) {
     return (
-        <li className="relative py-5 hover:bg-gray-50" role="button" onClick={() => undefined}>
+        <div className="relative py-5 hover:bg-gray-50" role="button" onClick={() => undefined}>
             <div className="px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto flex max-w-4xl justify-between gap-x-6">
                     <div className="flex min-w-0 gap-x-4">
@@ -29,6 +29,6 @@ export function GlobalBookingRequestRow({ occasion, priceClass }: GlobalBookingR
                     </div>
                 </div>
             </div>
-        </li>
+        </div>
     );
 }

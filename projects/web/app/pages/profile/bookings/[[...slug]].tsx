@@ -1,4 +1,4 @@
-import { PEHeader, PEProfileNavigation } from '@people-eat/web-components';
+import { GlobalBookingRequestRow, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
 import {
     GetProfileBookingsPageDataDocument,
     GetProfileBookingsPageDataQuery,
@@ -47,6 +47,10 @@ export default function ProfileBookingsPage({ signedInUser, bookingRequests, glo
 
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <PEProfileNavigation current="BOOKINGS" />
+
+                {globalBookingRequests.map(() => (
+                    <GlobalBookingRequestRow />
+                ))}
             </div>
         </div>
     );

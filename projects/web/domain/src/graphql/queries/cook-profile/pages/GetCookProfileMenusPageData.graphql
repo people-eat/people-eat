@@ -27,6 +27,7 @@ query GetCookProfileMenusPageData($cookId: String!) {
                     title
                 }
                 imageUrls
+                courseCount
             }
         }
     }

@@ -41,6 +41,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         };
     } catch (error) {
+        console.error(error);
         throw new Error();
     }
 };
@@ -73,6 +74,7 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                             basePriceCustomers,
                             pricePerAdult,
                             pricePerChild,
+                            courseCount,
                         }) => (
                             <Link key={menuId} href={{ pathname: '/chef-profile/menus/' + menuId }}>
                                 <MenuCard
@@ -83,7 +85,7 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                                         firstName: signedInUser.firstName,
                                         profilePictureUrl: null,
                                     }}
-                                    courseCount={2}
+                                    courseCount={courseCount}
                                     pricePerPerson={formatPrice({
                                         amount:
                                             calculateMenuPrice(2, 0, basePrice, basePriceCustomers, pricePerAdult, pricePerChild) / (2 + 0),
