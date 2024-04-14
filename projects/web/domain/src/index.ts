@@ -2,6 +2,7 @@ import { ParsedUrlQueryInput } from 'querystring';
 import { Dispatch, SetStateAction } from 'react';
 import {
     AllergyOptionFragment,
+    BookingRequestStatus,
     CategoryOptionFragment,
     KitchenOptionFragment,
     LanguageOptionFragment,
