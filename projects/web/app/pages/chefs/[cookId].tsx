@@ -305,7 +305,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="flex gap-8">
                     <div className="flex-1 flex flex-col gap-12">
-                        <div className="flex gap-8">
+                        <div className="flex gap-8 flex-col md:flex-row items-center">
                             {cook.user.profilePictureUrl && (
                                 <Image
                                     unoptimized
