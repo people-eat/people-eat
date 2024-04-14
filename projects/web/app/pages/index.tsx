@@ -440,7 +440,10 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                                 Du schaffst einzigartige Restaurant Dining Experiences bei dir Zuhause
                             </h2>
-                            <p className="mt-3 text-lg text-gray-500">Du entscheidest das Menü - wir übernehmen den Rest</p>
+                            <p className="mt-3 text-lg text-gray-500">
+                                Beeindrucke deine Gäste und schaffe unvergessliche Erlebnismomente in deinen eigenen vier Wänden. Den Rest
+                                übernehmen wir.
+                            </p>
 
                             <dl className="mt-10 space-y-10">
                                 {bulletPointList1.map((item) => (
