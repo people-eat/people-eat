@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const meta: Meta<typeof PELabelMultiSelection> = {
     component: PELabelMultiSelection,
-    title: 'PELabelMultiSelection',
+    title: 'Selectors/PELabelMultiSelection',
 };
 
 export default meta;

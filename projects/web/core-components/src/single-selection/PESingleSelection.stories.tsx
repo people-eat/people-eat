@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const meta: Meta<typeof PESingleSelection> = {
     component: PESingleSelection,
-    title: 'PESingleSelection',
+    title: 'Selectors/PESingleSelection',
 };
 
 export default meta;

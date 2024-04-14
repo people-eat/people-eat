@@ -233,11 +233,31 @@ export function dateDistanceToToday(date: Date): number {
     return dateDistanceInDays(new Date(), date);
 }
 
+export function groupDays(days: number): {
+    days: number;
+    months: number;
+} {
+    return {
+        days: days % 30,
+        months: Math.floor(days / 30),
+    };
+}
+
+// todo, not in use yet
+export function translatedFormattedDays(d: number): string {
+    const { days, months } = groupDays(d);
+    if (months > 1 && days > 1) return ``;
+    if (months > 1 && days > 1) return ``;
+    if (months > 1 && days > 1) return ``;
+    if (months > 1 && days > 1) return ``;
+    return '';
+}
+
 export function translatedDateDistanceToToday(date: Date): string {
     const numberOfDays = dateDistanceToToday(date);
     if (numberOfDays === 0) return 'Heute';
     else if (numberOfDays === 1) return `Morgen`;
     else if (numberOfDays === -1) return `Gestern`;
-    else if (numberOfDays < 0) return `Vor ${numberOfDays} Tagen`;
+    else if (numberOfDays < 0) return `Vor ${-1 * numberOfDays} Tagen`;
     else return `In ${numberOfDays} Tagen`;
 }

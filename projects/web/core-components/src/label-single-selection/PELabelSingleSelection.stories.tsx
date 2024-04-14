@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const meta: Meta<typeof PELabelSingleSelection> = {
     component: PELabelSingleSelection,
-    title: 'PELabelSingleSelection',
+    title: 'Selectors/PELabelSingleSelection',
 };
 
 export default meta;

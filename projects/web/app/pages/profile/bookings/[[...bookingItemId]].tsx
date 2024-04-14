@@ -7,6 +7,7 @@ import {
     Unpacked,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
+import { Filter } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { createApolloClient } from '../../../network/apolloClients';
@@ -83,13 +84,27 @@ export default function ProfileBookingsPage({
 
     return (
         <div>
-            <PEHeader signedInUser={signedInUser} />
+            <PEHeader
+                signedInUser={signedInUser}
+                className={classNames({ 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}
+            />
 
-            <div className={classNames('mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8', 'flex flex-col gap-8')}>
-                <PEProfileNavigation current="BOOKINGS" />
+            <div className={classNames('mx-auto max-w-7xl px-0 lg:px-8', 'flex flex-col gap-8')}>
+                <PEProfileNavigation
+                    current="BOOKINGS"
+                    className={classNames({ 'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest })}
+                />
 
                 <div className="flex gap-4">
-                    <div className={classNames('flex-1', { 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}>
+                    <div
+                        className={classNames('flex-1 px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
+                            'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest,
+                        })}
+                    >
+                        <div className="px-4 pb-4 flex justify-between items-center">
+                            <h1 className="text-xl font-bold">Buchungsanfragen</h1>
+                            <Filter size={16} />
+                        </div>
                         {globalBookingRequests.length + bookingRequests.length > 0 && (
                             <ul>
                                 {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
@@ -121,10 +136,12 @@ export default function ProfileBookingsPage({
                     </div>
 
                     <div
-                        className={classNames('flex-[2]', {
+                        className={classNames('flex-[2] lg:rounded-2xl lg:shadow-lg p-8', {
                             'hidden lg:block': !selectedBookingRequest && !selectedGlobalBookingRequest,
                         })}
                     >
+                        <h2 className="text-2xl"> - Noch in der Entwicklung - </h2>
+
                         {!selectedBookingRequest && !selectedGlobalBookingRequest && 'Wähle eine Buchungsanfrage aus'}
 
                         {selectedGlobalBookingRequest && 'Globale Buchungsanfrage'}

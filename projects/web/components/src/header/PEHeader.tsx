@@ -18,16 +18,17 @@ const navigationItems = [
 
 export interface PEHeaderProps {
     signedInUser: SignedInUser | null;
+    className?: string;
 }
 
-export function PEHeader({ signedInUser }: PEHeaderProps) {
+export function PEHeader({ signedInUser, className }: PEHeaderProps) {
     const router = useRouter();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const [expireCurrentSession] = useMutation(ExpireCurrentSessionDocument, { variables: { userId: signedInUser?.userId ?? '' } });
 
     return (
-        <header className="bg-white">
+        <header className={classNames('bg-white', className)}>
             <nav className="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
                 <div className="flex lg:flex-1">
                     <Link href="/">

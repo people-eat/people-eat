@@ -16,6 +16,11 @@ export { LoadingSpinner, type LoadingSpinnerProps } from './loading-spinner/Load
 export { PEMultiSelection, type PEMultiSelectionProps } from './multi-selection/PEMultiSelection';
 export { PESingleSelection, type PESingleSelectionProps } from './single-selection/PESingleSelection';
 export { PESlider, type PESliderProps } from './slider/PESlider';
+export {
+    PETabSingleSelection,
+    type PETabSingleSelectionOption,
+    type PETabSingleSelectionProps,
+} from './tab-multi-selection/PETabSingleSelection';
 export { PETextArea, type PETextAreaProps } from './text-area/PETextArea';
 export { PENumberTextField, type PENumberTextFieldProps } from './text-field/PENumberTextField';
 export { PETextField, type PETextFieldProps } from './text-field/PETextField';

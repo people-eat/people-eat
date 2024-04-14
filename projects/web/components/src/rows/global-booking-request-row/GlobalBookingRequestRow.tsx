@@ -14,7 +14,7 @@ export interface GlobalBookingRequestRowProps {
 
 export function GlobalBookingRequestRow({ occasion, priceClass, dateTime, selected, onSelect }: GlobalBookingRequestRowProps) {
     return (
-        <li className={classNames('relative py-5 hover:bg-gray-50', { 'bg-gray-50': selected })} role="button" onClick={onSelect}>
+        <li className={classNames('relative py-5 hover:bg-gray-100', { 'bg-gray-200': selected })} role="button" onClick={onSelect}>
             <div className="px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto flex max-w-4xl justify-between gap-x-6">
                     <div className="flex min-w-0 gap-x-4">
