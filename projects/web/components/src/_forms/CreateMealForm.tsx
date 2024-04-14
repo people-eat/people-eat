@@ -22,12 +22,15 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
         handleSubmit,
         setValue,
         getValues,
+        setFocus,
         formState: { errors },
     } = useForm<CreateMealFormInputs>();
 
     useEffect(() => {
         register('type', { required: 'Dein Gericht muss einer Kategorie zugeordnet werden.' });
     }, [register]);
+
+    useEffect(() => setFocus('title'), [setFocus]);
 
     return (
         <form className="flex flex-col gap-6" onSubmit={handleSubmit((data) => onCreate({ ...data, image }))}>
@@ -44,7 +47,7 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
             </div>
 
             <PETextField
-                id="title"
+                id="mealTitle"
                 labelTitle="Name"
                 type="text"
                 errorMessage={errors.title?.message}
@@ -55,13 +58,14 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
             />
 
             <PETextArea
-                id="description"
+                id="mealDescription"
                 labelTitle="Beschreibung"
                 errorMessage={errors.description?.message}
                 {...register('description', { required: 'Dein Gericht braucht noch eine Beschreibung.' })}
             />
 
             <p className="mt-4">Füge deinem Gericht ein Bild hinzu</p>
+
             <PEImagePicker onPick={setImage} onRemoveDefaultImage={(): void => setImage(undefined)} />
 
             <PEButton title="Gericht erstellen" type="submit" />

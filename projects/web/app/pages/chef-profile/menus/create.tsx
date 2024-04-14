@@ -655,7 +655,10 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                 <PEDialog open={createCourseDialogOpen} onClose={() => setCreateCourseDialogOpen(false)}>
                     <CreateMenuCourseForm
                         meals={meals}
-                        onCreateMeal={() => setCreateMealDialogOpen(true)}
+                        onCreateMeal={() => {
+                            setCreateMealDialogOpen(true);
+                            setCreateCourseDialogOpen(false);
+                        }}
                         onCreate={(data) => {
                             append(data);
                             setCreateCourseDialogOpen(false);
@@ -686,6 +689,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                     onClose={(reloadMeals) => {
                         setCreateMealDialogOpen(false);
                         if (reloadMeals) fetchMeals().then(({ data }) => data?.cooks.meals.findMany && setMeals(data.cooks.meals.findMany));
+                        setCreateCourseDialogOpen(true);
                     }}
                 />
 

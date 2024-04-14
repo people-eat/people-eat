@@ -35,7 +35,7 @@ import debounce from 'lodash/debounce';
 import { CheckCircleIcon, Circle, CircleUser, HandPlatter, MinusIcon, PlusIcon, ShoppingBasket, Sparkles, Utensils, X } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
@@ -204,8 +204,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function PublicMenuPage({ initialSignedInUser, menu, allergies, searchParams, stripePublishableKey }: ServerSideProps) {
+    // hack to not run useEffect for signedInUser change on initial render
+    const isInitialMount = useRef(true);
     const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
-
     const [shopBook, setShowBook] = useState(false);
 
     const [adults, setAdults] = useState(searchParams.adults);
@@ -330,7 +331,11 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
     }
 
     useEffect(() => {
-        if (signedInUser) onBook();
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        } else {
+            if (signedInUser) onBook();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [signedInUser]);
 
