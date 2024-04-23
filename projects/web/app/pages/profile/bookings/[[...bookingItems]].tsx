@@ -39,10 +39,21 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
     const bookingItems = query.bookingItems;
 
-    if (!bookingItems || bookingItems.length < 1) return signInPageRedirect;
+    let bookingType: 'STANDARD' | 'GLOBAL' | 'NONE' = 'NONE';
+    let bookingItemId: string | undefined;
 
-    const isStandardBooking = bookingItems.length === 1;
-    const bookingItemId = isStandardBooking ? bookingItems[0] : bookingItems[1];
+    if (!bookingItems) {
+        // do nothing
+    } else if (bookingItems.length < 1) {
+        bookingType = 'NONE';
+        bookingItemId = undefined;
+    } else if (bookingItems.length === 1) {
+        bookingType = 'STANDARD';
+        bookingItemId = bookingItems[0];
+    } else {
+        bookingType = 'GLOBAL';
+        bookingItemId = bookingItems[1];
+    }
 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
@@ -54,10 +65,10 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             query: GetProfileBookingsPageDataDocument,
             variables: {
                 userId,
-                globalBookingRequestId: isStandardBooking ? '' : bookingItemId,
-                fetchGlobalBookingRequest: !isStandardBooking,
-                bookingRequestId: isStandardBooking ? bookingItemId : '',
-                fetchBookingRequest: isStandardBooking,
+                globalBookingRequestId: bookingType === 'GLOBAL' ? bookingItemId! : '',
+                fetchGlobalBookingRequest: bookingType === 'GLOBAL',
+                bookingRequestId: bookingType === 'STANDARD' ? bookingItemId! : '',
+                fetchBookingRequest: bookingType === 'STANDARD',
             },
         });
 
