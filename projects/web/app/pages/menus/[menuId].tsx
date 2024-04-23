@@ -304,7 +304,10 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                 preparationTime: 120,
                 configuredMenu: {
                     menuId: menu.menuId,
-                    courses: Object.entries(courseMealSelections).map(([courseId, mealId]) => ({ courseId, mealId })),
+                    courses: Array.from(courseMealSelections.entries()).map(([courseId, mealOption]) => ({
+                        courseId,
+                        mealId: mealOption.meal.mealId,
+                    })),
                 },
                 travelExpensesAmount: 0,
             },

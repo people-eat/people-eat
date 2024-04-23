@@ -1,3 +1,4 @@
+import { MealCard } from '@people-eat/web-components';
 import { PETabSingleSelection } from '@people-eat/web-core-components';
 import {
     GetProfileBookingsPageDataQuery,
@@ -36,7 +37,7 @@ const profileBookingRequestDetailsTabIcons: Record<ProfileBookingRequestDetailsT
 
 export interface PEProfileBookingRequestDetailsProps {
     selectedTab: ProfileBookingRequestDetailsTab;
-    bookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findMany']>>;
+    bookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>>;
 }
 
 export function PEProfileBookingRequestDetails({ selectedTab, bookingRequest }: PEProfileBookingRequestDetailsProps) {
@@ -138,7 +139,23 @@ export function PEProfileBookingRequestDetails({ selectedTab, bookingRequest }: 
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (
                 <div>
-                    <h2>{bookingRequest.configuredMenu.title}</h2>
+                    <h2 className="text-2xl font-bold">{bookingRequest.configuredMenu.title}</h2>
+                    <h3>{bookingRequest.configuredMenu.description}</h3>
+                    {bookingRequest.configuredMenu.greetingFromKitchen && bookingRequest.configuredMenu.greetingFromKitchen !== '' && (
+                        <div>{bookingRequest.configuredMenu.greetingFromKitchen}</div>
+                    )}
+                    <div className="flex flex-col gap-4 p-16">
+                        {bookingRequest.configuredMenu.courses.map((course) => (
+                            <MealCard
+                                key={course.index}
+                                type="SIMPLE"
+                                title={course.mealTitle}
+                                description={course.mealDescription}
+                                imageUrl={course.mealImageUrl}
+                                onInfoClick={() => undefined}
+                            />
+                        ))}
+                    </div>
                 </div>
             )}
 

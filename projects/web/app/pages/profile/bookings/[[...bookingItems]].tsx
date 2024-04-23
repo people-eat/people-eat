@@ -26,10 +26,10 @@ const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-i
 interface ServerSideProps {
     signedInUser: SignedInUser;
     bookingRequests: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findMany']>>[];
-    selectedBookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findMany']>> | null;
+    selectedBookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>> | null;
     globalBookingRequests: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findMany']>>[];
     selectedGlobalBookingRequest: Unpacked<
-        NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findMany']>
+        NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findOne']>
     > | null;
     tab: ProfileBookingRequestDetailsTab;
 }
@@ -37,7 +37,12 @@ interface ServerSideProps {
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
-    const [bookingItemId] = query.bookingItemId ?? [];
+    const bookingItems = query.bookingItems;
+
+    if (!bookingItems || bookingItems.length < 1) return signInPageRedirect;
+
+    const isStandardBooking = bookingItems.length === 1;
+    const bookingItemId = isStandardBooking ? bookingItems[0] : bookingItems[1];
 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
@@ -45,36 +50,29 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         if (!signedInUser) return signInPageRedirect;
         const userId = signedInUser.userId;
 
-        const result = await apolloClient.query({ query: GetProfileBookingsPageDataDocument, variables: { userId } });
+        const result = await apolloClient.query({
+            query: GetProfileBookingsPageDataDocument,
+            variables: {
+                userId,
+                globalBookingRequestId: isStandardBooking ? '' : bookingItemId,
+                fetchGlobalBookingRequest: !isStandardBooking,
+                bookingRequestId: isStandardBooking ? bookingItemId : '',
+                fetchBookingRequest: isStandardBooking,
+            },
+        });
+
         const bookingRequests = result.data.users.bookingRequests.findMany ?? [];
+        const bookingRequest = result.data.users.bookingRequests.findOne ?? null;
         const globalBookingRequests = result.data.users.globalBookingRequests.findMany ?? [];
-
-        const bookingRequestIndex = bookingItemId
-            ? bookingRequests.findIndex(({ bookingRequestId }) => bookingRequestId === bookingItemId)
-            : -1;
-
-        const globalBookingRequestIndex = bookingItemId
-            ? globalBookingRequests.findIndex(({ globalBookingRequestId }) => globalBookingRequestId === bookingItemId)
-            : -1;
-
-        // @todo: fetch full bookings with dedicated queries
-        if (bookingItemId) {
-            // let selectedBookingRequest;
-            // let selectedGlobalBookingRequest;
-            // if (bookingRequestIndex !== -1) {
-            //     //
-            // } else if (globalBookingRequestIndex !== -1) {
-            //     //
-            // }
-        }
+        const globalBookingRequest = result.data.users.globalBookingRequests.findOne ?? null;
 
         return {
             props: {
                 signedInUser,
                 bookingRequests,
-                selectedBookingRequest: bookingRequestIndex !== -1 ? bookingRequests[bookingRequestIndex] : null,
+                selectedBookingRequest: bookingRequest,
                 globalBookingRequests,
-                selectedGlobalBookingRequest: globalBookingRequestIndex !== -1 ? globalBookingRequests[globalBookingRequestIndex] : null,
+                selectedGlobalBookingRequest: globalBookingRequest,
                 tab: toProfileBookingRequestDetailsTab(query.tab),
             },
         };
@@ -127,7 +125,7 @@ export default function ProfileBookingsPage({
                                         dateTime={dateTime}
                                         selected={globalBookingRequestId === selectedGlobalBookingRequest?.globalBookingRequestId}
                                         onSelect={() =>
-                                            router.push(`/profile/bookings/${globalBookingRequestId}`, undefined, { scroll: false })
+                                            router.push(`/profile/bookings/global/${globalBookingRequestId}`, undefined, { scroll: false })
                                         }
                                     />
                                 ))}

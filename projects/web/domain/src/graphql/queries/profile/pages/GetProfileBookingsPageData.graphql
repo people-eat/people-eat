@@ -1,10 +1,49 @@
-query GetProfileBookingsPageData($userId: String!) {
+query GetProfileBookingsPageData(
+    $userId: String!
+    $globalBookingRequestId: String!
+    $bookingRequestId: String!
+    $fetchBookingRequest: Boolean!
+    $fetchGlobalBookingRequest: Boolean!
+) {
     users {
         signedInUser: me {
             ...SignedInUser
         }
         bookingRequests(userId: $userId) {
             findMany {
+                bookingRequestId
+                globalBookingRequestId
+                adultParticipants
+                children
+                dateTime
+                status
+                userAccepted
+                cookAccepted
+                kitchenId
+                occasion
+                preparationTime
+                price {
+                    amount
+                    currencyCode
+                }
+                location {
+                    text
+                }
+                duration
+                createdAt
+                cook {
+                    cookId
+                    rank
+                    user {
+                        firstName
+                        profilePictureUrl
+                    }
+                }
+                configuredMenu {
+                    title
+                }
+            }
+            findOne(bookingRequestId: $bookingRequestId) @include(if: $fetchBookingRequest) {
                 bookingRequestId
                 globalBookingRequestId
                 adultParticipants
@@ -36,12 +75,31 @@ query GetProfileBookingsPageData($userId: String!) {
                     }
                 }
                 configuredMenu {
-                    title
+                    ...ConfiguredMenu
                 }
             }
         }
         globalBookingRequests(userId: $userId) {
             findMany {
+                globalBookingRequestId
+                children
+                adultParticipants
+                occasion
+                message
+                dateTime
+                duration
+                priceClass {
+                    type
+                    min
+                    max
+                    currencyCode
+                }
+                location {
+                    text
+                }
+                createdAt
+            }
+            findOne(globalBookingRequestId: $globalBookingRequestId) @include(if: $fetchGlobalBookingRequest) {
                 globalBookingRequestId
                 children
                 adultParticipants
