@@ -174,7 +174,11 @@ export default function ProfileBookingsPage({
                         )}
 
                         {selectedBookingRequest && (
-                            <PEProfileBookingRequestDetails selectedTab={tab} bookingRequest={selectedBookingRequest} />
+                            <PEProfileBookingRequestDetails
+                                userId={signedInUser.userId}
+                                selectedTab={tab}
+                                bookingRequest={selectedBookingRequest}
+                            />
                         )}
                     </div>
                 </div>
