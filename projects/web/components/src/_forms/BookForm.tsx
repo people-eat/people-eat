@@ -166,7 +166,7 @@ export function BookForm({
 
                 {categories && categories.categoryOptions.length > 0 && (
                     <div className="flex flex-col gap-4">
-                        <span className="text-lg font-semibold">Kategorien</span>
+                        <span className="text-base font-medium">Kategorien</span>
                         <PELabelMultiSelection
                             options={categories.categoryOptions}
                             selectedOptions={categories.selectedCategories}
@@ -179,7 +179,7 @@ export function BookForm({
 
                 {kitchens && kitchens.kitchenOptions.length > 0 && (
                     <div className="flex flex-col gap-4">
-                        <span className="text-lg font-semibold">Küche</span>
+                        <span className="text-base font-medium">Küche</span>
                         <PELabelSingleSelection
                             options={kitchens.kitchenOptions}
                             selectedOption={kitchens.selectedKitchen}
@@ -192,7 +192,7 @@ export function BookForm({
 
                 {allergies && allergies.allergyOptions.length > 0 && (
                     <div className="flex flex-col gap-4">
-                        <span className="text-lg font-semibold">Allergien</span>
+                        <span className="text-base font-medium">Allergien</span>
                         <PELabelMultiSelection
                             options={allergies.allergyOptions}
                             selectedOptions={allergies.selectedAllergies}
@@ -205,7 +205,7 @@ export function BookForm({
 
                 {priceClass && (
                     <div className="flex flex-col gap-4">
-                        <span className="text-lg font-semibold">Budget pro Person</span>
+                        <span className="text-base font-medium">Budget pro Person</span>
                         <PEPriceClassSelection selectedPriceClass={priceClass.value} onChange={priceClass.onChange} layout="VERTICAL" />
                     </div>
                 )}

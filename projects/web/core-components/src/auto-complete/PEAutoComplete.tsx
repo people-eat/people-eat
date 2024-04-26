@@ -29,8 +29,8 @@ function PEAutoComplete<T>(
     ref: ForwardedRef<HTMLInputElement>,
 ) {
     return (
-        <Combobox as="div" value={selectedOption} onChange={onSelectedOptionChange} className="flex flex-col gap-4">
-            <Combobox.Label className="ml-px block text-lg font-semibold leading-6 text-gray-900">{title}</Combobox.Label>
+        <Combobox as="div" value={selectedOption} onChange={onSelectedOptionChange} className="flex flex-col gap-2">
+            <Combobox.Label className="ml-px block text-md font-medium leading-6 text-gray-900">{title}</Combobox.Label>
             <div className="relative">
                 <Combobox.Input
                     defaultValue={selectedOption ? getLabel(selectedOption) : ('' as T)}

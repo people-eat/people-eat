@@ -11,7 +11,7 @@ export interface ParticipantsPickerProps {
 export function ParticipantsPicker({ hideLabel, adults, setAdults, children, setChildren }: ParticipantsPickerProps) {
     return (
         <div className="flex flex-col gap-4">
-            {!hideLabel && <span className="text-lg font-semibold">Wer soll Teilnehmen?</span>}
+            {!hideLabel && <span className="text-base font-medium">Wer soll Teilnehmen?</span>}
             <div className="flex justify-between items-center gap-8">
                 <div className="flex gap-4">
                     <Users strokeWidth={1.5} />

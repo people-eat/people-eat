@@ -15,12 +15,12 @@ const minutes = [0, 15, 30, 45];
 export function PETimePicker({ value, onChange }: PETimePickerProps) {
     return (
         <div>
-            <label htmlFor="name" className="ml-px block text-sm font-medium leading-6 text-gray-900 text-left">
-                Uhrzeit?
+            <label htmlFor="name" className="ml-px block text-base font-medium leading-6 text-gray-900 text-left">
+                Uhrzeit
             </label>
             <div className="flex gap-1 mt-2">
                 <Menu as="div" className="relative inline-block text-left">
-                    <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                         {value.hours}
                         <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                     </Menu.Button>

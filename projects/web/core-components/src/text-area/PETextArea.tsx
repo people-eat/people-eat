@@ -14,7 +14,7 @@ export const PETextArea = forwardRef(function (
     return (
         <div>
             {labelTitle && (
-                <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor={id} className="block text-base font-medium leading-6 text-gray-900">
                     {labelTitle}
                 </label>
             )}

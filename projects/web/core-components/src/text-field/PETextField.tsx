@@ -16,7 +16,7 @@ export const PETextField = forwardRef(function (
     return (
         <div className="w-full">
             {labelTitle && (
-                <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900 mb-2">
+                <label htmlFor={id} className="block text-base font-medium leading-6 text-gray-900 mb-2">
                     {labelTitle}
                 </label>
             )}
