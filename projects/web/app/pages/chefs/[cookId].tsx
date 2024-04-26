@@ -393,6 +393,8 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                     </div>
 
                     <BookBar
+                        title="Du hast kein Menü gefunden?"
+                        subtitle={`Sende ${cook.user.firstName} direkt eine Anfrage nach deinen Präferenzen`}
                         onLocationSearchTextChange={onLocationSearchTextChange}
                         locationSearchResults={locationSearchResults}
                         selectedLocation={selectedLocation}

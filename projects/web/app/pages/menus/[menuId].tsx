@@ -35,11 +35,11 @@ import debounce from 'lodash/debounce';
 import { CheckCircleIcon, Circle, CircleUser, HandPlatter, MinusIcon, PlusIcon, ShoppingBasket, Sparkles, Utensils, X } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
-import Link from 'next/link';
 
 const publicMenusRedirect = { redirect: { permanent: false, destination: '/menus' } };
 
@@ -512,6 +512,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                     </div>
 
                     <BookBar
+                        title="Veranstaltungsdetails"
                         onLocationSearchTextChange={onLocationSearchTextChange}
                         locationSearchResults={locationSearchResults}
                         selectedLocation={selectedLocation}

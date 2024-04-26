@@ -10,6 +10,8 @@ import {
 import { BookForm } from '../_forms/BookForm';
 
 export interface BookBarProps {
+    title: string;
+    subtitle?: string;
     onLocationSearchTextChange: (changedLocationSearchText: string) => void;
     locationSearchResults: LocationSearchResult[];
     selectedLocation?: LocationSearchResult;
@@ -60,6 +62,8 @@ export interface BookBarProps {
 }
 
 export function BookBar({
+    title,
+    subtitle,
     onLocationSearchTextChange,
     locationSearchResults,
     selectedLocation,
@@ -85,8 +89,11 @@ export function BookBar({
     priceClass,
 }: BookBarProps) {
     return (
-        <div className="sticky top-4 float-none h-full hidden lg:block shadow-lg shadow-orange-500/20 rounded-2xl p-6 w-96">
-            <h1 className="font-bold text-lg">Event Details</h1>
+        <div className="sticky top-4 float-none h-full hidden lg:flex flex-col gap-4 shadow-lg shadow-orange-500/20 rounded-2xl p-6 w-96">
+            <div>
+                <h1 className="font-bold text-xl">{title}</h1>
+                {subtitle && <h2 className="text-lg font-light">{subtitle}</h2>}
+            </div>
             <BookForm
                 onLocationSearchTextChange={onLocationSearchTextChange}
                 locationSearchResults={locationSearchResults}
