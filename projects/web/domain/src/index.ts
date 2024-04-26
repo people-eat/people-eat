@@ -150,7 +150,7 @@ export const defaultSearchParams: SearchParams = {
     locationLongitude: null,
     locationText: null,
     dateString: toDBDateString(addDaysToDate(new Date(), 14)),
-    adults: 2,
+    adults: 4,
     children: 0,
 };
 
