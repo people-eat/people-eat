@@ -347,6 +347,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
 
                         <div className="flex flex-col gap-2">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900">Menüauswahl</h2>
+                            {cook.menus.length < 1 && <span className="text-gray-500">Dieser Koch hat noch keine Menüs erstellt.</span>}
                             <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 xl:gap-x-8 m-4">
                                 {cook.menus.map(
                                     ({
