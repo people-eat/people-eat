@@ -341,7 +341,10 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                         {cook.biography && (
                             <div className="flex flex-col gap-2">
                                 <h2 className="text-3xl font-bold tracking-tight text-gray-900">Über {cook.user.firstName}</h2>
-                                <div className="text-gray-500">{cook.biography}</div>
+                                <span
+                                    className="text-gray-500"
+                                    dangerouslySetInnerHTML={{ __html: cook.biography.split('\n').join('<br />') }}
+                                />
                             </div>
                         )}
 

@@ -268,7 +268,9 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                     <PEProfileCard title="Bio" className="flex flex-col gap-4 flex-1">
                         {!editBioOn && (
                             <>
-                                {cookProfile.biography && <span>{cookProfile.biography}</span>}
+                                {cookProfile.biography && (
+                                    <span dangerouslySetInnerHTML={{ __html: cookProfile.biography.split('\n').join('<br />') }} />
+                                )}
                                 {!cookProfile.biography && (
                                     <span>
                                         Deine Bio ist noch leer. Füge eine Profilbeschreibung hinzu in der du über dich, deinen Werdegang
