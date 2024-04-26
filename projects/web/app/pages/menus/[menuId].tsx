@@ -468,7 +468,6 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
                         {menu.description && (
                             <div className="flex flex-col gap-2">
-                                <div className="font-bold text-gray-900 text-3xl">Über das Menü</div>
                                 <div className="text-gray-500">{menu.description}</div>
                             </div>
                         )}
@@ -480,6 +479,13 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                 ist dieses automatisch ausgewählt.
                             </span>
                         </div>
+
+                        {menu.greetingFromKitchen && (
+                            <div className="flex flex-col gap-2">
+                                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
+                                <span className="textxl text-gray-500">{menu.greetingFromKitchen}</span>
+                            </div>
+                        )}
 
                         {sortedCourses.map(({ courseId, title, mealOptions }) => (
                             <div key={courseId} className="flex flex-col gap-10 mb-8">
