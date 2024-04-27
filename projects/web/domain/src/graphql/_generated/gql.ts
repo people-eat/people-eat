@@ -25,6 +25,7 @@ const documents = {
     "mutation CreateOneUserByEmailAddress($request: CreateOneUserByEmailAddressRequest!, $profilePicture: Upload) {\n  users {\n    success: createOneByEmailAddress(\n      request: $request\n      profilePicture: $profilePicture\n    )\n  }\n}": types.CreateOneUserByEmailAddressDocument,
     "mutation ExpireCurrentSession($userId: String!) {\n  users {\n    sessions(userId: $userId) {\n      success: expireCurrent\n    }\n  }\n}": types.ExpireCurrentSessionDocument,
     "mutation CreateOneUserBookingRequest($request: CreateBookingRequestRequest!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      createOne(request: $request) {\n        success\n        clientSecret\n        bookingRequestId\n      }\n    }\n  }\n}": types.CreateOneUserBookingRequestDocument,
+    "mutation CreateOneUserBookingRequestChatMessage($request: CreateChatMessageRequest!, $bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      chatMessages(bookingRequestId: $bookingRequestId) {\n        success: createOne(request: $request)\n      }\n    }\n  }\n}": types.CreateOneUserBookingRequestChatMessageDocument,
     "mutation CreateOneUserGlobalBookingRequest($userId: String!, $request: CreateOneGlobalBookingRequestRequest!) {\n  users {\n    globalBookingRequests(userId: $userId) {\n      success: createOne(request: $request)\n    }\n  }\n}": types.CreateOneUserGlobalBookingRequestDocument,
     "mutation UpdateCookBiography($cookId: String!, $biography: String!) {\n  cooks {\n    success: updateBiography(cookId: $cookId, biography: $biography)\n  }\n}": types.UpdateCookBiographyDocument,
     "mutation UpdateCookIsVisible($cookId: String!, $isVisible: Boolean!) {\n  cooks {\n    success: updateIsVisible(cookId: $cookId, isVisible: $isVisible)\n  }\n}": types.UpdateCookIsVisibleDocument,
@@ -166,6 +167,10 @@ export function gql(source: "mutation ExpireCurrentSession($userId: String!) {\n
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation CreateOneUserBookingRequest($request: CreateBookingRequestRequest!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      createOne(request: $request) {\n        success\n        clientSecret\n        bookingRequestId\n      }\n    }\n  }\n}"): (typeof documents)["mutation CreateOneUserBookingRequest($request: CreateBookingRequestRequest!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      createOne(request: $request) {\n        success\n        clientSecret\n        bookingRequestId\n      }\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateOneUserBookingRequestChatMessage($request: CreateChatMessageRequest!, $bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      chatMessages(bookingRequestId: $bookingRequestId) {\n        success: createOne(request: $request)\n      }\n    }\n  }\n}"): (typeof documents)["mutation CreateOneUserBookingRequestChatMessage($request: CreateChatMessageRequest!, $bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      chatMessages(bookingRequestId: $bookingRequestId) {\n        success: createOne(request: $request)\n      }\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

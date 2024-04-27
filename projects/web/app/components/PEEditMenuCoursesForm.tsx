@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { CreateMenuCourseForm, MealCard } from '@people-eat/web-components';
 import { PEButton, PEDialog, PETextField } from '@people-eat/web-core-components';
 import { GetCookProfileMenuPageDataQuery, Unpacked, UpdateCookMenuCourseTitleDocument } from '@people-eat/web-domain';
@@ -5,9 +6,8 @@ import classNames from 'classnames';
 import { Plus, Save } from 'lucide-react';
 import { CreateMenuCourseFormInputs } from 'projects/web/components/src/_forms/CreateMenuCourseForm';
 import { useEffect, useState } from 'react';
-import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client';
+import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
 
 interface PEEditMenuCoursesFormInputs {
     greetingFromKitchen: string;
@@ -183,7 +183,7 @@ export function PEEditMenuCoursesForm({
                         ))}
                     </div>
 
-                    {/* {coursesInEditMode && (
+                    {coursesInEditMode && (
                         <button
                             role="button"
                             className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
@@ -195,23 +195,9 @@ export function PEEditMenuCoursesForm({
                             <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
                             <span className="mt-2 block text-sm text-gray-900">Gang hinzufügen</span>
                         </button>
-                    )} */}
+                    )}
                 </div>
             ))}
-
-            {/* TODO: delete this following block after the index topic is fixed on the server side */}
-            {coursesInEditMode && (
-                <button
-                    role="button"
-                    className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-                    onClick={() => {
-                        setCreateCourseDialogOpen(true);
-                    }}
-                >
-                    <Plus className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
-                    <span className="mt-2 block text-sm text-gray-900">Gang hinzufügen</span>
-                </button>
-            )}
 
             <PEDialog open={createCourseDialogOpen} onClose={() => setCreateCourseDialogOpen(false)}>
                 <CreateMenuCourseForm

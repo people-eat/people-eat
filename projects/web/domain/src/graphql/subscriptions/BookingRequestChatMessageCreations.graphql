@@ -1,0 +1,5 @@
+subscription BookingRequestChatMessageCreations($bookingRequestId: String!) {
+    bookingRequestChatMessageCreations(bookingRequestId: $bookingRequestId) {
+        ...ChatMessage
+    }
+}
