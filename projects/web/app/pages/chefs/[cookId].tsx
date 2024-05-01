@@ -128,7 +128,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         });
 
-        const cook = result.data.publicCooks.findOne!;
+        const cook = result.data.publicCooks.findOne;
+
+        if (!cook) return publicCooksRedirect;
 
         return {
             props: {

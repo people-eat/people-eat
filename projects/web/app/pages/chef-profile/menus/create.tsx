@@ -35,6 +35,7 @@ import { CreateMealDialog } from '../../../components/CreateMealDialog';
 import { PEAddMealToCourseDialog } from '../../../components/PEAddMealToCourseDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
+import Image from 'next/image';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -159,6 +160,10 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
         },
     });
 
+    const mealImageUrls = courses.flatMap(({ mealOptions }) => mealOptions.flatMap(({ imageUrl }) => imageUrl)).filter(Boolean) as string[];
+
+    const [keyMealOptionIndex, setKeyMealOptionIndex] = useState<number>(0);
+
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
     const { basePrice, basePriceCustomers, pricePerAdult, pricePerChild } = watch();
@@ -202,6 +207,8 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
             variables: {
                 cookId,
                 menu: {
+                    // @todo: add check if option for this index even exists
+                    keyMealOptionIndex,
                     title,
                     description,
                     basePrice: basePrice * 100,
@@ -284,7 +291,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                         </ol>
                     </nav>
 
-                    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onCreate)}>
+                    <form className="flex flex-col gap-8" onSubmit={handleSubmit(onCreate)}>
                         {currentStepIndex === 0 && (
                             <>
                                 <PETextField
@@ -340,6 +347,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         optionTitle={(o) => o}
                                         optionIdentifier={(o) => o}
                                     />
+
                                     {greetingFromKitchenEnabled && (
                                         <div className="w-full">
                                             <PETextField
@@ -431,6 +439,36 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     errorMessage={errors.description?.message}
                                     {...register('description', { required: 'Dein Menü braucht noch eine Beschreibung.' })}
                                 />
+
+                                <div className="flex flex-col gap-4">
+                                    <label className="block text-base font-medium leading-6 text-gray-900">
+                                        Titelbild für dein Menü auswählen
+                                    </label>
+
+                                    {mealImageUrls.length > 0 && (
+                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                            {mealImageUrls.map((mealImageUrl, index) => (
+                                                <Image
+                                                    key={index}
+                                                    src={mealImageUrl}
+                                                    alt=""
+                                                    width={400}
+                                                    height={400}
+                                                    className={classNames('rounded-2xl shadow-lg', {
+                                                        'ring-2 ring-orange-600': keyMealOptionIndex === mealImageUrl,
+                                                    })}
+                                                    onClick={() => setKeyMealOptionIndex(mealImageUrl)}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {mealImageUrls.length < 1 && (
+                                        <div className="text-gray-400">
+                                            Keine der Gerichtsoptionen deiner konfigurierten Gänge hat ein Bild.
+                                        </div>
+                                    )}
+                                </div>
 
                                 <PEButton
                                     title="Weiter"

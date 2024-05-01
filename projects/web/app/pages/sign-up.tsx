@@ -1,9 +1,8 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, SignUpForm, SignUpFormInputs } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-core-components';
+import { PEAlert, PELabelLink } from '@people-eat/web-core-components';
 import { CreateOneUserByEmailAddressDocument, GetPageDataDocument } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { createApolloClient } from '../network/apolloClients';
 
@@ -60,14 +59,21 @@ export default function SignUpPage() {
 
             <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <Image
+                    {/* <Image
                         className="mx-auto h-10 w-auto hidden md:block mb-10"
                         src="/people-eat-logo-title.png"
                         alt="PeopleEat Firmen Logo"
                         width={800}
                         height={240}
-                    />
-                    <h2 className="text-2xl font-bold leading-9 tracking-tight text-gray-900">Einen Gastgeberaccount erstellen</h2>
+                    /> */}
+
+                    <h1 className="text-2xl font-bold mb-4">Registrierung</h1>
+
+                    <div className="mb-8 flex gap-2">
+                        <PELabelLink href="" title="Als Gastgeber" selected />
+                        <PELabelLink href="/chef-sign-up" title="Als Koch" selected={false} />
+                    </div>
+                    <h2 className="text-xl font-bold leading-9 tracking-tight text-gray-900">Einen Gastgeberaccount erstellen</h2>
                 </div>
 
                 <SignUpForm

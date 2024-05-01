@@ -10,7 +10,6 @@ import {
     SignedInUser,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { createApolloClient } from '../network/apolloClients';
@@ -98,14 +97,14 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
 
             <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <Image
+                    {/* <Image
                         className="mx-auto h-10 w-auto hidden md:block mb-10"
                         src="/people-eat-logo-title.png"
                         alt="PeopleEat Firmen Logo"
                         width={800}
                         height={240}
-                    />
-                    <h2 className="text-2xl font-bold leading-9 tracking-tight text-gray-900">Einen Kochaccount erstellen</h2>
+                    /> */}
+                    <h1 className="text-2xl font-bold leading-9 tracking-tight text-gray-900">Einen Kochaccount erstellen</h1>
                 </div>
 
                 <CookSignUpForm

@@ -1028,6 +1028,7 @@ export type CreateOneMenuRequest = {
   description: Scalars['String']['input'];
   greetingFromKitchen?: InputMaybe<Scalars['String']['input']>;
   isVisible: Scalars['Boolean']['input'];
+  keyMealOptionIndex?: InputMaybe<Scalars['UnsignedInt']['input']>;
   kitchenId?: InputMaybe<Scalars['String']['input']>;
   preparationTime: Scalars['UnsignedInt']['input'];
   pricePerAdult: Scalars['UnsignedInt']['input'];
@@ -1349,6 +1350,7 @@ export type Menu = {
   currencyCode: CurrencyCode;
   description: Scalars['String']['output'];
   greetingFromKitchen?: Maybe<Scalars['String']['output']>;
+  imageUrl?: Maybe<Scalars['URL']['output']>;
   imageUrls: Array<Scalars['URL']['output']>;
   isVisible: Scalars['Boolean']['output'];
   kitchen?: Maybe<Kitchen>;

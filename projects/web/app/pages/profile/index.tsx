@@ -87,6 +87,11 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
                             <PELink type="secondary" title="Zum Kochprofil" href="/chef-profile" />
                         </div>
                     )}
+                    {!profile.isCook && (
+                        <div>
+                            <PELink type="primary" title="Als Koch registrieren" href="/chef-sign-up" />
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex gap-8 flex-col lg:flex-row">
