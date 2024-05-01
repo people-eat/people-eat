@@ -122,7 +122,7 @@ interface ToCostBreakdownInput {
 }
 
 function toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, menu }: ToCostBreakdownInput): CostBreakdown {
-    const travelExpenses: number | undefined = distance && distance * menu.cook.travelExpenses;
+    const travelExpenses: number | undefined = distance && distance * menu.cook.travelExpenses * 2;
 
     const menuPrice = calculateMenuPrice(adults, children, menu.basePrice, menu.basePriceCustomers, menu.pricePerAdult, menu.pricePerChild);
 
