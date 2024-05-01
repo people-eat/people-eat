@@ -27,6 +27,7 @@ import {
 import classNames from 'classnames';
 import { ArrowDown, ArrowUp, Car, CheckIcon, HandCoins, Plus } from 'lucide-react';
 import { GetServerSideProps } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ParticipantsPicker } from 'projects/web/components/src/search-bar/PEParticipantsPicker';
 import { useEffect, useState } from 'react';
@@ -35,7 +36,6 @@ import { CreateMealDialog } from '../../../components/CreateMealDialog';
 import { PEAddMealToCourseDialog } from '../../../components/PEAddMealToCourseDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
-import Image from 'next/image';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -162,7 +162,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
 
     const mealImageUrls = courses.flatMap(({ mealOptions }) => mealOptions.flatMap(({ imageUrl }) => imageUrl)).filter(Boolean) as string[];
 
-    const [keyMealOptionIndex, setKeyMealOptionIndex] = useState<number>(0);
+    const [keyMealOptionIndex] = useState<number>(0); // setKeyMealOptionIndex
 
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
@@ -455,9 +455,9 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                     width={400}
                                                     height={400}
                                                     className={classNames('rounded-2xl shadow-lg', {
-                                                        'ring-2 ring-orange-600': keyMealOptionIndex === mealImageUrl,
+                                                        // 'ring-2 ring-orange-600': keyMealOptionIndex === mealImageUrl,
                                                     })}
-                                                    onClick={() => setKeyMealOptionIndex(mealImageUrl)}
+                                                    onClick={() => undefined} // setKeyMealOptionIndex(mealImageUrl)
                                                 />
                                             ))}
                                         </div>
