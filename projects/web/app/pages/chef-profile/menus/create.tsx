@@ -160,9 +160,11 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
         },
     });
 
-    const mealImageUrls = courses.flatMap(({ mealOptions }) => mealOptions.flatMap(({ imageUrl }) => imageUrl)).filter(Boolean) as string[];
+    const numberOfMealOptionsWithImages = courses
+        .flatMap(({ mealOptions }) => mealOptions.flatMap(({ imageUrl }) => imageUrl))
+        .filter(Boolean).length;
 
-    const [keyMealOptionIndex] = useState<number>(0); // setKeyMealOptionIndex
+    const [keyMealOption, setKeyMealOption] = useState<{ index: number; courseIndex: number }>({ index: 0, courseIndex: 0 });
 
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
@@ -208,7 +210,8 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                 cookId,
                 menu: {
                     // @todo: add check if option for this index even exists
-                    keyMealOptionIndex,
+                    keyMealOptionCourseIndex: keyMealOption.courseIndex,
+                    keyMealOptionIndex: keyMealOption.index,
                     title,
                     description,
                     basePrice: basePrice * 100,
@@ -445,25 +448,35 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         Titelbild für dein Menü auswählen
                                     </label>
 
-                                    {mealImageUrls.length > 0 && (
+                                    {numberOfMealOptionsWithImages > 0 && (
                                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                            {mealImageUrls.map((mealImageUrl, index) => (
-                                                <Image
-                                                    key={index}
-                                                    src={mealImageUrl}
-                                                    alt=""
-                                                    width={400}
-                                                    height={400}
-                                                    className={classNames('rounded-2xl shadow-lg', {
-                                                        // 'ring-2 ring-orange-600': keyMealOptionIndex === mealImageUrl,
-                                                    })}
-                                                    onClick={() => undefined} // setKeyMealOptionIndex(mealImageUrl)
-                                                />
-                                            ))}
+                                            {courses.map((course, courseIndex) =>
+                                                course.mealOptions.map((mealOption, mealOptionIndex) => (
+                                                    <>
+                                                        {mealOption.imageUrl && (
+                                                            <Image
+                                                                key={mealOptionIndex}
+                                                                src={mealOption.imageUrl!}
+                                                                alt=""
+                                                                width={400}
+                                                                height={400}
+                                                                className={classNames('rounded-2xl shadow-lg', {
+                                                                    'ring-2 ring-orange-600':
+                                                                        keyMealOption.index === mealOptionIndex &&
+                                                                        keyMealOption.courseIndex === courseIndex,
+                                                                })}
+                                                                onClick={() =>
+                                                                    setKeyMealOption({ index: mealOptionIndex, courseIndex: courseIndex })
+                                                                }
+                                                            />
+                                                        )}
+                                                    </>
+                                                )),
+                                            )}
                                         </div>
                                     )}
 
-                                    {mealImageUrls.length < 1 && (
+                                    {numberOfMealOptionsWithImages < 1 && (
                                         <div className="text-gray-400">
                                             Keine der Gerichtsoptionen deiner konfigurierten Gänge hat ein Bild.
                                         </div>
