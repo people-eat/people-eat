@@ -16,11 +16,13 @@ import {
     KitchenOption,
     UpdateCookMenuDescriptionDocument,
     UpdateCookMenuIsVisibleDocument,
+    UpdateCookMenuKeyMealOptionDocument,
     UpdateCookMenuKitchenIdDocument,
     UpdateCookMenuPreparationTimeDocument,
     UpdateCookMenuTitleDocument,
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -32,6 +34,11 @@ export interface PEEditMenuCommonFormInputs {
     categories: CategoryOption[];
     preparationTime: number;
     isVisible: boolean;
+    keyMealOption?: {
+        imageUrl: string;
+        courseId: string;
+        index: number;
+    };
 }
 
 export interface PEEditMenuCommonProps {
@@ -77,12 +84,19 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
             kitchen: menu.kitchen ?? undefined,
             preparationTime: menu.preparationTime,
             isVisible: menu.isVisible,
+            keyMealOption: menu.imageUrl
+                ? {
+                      imageUrl: menu.imageUrl,
+                      courseId: '',
+                      index: 0,
+                  }
+                : undefined,
         },
     });
 
     const { fields: categories, append, remove } = useFieldArray({ control, name: 'categories' });
 
-    const { title, description, kitchen, preparationTime, isVisible } = watch();
+    const { title, description, kitchen, preparationTime, isVisible, keyMealOption } = watch();
 
     const [requestTitleUpdate] = useMutation(UpdateCookMenuTitleDocument);
     const [requestDescriptionUpdate] = useMutation(UpdateCookMenuDescriptionDocument);
@@ -90,6 +104,7 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
     const [requestKitchenUpdate] = useMutation(UpdateCookMenuKitchenIdDocument);
     const [requestPreparationTimeUpdate] = useMutation(UpdateCookMenuPreparationTimeDocument);
     const [requestIsVisibleUpdate] = useMutation(UpdateCookMenuIsVisibleDocument);
+    const [requestKeyMealOptionUpdate] = useMutation(UpdateCookMenuKeyMealOptionDocument);
     const [deleteMenu] = useMutation(DeleteOneCookMenuDocument);
 
     function onSave() {
@@ -101,6 +116,15 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
         if (preparationTime !== menu.preparationTime)
             requestPreparationTimeUpdate({ variables: { cookId, menuId, preparationTime } }).then(onChangesApplied);
         if (isVisible !== menu.isVisible) requestIsVisibleUpdate({ variables: { cookId, menuId, isVisible } }).then(onChangesApplied);
+
+        if (keyMealOption?.imageUrl !== menu.imageUrl)
+            requestKeyMealOptionUpdate({
+                variables: {
+                    cookId,
+                    menuId,
+                    keyMealOption: keyMealOption ? { courseId: keyMealOption.courseId, index: keyMealOption.index } : undefined,
+                },
+            }).then(onChangesApplied);
 
         setEditModeOn(false);
     }
@@ -121,7 +145,8 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
         kitchen?.kitchenId !== menu.kitchen?.kitchenId ||
         preparationTime !== menu.preparationTime ||
         isVisible !== menu.isVisible ||
-        !compareSets(originalCategoryIdSet, categoryIdSet);
+        !compareSets(originalCategoryIdSet, categoryIdSet) ||
+        keyMealOption?.imageUrl !== menu.imageUrl;
 
     if (editModeOn) {
         return (
@@ -136,6 +161,34 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
                         }}
                     />
                     {changesToBeSaved && <PEButton title="Speichern" type="submit" />}
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {menu.courses.map((course, courseIndex) =>
+                        course.mealOptions.map((mealOption, mealOptionIndex) => (
+                            <>
+                                {mealOption.meal.imageUrl && (
+                                    <Image
+                                        key={mealOptionIndex}
+                                        src={mealOption.meal.imageUrl}
+                                        alt=""
+                                        width={400}
+                                        height={400}
+                                        className={classNames('rounded-2xl shadow-lg', {
+                                            'ring-2 ring-orange-600': keyMealOption?.imageUrl === mealOption.meal.imageUrl,
+                                        })}
+                                        onClick={() =>
+                                            setValue('keyMealOption', {
+                                                imageUrl: mealOption.meal.imageUrl!,
+                                                courseId: course.courseId,
+                                                index: mealOption.index,
+                                            })
+                                        }
+                                    />
+                                )}
+                            </>
+                        )),
+                    )}
                 </div>
 
                 <PETextField
@@ -224,6 +277,12 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
                     Menü löschen
                 </button>
             </div>
+
+            {menu.imageUrl && (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <Image src={menu.imageUrl} alt="" width={400} height={400} className="rounded-2xl shadow-lg" />
+                </div>
+            )}
 
             <div className="flex flex-col gap-2">
                 <h1 className="text-2xl font-bold">{menu.title}</h1>

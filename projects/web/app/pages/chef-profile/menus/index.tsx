@@ -67,7 +67,7 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                         ({
                             menuId,
                             title,
-                            imageUrls,
+                            imageUrl,
                             kitchen,
                             categories,
                             basePrice,
@@ -79,7 +79,7 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                             <Link key={menuId} href={{ pathname: '/chef-profile/menus/' + menuId }}>
                                 <MenuCard
                                     title={title}
-                                    imageUrls={imageUrls}
+                                    imageUrls={imageUrl ? [imageUrl] : []}
                                     kitchenTitle={kitchen?.title}
                                     cook={{
                                         firstName: signedInUser.firstName,

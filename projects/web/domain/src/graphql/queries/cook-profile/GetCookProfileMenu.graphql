@@ -3,6 +3,7 @@ query GetCookProfileMenu($menuId: String!, $cookId: String!) {
         menus(cookId: $cookId) {
             findOne(menuId: $menuId) {
                 menuId
+                imageUrl
                 isVisible
                 title
                 description

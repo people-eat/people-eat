@@ -1,0 +1,7 @@
+mutation UpdateCookMenuKeyMealOption($menuId: String!, $cookId: String!, $keyMealOption: UpdateOneMenuKeyMealOptionRequest) {
+    cooks {
+        menus(cookId: $cookId) {
+            success: updateKeyMealOption(menuId: $menuId, keyMealOption: $keyMealOption)
+        }
+    }
+}
