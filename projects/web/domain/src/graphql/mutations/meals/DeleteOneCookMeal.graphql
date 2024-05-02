@@ -1,7 +1,18 @@
 mutation DeleteOneCookMeal($mealId: String!, $cookId: String!) {
     cooks {
         meals(cookId: $cookId) {
-            success: deleteOne(mealId: $mealId)
+            deleteOne(mealId: $mealId) {
+                ... on DeleteMealSuccessResult {
+                    deletedAt
+                }
+                ... on DeleteMealRequiredForMenuResult {
+                    menuId
+                    menuTitle
+                }
+                ... on DeleteMealErrorResult {
+                    failedAt
+                }
+            }
         }
     }
 }

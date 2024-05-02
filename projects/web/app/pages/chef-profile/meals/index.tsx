@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, MealCard, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
-import { PELabelMultiSelection, PELink } from '@people-eat/web-core-components';
+import { PEAlert, PELabelMultiSelection, PELink } from '@people-eat/web-core-components';
 import {
     DeleteOneCookMealDocument,
     GetCookProfileMealsDocument,
@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { CookProfileMealDialog } from '../../../components/CookProfileMealDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
+import { useRouter } from 'next/router';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -50,6 +51,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function CookProfileMealsPage({ signedInUser, initialMeals }: ServerSideProps) {
+    const router = useRouter();
     const cookId = signedInUser.userId;
 
     const [meals, setMeals] = useState(initialMeals);
@@ -72,11 +74,18 @@ export default function CookProfileMealsPage({ signedInUser, initialMeals }: Ser
 
     const [deleteMeal, { loading }] = useMutation(DeleteOneCookMealDocument);
 
+    const [requiredForMenu, setRequiredForMenu] = useState<{ menuId: string; title: string } | undefined>();
+
     async function onDelete(mealId: string) {
         const result = await deleteMeal({ variables: { cookId, mealId } });
-        if (result.data?.cooks.meals.success) {
+
+        if (result.data?.cooks.meals.deleteOne.__typename === 'DeleteMealSuccessResult') {
             setSelectedMealIndex(undefined);
             updateMeals();
+        }
+
+        if (result.data?.cooks.meals.deleteOne.__typename === 'DeleteMealRequiredForMenuResult') {
+            setRequiredForMenu({ menuId: result.data?.cooks.meals.deleteOne.menuId, title: result.data?.cooks.meals.deleteOne.menuTitle });
         }
     }
 
@@ -85,6 +94,21 @@ export default function CookProfileMealsPage({ signedInUser, initialMeals }: Ser
             <PEHeader signedInUser={signedInUser} />
 
             <LoadingDialog active={loading} />
+
+            <PEAlert
+                open={Boolean(requiredForMenu)}
+                type="INFO"
+                title="Gericht wird in Menü verwendet"
+                subtitle={`Das zu löschende Gericht ist aktuell noch Teil der Auswahloptionen in mindestens einem deiner Menüs '${requiredForMenu?.title ?? ''}. Entferne es aus den Gerichtsoptionen um mit dem Löschen fortzufahren.'`}
+                primaryButton={{
+                    title: 'Zu Menü',
+                    onClick: () => router.push(`/chef-profile/menus/${requiredForMenu?.menuId ?? ''}?tab=1`),
+                }}
+                secondaryButton={{
+                    title: 'Abbrechen',
+                    onClick: () => setRequiredForMenu(undefined),
+                }}
+            />
 
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="MEALS" />
