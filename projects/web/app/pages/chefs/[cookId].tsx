@@ -307,14 +307,14 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="flex gap-8">
                     <div className="flex-1 flex flex-col gap-12">
-                        <div className="flex gap-8 flex-col md:flex-row items-center">
+                        <div className="flex gap-8 items-center">
                             {cook.user.profilePictureUrl && (
                                 <Image
                                     src={cook.user.profilePictureUrl}
                                     alt=""
                                     width={400}
                                     height={400}
-                                    className="object-cover object-center rounded-full w-44"
+                                    className="object-cover object-center rounded-lg w-44"
                                 />
                             )}
 
@@ -444,10 +444,10 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                     />
                 </div>
 
-                <div className="mx-auto max-w-7xl py-24 sm:px-2 sm:py-32 lg:px-4 block">
+                <div className="mx-auto max-w-7xl sm:px-2 lg:px-4 block py-10">
                     <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
                         <div className="max-w-3xl">
-                            <h2 className="text-4xl font-bold tracking-tight text-gray-900">
+                            <h2 className="text-3xl font-bold tracking-tight text-gray-900">
                                 Du bist der Gastgeber, wir kümmern uns um den Rest
                             </h2>
                             <p className="mt-4 text-gray-500">
@@ -471,7 +471,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
                     <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
                         <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
                         <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
