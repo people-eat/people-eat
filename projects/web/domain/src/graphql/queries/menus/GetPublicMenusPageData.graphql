@@ -25,7 +25,7 @@ query GetPublicMenusPageData($request: FindManyPublicMenusRequest!) {
                 categoryId
                 title
             }
-            imageUrls
+            imageUrl
             basePrice
             basePriceCustomers
             pricePerAdult

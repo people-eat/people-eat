@@ -44,7 +44,7 @@ query GetHomePageData {
                 categoryId
                 title
             }
-            imageUrls
+            imageUrl
             basePrice
             basePriceCustomers
             pricePerAdult

@@ -358,7 +358,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                                     ({
                                         menuId,
                                         title,
-                                        imageUrls,
+                                        imageUrl,
                                         kitchen,
                                         categories,
                                         basePrice,
@@ -369,7 +369,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                                         <Link key={menuId} href={'/menus/' + menuId}>
                                             <MenuCard
                                                 title={title}
-                                                imageUrls={imageUrls}
+                                                imageUrls={imageUrl ? [imageUrl] : []}
                                                 kitchenTitle={kitchen?.title}
                                                 cook={{
                                                     firstName: '',

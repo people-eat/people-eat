@@ -42,7 +42,7 @@ query GetPublicCookPageData($cookId: String!) {
                     categoryId
                     title
                 }
-                imageUrls
+                imageUrl
                 currencyCode
                 description
                 greetingFromKitchen

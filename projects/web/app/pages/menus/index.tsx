@@ -136,7 +136,7 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
                             ({
                                 menuId,
                                 title,
-                                imageUrls,
+                                imageUrl,
                                 kitchen,
                                 cook,
                                 categories,
@@ -155,7 +155,7 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
                                 >
                                     <MenuCard
                                         title={title}
-                                        imageUrls={imageUrls}
+                                        imageUrls={imageUrl ? [imageUrl] : []}
                                         kitchenTitle={kitchen?.title}
                                         cook={{
                                             firstName: cook.user.firstName,

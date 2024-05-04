@@ -48,7 +48,7 @@ query GetPublicMenuPageData($menuId: String!) {
                     }
                 }
             }
-            imageUrls
+            imageUrl
             basePrice
             basePriceCustomers
             pricePerAdult
