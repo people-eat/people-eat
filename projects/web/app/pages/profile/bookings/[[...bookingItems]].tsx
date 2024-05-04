@@ -103,6 +103,8 @@ export default function ProfileBookingsPage({
 }: ServerSideProps) {
     const router = useRouter();
 
+    const totalNumberOfBookingRequests = globalBookingRequests.length + bookingRequests.length;
+
     return (
         <div>
             <PEHeader
@@ -126,7 +128,7 @@ export default function ProfileBookingsPage({
                             <h1 className="text-xl font-bold">Buchungsanfragen</h1>
                             <Filter size={16} />
                         </div>
-                        {globalBookingRequests.length + bookingRequests.length > 0 && (
+                        {totalNumberOfBookingRequests > 0 && (
                             <ul>
                                 {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
                                     <GlobalBookingRequestRow
@@ -156,7 +158,7 @@ export default function ProfileBookingsPage({
                             </ul>
                         )}
 
-                        {globalBookingRequests.length === 0 && <p>Noch keine Buchungsanfragen</p>}
+                        {totalNumberOfBookingRequests < 1 && <p className="px-4">Noch keine Buchungsanfragen</p>}
                     </div>
 
                     <div

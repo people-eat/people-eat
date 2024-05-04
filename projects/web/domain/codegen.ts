@@ -6,6 +6,7 @@ const config: CodegenConfig = {
         'projects/web/domain/src/graphql/queries/**/*.graphql',
         'projects/web/domain/src/graphql/mutations/**/*.graphql',
         'projects/web/domain/src/graphql/fragments/**/*.graphql',
+        'projects/web/domain/src/graphql/subscriptions/**/*.graphql',
     ],
     hooks: {
         // afterAllFileWrite: [

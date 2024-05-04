@@ -47,10 +47,13 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         });
 
+        const sortedCooks = [...result.data.publicCooks.findMany];
+        sortedCooks.sort((a, b) => a.menuCount - b.menuCount);
+
         return {
             props: {
                 signedInUser: result.data.users.signedInUser ?? null,
-                cooks: result.data.publicCooks.findMany,
+                cooks: sortedCooks,
                 searchParams,
             },
         };

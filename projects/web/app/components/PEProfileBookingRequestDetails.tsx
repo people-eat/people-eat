@@ -39,7 +39,7 @@ const profileBookingRequestDetailsTabIcons: Record<ProfileBookingRequestDetailsT
 export interface PEProfileBookingRequestDetailsProps {
     userId: string;
     selectedTab: ProfileBookingRequestDetailsTab;
-    bookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>>;
+    bookingRequest: NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>;
 }
 
 export function PEProfileBookingRequestDetails({ userId, selectedTab, bookingRequest }: PEProfileBookingRequestDetailsProps) {
@@ -139,7 +139,7 @@ export function PEProfileBookingRequestDetails({ userId, selectedTab, bookingReq
 
             {selectedTab === 'CHAT' && (
                 <div className="flex flex-col gap-8">
-                    <ProfileBookingRequestChat userId={userId} bookingRequestId={bookingRequest.bookingRequestId} />
+                    <ProfileBookingRequestChat userId={userId} bookingRequest={bookingRequest} />
                 </div>
             )}
 
