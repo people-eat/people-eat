@@ -140,6 +140,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
         formState: { errors },
     } = useForm<CreateMenuFormInputs>({
         defaultValues: {
+            description: '',
             basePrice: 100,
             basePriceCustomers: 2,
             pricePerAdult: 50,
@@ -440,7 +441,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     id="description"
                                     labelTitle="Beschreibung"
                                     errorMessage={errors.description?.message}
-                                    {...register('description', { required: 'Dein Menü braucht noch eine Beschreibung.' })}
+                                    {...register('description')}
                                 />
 
                                 <div className="flex flex-col gap-4">

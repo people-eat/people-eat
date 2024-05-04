@@ -209,7 +209,7 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
                     id="description"
                     labelTitle="Beschreibung"
                     errorMessage={errors.description?.message}
-                    {...register('description', { required: 'Dein Menü braucht noch eine Beschreibung.' })}
+                    {...register('description')}
                 />
 
                 <div className="relative">
