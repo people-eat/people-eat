@@ -44,13 +44,10 @@ interface ServerSideProps {
     signedInUser: SignedInUser;
     initialCookProfile: NonNullable<GetCookProfilePersonalInformationPageDataQuery['cooks']['findOne']>;
     languages: NonNullable<GetCookProfilePersonalInformationPageDataQuery['languages']['findAll']>;
-    updateWalletStatus: boolean;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
-
-    const updateWalletStatus = typeof query['update-wallet-status'] === 'string';
 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
@@ -70,7 +67,6 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 signedInUser,
                 initialCookProfile,
                 languages,
-                updateWalletStatus,
             },
         };
     } catch (error) {
@@ -78,7 +74,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function CookProfilePage({ signedInUser, initialCookProfile, languages, updateWalletStatus }: ServerSideProps) {
+export default function CookProfilePage({ signedInUser, initialCookProfile, languages }: ServerSideProps) {
     const router = useRouter();
 
     const cookId = initialCookProfile.cookId;
@@ -206,15 +202,18 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
         loadingUpdateProfilePicture ||
         walletUpdateLoading;
 
+    const updateWalletStatus = typeof router.query['update-wallet-status'] === 'string';
+
     function updateHasStripePayoutMethodActivated() {
-        console.log('Executed');
         requestHasStripePayoutMethodActivatedUpdate()
             .then(() => router.replace({ query: {} }, undefined, { scroll: false }))
             .then(updateCookProfile);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => updateHasStripePayoutMethodActivated, []);
+    useEffect(() => {
+        if (updateWalletStatus) updateHasStripePayoutMethodActivated();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div>
