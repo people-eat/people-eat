@@ -2,6 +2,7 @@ fragment ChatMessage on ChatMessage {
     chatMessageId
     bookingRequestId
     message
+    generated
     createdBy
     createdAt
 }

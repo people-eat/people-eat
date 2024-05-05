@@ -119,6 +119,7 @@ export default function ProfileBookingsPage({
                 />
 
                 <div className="flex gap-4">
+                    {/* Start of side bar */}
                     <div
                         className={classNames('flex-1 px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
                             'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest,
@@ -128,6 +129,7 @@ export default function ProfileBookingsPage({
                             <h1 className="text-xl font-bold">Buchungsanfragen</h1>
                             <Filter size={16} />
                         </div>
+
                         {totalNumberOfBookingRequests > 0 && (
                             <ul>
                                 {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
@@ -161,6 +163,7 @@ export default function ProfileBookingsPage({
                         {totalNumberOfBookingRequests < 1 && <p className="px-4">Noch keine Buchungsanfragen</p>}
                     </div>
 
+                    {/* Start of details */}
                     <div
                         className={classNames('flex-[2] lg:rounded-2xl lg:shadow-lg p-8', {
                             'hidden lg:block': !selectedBookingRequest && !selectedGlobalBookingRequest,

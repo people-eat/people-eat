@@ -1,7 +1,7 @@
 import { CreateSupportRequestForm, CreateSupportRequestFormInputs, MealCard } from '@people-eat/web-components';
 import { PETabSingleSelection } from '@people-eat/web-core-components';
 import {
-    GetProfileBookingsPageDataQuery,
+    GetCookProfileBookingsPageDataQuery,
     formatPrice,
     toTranslatedFormattedDate,
     translatedBookingRequestStatus,
@@ -9,39 +9,45 @@ import {
 import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ProfileBookingRequestChat } from './ProfileBookingRequestChat';
+import { CookProfileBookingRequestChat } from './CookProfileBookingRequestChat';
 
-const defaultProfileBookingRequestDetailsTab: ProfileBookingRequestDetailsTab = 'EVENT_DETAILS';
+const defaultProfileBookingRequestDetailsTab: CookProfileBookingRequestDetailsTab = 'EVENT_DETAILS';
 
-export function toProfileBookingRequestDetailsTab(value: any): ProfileBookingRequestDetailsTab {
-    return profileBookingRequestDetailsTabs.includes(value) ? value : defaultProfileBookingRequestDetailsTab;
+export function toCookProfileBookingRequestDetailsTab(value: any): CookProfileBookingRequestDetailsTab {
+    return cookProfileBookingRequestDetailsTabs.includes(value) ? value : defaultProfileBookingRequestDetailsTab;
 }
 
-export type ProfileBookingRequestDetailsTab = 'CHAT' | 'EVENT_DETAILS' | 'MENU' | 'SUPPORT';
+export type CookProfileBookingRequestDetailsTab = 'CHAT' | 'EVENT_DETAILS' | 'MENU' | 'SUPPORT';
 
-const profileBookingRequestDetailsTabs: ProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'MENU', 'SUPPORT'];
+const cookProfileBookingRequestDetailsTabs: CookProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'MENU', 'SUPPORT'];
 
-const profileBookingRequestDetailsTabTranslations: Record<ProfileBookingRequestDetailsTab, string> = {
+const cookProfileBookingRequestDetailsTabTranslations: Record<CookProfileBookingRequestDetailsTab, string> = {
     CHAT: 'Chat',
     EVENT_DETAILS: 'Veranstaltung',
     MENU: 'Menü',
     SUPPORT: 'Support',
 };
 
-const profileBookingRequestDetailsTabIcons: Record<ProfileBookingRequestDetailsTab, LucideIcon> = {
+const cookProfileBookingRequestDetailsTabIcons: Record<CookProfileBookingRequestDetailsTab, LucideIcon> = {
     CHAT: MessageCircle,
     EVENT_DETAILS: ReceiptText,
     MENU: CookingPot,
     SUPPORT: Headset,
 };
 
-export interface PEProfileBookingRequestDetailsProps {
+export interface PECookProfileBookingRequestDetailsProps {
     userId: string;
-    selectedTab: ProfileBookingRequestDetailsTab;
-    bookingRequest: NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>;
+    selectedTab: CookProfileBookingRequestDetailsTab;
+    hasStripePayoutMethodActivated: boolean;
+    bookingRequest: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
 }
 
-export function PEProfileBookingRequestDetails({ userId, selectedTab, bookingRequest }: PEProfileBookingRequestDetailsProps) {
+export function PECookProfileBookingRequestDetails({
+    userId,
+    selectedTab,
+    hasStripePayoutMethodActivated,
+    bookingRequest,
+}: PECookProfileBookingRequestDetailsProps) {
     const router = useRouter();
 
     return (
@@ -52,12 +58,12 @@ export function PEProfileBookingRequestDetails({ userId, selectedTab, bookingReq
             </Link>
 
             <PETabSingleSelection
-                options={profileBookingRequestDetailsTabs}
+                options={cookProfileBookingRequestDetailsTabs}
                 selectedOption={selectedTab}
                 selectedOptionChanged={(tab) => tab && router.replace({ query: { ...router.query, tab } }, undefined, { scroll: false })}
-                optionTitle={(o) => profileBookingRequestDetailsTabTranslations[o]}
+                optionTitle={(o) => cookProfileBookingRequestDetailsTabTranslations[o]}
                 optionIdentifier={(o) => o}
-                optionIcon={(o) => profileBookingRequestDetailsTabIcons[o]}
+                optionIcon={(o) => cookProfileBookingRequestDetailsTabIcons[o]}
                 optionNotificationCount={undefined}
             />
 
@@ -138,7 +144,11 @@ export function PEProfileBookingRequestDetails({ userId, selectedTab, bookingReq
 
             {selectedTab === 'CHAT' && (
                 <div className="flex flex-col gap-8">
-                    <ProfileBookingRequestChat userId={userId} bookingRequest={bookingRequest} />
+                    <CookProfileBookingRequestChat
+                        cookId={userId}
+                        hasStripePayoutMethodActivated={hasStripePayoutMethodActivated}
+                        bookingRequest={bookingRequest}
+                    />
                 </div>
             )}
 

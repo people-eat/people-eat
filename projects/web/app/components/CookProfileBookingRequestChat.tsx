@@ -4,37 +4,44 @@ import { PEAlert, PEButton, PETextField } from '@people-eat/web-core-components'
 import {
     BookingRequestChatMessageCreationsDocument,
     ChatMessage,
-    CreateOneUserBookingRequestChatMessageDocument,
-    FindManyUserBookingRequestChatMessagesDocument,
-    GetProfileBookingsPageDataQuery,
-    UserBookingRequestAcceptDocument,
-    UserBookingRequestDeclineDocument,
+    CookBookingRequestAcceptDocument,
+    CookBookingRequestDeclineDocument,
+    CreateOneCookBookingRequestChatMessageDocument,
+    FindManyCookBookingRequestChatMessagesDocument,
+    GetCookProfileBookingsPageDataQuery,
 } from '@people-eat/web-domain';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEChatMessage } from './PEChatMessage';
+import { useRouter } from 'next/router';
 
-export interface ProfileBookingRequestChatProps {
-    userId: string;
-    bookingRequest: NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>;
+export interface CookProfileBookingRequestChatProps {
+    cookId: string;
+    hasStripePayoutMethodActivated: boolean;
+    bookingRequest: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
 }
 
-export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBookingRequestChatProps) {
+export function CookProfileBookingRequestChat({
+    cookId,
+    hasStripePayoutMethodActivated,
+    bookingRequest,
+}: CookProfileBookingRequestChatProps) {
+    const router = useRouter();
     const { bookingRequestId, status, cookAccepted, userAccepted } = bookingRequest;
     const chatBottom = useRef<HTMLDivElement>(null);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
-    const { data } = useQuery(FindManyUserBookingRequestChatMessagesDocument, {
-        variables: { userId, bookingRequestId },
+    const { data } = useQuery(FindManyCookBookingRequestChatMessagesDocument, {
+        variables: { cookId, bookingRequestId },
     });
-    const [accept, { loading: acceptLoading }] = useMutation(UserBookingRequestAcceptDocument, {
-        variables: { userId, bookingRequestId },
+    const [accept, { loading: acceptLoading }] = useMutation(CookBookingRequestAcceptDocument, {
+        variables: { cookId, bookingRequestId },
     });
-    const [decline, { loading: declineLoading }] = useMutation(UserBookingRequestDeclineDocument, {
-        variables: { userId, bookingRequestId },
+    const [decline, { loading: declineLoading }] = useMutation(CookBookingRequestDeclineDocument, {
+        variables: { cookId, bookingRequestId },
     });
 
-    const [send] = useMutation(CreateOneUserBookingRequestChatMessageDocument);
+    const [send] = useMutation(CreateOneCookBookingRequestChatMessageDocument);
 
     const {
         register,
@@ -45,6 +52,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
 
     const [showAcceptDialog, setShowAcceptDialog] = useState(false);
     const [showDeclineDialog, setShowDeclineDialog] = useState(false);
+    const [showStripeNotSetupDialog, setStripeNotSetupDialog] = useState(false);
 
     useSubscription(BookingRequestChatMessageCreationsDocument, {
         variables: { bookingRequestId: bookingRequest.bookingRequestId },
@@ -65,7 +73,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
     }
 
     useEffect(() => {
-        const fetchedChatMessages = data?.users.bookingRequests.chatMessages.findMany;
+        const fetchedChatMessages = data?.cooks.bookingRequests.chatMessages.findMany;
         if (fetchedChatMessages) setChatMessages(fetchedChatMessages);
         setTimeout(() => scrollToChatBottom(), 200);
     }, [data]);
@@ -82,7 +90,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
         <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
                 {sortedChatMessages.map((chatMessage) => (
-                    <PEChatMessage key={chatMessage.chatMessageId} chatMessage={chatMessage} isAuthor={chatMessage.createdBy === userId} />
+                    <PEChatMessage key={chatMessage.chatMessageId} chatMessage={chatMessage} isAuthor={chatMessage.createdBy === cookId} />
                 ))}
                 <div data-element="chat-bottom" ref={chatBottom} />
             </div>
@@ -90,8 +98,8 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
             {status === 'PENDING' && (
                 <form
                     onSubmit={handleSubmit(({ message }) =>
-                        send({ variables: { userId, bookingRequestId, request: { message } } }).then(
-                            ({ data }) => data?.users.bookingRequests.chatMessages.success && setValue('message', ''),
+                        send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
+                            ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),
                         ),
                     )}
                     className="flex gap-4 items-center"
@@ -109,13 +117,16 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
 
             {status === 'OPEN' && (
                 <div className="flex justify-end gap-4">
-                    {cookAccepted === true && userAccepted === null && (
+                    {userAccepted === true && cookAccepted === null && (
                         <>
                             <PEButton title="Ablehnen" onClick={() => setShowDeclineDialog(true)} type="secondary" />
-                            <PEButton onClick={() => setShowAcceptDialog(true)} title="Akzeptieren" />
+                            <PEButton
+                                onClick={() => (hasStripePayoutMethodActivated ? setShowAcceptDialog(true) : setStripeNotSetupDialog(true))}
+                                title="Akzeptieren"
+                            />
                         </>
                     )}
-                    {cookAccepted === null && userAccepted === true && (
+                    {userAccepted === null && cookAccepted === true && (
                         <PEButton onClick={() => setShowDeclineDialog(true)} title="Ablehnen" />
                     )}
                 </div>
@@ -154,6 +165,24 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
                 secondaryButton={{
                     title: 'Abbrechen',
                     onClick: () => setShowDeclineDialog(false),
+                }}
+            />
+
+            <PEAlert
+                open={showStripeNotSetupDialog}
+                type="INFO"
+                title="Wallet notwendig"
+                subtitle="Um Buchungsanfragen akzeptieren zu können, muss die Eirichtung der Wallet abgeschlossen sein."
+                primaryButton={{
+                    title: 'Wallet einrichten',
+                    onClick: () => {
+                        router.push('/chef-profile');
+                        setStripeNotSetupDialog(false);
+                    },
+                }}
+                secondaryButton={{
+                    title: 'Abbrechen',
+                    onClick: () => setStripeNotSetupDialog(false),
                 }}
             />
 
