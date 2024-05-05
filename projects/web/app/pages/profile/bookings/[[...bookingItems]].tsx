@@ -12,7 +12,7 @@ import classNames from 'classnames';
 import { Filter } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     PEProfileBookingRequestDetails,
     ProfileBookingRequestDetailsTab,
@@ -128,6 +128,11 @@ export default function ProfileBookingsPage({
         setGlobalBookingRequests(data?.users.globalBookingRequests.findMany ?? []);
         setSelectedGlobalBookingRequest(data?.users.globalBookingRequests.findOne ?? null);
     }
+
+    useEffect(() => setBookingRequests(initialBookingRequests), [initialBookingRequests]);
+    useEffect(() => setSelectedBookingRequest(initialSelectedBookingRequest), [initialSelectedBookingRequest]);
+    useEffect(() => setGlobalBookingRequests(initialGlobalBookingRequests), [initialGlobalBookingRequests]);
+    useEffect(() => setSelectedGlobalBookingRequest(initialSelectedGlobalBookingRequest), [initialSelectedGlobalBookingRequest]);
 
     const totalNumberOfBookingRequests = globalBookingRequests.length + bookingRequests.length;
 

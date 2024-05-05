@@ -17,7 +17,7 @@ import {
 } from '../../../components/PECookProfileBookingRequestDetails';
 import { createApolloClient } from '../../../network/apolloClients';
 import { useLazyQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         const hasStripePayoutMethodActivated = result.data.cooks.findOne?.hasStripePayoutMethodActivated ?? false;
         const bookingRequests = result.data.cooks.bookingRequests.findMany ?? [];
         const selectedBookingRequest = result.data.cooks.bookingRequests.findOne ?? null;
-
+        console.log('executed');
         return {
             props: {
                 signedInUser,
@@ -96,6 +96,9 @@ export default function CookProfileBookingsPage({
         setBookingRequests(data?.cooks.bookingRequests.findMany ?? []);
         setSelectedBookingRequest(data?.cooks.bookingRequests.findOne ?? null);
     }
+
+    useEffect(() => setBookingRequests(initialBookingRequests), [initialBookingRequests]);
+    useEffect(() => setSelectedBookingRequest(initialSelectedBookingRequest), [initialSelectedBookingRequest]);
 
     return (
         <div>
