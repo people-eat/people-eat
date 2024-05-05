@@ -232,7 +232,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                 type="ERROR"
                 subtitle="Bei dem Versuch deine Wallet einrichtung abzuschließen ist leider ein unerwarteter Fehler aufgetreten. Du kannst es erneut versuchen, sollte dies jedoch nicht funktionieren, setzte dich bitte mit unserem Support in Verbindung. Wir helfen gerne!"
                 primaryButton={{ title: 'Erneut versuchen', onClick: updateHasStripePayoutMethodActivated }}
-                secondaryButton={{ title: 'Okay', onClick: resetUpdateWallet }}
+                secondaryButton={{ title: 'Fehler an Support melden', onClick: resetUpdateWallet }}
             />
 
             <PEHeader signedInUser={signedInUser} />
