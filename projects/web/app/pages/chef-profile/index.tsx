@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, PECookProfileNavigation, PEHeader, PEImagePicker } from '@people-eat/web-components';
-import { PEButton, PELabelMultiSelection, PELink, PESlider, PETextArea } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PELabelMultiSelection, PELink, PESlider, PETextArea } from '@people-eat/web-core-components';
 import {
     AddOneCookLanguageDocument,
     CookGetStripeDashboardUrlDocument,
@@ -12,6 +12,7 @@ import {
     RemoveOneCookLanguageDocument,
     SignedInUser,
     UpdateCookBiographyDocument,
+    UpdateCookHasStripePayoutMethodActivatedDocument,
     UpdateCookIsVisibleDocument,
     UpdateCookMaximumParticipantsDocument,
     UpdateCookMaximumTravelDistanceDocument,
@@ -22,7 +23,8 @@ import {
 import classNames from 'classnames';
 import { MinusIcon, PlusIcon, Users } from 'lucide-react';
 import { GetServerSideProps } from 'next';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
@@ -42,10 +44,13 @@ interface ServerSideProps {
     signedInUser: SignedInUser;
     initialCookProfile: NonNullable<GetCookProfilePersonalInformationPageDataQuery['cooks']['findOne']>;
     languages: NonNullable<GetCookProfilePersonalInformationPageDataQuery['languages']['findAll']>;
+    updateWalletStatus: boolean;
 }
 
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
+
+    const updateWalletStatus = typeof query['update-wallet-status'] === 'string';
 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
@@ -65,6 +70,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 signedInUser,
                 initialCookProfile,
                 languages,
+                updateWalletStatus,
             },
         };
     } catch (error) {
@@ -72,7 +78,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function CookProfilePage({ signedInUser, initialCookProfile, languages }: ServerSideProps) {
+export default function CookProfilePage({ signedInUser, initialCookProfile, languages, updateWalletStatus }: ServerSideProps) {
+    const router = useRouter();
+
     const cookId = initialCookProfile.cookId;
     const [cookProfile, setCookProfile] = useState(initialCookProfile);
     const [editLanguagesOn, setEditLanguagesOn] = useState(false);
@@ -137,6 +145,11 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
         variables: { cookId, maximumParticipants: maximumParticipants },
     });
 
+    const [
+        requestHasStripePayoutMethodActivatedUpdate,
+        { loading: walletUpdateLoading, reset: resetUpdateWallet, data: updateWalletData },
+    ] = useMutation(UpdateCookHasStripePayoutMethodActivatedDocument, { variables: { cookId } });
+
     function updateBookingDetails() {
         const updateRequests = [];
 
@@ -179,8 +192,8 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
 
     const [requestIsVisibleUpdate, { loading: loadingUpdateIsVisible }] = useMutation(UpdateCookIsVisibleDocument);
 
-    async function updateIsVisible(changedIsVisble: boolean) {
-        await requestIsVisibleUpdate({ variables: { cookId, isVisible: changedIsVisble } });
+    async function updateIsVisible(changedIsVisible: boolean) {
+        await requestIsVisibleUpdate({ variables: { cookId, isVisible: changedIsVisible } });
         updateCookProfile();
     }
 
@@ -190,11 +203,37 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
         loadingStripeDashboardUrl ||
         updateBioLoading ||
         loadingUpdateIsVisible ||
-        loadingUpdateProfilePicture;
+        loadingUpdateProfilePicture ||
+        walletUpdateLoading;
+
+    function updateHasStripePayoutMethodActivated() {
+        console.log('Executed');
+        requestHasStripePayoutMethodActivatedUpdate()
+            .then(() => router.replace({ query: {} }, undefined, { scroll: false }))
+            .then(updateCookProfile);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => updateHasStripePayoutMethodActivated, []);
 
     return (
         <div>
             <LoadingDialog active={loading} />
+
+            <PEAlert
+                open={updateWalletData?.cooks.success ?? false}
+                title="Wallet Einrichtung abgeschlossen"
+                subtitle="Du hast die Einrichtung deiner Wallet erfolgreich abgeschlossen. Das ermöglicht es dir Buchungsanfragen zu akzeptieren."
+                primaryButton={{ title: 'Okay', onClick: resetUpdateWallet }}
+            />
+
+            <PEAlert
+                open={updateWalletData?.cooks.success === false}
+                title="Wallet Einrichtung fehlgeschlagen"
+                subtitle="Bei dem Versuch deine Wallet einrichtung abzuschließen ist leider ein unerwarteter Fehler aufgetreten. Du kannst es erneut versuchen, soltle dies jedoch nicht funktionieren, setzte dich bitte mit unserem Support in Verbindung. Wir helfen gerne!"
+                primaryButton={{ title: 'Erneut versuchen', onClick: updateHasStripePayoutMethodActivated }}
+                secondaryButton={{ title: 'Okay', onClick: resetUpdateWallet }}
+            />
 
             <PEHeader signedInUser={signedInUser} />
 

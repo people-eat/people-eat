@@ -34,6 +34,7 @@ const documents = {
     "mutation UserBookingRequestDecline($bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      success: decline(bookingRequestId: $bookingRequestId)\n    }\n  }\n}": types.UserBookingRequestDeclineDocument,
     "mutation CreateOneUserBookingRequestChatMessage($request: CreateChatMessageRequest!, $bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      chatMessages(bookingRequestId: $bookingRequestId) {\n        success: createOne(request: $request)\n      }\n    }\n  }\n}": types.CreateOneUserBookingRequestChatMessageDocument,
     "mutation UpdateCookBiography($cookId: String!, $biography: String!) {\n  cooks {\n    success: updateBiography(cookId: $cookId, biography: $biography)\n  }\n}": types.UpdateCookBiographyDocument,
+    "mutation UpdateCookHasStripePayoutMethodActivated($cookId: String!) {\n  cooks {\n    success: updateHasStripePayoutMethodActivated(cookId: $cookId)\n  }\n}": types.UpdateCookHasStripePayoutMethodActivatedDocument,
     "mutation UpdateCookIsVisible($cookId: String!, $isVisible: Boolean!) {\n  cooks {\n    success: updateIsVisible(cookId: $cookId, isVisible: $isVisible)\n  }\n}": types.UpdateCookIsVisibleDocument,
     "mutation UpdateCookLocation($cookId: String!, $location: LocationInput!) {\n  cooks {\n    success: updateLocation(cookId: $cookId, location: $location)\n  }\n}": types.UpdateCookLocationDocument,
     "mutation UpdateCookMaximumParticipants($cookId: String!, $maximumParticipants: UnsignedInt) {\n  cooks {\n    success: updateMaximumParticipants(\n      cookId: $cookId\n      maximumParticipants: $maximumParticipants\n    )\n  }\n}": types.UpdateCookMaximumParticipantsDocument,
@@ -213,6 +214,10 @@ export function gql(source: "mutation CreateOneUserBookingRequestChatMessage($re
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation UpdateCookBiography($cookId: String!, $biography: String!) {\n  cooks {\n    success: updateBiography(cookId: $cookId, biography: $biography)\n  }\n}"): (typeof documents)["mutation UpdateCookBiography($cookId: String!, $biography: String!) {\n  cooks {\n    success: updateBiography(cookId: $cookId, biography: $biography)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation UpdateCookHasStripePayoutMethodActivated($cookId: String!) {\n  cooks {\n    success: updateHasStripePayoutMethodActivated(cookId: $cookId)\n  }\n}"): (typeof documents)["mutation UpdateCookHasStripePayoutMethodActivated($cookId: String!) {\n  cooks {\n    success: updateHasStripePayoutMethodActivated(cookId: $cookId)\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
