@@ -40,6 +40,7 @@ export interface PECookProfileBookingRequestDetailsProps {
     selectedTab: CookProfileBookingRequestDetailsTab;
     hasStripePayoutMethodActivated: boolean;
     bookingRequest: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
+    onRequireUpdate: () => void;
 }
 
 export function PECookProfileBookingRequestDetails({
@@ -47,6 +48,7 @@ export function PECookProfileBookingRequestDetails({
     selectedTab,
     hasStripePayoutMethodActivated,
     bookingRequest,
+    onRequireUpdate,
 }: PECookProfileBookingRequestDetailsProps) {
     const router = useRouter();
 
@@ -148,6 +150,7 @@ export function PECookProfileBookingRequestDetails({
                         cookId={userId}
                         hasStripePayoutMethodActivated={hasStripePayoutMethodActivated}
                         bookingRequest={bookingRequest}
+                        onRequireUpdate={onRequireUpdate}
                     />
                 </div>
             )}

@@ -17,9 +17,10 @@ import { PEChatMessage } from './PEChatMessage';
 export interface ProfileBookingRequestChatProps {
     userId: string;
     bookingRequest: NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>;
+    onRequireUpdate: () => void;
 }
 
-export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBookingRequestChatProps) {
+export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpdate }: ProfileBookingRequestChatProps) {
     const { bookingRequestId, status, cookAccepted, userAccepted } = bookingRequest;
     const chatBottom = useRef<HTMLDivElement>(null);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -129,7 +130,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
                 primaryButton={{
                     title: 'Akzeptieren',
                     onClick: () => {
-                        accept();
+                        accept().then(onRequireUpdate);
                         setShowAcceptDialog(false);
                     },
                 }}
@@ -147,7 +148,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest }: ProfileBoo
                 primaryButton={{
                     title: 'Ablehnen',
                     onClick: () => {
-                        decline();
+                        decline().then(onRequireUpdate);
                         setShowDeclineDialog(false);
                     },
                 }}

@@ -39,9 +39,15 @@ export interface PEProfileBookingRequestDetailsProps {
     userId: string;
     selectedTab: ProfileBookingRequestDetailsTab;
     bookingRequest: NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>;
+    onRequireUpdate: () => void;
 }
 
-export function PEProfileBookingRequestDetails({ userId, selectedTab, bookingRequest }: PEProfileBookingRequestDetailsProps) {
+export function PEProfileBookingRequestDetails({
+    userId,
+    selectedTab,
+    bookingRequest,
+    onRequireUpdate,
+}: PEProfileBookingRequestDetailsProps) {
     const router = useRouter();
 
     return (
@@ -138,7 +144,7 @@ export function PEProfileBookingRequestDetails({ userId, selectedTab, bookingReq
 
             {selectedTab === 'CHAT' && (
                 <div className="flex flex-col gap-8">
-                    <ProfileBookingRequestChat userId={userId} bookingRequest={bookingRequest} />
+                    <ProfileBookingRequestChat userId={userId} bookingRequest={bookingRequest} onRequireUpdate={onRequireUpdate} />
                 </div>
             )}
 

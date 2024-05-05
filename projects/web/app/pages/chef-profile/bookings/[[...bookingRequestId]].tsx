@@ -1,5 +1,6 @@
 import { BookingRequestRow, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
 import {
+    GetCookProfileBookingsDocument,
     GetCookProfileBookingsPageDataDocument,
     GetCookProfileBookingsPageDataQuery,
     GetSignedInUserDocument,
@@ -15,6 +16,8 @@ import {
     toCookProfileBookingRequestDetailsTab,
 } from '../../../components/PECookProfileBookingRequestDetails';
 import { createApolloClient } from '../../../network/apolloClients';
+import { useLazyQuery } from '@apollo/client';
+import { useState } from 'react';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -68,12 +71,31 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
 export default function CookProfileBookingsPage({
     signedInUser,
-    hasStripePayoutMethodActivated,
-    bookingRequests,
-    selectedBookingRequest,
+    hasStripePayoutMethodActivated: initialHasStripePayoutMethodActivated,
+    bookingRequests: initialBookingRequests,
+    selectedBookingRequest: initialSelectedBookingRequest,
     tab,
 }: ServerSideProps) {
     const router = useRouter();
+
+    const [hasStripePayoutMethodActivated, setHasStripePayoutMethodActivated] = useState(initialHasStripePayoutMethodActivated);
+    const [bookingRequests, setBookingRequests] = useState(initialBookingRequests);
+    const [selectedBookingRequest, setSelectedBookingRequest] = useState(initialSelectedBookingRequest);
+
+    const [getUpdatedBookings] = useLazyQuery(GetCookProfileBookingsDocument, {
+        variables: {
+            cookId: signedInUser.userId,
+            bookingRequestId: initialSelectedBookingRequest?.bookingRequestId ?? '',
+            fetchBookingRequest: Boolean(initialSelectedBookingRequest),
+        },
+    });
+
+    async function update() {
+        const { data } = await getUpdatedBookings();
+        setHasStripePayoutMethodActivated(data?.cooks.findOne?.hasStripePayoutMethodActivated ?? false);
+        setBookingRequests(data?.cooks.bookingRequests.findMany ?? []);
+        setSelectedBookingRequest(data?.cooks.bookingRequests.findOne ?? null);
+    }
 
     return (
         <div>
@@ -134,6 +156,7 @@ export default function CookProfileBookingsPage({
                                 selectedTab={tab}
                                 hasStripePayoutMethodActivated={hasStripePayoutMethodActivated}
                                 bookingRequest={selectedBookingRequest}
+                                onRequireUpdate={update}
                             />
                         )}
                     </div>

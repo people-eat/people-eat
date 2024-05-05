@@ -1,5 +1,7 @@
+import { useLazyQuery } from '@apollo/client';
 import { BookingRequestRow, GlobalBookingRequestRow, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
 import {
+    GetProfileBookingsDocument,
     GetProfileBookingsPageDataDocument,
     GetProfileBookingsPageDataQuery,
     GetSignedInUserDocument,
@@ -10,6 +12,7 @@ import classNames from 'classnames';
 import { Filter } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import {
     PEProfileBookingRequestDetails,
     ProfileBookingRequestDetailsTab,
@@ -95,13 +98,36 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
 export default function ProfileBookingsPage({
     signedInUser,
-    bookingRequests,
-    selectedBookingRequest,
-    globalBookingRequests,
-    selectedGlobalBookingRequest,
+    bookingRequests: initialBookingRequests,
+    selectedBookingRequest: initialSelectedBookingRequest,
+    globalBookingRequests: initialGlobalBookingRequests,
+    selectedGlobalBookingRequest: initialSelectedGlobalBookingRequest,
     tab,
 }: ServerSideProps) {
     const router = useRouter();
+
+    const [bookingRequests, setBookingRequests] = useState(initialBookingRequests);
+    const [selectedBookingRequest, setSelectedBookingRequest] = useState(initialSelectedBookingRequest);
+    const [globalBookingRequests, setGlobalBookingRequests] = useState(initialGlobalBookingRequests);
+    const [selectedGlobalBookingRequest, setSelectedGlobalBookingRequest] = useState(initialSelectedGlobalBookingRequest);
+
+    const [getUpdatedBookings] = useLazyQuery(GetProfileBookingsDocument, {
+        variables: {
+            userId: signedInUser.userId,
+            bookingRequestId: initialSelectedBookingRequest?.bookingRequestId ?? '',
+            fetchBookingRequest: Boolean(initialSelectedBookingRequest),
+            globalBookingRequestId: initialSelectedGlobalBookingRequest?.globalBookingRequestId ?? '',
+            fetchGlobalBookingRequest: Boolean(initialSelectedGlobalBookingRequest),
+        },
+    });
+
+    async function update() {
+        const { data } = await getUpdatedBookings();
+        setBookingRequests(data?.users.bookingRequests.findMany ?? []);
+        setSelectedBookingRequest(data?.users.bookingRequests.findOne ?? null);
+        setGlobalBookingRequests(data?.users.globalBookingRequests.findMany ?? []);
+        setSelectedGlobalBookingRequest(data?.users.globalBookingRequests.findOne ?? null);
+    }
 
     const totalNumberOfBookingRequests = globalBookingRequests.length + bookingRequests.length;
 
@@ -183,6 +209,7 @@ export default function ProfileBookingsPage({
                                 userId={signedInUser.userId}
                                 selectedTab={tab}
                                 bookingRequest={selectedBookingRequest}
+                                onRequireUpdate={update}
                             />
                         )}
                     </div>

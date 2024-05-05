@@ -19,12 +19,14 @@ export interface CookProfileBookingRequestChatProps {
     cookId: string;
     hasStripePayoutMethodActivated: boolean;
     bookingRequest: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
+    onRequireUpdate: () => void;
 }
 
 export function CookProfileBookingRequestChat({
     cookId,
     hasStripePayoutMethodActivated,
     bookingRequest,
+    onRequireUpdate,
 }: CookProfileBookingRequestChatProps) {
     const router = useRouter();
     const { bookingRequestId, status, cookAccepted, userAccepted } = bookingRequest;
@@ -140,7 +142,7 @@ export function CookProfileBookingRequestChat({
                 primaryButton={{
                     title: 'Akzeptieren',
                     onClick: () => {
-                        accept();
+                        accept().then(onRequireUpdate);
                         setShowAcceptDialog(false);
                     },
                 }}
@@ -158,7 +160,7 @@ export function CookProfileBookingRequestChat({
                 primaryButton={{
                     title: 'Ablehnen',
                     onClick: () => {
-                        decline();
+                        decline().then(onRequireUpdate);
                         setShowDeclineDialog(false);
                     },
                 }}
