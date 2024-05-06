@@ -160,6 +160,13 @@ function toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, 
                 currencyCode: '€',
             },
         },
+        totalPerPerson: {
+            title: '',
+            price: {
+                amount: finalPrice / (adults + children),
+                currencyCode: '€',
+            },
+        },
     };
 }
 

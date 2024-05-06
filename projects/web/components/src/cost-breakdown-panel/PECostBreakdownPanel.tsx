@@ -5,7 +5,7 @@ export interface PECostBreakdownPanelProps {
 }
 
 export function PECostBreakdownPanel({ costBreakdown }: PECostBreakdownPanelProps) {
-    const { lineItems, total } = costBreakdown;
+    const { lineItems, total, totalPerPerson } = costBreakdown;
     return (
         <section className="flex flex-col gap-4">
             {lineItems.map(({ title, price }) => (
@@ -15,10 +15,20 @@ export function PECostBreakdownPanel({ costBreakdown }: PECostBreakdownPanelProp
                 </div>
             ))}
             <hr />
-            {total && (
-                <div className="flex justify-between">
-                    <span className="font-semibold">{total.title}</span>
-                    <span className="font-semibold">{formatPrice(total.price)}</span>
+            {(total || totalPerPerson) && (
+                <div className="flex flex-col gap-2">
+                    {total && (
+                        <div className="flex justify-between">
+                            <span className="font-semibold">{total.title}</span>
+                            <span className="font-semibold">{formatPrice(total.price)}</span>
+                        </div>
+                    )}
+                    {totalPerPerson && (
+                        <div className="flex justify-between">
+                            <span className="font-light">Preis pro Person</span>
+                            <span className="font-light">{formatPrice(totalPerPerson.price)}</span>
+                        </div>
+                    )}
                 </div>
             )}
         </section>

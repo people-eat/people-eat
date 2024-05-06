@@ -50,6 +50,10 @@ export interface CostBreakdown {
         title: string;
         price: Price;
     };
+    totalPerPerson?: {
+        title: string;
+        price: Price;
+    };
 }
 
 export function calculateMenuPrice(
