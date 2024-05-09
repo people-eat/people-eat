@@ -13,7 +13,7 @@ export default function Example() {
                         width={1000}
                         height={800}
                         className="aspect-video rounded-xl bg-gray-50 object-cover"
-                        src="/blogs/kuechen-party.jpeg"
+                        src="/blogs/vatertag.jpeg"
                         alt=""
                     />
                 </figure>
