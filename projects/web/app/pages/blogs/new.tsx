@@ -31,7 +31,7 @@ export default function Example() {
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Eine Auswahl an verschiedenen Köchen:</strong> Überrasche
+                                <strong className="font-semibold text-gray-900">Privates Grillevent im eigenen Garten:</strong> Überrasche
                                 deinen Vater mit einem exklusiven Grillabend im eigenen Garten. Ein erfahrener Privatkoch kann die perfekten
                                 Grillgerichte zaubern, während dein Vater sich entspannt und den Abend genießt.
                             </span>
@@ -39,7 +39,7 @@ export default function Example() {
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Kreative Menügestaltung:</strong> Schenke deinem Vater ein
+                                <strong className="font-semibold text-gray-900">Gourmet-Dinner zu Hause:</strong> Schenke deinem Vater ein
                                 Gourmet-Dinner in den eigenen vier Wänden. Lass einen Privatkoch ein maßgeschneidertes Menü kreieren und das
                                 Abendessen zu einem unvergesslichen kulinarischen Erlebnis machen.
                             </span>
@@ -47,16 +47,16 @@ export default function Example() {
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Exquisite Zutaten:</strong> Wenn dein Vater gerne kocht,
-                                wäre ein privater Kochkurs das ideale Geschenk. Er kann neue Techniken erlernen und köstliche Gerichte unter
-                                Anleitung eines Profis zubereiten.
+                                <strong className="font-semibold text-gray-900">Kochkurs mit einem Privatkoch:</strong> Wenn dein Vater
+                                gerne kocht, wäre ein privater Kochkurs das ideale Geschenk. Er kann neue Techniken erlernen und köstliche
+                                Gerichte unter Anleitung eines Profis zubereiten.
                             </span>
                         </li>
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Professionelle Zubereitung:</strong> Organisiere eine
-                                private Wein- und Speisenverkostung für deinen Vater und seine Freunde. Ein erfahrener Sommelier und
+                                <strong className="font-semibold text-gray-900">Wein- und Speisenverkostung zu Hause:</strong> Organisiere
+                                eine private Wein- und Speisenverkostung für deinen Vater und seine Freunde. Ein erfahrener Sommelier und
                                 Privatkoch können eine Auswahl exquisiter Weine und passender Speisen präsentieren. Leckereweine.org bietet
                                 hierfür einzigartige Weinsets zum verschenken an.
                             </span>
@@ -64,23 +64,23 @@ export default function Example() {
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Aufmerksamer Service:</strong> Überrasche deinen Vater mit
-                                einem entspannten Brunch zu Hause. Ein Privatkoch kann eine Vielzahl von Frühstücksklassikern zubereiten,
-                                während dein Vater sich zurücklehnt und den Tag genießt.
+                                <strong className="font-semibold text-gray-900">Entspanntes Brunch-Erlebnis:</strong> Überrasche deinen
+                                Vater mit einem entspannten Brunch zu Hause. Ein Privatkoch kann eine Vielzahl von Frühstücksklassikern
+                                zubereiten, während dein Vater sich zurücklehnt und den Tag genießt.
                             </span>
                         </li>
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Einbindung der Gäste:</strong> Wenn dein Vater eine
-                                besondere Person in seinem Leben hat, überrasche ihn mit einem romantischen Candle-Light-Dinner zu Hause.
-                                Ein Privatkoch kann ein intimes und unvergessliches Abendessen für zwei zaubern.
+                                <strong className="font-semibold text-gray-900">Romantisches Candle-Light-Dinner:</strong> Wenn dein Vater
+                                eine besondere Person in seinem Leben hat, überrasche ihn mit einem romantischen Candle-Light-Dinner zu
+                                Hause. Ein Privatkoch kann ein intimes und unvergessliches Abendessen für zwei zaubern.
                             </span>
                         </li>
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Nachbesprechung und Feedback:</strong> Organisiere ein
+                                <strong className="font-semibold text-gray-900">Themenbasiertes Dinner-Erlebnis:</strong> Organisiere ein
                                 themenbasiertes Dinner-Erlebnis für deinen Vater und seine Freunde. Von einem italienischen Abend bis zu
                                 einem exotischen asiatischen Abendessen - ein Privatkoch kann die perfekte Atmosphäre schaffen.
                             </span>
@@ -88,7 +88,7 @@ export default function Example() {
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Nachbesprechung und Feedback:</strong> Plane ein
+                                <strong className="font-semibold text-gray-900">Kulinarisches Picknick im Freien:</strong> Plane ein
                                 kulinarisches Picknick im Freien für deinen Vater und die Familie. Ein Privatkoch kann eine Vielzahl von
                                 köstlichen Speisen zubereiten, die perfekt für ein entspanntes Picknick sind.
                             </span>
@@ -96,17 +96,17 @@ export default function Example() {
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Nachbesprechung und Feedback:</strong> Wenn dein Vater Sushi
-                                liebt, organisiere einen Sushi-Abend zu Hause mit einem Privatkoch. Er kann frische und köstliche
-                                Sushi-Kreationen zaubern, die deinen Vater begeistern werden.
+                                <strong className="font-semibold text-gray-900">Sushi-Abend zu Hause:</strong> Wenn dein Vater Sushi liebt,
+                                organisiere einen Sushi-Abend zu Hause mit einem Privatkoch. Er kann frische und köstliche Sushi-Kreationen
+                                zaubern, die deinen Vater begeistern werden.
                             </span>
                         </li>
                         <li className="flex gap-x-3">
                             <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-orange-600" aria-hidden="true" />
                             <span>
-                                <strong className="font-semibold text-gray-900">Nachbesprechung und Feedback:</strong> Schenke deinem Vater
-                                ein Kochbuch mit persönlicher Widmung von seinem Lieblingskoch oder einem Privatkoch, der seine kulinarische
-                                Inspiration teilt.
+                                <strong className="font-semibold text-gray-900">Kochbuch mit persönlicher Signatur:</strong> Schenke deinem
+                                Vater ein Kochbuch mit persönlicher Widmung von seinem Lieblingskoch oder einem Privatkoch, der seine
+                                kulinarische Inspiration teilt.
                             </span>
                         </li>
                     </ul>
