@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 const defaultProfileGlobalBookingRequestDetailsTab: ProfileGlobalBookingRequestDetailsTab = 'EVENT_DETAILS';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toProfileGlobalBookingRequestDetailsTab(value: any): ProfileGlobalBookingRequestDetailsTab {
     return profileGlobalBookingRequestDetailsTabs.includes(value) ? value : defaultProfileGlobalBookingRequestDetailsTab;
 }

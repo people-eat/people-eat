@@ -1,4 +1,4 @@
-import { CreateSupportRequestForm, CreateSupportRequestFormInputs, MealCard } from '@people-eat/web-components';
+import { BookingStatusInfoPopover, CreateSupportRequestForm, CreateSupportRequestFormInputs, MealCard } from '@people-eat/web-components';
 import { PETabSingleSelection } from '@people-eat/web-core-components';
 import {
     GetProfileBookingsPageDataQuery,
@@ -74,8 +74,9 @@ export function PEProfileBookingRequestDetails({
                         <div className="pt-6 sm:flex">
                             <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Status</dt>
                             <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">
-                                    {translatedBookingRequestStatus[bookingRequest.status]} (TODO - explain)
+                                <div className="text-gray-900 flex justify-between w-full">
+                                    <span>{translatedBookingRequestStatus[bookingRequest.status]}</span>
+                                    <BookingStatusInfoPopover currentBookingRequestStatus={bookingRequest.status} />
                                 </div>
                             </dd>
                         </div>

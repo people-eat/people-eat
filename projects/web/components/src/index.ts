@@ -13,6 +13,7 @@ export { EditAddressForm, type EditAddressFormInputs, type EditAddressFormProps 
 export { SignInForm, type SignInFormInputs, type SignInFormProps } from './_forms/SignInForm';
 export { SignUpForm, type SignUpFormInputs, type SignUpFormProps } from './_forms/SignUpForm';
 export { BookBar, type BookBarProps } from './book-bar/BookBar';
+export { BookingStatusInfoPopover, type BookingStatusInfoPopoverProps } from './booking-status-info-popover/BookingStatusInfoPopover';
 export { BookingRequestStatusPill, type BookingRequestStatusPillProps } from './booking-status-pill/BookingStatusPill';
 export { CookCard, type CookCardProps } from './cards/cook-card/CookCard';
 export { MealCard, type MealCardProps } from './cards/meal-card/MealCard';

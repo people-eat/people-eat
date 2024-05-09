@@ -1,4 +1,5 @@
 import { ParsedUrlQueryInput } from 'querystring';
+import { Circle, CircleDashed, CircleDot, LucideIcon, MessageCircleX } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 import {
     AllergyOptionFragment,
@@ -268,8 +269,37 @@ export function translatedDateDistanceToToday(date: Date): string {
 }
 
 export const translatedBookingRequestStatus: Record<BookingRequestStatus, string> = {
-    CANCELED: 'Abgesagt',
-    COMPLETED: 'Abgeschlossen',
     OPEN: 'Offen',
     PENDING: 'In Bearbeitung',
+    CANCELED: 'Abgesagt',
+    COMPLETED: 'Abgeschlossen',
+};
+
+export const bookingRequestStatusIcon: Record<BookingRequestStatus, LucideIcon> = {
+    OPEN: CircleDashed,
+    PENDING: Circle,
+    CANCELED: MessageCircleX,
+    COMPLETED: CircleDot,
+};
+
+export const bookingRequestStatusIconColor: Record<BookingRequestStatus, string> = {
+    OPEN: 'text-green-400',
+    PENDING: 'text-blue-400',
+    COMPLETED: 'text-gray-400',
+    CANCELED: 'text-red-400',
+};
+
+export const bookingRequestStatusTextColor: Record<BookingRequestStatus, string> = {
+    OPEN: 'text-green-600',
+    PENDING: 'text-blue-600',
+    COMPLETED: 'text-gray-600',
+    CANCELED: 'text-red-600',
+};
+
+export const bookingRequestStatusDescription: Record<BookingRequestStatus, string> = {
+    OPEN: 'Die Buchungsanfrage wurde erstellt, allerdings haben noch nicht beide Parteien dem unterbreiteten Abgebot zugestimmt. Bis eine Einigung erfolgt ist, entstehen keine Kosten.',
+    PENDING:
+        'Beide Parteien haben dem unterbreiteten Abgebot zugestimmt. Innerhalb des Zeitraums von zwei Wochen vor dem Event wird das angegebene Zahlungsmittel belastet.',
+    COMPLETED: 'Das Event hat stattgefunden',
+    CANCELED: 'Es konnte keine Einigug zwischen den beiden Parteien erzielt werden.',
 };
