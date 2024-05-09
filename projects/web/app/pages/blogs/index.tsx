@@ -22,13 +22,13 @@ const posts = [
     },
     {
         id: 2,
-        title: 'Wie man ein unvergessliches Dinner-Party-Erlebnis mit einem Privatkoch schafft',
-        href: '/blogs/kuechen-party',
+        title: 'Top 10 einzigartige Geschenkideen für den Vatertag: Mache diesen Tag unvergesslich',
+        href: '/blogs/geschenkideen-fuer-den-vatertag',
         description:
             'Ein unvergessliches Dinner-Party-Erlebnis zu schaffen, das deine Gäste beeindruckt und begeistert, erfordert mehr als nur gutes Essen. Mit einem Privatkoch sorgst du dafür, dass dein besonderer Anlass perfekt wird. Von der Zubereitung der Gerichte, bis hin zum Verlassen einer sauberen Küche sorgt der Koch dafür, dass du und deine Gäste einen unvergesslichen Abend habt.',
-        imageUrl: '/blogs/kuechen-party.jpeg',
-        date: '9. Mai 2024',
-        datetime: '2024-05-9',
+        imageUrl: '/blogs/vatertag.jpeg',
+        date: '1. Mai 2024',
+        datetime: '2024-05-1',
         category: { title: 'Gastgeber' },
         author: {
             name: 'Daniel',
@@ -37,11 +37,11 @@ const posts = [
     },
     {
         id: 3,
-        title: 'Top 10 einzigartige Geschenkideen für den Vatertag: Mache diesen Tag unvergesslich',
-        href: '/blogs/geschenkideen-fuer-den-vatertag',
+        title: 'Wie man ein unvergessliches Dinner-Party-Erlebnis mit einem Privatkoch schafft',
+        href: '/blogs/kuechen-party',
         description:
             'Ein unvergessliches Dinner-Party-Erlebnis zu schaffen, das deine Gäste beeindruckt und begeistert, erfordert mehr als nur gutes Essen. Mit einem Privatkoch sorgst du dafür, dass dein besonderer Anlass perfekt wird. Von der Zubereitung der Gerichte, bis hin zum Verlassen einer sauberen Küche sorgt der Koch dafür, dass du und deine Gäste einen unvergesslichen Abend habt.',
-        imageUrl: '/blogs/vatertag.jpeg',
+        imageUrl: '/blogs/kuechen-party.jpeg',
         date: '9. Mai 2024',
         datetime: '2024-05-9',
         category: { title: 'Gastgeber' },
