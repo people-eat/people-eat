@@ -1,5 +1,5 @@
+import { Circle, CircleDashed, CircleDot, CircleX, LucideIcon } from 'lucide-react';
 import { ParsedUrlQueryInput } from 'querystring';
-import { Circle, CircleDashed, CircleDot, LucideIcon, MessageCircleX } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
 import {
     AllergyOptionFragment,
@@ -197,7 +197,7 @@ export const mealTypeTranslations: Record<MealType, string> = {
     SPECIAL: 'Spezial',
 };
 
-export { translatedPriceClasses, priceClassRanges } from './priceClass';
+export { priceClassRanges, translatedPriceClasses } from './priceClass';
 
 const weekDays: Record<number, string> = {
     0: 'Sonntag',
@@ -278,7 +278,7 @@ export const translatedBookingRequestStatus: Record<BookingRequestStatus, string
 export const bookingRequestStatusIcon: Record<BookingRequestStatus, LucideIcon> = {
     OPEN: CircleDashed,
     PENDING: Circle,
-    CANCELED: MessageCircleX,
+    CANCELED: CircleX,
     COMPLETED: CircleDot,
 };
 
