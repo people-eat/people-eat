@@ -1,5 +1,11 @@
 import { PETabSingleSelection } from '@people-eat/web-core-components';
-import { GetProfileBookingsPageDataQuery, Unpacked, toTranslatedFormattedDate, translatedPriceClasses } from '@people-eat/web-domain';
+import {
+    GetProfileBookingsPageDataQuery,
+    Unpacked,
+    formatTime,
+    toTranslatedFormattedDate,
+    translatedPriceClasses,
+} from '@people-eat/web-domain';
 import { ArrowLeft, Headset, LucideIcon, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -80,7 +86,7 @@ export function PEProfileGlobalBookingRequestDetails({ selectedTab, globalBookin
                         <div className="pt-6 sm:flex">
                             <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Uhrzeit</dt>
                             <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{'TODO'}</div>
+                                <div className="text-gray-900">{formatTime(globalBookingRequest.dateTime)}</div>
                             </dd>
                         </div>
                         <div className="pt-6 sm:flex">

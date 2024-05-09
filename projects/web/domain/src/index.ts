@@ -139,6 +139,13 @@ export function addDaysToDate(date: Date, days: number): Date {
     return d;
 }
 
+export function formatTime(date: Date): string {
+    return new Date(date).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+}
+
 // Search Params
 
 export interface SearchParams {
