@@ -12,8 +12,23 @@ const posts = [
         description:
             'Dass Essen ist weit mehr als nur eine Notwendigkeit. Es ist ein Erlebnis, das unsere Sinne anspricht, uns verbindet und Erinnerungen schafft. Ein Privatkoch ist der Schlüssel zu diesem besonderen kulinarischen Erlebnis, das weit über den gewöhnlichen Restaurantbesuch hinausgeht. In diesem Blogbeitrag erfährst du, warum du einen Privatkoch buchen solltest, um einzigartige Genussmomente in deinen eigenen vier Wänden zu erleben.',
         imageUrl: '/blogs/privatkoch-koeln.jpg',
-        date: 'Mar 6, 2024',
+        date: '6. März 2024',
         datetime: '2024-03-6',
+        category: { title: 'Gastgeber' },
+        author: {
+            name: 'Daniel',
+            role: 'Co-Founder',
+        },
+    },
+    {
+        id: 2,
+        title: 'Wie man ein unvergessliches Dinner-Party-Erlebnis mit einem Privatkoch schafft',
+        href: '/blogs/kuechen-party',
+        description:
+            'Ein unvergessliches Dinner-Party-Erlebnis zu schaffen, das deine Gäste beeindruckt und begeistert, erfordert mehr als nur gutes Essen. Mit einem Privatkoch sorgst du dafür, dass dein besonderer Anlass perfekt wird. Von der Zubereitung der Gerichte, bis hin zum Verlassen einer sauberen Küche sorgt der Koch dafür, dass du und deine Gäste einen unvergesslichen Abend habt.',
+        imageUrl: '/blogs/kuechen-party.jpeg',
+        date: '9. Mai 2024',
+        datetime: '2024-05-9',
         category: { title: 'Gastgeber' },
         author: {
             name: 'Daniel',
