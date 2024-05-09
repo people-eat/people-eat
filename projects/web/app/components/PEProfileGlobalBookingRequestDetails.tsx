@@ -89,7 +89,7 @@ export function PEProfileGlobalBookingRequestDetails({ selectedTab, globalBookin
                             </dd>
                         </div>
                         <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Presiklasse</dt>
+                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Preisklasse</dt>
                             <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
                                 <div className="text-gray-900">{translatedPriceClasses[globalBookingRequest.priceClass.type]}</div>
                             </dd>
