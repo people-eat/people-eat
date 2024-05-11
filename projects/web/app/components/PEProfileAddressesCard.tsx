@@ -59,17 +59,17 @@ function AddressPreviewCard({ address, onDelete, pin }: AddressPreviewCardProps)
             {pin && (
                 <div className="flex gap-2">
                     {!pin.isPinned && (
-                        <button onClick={onDelete}>
+                        <button type="button" onClick={onDelete}>
                             <Trash />
                         </button>
                     )}
-                    <button onClick={pin.onClick}>
+                    <button type="button" onClick={pin.onClick}>
                         <Pin fill={pin.isPinned ? 'black' : 'none'} />
                     </button>
                 </div>
             )}
             {!pin && (
-                <button onClick={onDelete}>
+                <button type="button" onClick={onDelete}>
                     <Trash />
                 </button>
             )}

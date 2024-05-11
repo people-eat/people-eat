@@ -48,6 +48,7 @@ export function PETabSingleSelection<T>({
 
                             return (
                                 <button
+                                    type="button"
                                     key={optionIdentifier(option)}
                                     onClick={() => selectedOptionChanged(option)}
                                     className={classNames(

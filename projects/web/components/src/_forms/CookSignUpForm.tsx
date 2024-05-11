@@ -306,7 +306,7 @@ export function CookSignUpForm({
 
             <p className="mt-10 text-center text-sm text-gray-500">
                 Du hast bereits ein Profil?{' '}
-                <button className="font-semibold leading-6 text-orange-600 hover:text-orange-500" onClick={onSignIn}>
+                <button type="button" className="font-semibold leading-6 text-orange-600 hover:text-orange-500" onClick={onSignIn}>
                     Hier anmelden
                 </button>
             </p>

@@ -23,7 +23,7 @@ export function BookingStatusInfoPopover({ currentBookingRequestStatus }: Bookin
 
     return (
         <>
-            <button onClick={() => setOpen(true)}>
+            <button type="button" onClick={() => setOpen(true)}>
                 <Info />
             </button>
 
@@ -65,6 +65,7 @@ export function BookingStatusInfoPopover({ currentBookingRequestStatus }: Bookin
                                                 }))
                                                 .map((status) => (
                                                     <button
+                                                        type="button"
                                                         key={status.displayName}
                                                         className={classNames('flex flex-col gap-2 items-center flex-1 w-full', {
                                                             'ring-2 rounded-xl ring-inset ring-gray-300 p-4':

@@ -50,7 +50,7 @@ export function PEDialog({ open, onClose, title, closeOnClickAround, children, c
                                     {title && <h2 className="font-semibold text-xl">{title}</h2>}
                                     <span className="flex-1" />
                                     {onClose && (
-                                        <button onClick={onClose}>
+                                        <button type="button" onClick={onClose}>
                                             <X />
                                         </button>
                                     )}

@@ -61,6 +61,7 @@ export function PEImagePicker({ onPick, onRemoveDefaultImage, defaultImage }: PE
                             height={200}
                         />
                         <button
+                            type="button"
                             onClick={(event): void => handleRemoveImage(event)}
                             className="flex justify-center items-center opacity-50 hover:opacity-100 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                         >

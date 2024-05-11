@@ -136,7 +136,9 @@ export function PEFooter() {
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                     <p className="text-xs leading-5 text-gray-500">&copy; 2024 PeopleEat UG, alle Rechte vorbehalten.</p>
-                    <button className="text-xs leading-5 text-gray-500">Sitemap</button>
+                    <button type="button" className="text-xs leading-5 text-gray-500">
+                        Sitemap
+                    </button>
                 </div>
             </div>
         </footer>

@@ -33,7 +33,7 @@ export function MealSelectionCard({ title, description, imageUrl, selected, onSe
                 <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-medium text-gray-500">{description}</p>
 
                 <div className="mt-4 flex justify-between items-center gap-4">
-                    <button onClick={onInfoClick}>
+                    <button type="button" onClick={onInfoClick}>
                         <InfoIcon strokeWidth={1} className="text-xs md:text-sm" />
                     </button>
                     {selected && !onDeselect && (

@@ -258,7 +258,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                 <div className="h-0.5 w-full bg-orange-500" />
                                             </div>
                                             <button
-                                                role="button"
+                                                type="button"
                                                 onClick={() => setCurrentStepIndex(stepIdx)}
                                                 className="relative flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 hover:bg-orange-400"
                                             >
@@ -380,13 +380,13 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                     <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
                                         <div className="flex justify-between">
                                             <h3>{course.title}</h3>
-                                            <button role="button" onClick={() => remove(index)}>
+                                            <button type="button" onClick={() => remove(index)}>
                                                 Gang entfernen
                                             </button>
                                         </div>
                                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                             <button
-                                                role="button"
+                                                type="button"
                                                 className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                                                 onClick={() => setCourseIndexToAddMealTo(index)}
                                             >
@@ -648,7 +648,6 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         </div>
 
                                         <button
-                                            role="button"
                                             type="button"
                                             className="text-gray-500"
                                             onClick={(): void => setCostDetailsShown(!costDetailsShown)}

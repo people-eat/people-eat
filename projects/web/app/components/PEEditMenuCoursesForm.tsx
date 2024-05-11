@@ -1,7 +1,12 @@
 import { useMutation } from '@apollo/client';
 import { CreateMenuCourseForm, MealCard } from '@people-eat/web-components';
-import { PEButton, PEDialog, PETextField } from '@people-eat/web-core-components';
-import { GetCookProfileMenuPageDataQuery, Unpacked, UpdateCookMenuCourseTitleDocument } from '@people-eat/web-domain';
+import { PEButton, PEDialog, PELabelSingleSelection, PETextField } from '@people-eat/web-core-components';
+import {
+    GetCookProfileMenuPageDataQuery,
+    Unpacked,
+    UpdateCookMenuCourseTitleDocument,
+    UpdateCookMenuGreetingFromKitchenDocument,
+} from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { Plus, Save } from 'lucide-react';
 import { CreateMenuCourseFormInputs } from 'projects/web/components/src/_forms/CreateMenuCourseForm';
@@ -11,6 +16,7 @@ import { PEAddMealToCourseDialog } from './PEAddMealToCourseDialog';
 
 interface PEEditMenuCoursesFormInputs {
     greetingFromKitchen: string;
+    greetingFromKitchenEnabled: boolean;
     courseTitles: {
         title: string;
     }[];
@@ -57,25 +63,34 @@ export function PEEditMenuCoursesForm({
         control,
     } = useForm<PEEditMenuCoursesFormInputs>({
         defaultValues: {
-            greetingFromKitchen: '',
+            greetingFromKitchen: menu.greetingFromKitchen ?? '',
+            greetingFromKitchenEnabled: menu.greetingFromKitchen !== null && menu.greetingFromKitchen !== undefined,
             courseTitles: menu.courses.map(({ title }) => ({ title })),
         },
     });
 
     const { fields: courseTitles } = useFieldArray({ control, name: 'courseTitles' });
 
-    const { courseTitles: liveCourseTitles } = watch();
+    const { courseTitles: liveCourseTitles, greetingFromKitchenEnabled, greetingFromKitchen } = watch();
 
     const [requestCourseTitleUpdate] = useMutation(UpdateCookMenuCourseTitleDocument);
+    const [requestGreetingFromKitchenUpdate] = useMutation(UpdateCookMenuGreetingFromKitchenDocument, {
+        variables: { cookId, menuId: menu.menuId, greetingFromKitchen: greetingFromKitchenEnabled ? greetingFromKitchen : null },
+    });
 
-    useEffect(
-        () =>
-            setValue(
-                'courseTitles',
-                menu.courses.map(({ title }) => ({ title })),
-            ),
-        [menu, setValue],
-    );
+    useEffect(() => {
+        setValue(
+            'courseTitles',
+            menu.courses.map(({ title }) => ({ title })),
+        );
+        setValue('greetingFromKitchen', menu.greetingFromKitchen ?? '');
+        setValue('greetingFromKitchenEnabled', menu.greetingFromKitchen !== null && menu.greetingFromKitchen !== undefined);
+    }, [menu, setValue]);
+
+    const greetingChangesToBeSaved =
+        (greetingFromKitchenEnabled === true && (menu.greetingFromKitchen === null || menu.greetingFromKitchen === undefined)) ||
+        (greetingFromKitchenEnabled === false && menu.greetingFromKitchen !== null && menu.greetingFromKitchen !== undefined) ||
+        (typeof menu.greetingFromKitchen === 'string' && menu.greetingFromKitchen !== greetingFromKitchen);
 
     return (
         <>
@@ -88,6 +103,57 @@ export function PEEditMenuCoursesForm({
                     </>
                 )}
             </div>
+
+            {!coursesInEditMode && menu.greetingFromKitchen && (
+                <div className="flex flex-col gap-2">
+                    <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
+                    <span className="textxl text-gray-500">{menu.greetingFromKitchen}</span>
+                </div>
+            )}
+
+            {coursesInEditMode && (
+                <div className="flex flex-col gap-4">
+                    <span className="text-xl font-semibold">Möchtest du einen Gruß aus der Küche anbieten?</span>
+                    <div className="flex flex-col gap-4 items-start">
+                        <div className="flex justify-between w-full">
+                            <PELabelSingleSelection
+                                options={['Ja', 'Nein']}
+                                selectedOption={greetingFromKitchenEnabled ? 'Ja' : 'Nein'}
+                                selectedOptionChanged={(o) => setValue('greetingFromKitchenEnabled', o === 'Ja')}
+                                optionTitle={(o) => o}
+                                optionIdentifier={(o) => o}
+                            />
+                            {greetingChangesToBeSaved && (
+                                <PEButton
+                                    title="Speichern"
+                                    onClick={async () => {
+                                        const { data } = await requestGreetingFromKitchenUpdate();
+                                        if (!data?.cooks.menus.success) return;
+                                        updateNeeded();
+                                    }}
+                                />
+                            )}
+                        </div>
+
+                        {greetingFromKitchenEnabled && (
+                            <div className="w-full">
+                                <PETextField
+                                    id="greetingFromKitchen"
+                                    type="text"
+                                    errorMessage={errors.greetingFromKitchen?.message}
+                                    {...register('greetingFromKitchen', {
+                                        required: greetingFromKitchenEnabled ? 'Beschreibe deinen Gruß aus der Küche.' : false,
+                                        minLength: {
+                                            value: 5,
+                                            message: 'Der Name deines Gruß aus der Küche ist zu kurz.',
+                                        },
+                                    })}
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {menu.courses.map((course, index) => (
                 <div key={index} className={classNames('flex flex-col gap-4', 'text-md font-semibold')}>
@@ -104,7 +170,7 @@ export function PEEditMenuCoursesForm({
                                 />
                                 {liveCourseTitles[index]?.title !== menu.courses[index]?.title && (
                                     <div>
-                                        <button>
+                                        <button type="button">
                                             <Save
                                                 onClick={async () => {
                                                     const { data } = await requestCourseTitleUpdate({
@@ -127,13 +193,15 @@ export function PEEditMenuCoursesForm({
                             </div>
                         )}
                         {coursesInEditMode && menu.courses.length > 1 && (
-                            <button onClick={() => onRemoveCourse(course.courseId)}>Gang entfernen</button>
+                            <button type="button" onClick={() => onRemoveCourse(course.courseId)}>
+                                Gang entfernen
+                            </button>
                         )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {coursesInEditMode && (
                             <button
-                                role="button"
+                                type="button"
                                 className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                                 onClick={() => {
                                     setSelectedCourse(course);
@@ -185,7 +253,7 @@ export function PEEditMenuCoursesForm({
 
                     {coursesInEditMode && (
                         <button
-                            role="button"
+                            type="button"
                             className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                             onClick={() => {
                                 setCreateCourseDialogOpen(true);

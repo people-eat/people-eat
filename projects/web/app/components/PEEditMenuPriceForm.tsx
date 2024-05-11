@@ -249,7 +249,7 @@ export function PEEditMenuPriceForm({ menu, onChange }: PEEditMenuPriceFormProps
                             Für Fahrtkosten und Trinkgeld fallen keine Servicegebühren an.
                         </span>
                     </div>
-                    <button className="text-gray-500" onClick={(): void => setCostDetailsShown(!costDetailsShown)}>
+                    <button type="button" className="text-gray-500" onClick={(): void => setCostDetailsShown(!costDetailsShown)}>
                         {!costDetailsShown && (
                             <div className="flex flex-col items-center">
                                 <span>Mehr anzeigen</span>

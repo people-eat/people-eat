@@ -63,6 +63,7 @@ export function PESearchBar({
             {/* Mobile */}
             <div className="lg:hidden p-4">
                 <button
+                    type="button"
                     className="flex gap-6 items-center w-full rounded-full  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                     onClick={() => setShowMobileDialog(!showMobileDialog)}
                 >

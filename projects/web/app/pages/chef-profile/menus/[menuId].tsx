@@ -163,6 +163,7 @@ export default function CookProfileMenuPage({
                             <nav className="-mb-px flex space-x-8" aria-label="Tabs">
                                 {tabs.map((tab, index) => (
                                     <button
+                                        type="button"
                                         key={tab.name}
                                         onClick={() => updateSelectedTab(index)}
                                         className={classNames(

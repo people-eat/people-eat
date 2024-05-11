@@ -15,7 +15,7 @@ export function PEFullPageSheet({ children, title, open, onClose }: PropsWithChi
             <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white p-6 flex flex-col gap-4">
                 <div className="flex justify-between">
                     <h1 className="font-bold text-lg">{title}</h1>
-                    <button className="rounded-full" onClick={onClose}>
+                    <button type="button" className="rounded-full" onClick={onClose}>
                         <XIcon />
                     </button>
                 </div>

@@ -57,7 +57,7 @@ export function SignInForm({ completeTitle, onSignIn, onSignUp, onForgotPassword
 
             <p className="mt-10 text-center text-sm text-gray-500">
                 Du hast noch kein Profil?{' '}
-                <button className="font-semibold leading-6 text-orange-600 hover:text-orange-500" onClick={onSignUp}>
+                <button type="button" className="font-semibold leading-6 text-orange-600 hover:text-orange-500" onClick={onSignUp}>
                     Hier registrieren
                 </button>
             </p>

@@ -273,7 +273,7 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
         <section className="flex flex-col gap-8">
             <div className="flex gap-4 justify-between">
                 <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditModeOn(true)} />
-                <button className="text-gray-500" onClick={() => setShowDeleteMenuAlert(true)}>
+                <button className="text-gray-500" onClick={() => setShowDeleteMenuAlert(true)} type="button">
                     Menü löschen
                 </button>
             </div>
