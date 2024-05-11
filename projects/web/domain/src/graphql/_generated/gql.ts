@@ -30,6 +30,7 @@ const documents = {
     "query FindManyCookBookingRequestChatMessages($bookingRequestId: String!, $cookId: String!) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      chatMessages(bookingRequestId: $bookingRequestId) {\n        findMany {\n          ...ChatMessage\n        }\n      }\n    }\n  }\n}": types.FindManyCookBookingRequestChatMessagesDocument,
     "mutation CreateOneUserBookingRequest($request: CreateBookingRequestRequest!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      createOne(request: $request) {\n        success\n        clientSecret\n        bookingRequestId\n      }\n    }\n  }\n}": types.CreateOneUserBookingRequestDocument,
     "mutation CreateOneUserGlobalBookingRequest($userId: String!, $request: CreateOneGlobalBookingRequestRequest!) {\n  users {\n    globalBookingRequests(userId: $userId) {\n      success: createOne(request: $request)\n    }\n  }\n}": types.CreateOneUserGlobalBookingRequestDocument,
+    "mutation CreateOneUserSupportRequest($request: CreateOneSupportRequest!, $userId: String!) {\n  users {\n    supportRequests(userId: $userId) {\n      createOne(request: $request)\n    }\n  }\n}": types.CreateOneUserSupportRequestDocument,
     "mutation UserBookingRequestAccept($bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      success: accept(bookingRequestId: $bookingRequestId)\n    }\n  }\n}": types.UserBookingRequestAcceptDocument,
     "mutation UserBookingRequestDecline($bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      success: decline(bookingRequestId: $bookingRequestId)\n    }\n  }\n}": types.UserBookingRequestDeclineDocument,
     "mutation CreateOneUserBookingRequestChatMessage($request: CreateChatMessageRequest!, $bookingRequestId: String!, $userId: String!) {\n  users {\n    bookingRequests(userId: $userId) {\n      chatMessages(bookingRequestId: $bookingRequestId) {\n        success: createOne(request: $request)\n      }\n    }\n  }\n}": types.CreateOneUserBookingRequestChatMessageDocument,
@@ -198,6 +199,10 @@ export function gql(source: "mutation CreateOneUserBookingRequest($request: Crea
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation CreateOneUserGlobalBookingRequest($userId: String!, $request: CreateOneGlobalBookingRequestRequest!) {\n  users {\n    globalBookingRequests(userId: $userId) {\n      success: createOne(request: $request)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneUserGlobalBookingRequest($userId: String!, $request: CreateOneGlobalBookingRequestRequest!) {\n  users {\n    globalBookingRequests(userId: $userId) {\n      success: createOne(request: $request)\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateOneUserSupportRequest($request: CreateOneSupportRequest!, $userId: String!) {\n  users {\n    supportRequests(userId: $userId) {\n      createOne(request: $request)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneUserSupportRequest($request: CreateOneSupportRequest!, $userId: String!) {\n  users {\n    supportRequests(userId: $userId) {\n      createOne(request: $request)\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

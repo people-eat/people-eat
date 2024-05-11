@@ -15,10 +15,17 @@ export function CreateSupportRequestForm({ onCreate }: CreateSupportRequestFormP
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm<CreateSupportRequestFormInputs>({});
 
     return (
-        <form onSubmit={handleSubmit((data) => onCreate(data))} className="flex flex-col gap-8">
+        <form
+            onSubmit={handleSubmit((data) => {
+                onCreate(data);
+                reset();
+            })}
+            className="flex flex-col gap-8"
+        >
             <PETextField
                 id="title"
                 labelTitle="Titel"

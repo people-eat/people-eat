@@ -1,6 +1,14 @@
-import { BookingStatusInfoPopover, CreateSupportRequestForm, CreateSupportRequestFormInputs, MealCard } from '@people-eat/web-components';
-import { PETabSingleSelection } from '@people-eat/web-core-components';
+import { useMutation } from '@apollo/client';
 import {
+    BookingStatusInfoPopover,
+    CreateSupportRequestForm,
+    CreateSupportRequestFormInputs,
+    LoadingDialog,
+    MealCard,
+} from '@people-eat/web-components';
+import { PEAlert, PETabSingleSelection } from '@people-eat/web-core-components';
+import {
+    CreateOneUserSupportRequestDocument,
     GetProfileBookingsPageDataQuery,
     formatPrice,
     formatTime,
@@ -51,6 +59,10 @@ export function PEProfileBookingRequestDetails({
     onRequireUpdate,
 }: PEProfileBookingRequestDetailsProps) {
     const router = useRouter();
+
+    const [createSupportRequest, { data, loading, reset }] = useMutation(CreateOneUserSupportRequestDocument);
+    const showSuccessAlert = data?.users.supportRequests.createOne ?? false;
+    const showFailedAlert = data ? !data.users.supportRequests.createOne : false;
 
     return (
         <div className="flex flex-col gap-8">
@@ -183,12 +195,49 @@ export function PEProfileBookingRequestDetails({
                     <h2 className="text-2xl font-bold">Support</h2>
 
                     <CreateSupportRequestForm
-                        onCreate={function (data: CreateSupportRequestFormInputs): void {
-                            throw new Error('Function not implemented.');
+                        onCreate={function ({ message, title }: CreateSupportRequestFormInputs): void {
+                            createSupportRequest({
+                                variables: {
+                                    userId,
+                                    request: {
+                                        bookingRequestId: bookingRequest.bookingRequestId,
+                                        message,
+                                        subject: title,
+                                    },
+                                },
+                            });
                         }}
                     />
                 </div>
             )}
+
+            <LoadingDialog active={loading} />
+
+            <PEAlert
+                open={showSuccessAlert}
+                type="SUCCESS"
+                title="Support Anfrage erfolgreich eingereicht"
+                subtitle="Wir werden uns schnellstmöglich um dein Anliegen kümmern und treten mit dir in Kontakt."
+                primaryButton={{
+                    title: 'Fertig',
+                    onClick: () => reset(),
+                }}
+            />
+
+            <PEAlert
+                open={showFailedAlert}
+                type="ERROR"
+                title="Leider konnte deine Support Anfrage nicht erfolgreich eingereicht werden"
+                subtitle="Bitte versuche es erneut oder falls dies weiterhin fehlschlägt, versuche später noch einmal. Entuldigung für die Umstände - Dein PeopleEat Support Team."
+                primaryButton={{
+                    title: 'Erneut versuchen',
+                    onClick: () => createSupportRequest(),
+                }}
+                secondaryButton={{
+                    title: 'Abbrechen',
+                    onClick: () => reset(),
+                }}
+            />
         </div>
     );
 }

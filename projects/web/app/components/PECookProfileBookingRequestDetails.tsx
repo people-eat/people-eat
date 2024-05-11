@@ -1,4 +1,4 @@
-import { BookingStatusInfoPopover, CreateSupportRequestForm, CreateSupportRequestFormInputs, MealCard } from '@people-eat/web-components';
+import { BookingStatusInfoPopover, MealCard } from '@people-eat/web-components';
 import { PETabSingleSelection } from '@people-eat/web-core-components';
 import {
     GetCookProfileBookingsPageDataQuery,
@@ -7,7 +7,7 @@ import {
     toTranslatedFormattedDate,
     translatedBookingRequestStatus,
 } from '@people-eat/web-domain';
-import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
+import { ArrowLeft, CookingPot, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { CookProfileBookingRequestChat } from './CookProfileBookingRequestChat';
@@ -19,22 +19,20 @@ export function toCookProfileBookingRequestDetailsTab(value: any): CookProfileBo
     return cookProfileBookingRequestDetailsTabs.includes(value) ? value : defaultProfileBookingRequestDetailsTab;
 }
 
-export type CookProfileBookingRequestDetailsTab = 'CHAT' | 'EVENT_DETAILS' | 'MENU' | 'SUPPORT';
+export type CookProfileBookingRequestDetailsTab = 'CHAT' | 'EVENT_DETAILS' | 'MENU';
 
-const cookProfileBookingRequestDetailsTabs: CookProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'MENU', 'SUPPORT'];
+const cookProfileBookingRequestDetailsTabs: CookProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'MENU'];
 
 const cookProfileBookingRequestDetailsTabTranslations: Record<CookProfileBookingRequestDetailsTab, string> = {
     CHAT: 'Chat',
     EVENT_DETAILS: 'Veranstaltung',
     MENU: 'Menü',
-    SUPPORT: 'Support',
 };
 
 const cookProfileBookingRequestDetailsTabIcons: Record<CookProfileBookingRequestDetailsTab, LucideIcon> = {
     CHAT: MessageCircle,
     EVENT_DETAILS: ReceiptText,
     MENU: CookingPot,
-    SUPPORT: Headset,
 };
 
 export interface PECookProfileBookingRequestDetailsProps {
@@ -182,18 +180,6 @@ export function PECookProfileBookingRequestDetails({
                             </div>
                         ))}
                     </div>
-                </div>
-            )}
-
-            {selectedTab === 'SUPPORT' && (
-                <div className="flex flex-col gap-8">
-                    <h2 className="text-2xl font-bold">Support</h2>
-
-                    <CreateSupportRequestForm
-                        onCreate={function (data: CreateSupportRequestFormInputs): void {
-                            throw new Error('Function not implemented.');
-                        }}
-                    />
                 </div>
             )}
         </div>
