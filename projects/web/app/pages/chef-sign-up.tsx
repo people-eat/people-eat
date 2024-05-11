@@ -83,6 +83,7 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
             />
 
             <PEAlert
+                type="ERROR"
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"

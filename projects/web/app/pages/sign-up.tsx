@@ -51,6 +51,7 @@ export default function SignUpPage() {
             />
 
             <PEAlert
+                type="ERROR"
                 open={showCreatesUerFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"

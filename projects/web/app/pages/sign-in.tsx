@@ -68,6 +68,7 @@ export default function SignInPage() {
             <LoadingDialog active={loading || createOneTimeAccessTokenLoading} />
 
             <PEAlert
+                type="ERROR"
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"
@@ -75,6 +76,7 @@ export default function SignInPage() {
             />
 
             <PEAlert
+                type="ERROR"
                 open={showForgotPasswordFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"

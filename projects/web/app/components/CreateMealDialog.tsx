@@ -37,6 +37,7 @@ export function CreateMealDialog({ cookId, open, onClose }: CreateMealDialogProp
             />
 
             <PEAlert
+                type="ERROR"
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"

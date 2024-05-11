@@ -755,6 +755,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                 />
 
                 <PEAlert
+                    type="ERROR"
                     open={showFailedAlert}
                     title="Leider ist ein Fehler aufgetreten"
                     subtitle="Bitte versuche es später erneut"

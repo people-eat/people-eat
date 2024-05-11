@@ -251,6 +251,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
             />
 
             <PEAlert
+                type="ERROR"
                 open={showFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Bitte versuche es später erneut"

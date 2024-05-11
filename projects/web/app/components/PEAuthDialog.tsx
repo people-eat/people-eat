@@ -94,6 +94,7 @@ export function PEAuthDialog({
             />
 
             <PEAlert
+                type="ERROR"
                 open={showSignInFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"
@@ -152,6 +153,7 @@ export function PEAuthDialog({
             />
 
             <PEAlert
+                type="ERROR"
                 open={showCreatesUerFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"
