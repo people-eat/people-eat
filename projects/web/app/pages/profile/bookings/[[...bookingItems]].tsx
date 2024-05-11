@@ -204,6 +204,7 @@ export default function ProfileBookingsPage({
 
                         {selectedGlobalBookingRequest && (
                             <PEProfileGlobalBookingRequestDetails
+                                userId={signedInUser.userId}
                                 selectedTab={toProfileGlobalBookingRequestDetailsTab(tab)}
                                 globalBookingRequest={selectedGlobalBookingRequest}
                             />

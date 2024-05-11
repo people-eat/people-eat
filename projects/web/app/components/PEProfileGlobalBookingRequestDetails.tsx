@@ -1,5 +1,8 @@
-import { PETabSingleSelection } from '@people-eat/web-core-components';
+import { useMutation } from '@apollo/client';
+import { CreateSupportRequestForm, CreateSupportRequestFormInputs, LoadingDialog } from '@people-eat/web-components';
+import { PEAlert, PETabSingleSelection } from '@people-eat/web-core-components';
 import {
+    CreateOneUserSupportRequestDocument,
     GetProfileBookingsPageDataQuery,
     Unpacked,
     formatTime,
@@ -32,12 +35,21 @@ const profileGlobalBookingRequestDetailsTabIcons: Record<ProfileGlobalBookingReq
 };
 
 export interface PEProfileGlobalBookingRequestDetailsProps {
+    userId: string;
     selectedTab: ProfileGlobalBookingRequestDetailsTab;
     globalBookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findMany']>>;
 }
 
-export function PEProfileGlobalBookingRequestDetails({ selectedTab, globalBookingRequest }: PEProfileGlobalBookingRequestDetailsProps) {
+export function PEProfileGlobalBookingRequestDetails({
+    userId,
+    selectedTab,
+    globalBookingRequest,
+}: PEProfileGlobalBookingRequestDetailsProps) {
     const router = useRouter();
+
+    const [createSupportRequest, { data, loading, reset }] = useMutation(CreateOneUserSupportRequestDocument);
+    const showSuccessAlert = data?.users.supportRequests.createOne ?? false;
+    const showFailedAlert = data ? !data.users.supportRequests.createOne : false;
 
     return (
         <div className="flex flex-col gap-8">
@@ -123,7 +135,54 @@ export function PEProfileGlobalBookingRequestDetails({ selectedTab, globalBookin
                 </div>
             )}
 
-            {selectedTab === 'SUPPORT' && 'Support'}
+            {selectedTab === 'SUPPORT' && (
+                <div className="flex flex-col gap-8">
+                    <h2 className="text-2xl font-bold">Support</h2>
+
+                    <CreateSupportRequestForm
+                        onCreate={function ({ message, title }: CreateSupportRequestFormInputs): void {
+                            createSupportRequest({
+                                variables: {
+                                    userId,
+                                    request: {
+                                        bookingRequestId: undefined,
+                                        message,
+                                        subject: title,
+                                    },
+                                },
+                            });
+                        }}
+                    />
+                </div>
+            )}
+
+            <LoadingDialog active={loading} />
+
+            <PEAlert
+                open={showSuccessAlert}
+                type="SUCCESS"
+                title="Support Anfrage erfolgreich eingereicht"
+                subtitle="Wir werden uns schnellstmöglich um dein Anliegen kümmern und treten mit dir in Kontakt."
+                primaryButton={{
+                    title: 'Fertig',
+                    onClick: () => reset(),
+                }}
+            />
+
+            <PEAlert
+                open={showFailedAlert}
+                type="ERROR"
+                title="Leider konnte deine Support Anfrage nicht erfolgreich eingereicht werden"
+                subtitle="Bitte versuche es erneut oder falls dies weiterhin fehlschlägt, versuche später noch einmal. Entuldigung für die Umstände - Dein PeopleEat Support Team."
+                primaryButton={{
+                    title: 'Erneut versuchen',
+                    onClick: () => createSupportRequest(),
+                }}
+                secondaryButton={{
+                    title: 'Abbrechen',
+                    onClick: () => reset(),
+                }}
+            />
         </div>
     );
 }
