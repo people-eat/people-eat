@@ -140,9 +140,7 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
                                     id="description"
                                     labelTitle="Beschreibung"
                                     errorMessage={errors.description?.message}
-                                    {...register('description', {
-                                        required: 'Dein Gericht braucht noch eine Beschreibung.',
-                                    })}
+                                    {...register('description')}
                                 />
                             )}
 

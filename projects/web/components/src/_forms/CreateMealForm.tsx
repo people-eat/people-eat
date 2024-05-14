@@ -61,7 +61,7 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
                 id="mealDescription"
                 labelTitle="Beschreibung"
                 errorMessage={errors.description?.message}
-                {...register('description', { required: 'Dein Gericht braucht noch eine Beschreibung.' })}
+                {...register('description')}
             />
 
             <p className="mt-4">Füge deinem Gericht ein Bild hinzu</p>
