@@ -35,6 +35,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { CreateMealDialog } from '../../../components/CreateMealDialog';
 import { PEAddMealToCourseDialog } from '../../../components/PEAddMealToCourseDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
+import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
@@ -234,6 +235,8 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
             },
         });
     }
+
+    useNotLeave();
 
     return (
         <div>

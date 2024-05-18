@@ -5,6 +5,7 @@ import { CreateMealDocument, GetSignedInUserDocument, SignedInUser } from '@peop
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { PEProfileCard } from '../../../components/PEProfileCard';
+import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
@@ -41,6 +42,8 @@ export default function CookProfileCreateMealPage({ signedInUser }: ServerSidePr
 
     const showSuccessAlert = data?.cooks.meals.success ?? false;
     const showFailedAlert = data ? !data.cooks.meals.success : false;
+
+    useNotLeave();
 
     return (
         <div>
