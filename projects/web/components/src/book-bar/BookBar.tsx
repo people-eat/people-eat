@@ -4,6 +4,7 @@ import {
     CostBreakdown,
     KitchenOption,
     LocationSearchResult,
+    Price,
     PriceClass,
     Time,
 } from '@people-eat/web-domain';
@@ -59,6 +60,12 @@ export interface BookBarProps {
         value: PriceClass;
         onChange: (changedPriceClass: PriceClass) => void;
     };
+
+    coupon?: {
+        onApply: () => void;
+        onChange: (giftCardPromoCodeId: string) => void;
+        state?: { balance: Price } | { expirationDate: Date } | { failed: boolean };
+    };
 }
 
 export function BookBar({
@@ -87,6 +94,7 @@ export function BookBar({
     kitchens,
     allergies,
     priceClass,
+    coupon,
 }: BookBarProps) {
     return (
         <div className="sticky top-4 float-none h-full hidden lg:flex flex-col gap-4 shadow-lg shadow-orange-500/20 rounded-2xl p-6 w-96">
@@ -118,6 +126,7 @@ export function BookBar({
                 kitchens={kitchens}
                 allergies={allergies}
                 priceClass={priceClass}
+                coupon={coupon}
             />
         </div>
     );

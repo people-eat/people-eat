@@ -14,6 +14,7 @@ import {
     CostBreakdown,
     KitchenOption,
     LocationSearchResult,
+    Price,
     PriceClass,
     Time,
 } from '@people-eat/web-domain';
@@ -70,12 +71,19 @@ export interface BookFormProps {
         value: PriceClass;
         onChange: (changedPriceClass: PriceClass) => void;
     };
+
+    coupon?: {
+        onApply: () => void;
+        onChange: (giftCardPromoCodeId: string) => void;
+        state?: { balance: Price } | { expirationDate: Date } | { failed: boolean };
+    };
 }
 
 interface BookFormInputs {
     location: string;
     occasion: string;
     message: string;
+    couponCode: string;
 }
 
 export function BookForm({
@@ -102,11 +110,13 @@ export function BookForm({
     kitchens,
     allergies,
     priceClass,
+    coupon,
 }: BookFormProps) {
     const {
         register,
         handleSubmit,
         formState: { errors },
+        getValues,
     } = useForm<BookFormInputs>();
 
     const minDate = new Date();
@@ -207,6 +217,36 @@ export function BookForm({
                     <div className="flex flex-col gap-4">
                         <span className="text-base font-medium">Budget pro Person</span>
                         <PEPriceClassSelection selectedPriceClass={priceClass.value} onChange={priceClass.onChange} layout="VERTICAL" />
+                    </div>
+                )}
+
+                {coupon && (
+                    <div className="flex flex-col gap-2 items-start">
+                        <PETextField
+                            id="coupon"
+                            labelTitle="Gutschein- oder Promocode einlösen"
+                            type="text"
+                            placeholder="XXXX-XXXX-XXXX"
+                            errorMessage={errors.couponCode?.message}
+                            trailingChildren={
+                                <div>
+                                    {!coupon.state && <PEButton title="Einlösen" type="secondary" onClick={() => coupon.onApply()} />}
+                                    {/* {coupon.state && 'balance' in coupon.state && <CheckCircle className="text-green-500" />}
+                                    {coupon.state && 'failed' in coupon.state && <XCircle className="text-red-500" />}
+                                    {coupon.state && 'expirationDate' in coupon.state && <XCircle className="text-red-500" />} */}
+                                </div>
+                            }
+                            {...register('couponCode', { onChange: () => coupon.onChange(getValues().couponCode) })}
+                        />
+                        {coupon.state && 'balance' in coupon.state && (
+                            <span className="text-green-500 text-sm">Rabattcode erfolgreich angewendet</span>
+                        )}
+                        {coupon.state && 'failed' in coupon.state && (
+                            <span className="text-red-500 text-sm">Angegebener Code ungültig</span>
+                        )}
+                        {coupon.state && 'expirationDate' in coupon.state && (
+                            <span className="text-red-500 text-sm">Angegebener Code ist abgelaufen</span>
+                        )}
                     </div>
                 )}
 

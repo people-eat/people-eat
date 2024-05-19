@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import {
     BookBar,
@@ -14,11 +14,12 @@ import { PEButton, PEDialog, PEFullPageSheet } from '@people-eat/web-core-compon
 import {
     AllergyOption,
     CostBreakdown,
+    CostLineItem,
     CreateBookingRequestRequest,
     CreateOneUserBookingRequestDocument,
+    GetOneGiftCardPromoCodeDocument,
     GetPublicMenuPageDataDocument,
     GetPublicMenuPageDataQuery,
-    LineItem,
     LocationSearchResult,
     SearchParams,
     SignedInUser,
@@ -36,6 +37,7 @@ import { CheckCircleIcon, Circle, CircleUser, HandPlatter, MinusIcon, PlusIcon, 
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { GetOneGiftCardPromoCodeQuery, Price } from 'projects/web/domain/src/graphql/_generated/graphql';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
@@ -119,20 +121,31 @@ interface ToCostBreakdownInput {
     distance?: number;
     isOutOfCookTravelRadius: boolean;
     menu: NonNullable<GetPublicMenuPageDataQuery['publicMenus']['findOne']>;
+    // @todo: take currency code into consideration
+    discountAmount?: number;
 }
 
-function toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, menu }: ToCostBreakdownInput): CostBreakdown {
+function toCostBreakdown({
+    adults,
+    children,
+    distance,
+    isOutOfCookTravelRadius,
+    menu,
+    discountAmount,
+}: ToCostBreakdownInput): CostBreakdown {
     const travelExpenses: number | undefined = distance && distance * menu.cook.travelExpenses * 2;
 
     const menuPrice = calculateMenuPrice(adults, children, menu.basePrice, menu.basePriceCustomers, menu.pricePerAdult, menu.pricePerChild);
 
     const customerFee = menuPrice * 0.04;
-    const stripeTransactionPrice = menuPrice + (travelExpenses ?? 0) + customerFee;
+    const stripeTransactionPrice = discountAmount
+        ? menuPrice + (travelExpenses ?? 0) + customerFee - discountAmount
+        : menuPrice + (travelExpenses ?? 0) + customerFee;
     const finalPrice = (stripeTransactionPrice + 25) / (1 - 0.015);
     const stripeFee = finalPrice - stripeTransactionPrice;
     const serviceFee = stripeFee + customerFee;
 
-    const lineItems: LineItem[] = [];
+    const lineItems: CostLineItem[] = [];
 
     lineItems.push({
         title: 'Menüpreis',
@@ -151,6 +164,12 @@ function toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, 
         price: { amount: serviceFee, currencyCode: '€' },
     });
 
+    discountAmount &&
+        lineItems.push({
+            title: 'Rabatt',
+            price: { amount: -discountAmount, currencyCode: '€' },
+        });
+
     return {
         lineItems: lineItems,
         total: {
@@ -167,6 +186,7 @@ function toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, 
                 currencyCode: '€',
             },
         },
+        // totalBeforeDiscount,
     };
 }
 
@@ -275,7 +295,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
     const isOutOfCookTravelRadius =
         !!menu.cook.maximumTravelDistance && distance !== undefined && distance > menu.cook.maximumTravelDistance;
 
-    const costBreakdown: CostBreakdown = toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, menu });
+    let costBreakdown: CostBreakdown = toCostBreakdown({ adults, children, distance, isOutOfCookTravelRadius, menu });
 
     const [authDialogOpen, setAuthDialogOpen] = useState(false);
     const [showPaymentDialog, setShowPaymentDialog] = useState(false);
@@ -291,6 +311,43 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
     const dateTime = new Date(date);
     dateTime.setHours(time.hours);
     dateTime.setMinutes(time.minutes);
+
+    // start of promo code
+
+    // loading: getGiftCardPromoCodeLoading
+
+    const [giftCardPromoCodeId, setGiftCardPromoCodeId] = useState('');
+    const [getGiftCardPromoCodeData, setGetGiftCardPromoCodeData] = useState<GetOneGiftCardPromoCodeQuery | undefined>();
+
+    const apolloClient = useApolloClient();
+
+    let couponState: { balance: Price } | { expirationDate: Date } | { failed: boolean } | undefined = undefined;
+
+    const giftCardPromoCode = getGiftCardPromoCodeData?.giftCardPromoCodes.findOne;
+
+    if (getGiftCardPromoCodeData) {
+        couponState = { failed: true };
+    }
+
+    if (giftCardPromoCode) {
+        if (new Date(giftCardPromoCode.expiresAt).getTime() < new Date().getTime()) {
+            couponState = { expirationDate: new Date(giftCardPromoCode.expiresAt) };
+        } else {
+            couponState = {
+                balance: giftCardPromoCode.balance,
+            };
+            costBreakdown = toCostBreakdown({
+                adults,
+                children,
+                distance,
+                isOutOfCookTravelRadius,
+                menu,
+                discountAmount: giftCardPromoCode.balance.amount,
+            });
+        }
+    }
+
+    // eof promo code
 
     function onBook(): void {
         const menuBookingRequest: CreateBookingRequestRequest = {
@@ -317,6 +374,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                     })),
                 },
                 travelExpensesAmount: 0,
+                giftCardPromoCodeId: giftCardPromoCode?.redeemCode,
             },
         };
 
@@ -433,6 +491,20 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                         allergyOptions: allergies,
                         selectedAllergies: selectedAllergies,
                         onChange: setSelectedAllergies,
+                    }}
+                    coupon={{
+                        onApply: async () => {
+                            const { data } = await apolloClient.query({
+                                query: GetOneGiftCardPromoCodeDocument,
+                                variables: { giftCardPromoCodeId },
+                            });
+                            setGetGiftCardPromoCodeData(data);
+                        },
+                        onChange: (id) => {
+                            setGiftCardPromoCodeId(id);
+                            setGetGiftCardPromoCodeData(undefined);
+                        },
+                        state: couponState,
                     }}
                 />
             </PEFullPageSheet>
@@ -552,6 +624,20 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                             allergyOptions: allergies,
                             selectedAllergies: selectedAllergies,
                             onChange: setSelectedAllergies,
+                        }}
+                        coupon={{
+                            onApply: async () => {
+                                const { data } = await apolloClient.query({
+                                    query: GetOneGiftCardPromoCodeDocument,
+                                    variables: { giftCardPromoCodeId },
+                                });
+                                setGetGiftCardPromoCodeData(data);
+                            },
+                            onChange: (i) => {
+                                setGiftCardPromoCodeId(i);
+                                setGetGiftCardPromoCodeData(undefined);
+                            },
+                            state: couponState,
                         }}
                     />
                 </div>

@@ -40,18 +40,33 @@ export interface Price {
     currencyCode: string;
 }
 
-export interface LineItem {
+export interface CostLineItem {
+    // type: 'COST';
     title: string;
     price: Price;
 }
 
+// export interface DiscountLineItem {
+//     type: 'DISCOUNT';
+//     title: string;
+//     price: Price;
+//     priceBeforeDiscount: Price;
+//     reason: string;
+// }
+
+// export type LineItem = CostLineItem | DiscountLineItem;
+
 export interface CostBreakdown {
-    lineItems: LineItem[];
+    lineItems: CostLineItem[];
     total?: {
         title: string;
         price: Price;
     };
     totalPerPerson?: {
+        title: string;
+        price: Price;
+    };
+    totalBeforeDiscount?: {
         title: string;
         price: Price;
     };

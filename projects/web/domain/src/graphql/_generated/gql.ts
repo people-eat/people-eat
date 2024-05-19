@@ -20,6 +20,7 @@ const documents = {
     "fragment KitchenOption on Kitchen {\n  kitchenId\n  title\n}": types.KitchenOptionFragmentDoc,
     "fragment LanguageOption on Language {\n  languageId\n  title\n}": types.LanguageOptionFragmentDoc,
     "fragment SignedInUser on User {\n  userId\n  firstName\n  profilePictureUrl\n  isCook\n  isAdmin\n}": types.SignedInUserFragmentDoc,
+    "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGIftCardPromoCodeDocument,
     "mutation AssignOneSessionByEmailAddress($request: CreateOneSessionByEmailAddressRequest!) {\n  sessions {\n    success: assignOneByEmailAddress(request: $request)\n  }\n}": types.AssignOneSessionByEmailAddressDocument,
     "mutation CreateOneCook($cookId: String!, $request: CreateOneCookRequest!) {\n  cooks {\n    success: createOne(cookId: $cookId, request: $request)\n  }\n}": types.CreateOneCookDocument,
     "mutation CreateOneUserByEmailAddress($request: CreateOneUserByEmailAddressRequest!, $profilePicture: Upload) {\n  users {\n    success: createOneByEmailAddress(\n      request: $request\n      profilePicture: $profilePicture\n    )\n  }\n}": types.CreateOneUserByEmailAddressDocument,
@@ -82,6 +83,7 @@ const documents = {
     "mutation CreateOnePhoneNumberUpdate($phoneNumber: PhoneNumber!, $userId: String!) {\n  users {\n    phoneNumberUpdate(userId: $userId) {\n      success: createOne(phoneNumber: $phoneNumber)\n    }\n  }\n}": types.CreateOnePhoneNumberUpdateDocument,
     "mutation UpdateUserPassword($userId: String!, $password: String!) {\n  users {\n    success: updatePassword(userId: $userId, password: $password)\n  }\n}": types.UpdateUserPasswordDocument,
     "mutation UpdateUserProfilePicture($userId: String!, $profilePicture: Upload) {\n  users {\n    success: updateProfilePicture(userId: $userId, profilePicture: $profilePicture)\n  }\n}": types.UpdateUserProfilePictureDocument,
+    "query GetOneGiftCardPromoCode($giftCardPromoCodeId: String!) {\n  giftCardPromoCodes {\n    findOne(giftCardPromoCodeId: $giftCardPromoCodeId) {\n      giftCardPromoCodeId\n      redeemCode\n      balance {\n        amount\n        currencyCode\n      }\n      expiresAt\n      createdAt\n    }\n  }\n}": types.GetOneGiftCardPromoCodeDocument,
     "query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetPageDataDocument,
     "query GetPrivacyPolicyPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicPrivacyPolicyUpdates {\n    findLatest {\n      privacyPolicyUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetPrivacyPolicyPageDataDocument,
     "query GetSignedInUser {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetSignedInUserDocument,
@@ -159,6 +161,10 @@ export function gql(source: "fragment LanguageOption on Language {\n  languageId
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "fragment SignedInUser on User {\n  userId\n  firstName\n  profilePictureUrl\n  isCook\n  isAdmin\n}"): (typeof documents)["fragment SignedInUser on User {\n  userId\n  firstName\n  profilePictureUrl\n  isCook\n  isAdmin\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -407,6 +413,10 @@ export function gql(source: "mutation UpdateUserPassword($userId: String!, $pass
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation UpdateUserProfilePicture($userId: String!, $profilePicture: Upload) {\n  users {\n    success: updateProfilePicture(userId: $userId, profilePicture: $profilePicture)\n  }\n}"): (typeof documents)["mutation UpdateUserProfilePicture($userId: String!, $profilePicture: Upload) {\n  users {\n    success: updateProfilePicture(userId: $userId, profilePicture: $profilePicture)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query GetOneGiftCardPromoCode($giftCardPromoCodeId: String!) {\n  giftCardPromoCodes {\n    findOne(giftCardPromoCodeId: $giftCardPromoCodeId) {\n      giftCardPromoCodeId\n      redeemCode\n      balance {\n        amount\n        currencyCode\n      }\n      expiresAt\n      createdAt\n    }\n  }\n}"): (typeof documents)["query GetOneGiftCardPromoCode($giftCardPromoCodeId: String!) {\n  giftCardPromoCodes {\n    findOne(giftCardPromoCodeId: $giftCardPromoCodeId) {\n      giftCardPromoCodeId\n      redeemCode\n      balance {\n        amount\n        currencyCode\n      }\n      expiresAt\n      createdAt\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,0 +1,14 @@
+query GetOneGiftCardPromoCode($giftCardPromoCodeId: String!) {
+    giftCardPromoCodes {
+        findOne(giftCardPromoCodeId: $giftCardPromoCodeId) {
+            giftCardPromoCodeId
+            redeemCode
+            balance {
+                amount
+                currencyCode
+            }
+            expiresAt
+            createdAt
+        }
+    }
+}

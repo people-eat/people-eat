@@ -1,0 +1,7 @@
+mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {
+    admins {
+        giftCardPromoCodes {
+            success: createOne(giftCardPromoCode: $giftCardPromoCode)
+        }
+    }
+}
