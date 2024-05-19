@@ -1,7 +1,16 @@
-import { PEHeader } from '@people-eat/web-components';
-import { AdminGetCooksPageDataDocument, AdminGetCooksPageDataQuery, GetSignedInUserDocument, SignedInUser } from '@people-eat/web-domain';
+import { LoadingDialog, PEHeader } from '@people-eat/web-components';
+import {
+    AdminAssignOneSessionDocument,
+    AdminGetCooksPageDataDocument,
+    AdminGetCooksPageDataQuery,
+    GetSignedInUserDocument,
+    SignedInUser,
+} from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../../network/apolloClients';
+import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
+import { PEButton } from '@people-eat/web-core-components';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
@@ -37,9 +46,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function AdministrationCooksPage({ signedInUser, initialCooks: cooks }: ServerSideProps) {
+    const [signInAsUser, { loading }] = useMutation(AdminAssignOneSessionDocument);
+    const router = useRouter();
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
+
+            <LoadingDialog active={loading} />
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-center">
@@ -71,6 +85,7 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Stadt
                                 </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,6 +102,19 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                         {cook.isVisible ? 'Ja' : 'Nein'}
                                     </td>
                                     <td className="px-3 py-4 text-sm text-gray-500">{cook.city}</td>
+                                    <td className="px-3 py-4 text-sm text-gray-500">
+                                        <PEButton
+                                            type="secondary"
+                                            title="anmelden"
+                                            onClick={async () => {
+                                                const { data } = await signInAsUser({ variables: { userId: cook.cookId } });
+
+                                                if (data?.sessions.success) {
+                                                    router.push('/profile');
+                                                }
+                                            }}
+                                        />
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

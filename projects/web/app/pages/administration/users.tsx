@@ -1,5 +1,6 @@
-import { PEHeader } from '@people-eat/web-components';
+import { LoadingDialog, PEHeader } from '@people-eat/web-components';
 import {
+    AdminAssignOneSessionDocument,
     AdminGetUsersPageDataDocument,
     AdminGetUsersPageDataQuery,
     GetSignedInUserDocument,
@@ -8,6 +9,9 @@ import {
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../../network/apolloClients';
+import { PEButton } from '@people-eat/web-core-components';
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
@@ -43,9 +47,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function AdministrationUsersPage({ signedInUser, initialUsers: users }: ServerSideProps) {
+    const [signInAsUser, { loading }] = useMutation(AdminAssignOneSessionDocument);
+    const router = useRouter();
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
+
+            <LoadingDialog active={loading} />
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-center">
@@ -77,6 +86,7 @@ export default function AdministrationUsersPage({ signedInUser, initialUsers: us
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Registriert am
                                 </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,6 +101,19 @@ export default function AdministrationUsersPage({ signedInUser, initialUsers: us
                                     <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{user.lastName}</td>
                                     <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{user.isCook ? 'Ja' : 'Nein'}</td>
                                     <td className="px-3 py-4 text-sm text-gray-500">{toTranslatedFormattedDate(user.createdAt)}</td>
+                                    <td className="px-3 py-4 text-sm text-gray-500">
+                                        <PEButton
+                                            type="secondary"
+                                            title="anmelden"
+                                            onClick={async () => {
+                                                const { data } = await signInAsUser({ variables: { userId: user.userId } });
+
+                                                if (data?.sessions.success) {
+                                                    router.push('/profile');
+                                                }
+                                            }}
+                                        />
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
