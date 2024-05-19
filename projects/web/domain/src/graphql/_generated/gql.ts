@@ -88,6 +88,12 @@ const documents = {
     "query GetPrivacyPolicyPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicPrivacyPolicyUpdates {\n    findLatest {\n      privacyPolicyUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetPrivacyPolicyPageDataDocument,
     "query GetSignedInUser {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetSignedInUserDocument,
     "query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetTermsAndConditionsPageDataDocument,
+    "query AdminGetCooksPageData {\n  cooks {\n    findMany(request: {}) {\n      cookId\n      user {\n        firstName\n        lastName\n        profilePictureUrl\n      }\n      isVisible\n      city\n    }\n  }\n}": types.AdminGetCooksPageDataDocument,
+    "query AdminGetGiftCardPromoCodesPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}": types.AdminGetGiftCardPromoCodesPageDataDocument,
+    "query AdminGetGlobalBookingRequestsPageData {\n  globalBookingRequests {\n    findMany {\n      globalBookingRequestId\n      dateTime\n      adultParticipants\n      children\n      occasion\n      priceClass {\n        type\n        min\n        max\n        currencyCode\n      }\n      location {\n        text\n      }\n      user {\n        userId\n        firstName\n        profilePictureUrl\n      }\n      createdAt\n    }\n  }\n}": types.AdminGetGlobalBookingRequestsPageDataDocument,
+    "query AdminGetPrivacyPolicyPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}": types.AdminGetPrivacyPolicyPageDataDocument,
+    "query AdminGetTermsAndConditionsPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}": types.AdminGetTermsAndConditionsPageDataDocument,
+    "query AdminGetUsersPageData {\n  users {\n    findMany(request: {}) {\n      userId\n      firstName\n      lastName\n      profilePictureUrl\n      isCook\n      createdAt\n    }\n  }\n}": types.AdminGetUsersPageDataDocument,
     "query CookGetStripeDashboardUrl($cookId: String!) {\n  cooks {\n    getStripeDashboardUrl(cookId: $cookId)\n  }\n}": types.CookGetStripeDashboardUrlDocument,
     "query CookGetStripeOnboardingUrl($cookId: String!) {\n  cooks {\n    getStripeOnboardingUrl(cookId: $cookId)\n  }\n}": types.CookGetStripeOnboardingUrlDocument,
     "query GetCookProfileMeals($cookId: String!) {\n  cooks {\n    meals(cookId: $cookId) {\n      findMany {\n        mealId\n        title\n        type\n        description\n        imageUrl\n        createdAt\n      }\n    }\n  }\n}": types.GetCookProfileMealsDocument,
@@ -433,6 +439,30 @@ export function gql(source: "query GetSignedInUser {\n  users {\n    signedInUse
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}"): (typeof documents)["query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query AdminGetCooksPageData {\n  cooks {\n    findMany(request: {}) {\n      cookId\n      user {\n        firstName\n        lastName\n        profilePictureUrl\n      }\n      isVisible\n      city\n    }\n  }\n}"): (typeof documents)["query AdminGetCooksPageData {\n  cooks {\n    findMany(request: {}) {\n      cookId\n      user {\n        firstName\n        lastName\n        profilePictureUrl\n      }\n      isVisible\n      city\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query AdminGetGiftCardPromoCodesPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}"): (typeof documents)["query AdminGetGiftCardPromoCodesPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query AdminGetGlobalBookingRequestsPageData {\n  globalBookingRequests {\n    findMany {\n      globalBookingRequestId\n      dateTime\n      adultParticipants\n      children\n      occasion\n      priceClass {\n        type\n        min\n        max\n        currencyCode\n      }\n      location {\n        text\n      }\n      user {\n        userId\n        firstName\n        profilePictureUrl\n      }\n      createdAt\n    }\n  }\n}"): (typeof documents)["query AdminGetGlobalBookingRequestsPageData {\n  globalBookingRequests {\n    findMany {\n      globalBookingRequestId\n      dateTime\n      adultParticipants\n      children\n      occasion\n      priceClass {\n        type\n        min\n        max\n        currencyCode\n      }\n      location {\n        text\n      }\n      user {\n        userId\n        firstName\n        profilePictureUrl\n      }\n      createdAt\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query AdminGetPrivacyPolicyPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}"): (typeof documents)["query AdminGetPrivacyPolicyPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query AdminGetTermsAndConditionsPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}"): (typeof documents)["query AdminGetTermsAndConditionsPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query AdminGetUsersPageData {\n  users {\n    findMany(request: {}) {\n      userId\n      firstName\n      lastName\n      profilePictureUrl\n      isCook\n      createdAt\n    }\n  }\n}"): (typeof documents)["query AdminGetUsersPageData {\n  users {\n    findMany(request: {}) {\n      userId\n      firstName\n      lastName\n      profilePictureUrl\n      isCook\n      createdAt\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

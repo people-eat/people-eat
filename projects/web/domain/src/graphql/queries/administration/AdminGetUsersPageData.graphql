@@ -1,0 +1,12 @@
+query AdminGetUsersPageData {
+    users {
+        findMany(request: {}) {
+            userId
+            firstName
+            lastName
+            profilePictureUrl
+            isCook
+            createdAt
+        }
+    }
+}

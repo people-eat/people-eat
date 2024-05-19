@@ -1,0 +1,14 @@
+query AdminGetCooksPageData {
+    cooks {
+        findMany(request: {}) {
+            cookId
+            user {
+                firstName
+                lastName
+                profilePictureUrl
+            }
+            isVisible
+            city
+        }
+    }
+}

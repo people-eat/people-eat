@@ -1,0 +1,26 @@
+query AdminGetGlobalBookingRequestsPageData {
+    globalBookingRequests {
+        findMany {
+            globalBookingRequestId
+            dateTime
+            adultParticipants
+            children
+            occasion
+            priceClass {
+                type
+                min
+                max
+                currencyCode
+            }
+            location {
+                text
+            }
+            user {
+                userId
+                firstName
+                profilePictureUrl
+            }
+            createdAt
+        }
+    }
+}

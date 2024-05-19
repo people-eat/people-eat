@@ -1,0 +1,16 @@
+query AdminGetPrivacyPolicyPageData {
+    admins {
+        giftCardPromoCodes {
+            findMany {
+                giftCardPromoCodeId
+                redeemCode
+                balance {
+                    amount
+                    currencyCode
+                }
+                expiresAt
+                createdAt
+            }
+        }
+    }
+}
