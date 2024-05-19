@@ -110,7 +110,7 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                                 const { data } = await signInAsUser({ variables: { userId: cook.cookId } });
 
                                                 if (data?.sessions.success) {
-                                                    router.push('/profile');
+                                                    router.push('/chef-profile');
                                                 }
                                             }}
                                         />
