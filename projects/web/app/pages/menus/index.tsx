@@ -15,7 +15,7 @@ import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { PELink } from '@people-eat/web-core-components';
@@ -86,6 +86,21 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
         [],
     );
 
+    const [sortedMenus, setSortedMenus] = useState(menus);
+
+    useEffect(() => {
+        console.log('sorted again');
+        const menusSorted = [...menus];
+        menusSorted.sort(
+            (a, b) =>
+                calculateMenuPrice(adults, children, a.basePrice, a.basePriceCustomers, a.pricePerAdult, a.pricePerChild) /
+                    (adults + children) -
+                calculateMenuPrice(adults, children, b.basePrice, b.basePriceCustomers, b.pricePerAdult, b.pricePerChild) /
+                    (adults + children),
+        );
+        setSortedMenus(menusSorted);
+    }, [menus, adults, children]);
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
@@ -132,7 +147,7 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
                         role="list"
                         className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4"
                     >
-                        {menus.map(
+                        {sortedMenus.map(
                             ({
                                 menuId,
                                 title,
