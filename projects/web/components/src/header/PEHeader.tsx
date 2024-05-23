@@ -33,7 +33,7 @@ export function PEHeader({ signedInUser, className }: PEHeaderProps) {
                 <div className="flex lg:flex-1">
                     <Link href="/">
                         <span className="sr-only">PeopleEat</span>
-                        <Image src="/people-eat-logo-title.png" alt="" width={256} height={256} className="h-8 w-auto" />
+                        <Image src="/people-eat-logo-title.png" alt="" width={256} height={256} className="h-8 w-auto" unoptimized />
                     </Link>
                 </div>
                 <div className="hidden lg:flex lg:gap-x-12">
