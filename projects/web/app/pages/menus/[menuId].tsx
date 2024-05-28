@@ -42,6 +42,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
+import Head from 'next/head';
 
 const publicMenusRedirect = { redirect: { permanent: false, destination: '/menus' } };
 
@@ -409,32 +410,49 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
     }, [signedInUser]);
 
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <Head>
+                <title>
+                    {menu.title} von {menu.cook.user.firstName}
+                </title>
 
-            <LoadingDialog active={loading} />
+                <meta name="title" content="Finde einen Privatkoch in deiner Umgebung" />
+                <meta
+                    name="description"
+                    content="Hier kannst du einen Privatkoch für Zuhause zu buchen. Du wirst es kaum glauben, aber es war nie einfacher"
+                />
+                <meta name="keywords" content="Koch buchen, Koch für Zuhause, Mietkoch" />
+                <link rel="alternate" href={`https://people-eat.com/menus/${menu.menuId}`} hrefLang="x-default" />
+                <link rel="alternate" href={`https://people-eat.com/menus/${menu.menuId}`} hrefLang="de" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
 
-            {completionState === 'SUCCESSFUL' && stripeClientSecret && stripePublishableKey && (
-                <PEDialog open={showPaymentDialog} onClose={() => setShowPaymentDialog(false)} title="Zahlungsmittel hinterlegen">
-                    <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret }}>
-                        <Payment userId={signedInUser!.userId} bookingRequestId={bookingRequestId!}>
-                            <div className="flex flex-col gap-4">
-                                <h3 className="text-lg font-semibold">{menu.title}</h3>
+            <div>
+                <PEHeader signedInUser={signedInUser} />
 
-                                {/* {courseMealSelections.map(({ courseId, courseTitle, mealTitle }) => (
+                <LoadingDialog active={loading} />
+
+                {completionState === 'SUCCESSFUL' && stripeClientSecret && stripePublishableKey && (
+                    <PEDialog open={showPaymentDialog} onClose={() => setShowPaymentDialog(false)} title="Zahlungsmittel hinterlegen">
+                        <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret }}>
+                            <Payment userId={signedInUser!.userId} bookingRequestId={bookingRequestId!}>
+                                <div className="flex flex-col gap-4">
+                                    <h3 className="text-lg font-semibold">{menu.title}</h3>
+
+                                    {/* {courseMealSelections.map(({ courseId, courseTitle, mealTitle }) => (
                                         <VStack key={courseId}>
                                             <b>{courseTitle}</b>
                                             <div>{mealTitle}</div>
                                         </VStack>
                                     ))} */}
 
-                                {/* <Spacer /> */}
+                                    {/* <Spacer /> */}
 
-                                {/*<Divider flexItem /> */}
+                                    {/*<Divider flexItem /> */}
 
-                                <PECostBreakdownPanel costBreakdown={costBreakdown} />
+                                    <PECostBreakdownPanel costBreakdown={costBreakdown} />
 
-                                {/* {moreThanTwoWeeksInTheFuture <= 14 && (
+                                    {/* {moreThanTwoWeeksInTheFuture <= 14 && (
                                         <div className="text-text-sm" style={{ color: 'gray' }}>
                                             Der Gesamtbetrag wird erst dann eingezogen wenn der Koch die Anfrage akzeptiert hat.
                                         </div>
@@ -446,159 +464,26 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                             (zuvor wird eine Ankündigungsmail verschickt).
                                         </div>
                                     )} */}
-                            </div>
-                        </Payment>
-                    </Elements>
-                </PEDialog>
-            )}
+                                </div>
+                            </Payment>
+                        </Elements>
+                    </PEDialog>
+                )}
 
-            <PEAuthDialog
-                open={authDialogOpen}
-                onClose={() => setAuthDialogOpen(false)}
-                signInButtonTitle="Anfrage senden"
-                signUpButtonTitle="Registrieren"
-                onSignedInUserFetched={(changedSignedInUser) => {
-                    setSignedInUser(changedSignedInUser);
-                    setAuthDialogOpen(false);
-                    // setShowPaymentDialog(true);
-                }}
-            />
-
-            <PEFullPageSheet title="Event Details" open={shopBook} onClose={() => setShowBook(false)}>
-                <BookForm
-                    onLocationSearchTextChange={onLocationSearchTextChange}
-                    locationSearchResults={locationSearchResults}
-                    selectedLocation={selectedLocation}
-                    setSelectedLocation={setSelectedLocation}
-                    isOutOfTravelRadius={isOutOfCookTravelRadius}
-                    adults={adults}
-                    setAdults={setAdults}
-                    kids={children}
-                    setKids={setChildren}
-                    date={date}
-                    setDate={setDate}
-                    time={time}
-                    setTime={setTime}
-                    message={message}
-                    setMessage={setMessage}
-                    occasion={occasion}
-                    setOccasion={setOccasion}
-                    costBreakdown={costBreakdown}
-                    searchButton={{
-                        title: 'Anfrage senden',
-                        onClick: () => (signedInUser ? onBook() : setAuthDialogOpen(true)),
-                    }}
-                    allergies={{
-                        allergyOptions: allergies,
-                        selectedAllergies: selectedAllergies,
-                        onChange: setSelectedAllergies,
-                    }}
-                    coupon={{
-                        onApply: async () => {
-                            const { data } = await apolloClient.query({
-                                query: GetOneGiftCardPromoCodeDocument,
-                                variables: { giftCardPromoCodeId },
-                            });
-                            setGetGiftCardPromoCodeData(data);
-                        },
-                        onChange: (id) => {
-                            setGiftCardPromoCodeId(id);
-                            setGetGiftCardPromoCodeData(undefined);
-                        },
-                        state: couponState,
+                <PEAuthDialog
+                    open={authDialogOpen}
+                    onClose={() => setAuthDialogOpen(false)}
+                    signInButtonTitle="Anfrage senden"
+                    signUpButtonTitle="Registrieren"
+                    onSignedInUserFetched={(changedSignedInUser) => {
+                        setSignedInUser(changedSignedInUser);
+                        setAuthDialogOpen(false);
+                        // setShowPaymentDialog(true);
                     }}
                 />
-            </PEFullPageSheet>
 
-            <div className="mx-auto max-w-7xl px-4 md:py-8 sm:px-6 lg:px-8">
-                <div className="flex gap-8">
-                    <div className="flex-1 flex flex-col gap-4">
-                        <h1 className="font-bold text-3xl tracking-tight text-gray-900 break-all">{menu.title}</h1>
-
-                        {menu.kitchen && (
-                            <div className="flex gap-4 text-gray-500 text-base font-semibold">
-                                <Utensils />
-                                <div>{menu.kitchen.title}</div>
-                            </div>
-                        )}
-
-                        {menu.categories.length > 0 && (
-                            <div className="flex gap-4 text-gray-500 text-base font-semibold">
-                                {menu.categories.map(({ title }) => title).join(', ')}
-                            </div>
-                        )}
-
-                        <Link href={'/chefs/' + menu.cook.cookId}>
-                            <figcaption className="flex items-center gap-x-4">
-                                {!menu.cook.user.profilePictureUrl && (
-                                    <CircleUser strokeWidth={1.5} className="text-orange-500 w-10 h-10" />
-                                )}
-                                {menu.cook.user.profilePictureUrl && (
-                                    <Image
-                                        src={menu.cook.user.profilePictureUrl}
-                                        width={100}
-                                        height={100}
-                                        alt=""
-                                        className="object-cover object-center rounded-full w-10"
-                                    />
-                                )}
-                                <span className="text-gray-900 text-2xl">{menu.cook.user.firstName}</span>
-                            </figcaption>
-                        </Link>
-
-                        {menu.description && (
-                            <div className="flex flex-col gap-2">
-                                <div className="text-gray-500">{menu.description}</div>
-                            </div>
-                        )}
-
-                        <div className="flex flex-col gap-2">
-                            <div className="font-bold text-gray-900 text-xl">Stelle dein Wunschmenü zusammen</div>
-                            <span className="textxl text-gray-500">
-                                Klicke auf <i>Auswählen</i> und stelle dein Menü zusammen. Wird nur ein Gericht in einem Gang angezeigt, so
-                                ist dieses automatisch ausgewählt.
-                            </span>
-                        </div>
-
-                        {menu.greetingFromKitchen && (
-                            <div className="flex flex-col gap-2">
-                                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
-                                <span className="textxl text-gray-500">{menu.greetingFromKitchen}</span>
-                            </div>
-                        )}
-
-                        {sortedCourses.map(({ courseId, title, mealOptions }) => (
-                            <div key={courseId} className="flex flex-col gap-10 mb-8">
-                                <div className="flex flex-col gap-2">
-                                    <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
-                                    <span className="textxl text-gray-500">
-                                        {courseMealSelections.get(courseId)?.meal.title} ausgewählt
-                                    </span>
-                                </div>
-
-                                <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
-                                    {mealOptions.map(({ index, meal }) => (
-                                        <MealSelectionCard
-                                            key={meal.mealId}
-                                            title={meal.title}
-                                            description={meal.description}
-                                            imageUrl={meal.imageUrl}
-                                            selected={courseMealSelections.get(courseId)?.index === index}
-                                            onSelect={() => {
-                                                const map = new Map(courseMealSelections);
-                                                map.set(courseId, { index, meal });
-                                                setCourseMealSelections(map);
-                                            }}
-                                            onInfoClick={() => setSelectedMeal({ meal, courseId, index })}
-                                        />
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-
-                    <BookBar
-                        title="Veranstaltungsdetails"
+                <PEFullPageSheet title="Event Details" open={shopBook} onClose={() => setShowBook(false)}>
+                    <BookForm
                         onLocationSearchTextChange={onLocationSearchTextChange}
                         locationSearchResults={locationSearchResults}
                         selectedLocation={selectedLocation}
@@ -634,181 +519,319 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                 });
                                 setGetGiftCardPromoCodeData(data);
                             },
-                            onChange: (i) => {
-                                setGiftCardPromoCodeId(i);
+                            onChange: (id) => {
+                                setGiftCardPromoCodeId(id);
                                 setGetGiftCardPromoCodeData(undefined);
                             },
                             state: couponState,
                         }}
                     />
-                </div>
+                </PEFullPageSheet>
 
-                <div className="mx-auto max-w-7xl py-10 sm:px-2 md:py-32 lg:px-4 block">
-                    <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
-                        <div className="max-w-3xl">
-                            <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-                                Du bist der Gastgeber, wir kümmern uns um den Rest
-                            </h2>
-                            <p className="mt-4 text-gray-500">
-                                Spare Zeit und kümmere dich voll und ganz auf deine Gäste, währenddessen versorgt dein Koch dich und deine
-                                Gäste mit erstklassigen kulinarischen Menükreationen.
-                            </p>
-                        </div>
-                        <div className="mt-8 md:mt-16 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">
-                            {incentives.map((incentive) => (
-                                <div key={incentive.name} className="sm:flex lg:block">
-                                    <div className="sm:flex-shrink-0">
-                                        <incentive.imageSrc strokeWidth={1.5} className="h-8 w-8 text-orange-500" />
+                <div className="mx-auto max-w-7xl px-4 md:py-8 sm:px-6 lg:px-8">
+                    <div className="flex gap-8">
+                        <div className="flex-1 flex flex-col gap-4">
+                            <h1 className="font-bold text-3xl tracking-tight text-gray-900 break-all">{menu.title}</h1>
+
+                            {menu.kitchen && (
+                                <div className="flex gap-4 text-gray-500 text-base font-semibold">
+                                    <Utensils />
+                                    <div>{menu.kitchen.title}</div>
+                                </div>
+                            )}
+
+                            {menu.categories.length > 0 && (
+                                <div className="flex gap-4 text-gray-500 text-base font-semibold">
+                                    {menu.categories.map(({ title }) => title).join(', ')}
+                                </div>
+                            )}
+
+                            <Link href={'/chefs/' + menu.cook.cookId}>
+                                <figcaption className="flex items-center gap-x-4">
+                                    {!menu.cook.user.profilePictureUrl && (
+                                        <CircleUser strokeWidth={1.5} className="text-orange-500 w-10 h-10" />
+                                    )}
+                                    {menu.cook.user.profilePictureUrl && (
+                                        <Image
+                                            src={menu.cook.user.profilePictureUrl}
+                                            width={100}
+                                            height={100}
+                                            alt=""
+                                            className="object-cover object-center rounded-full w-10"
+                                        />
+                                    )}
+                                    <span className="text-gray-900 text-2xl">{menu.cook.user.firstName}</span>
+                                </figcaption>
+                            </Link>
+
+                            {menu.description && (
+                                <div className="flex flex-col gap-2">
+                                    <div className="text-gray-500">{menu.description}</div>
+                                </div>
+                            )}
+
+                            <div className="flex flex-col gap-2">
+                                <div className="font-bold text-gray-900 text-xl">Stelle dein Wunschmenü zusammen</div>
+                                <span className="textxl text-gray-500">
+                                    Klicke auf <i>Auswählen</i> und stelle dein Menü zusammen. Wird nur ein Gericht in einem Gang angezeigt,
+                                    so ist dieses automatisch ausgewählt.
+                                </span>
+                            </div>
+
+                            {menu.greetingFromKitchen && (
+                                <div className="flex flex-col gap-2">
+                                    <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
+                                    <span className="textxl text-gray-500">{menu.greetingFromKitchen}</span>
+                                </div>
+                            )}
+
+                            {sortedCourses.map(({ courseId, title, mealOptions }) => (
+                                <div key={courseId} className="flex flex-col gap-10 mb-8">
+                                    <div className="flex flex-col gap-2">
+                                        <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
+                                        <span className="textxl text-gray-500">
+                                            {courseMealSelections.get(courseId)?.meal.title} ausgewählt
+                                        </span>
                                     </div>
-                                    <div className="mt-4 sm:ml-6 sm:mt-0 lg:ml-0 lg:mt-6">
-                                        <h3 className="text-sm font-medium text-gray-900">{incentive.name}</h3>
-                                        <p className="mt-2 text-sm text-gray-500">{incentive.description}</p>
-                                    </div>
+
+                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
+                                        {mealOptions.map(({ index, meal }) => (
+                                            <MealSelectionCard
+                                                key={meal.mealId}
+                                                title={meal.title}
+                                                description={meal.description}
+                                                imageUrl={meal.imageUrl}
+                                                selected={courseMealSelections.get(courseId)?.index === index}
+                                                onSelect={() => {
+                                                    const map = new Map(courseMealSelections);
+                                                    map.set(courseId, { index, meal });
+                                                    setCourseMealSelections(map);
+                                                }}
+                                                onInfoClick={() => setSelectedMeal({ meal, courseId, index })}
+                                            />
+                                        ))}
+                                    </ul>
                                 </div>
                             ))}
                         </div>
+
+                        <BookBar
+                            title="Veranstaltungsdetails"
+                            onLocationSearchTextChange={onLocationSearchTextChange}
+                            locationSearchResults={locationSearchResults}
+                            selectedLocation={selectedLocation}
+                            setSelectedLocation={setSelectedLocation}
+                            isOutOfTravelRadius={isOutOfCookTravelRadius}
+                            adults={adults}
+                            setAdults={setAdults}
+                            kids={children}
+                            setKids={setChildren}
+                            date={date}
+                            setDate={setDate}
+                            time={time}
+                            setTime={setTime}
+                            message={message}
+                            setMessage={setMessage}
+                            occasion={occasion}
+                            setOccasion={setOccasion}
+                            costBreakdown={costBreakdown}
+                            searchButton={{
+                                title: 'Anfrage senden',
+                                onClick: () => (signedInUser ? onBook() : setAuthDialogOpen(true)),
+                            }}
+                            allergies={{
+                                allergyOptions: allergies,
+                                selectedAllergies: selectedAllergies,
+                                onChange: setSelectedAllergies,
+                            }}
+                            coupon={{
+                                onApply: async () => {
+                                    const { data } = await apolloClient.query({
+                                        query: GetOneGiftCardPromoCodeDocument,
+                                        variables: { giftCardPromoCodeId },
+                                    });
+                                    setGetGiftCardPromoCodeData(data);
+                                },
+                                onChange: (i) => {
+                                    setGiftCardPromoCodeId(i);
+                                    setGetGiftCardPromoCodeData(undefined);
+                                },
+                                state: couponState,
+                            }}
+                        />
                     </div>
-                </div>
 
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
-                        <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
-                        <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
-                            {faqs.map((faq) => (
-                                <Disclosure as="div" key={faq.question} className="pt-6">
-                                    {({ open }) => (
-                                        <>
-                                            <dt>
-                                                <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900">
-                                                    <span className="text-base font-semibold leading-7">{faq.question}</span>
-                                                    <span className="ml-6 flex h-7 items-center">
-                                                        {open ? (
-                                                            <MinusIcon className="h-6 w-6" aria-hidden="true" />
-                                                        ) : (
-                                                            <PlusIcon className="h-6 w-6" aria-hidden="true" />
-                                                        )}
-                                                    </span>
-                                                </Disclosure.Button>
-                                            </dt>
-                                            <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                                                <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
-                                            </Disclosure.Panel>
-                                        </>
-                                    )}
-                                </Disclosure>
-                            ))}
-                        </dl>
-                    </div>
-                </div>
-            </div>
-
-            <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
-                <div className="flex justify-between w-full">
-                    {costBreakdown.total?.price && <span>{formatPrice(costBreakdown.total.price)}</span>}
-                    <PEButton title="Jetzt buchen" onClick={() => setShowBook(true)} />
-                </div>
-            </div>
-
-            <Transition.Root show={Boolean(selectedMeal)} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={() => setSelectedMeal(undefined)}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 hidden bg-gray-500 bg-opacity-75 transition-opacity md:block" />
-                    </Transition.Child>
-
-                    <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-                        <div className="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
-                                enterTo="opacity-100 translate-y-0 md:scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 translate-y-0 md:scale-100"
-                                leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
-                            >
-                                <Dialog.Panel className="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
-                                    {selectedMeal && (
-                                        <div className="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-2xl">
-                                            <button
-                                                type="button"
-                                                className="absolute right-4 top-4 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8"
-                                                onClick={() => setSelectedMeal(undefined)}
-                                            >
-                                                <span className="sr-only">Close</span>
-                                                <X className="h-6 w-6" aria-hidden="true" />
-                                            </button>
-
-                                            <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
-                                                <div className="sm:col-span-4 lg:col-span-5">
-                                                    <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
-                                                        <Image
-                                                            src={selectedMeal.meal.imageUrl ?? '/placeholders/meal.png'}
-                                                            alt=""
-                                                            className="object-cover object-center"
-                                                            width={600}
-                                                            height={600}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="sm:col-span-8 lg:col-span-7">
-                                                    <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{selectedMeal.meal.title}</h2>
-
-                                                    <section aria-labelledby="information-heading" className="mt-3">
-                                                        <h3 id="information-heading" className="sr-only">
-                                                            Product information
-                                                        </h3>
-
-                                                        <div className="mt-6">
-                                                            <h4 className="sr-only">Description</h4>
-                                                            <p className="text-sm text-gray-700">{selectedMeal.meal.description}</p>
-                                                        </div>
-                                                    </section>
-
-                                                    <section aria-labelledby="options-heading" className="mt-6">
-                                                        {courseMealSelections.get(selectedMeal.courseId)?.index === selectedMeal.index && (
-                                                            <div className="inline-flex items-center gap-x-2 rounded-full bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm">
-                                                                <span>Ausgewählt</span>
-                                                                <CheckCircleIcon className="-mr-0.5 h-5 w-5" aria-hidden="true" />
-                                                            </div>
-                                                        )}
-                                                        {courseMealSelections.get(selectedMeal.courseId)?.index !== selectedMeal.index && (
-                                                            <button
-                                                                type="button"
-                                                                className="inline-flex items-center gap-x-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                                                onClick={() => {
-                                                                    const map = new Map(courseMealSelections);
-                                                                    map.set(selectedMeal.courseId, {
-                                                                        index: selectedMeal.index,
-                                                                        meal: selectedMeal.meal,
-                                                                    });
-                                                                    setCourseMealSelections(map);
-                                                                }}
-                                                            >
-                                                                <span>Auswählen</span>
-                                                                <Circle className="-mr-0.5 h-5 w-5" aria-hidden="true" />
-                                                            </button>
-                                                        )}
-                                                    </section>
-                                                </div>
-                                            </div>
+                    <div className="mx-auto max-w-7xl py-10 sm:px-2 md:py-32 lg:px-4 block">
+                        <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
+                            <div className="max-w-3xl">
+                                <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+                                    Du bist der Gastgeber, wir kümmern uns um den Rest
+                                </h2>
+                                <p className="mt-4 text-gray-500">
+                                    Spare Zeit und kümmere dich voll und ganz auf deine Gäste, währenddessen versorgt dein Koch dich und
+                                    deine Gäste mit erstklassigen kulinarischen Menükreationen.
+                                </p>
+                            </div>
+                            <div className="mt-8 md:mt-16 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">
+                                {incentives.map((incentive) => (
+                                    <div key={incentive.name} className="sm:flex lg:block">
+                                        <div className="sm:flex-shrink-0">
+                                            <incentive.imageSrc strokeWidth={1.5} className="h-8 w-8 text-orange-500" />
                                         </div>
-                                    )}
-                                </Dialog.Panel>
-                            </Transition.Child>
+                                        <div className="mt-4 sm:ml-6 sm:mt-0 lg:ml-0 lg:mt-6">
+                                            <h3 className="text-sm font-medium text-gray-900">{incentive.name}</h3>
+                                            <p className="mt-2 text-sm text-gray-500">{incentive.description}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </Dialog>
-            </Transition.Root>
 
-            <PEFooter />
-        </div>
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
+                            <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
+                            <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
+                                {faqs.map((faq) => (
+                                    <Disclosure as="div" key={faq.question} className="pt-6">
+                                        {({ open }) => (
+                                            <>
+                                                <dt>
+                                                    <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900">
+                                                        <span className="text-base font-semibold leading-7">{faq.question}</span>
+                                                        <span className="ml-6 flex h-7 items-center">
+                                                            {open ? (
+                                                                <MinusIcon className="h-6 w-6" aria-hidden="true" />
+                                                            ) : (
+                                                                <PlusIcon className="h-6 w-6" aria-hidden="true" />
+                                                            )}
+                                                        </span>
+                                                    </Disclosure.Button>
+                                                </dt>
+                                                <Disclosure.Panel as="dd" className="mt-2 pr-12">
+                                                    <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
+                                                </Disclosure.Panel>
+                                            </>
+                                        )}
+                                    </Disclosure>
+                                ))}
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
+                    <div className="flex justify-between w-full">
+                        {costBreakdown.total?.price && <span>{formatPrice(costBreakdown.total.price)}</span>}
+                        <PEButton title="Jetzt buchen" onClick={() => setShowBook(true)} />
+                    </div>
+                </div>
+
+                <Transition.Root show={Boolean(selectedMeal)} as={Fragment}>
+                    <Dialog as="div" className="relative z-10" onClose={() => setSelectedMeal(undefined)}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0 hidden bg-gray-500 bg-opacity-75 transition-opacity md:block" />
+                        </Transition.Child>
+
+                        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                            <div className="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
+                                    enterTo="opacity-100 translate-y-0 md:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 md:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
+                                >
+                                    <Dialog.Panel className="flex w-full transform text-left text-base transition md:my-8 md:max-w-2xl md:px-4 lg:max-w-4xl">
+                                        {selectedMeal && (
+                                            <div className="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-2xl">
+                                                <button
+                                                    type="button"
+                                                    className="absolute right-4 top-4 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8"
+                                                    onClick={() => setSelectedMeal(undefined)}
+                                                >
+                                                    <span className="sr-only">Close</span>
+                                                    <X className="h-6 w-6" aria-hidden="true" />
+                                                </button>
+
+                                                <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
+                                                    <div className="sm:col-span-4 lg:col-span-5">
+                                                        <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
+                                                            <Image
+                                                                src={selectedMeal.meal.imageUrl ?? '/placeholders/meal.png'}
+                                                                alt=""
+                                                                className="object-cover object-center"
+                                                                width={600}
+                                                                height={600}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="sm:col-span-8 lg:col-span-7">
+                                                        <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">
+                                                            {selectedMeal.meal.title}
+                                                        </h2>
+
+                                                        <section aria-labelledby="information-heading" className="mt-3">
+                                                            <h3 id="information-heading" className="sr-only">
+                                                                Product information
+                                                            </h3>
+
+                                                            <div className="mt-6">
+                                                                <h4 className="sr-only">Description</h4>
+                                                                <p className="text-sm text-gray-700">{selectedMeal.meal.description}</p>
+                                                            </div>
+                                                        </section>
+
+                                                        <section aria-labelledby="options-heading" className="mt-6">
+                                                            {courseMealSelections.get(selectedMeal.courseId)?.index ===
+                                                                selectedMeal.index && (
+                                                                <div className="inline-flex items-center gap-x-2 rounded-full bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm">
+                                                                    <span>Ausgewählt</span>
+                                                                    <CheckCircleIcon className="-mr-0.5 h-5 w-5" aria-hidden="true" />
+                                                                </div>
+                                                            )}
+                                                            {courseMealSelections.get(selectedMeal.courseId)?.index !==
+                                                                selectedMeal.index && (
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center gap-x-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                                                    onClick={() => {
+                                                                        const map = new Map(courseMealSelections);
+                                                                        map.set(selectedMeal.courseId, {
+                                                                            index: selectedMeal.index,
+                                                                            meal: selectedMeal.meal,
+                                                                        });
+                                                                        setCourseMealSelections(map);
+                                                                    }}
+                                                                >
+                                                                    <span>Auswählen</span>
+                                                                    <Circle className="-mr-0.5 h-5 w-5" aria-hidden="true" />
+                                                                </button>
+                                                            )}
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
+                        </div>
+                    </Dialog>
+                </Transition.Root>
+
+                <PEFooter />
+            </div>
+        </>
     );
 }

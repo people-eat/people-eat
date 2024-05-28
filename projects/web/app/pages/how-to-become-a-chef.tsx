@@ -6,6 +6,7 @@ import { MinusIcon, PlusIcon } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { createApolloClient } from '../network/apolloClients';
+import Head from 'next/head';
 
 const faqs = [
     {
@@ -124,235 +125,252 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
 export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) {
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <Head>
+                <title>Koch werden | Mit Kochen Geld verdienen | PeopleEat</title>
+                <meta
+                    name="description"
+                    content="Werde Mietkoch, genieße die Freiheit und Flexibilität wann du deine Privatkoch Dienstleistungen anbieten möchtest. Teile deine Leidenschaft mit deinen Gästen und schaffe einzigartige Erlebnismomente."
+                />
+                <meta name="keywords" content="PeopleEat, Privatkoch werden, Eventkoch, Koch werden, eigenes Restaurant eröffnen" />
+                <link rel="icon" href="/favicon.ico" />
+                <link rel="alternate" href="https://people-eat.com/how-to-chef/" hrefLang="x-default" />
+                <link rel="alternate" href="https://people-eat.com/how-to-chef/" hrefLang="de" />
+            </Head>
 
             <div>
-                <div className="relative isolate overflow-hidden bg-gradient-to-b from-indigo-100/20">
-                    <div
-                        className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:-mr-80 lg:-mr-96"
-                        aria-hidden="true"
-                    />
-                    <div className="mx-auto max-w-7xl px-6 py-32 sm:py-40 lg:px-8">
-                        <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
-                            <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:col-span-2 xl:col-auto">
-                                Koche deine Menüs. <br />
-                                In ihrer Küche. <br />
-                                Zu deinen Konditionen.
-                            </h1>
-                            <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
-                                <p className="text-lg leading-8 text-gray-600">
-                                    Hier lebst du die volle Freiheit und deine Leidenschaft. Du entscheidest nicht nur über den Geschmack,
-                                    sondern auch die Preisgestaltung für deine Menükreationen und schaffe dabei unvergessliche Genussmomente
-                                </p>
-                                <div className="mt-10 flex items-center gap-x-6">
-                                    {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
-                                    {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
+                <PEHeader signedInUser={signedInUser} />
+
+                <div>
+                    <div className="relative isolate overflow-hidden bg-gradient-to-b from-indigo-100/20">
+                        <div
+                            className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:-mr-80 lg:-mr-96"
+                            aria-hidden="true"
+                        />
+                        <div className="mx-auto max-w-7xl px-6 py-32 sm:py-40 lg:px-8">
+                            <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
+                                <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:col-span-2 xl:col-auto">
+                                    Koche deine Menüs. <br />
+                                    In ihrer Küche. <br />
+                                    Zu deinen Konditionen.
+                                </h1>
+                                <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
+                                    <p className="text-lg leading-8 text-gray-600">
+                                        Hier lebst du die volle Freiheit und deine Leidenschaft. Du entscheidest nicht nur über den
+                                        Geschmack, sondern auch die Preisgestaltung für deine Menükreationen und schaffe dabei
+                                        unvergessliche Genussmomente
+                                    </p>
+                                    <div className="mt-10 flex items-center gap-x-6">
+                                        {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
+                                        {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
+                                    </div>
                                 </div>
+                                <Image
+                                    src="/how-to-become-a-chef/chef.jpg"
+                                    alt=""
+                                    className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36"
+                                    width={500}
+                                    height={400}
+                                />
                             </div>
-                            <Image
-                                src="/how-to-become-a-chef/chef.jpg"
-                                alt=""
-                                className="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36"
-                                width={500}
-                                height={400}
-                            />
+                        </div>
+                        <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-white sm:h-32" />
+                    </div>
+                </div>
+
+                <div className="pb-24">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="mx-auto max-w-2xl lg:mx-0">
+                            <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                                Beginne in nur wenigen Schritten
+                            </h2>
+                            <p className="mt-6 text-lg leading-8 text-gray-600">
+                                Egal ob Mietkoch, Privatkoch oder angestellter Koch - Wir unterstützen dich im Onboarding, damit du
+                                erfolgreich starten kannst.
+                            </p>
                         </div>
                     </div>
-                    <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-white sm:h-32" />
                 </div>
-            </div>
 
-            <div className="pb-24">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl lg:mx-0">
-                        <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Beginne in nur wenigen Schritten</h2>
-                        <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Egal ob Mietkoch, Privatkoch oder angestellter Koch - Wir unterstützen dich im Onboarding, damit du erfolgreich
-                            starten kannst.
-                        </p>
+                <div className="pb-24">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-8 overflow-hidden lg:mx-0 lg:max-w-none lg:grid-cols-4">
+                            {timeline.map((item) => (
+                                <div key={item.name}>
+                                    <time
+                                        dateTime={item.dateTime}
+                                        className="flex items-center text-sm font-semibold leading-6 text-orange-500"
+                                    >
+                                        <svg viewBox="0 0 4 4" className="mr-4 h-1 w-1 flex-none" aria-hidden="true">
+                                            <circle cx={2} cy={2} r={2} fill="currentColor" />
+                                        </svg>
+                                        {item.date}
+                                        <div
+                                            className="absolute -ml-2 h-px w-screen -translate-x-full bg-gray-900/10 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0"
+                                            aria-hidden="true"
+                                        />
+                                    </time>
+                                    <p className="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">{item.name}</p>
+                                    <p className="mt-1 text-base leading-7 text-gray-600">{item.description}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="pb-24">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto grid max-w-2xl grid-cols-1 gap-8 overflow-hidden lg:mx-0 lg:max-w-none lg:grid-cols-4">
-                        {timeline.map((item) => (
-                            <div key={item.name}>
-                                <time
-                                    dateTime={item.dateTime}
-                                    className="flex items-center text-sm font-semibold leading-6 text-orange-500"
-                                >
-                                    <svg viewBox="0 0 4 4" className="mr-4 h-1 w-1 flex-none" aria-hidden="true">
-                                        <circle cx={2} cy={2} r={2} fill="currentColor" />
-                                    </svg>
-                                    {item.date}
-                                    <div
-                                        className="absolute -ml-2 h-px w-screen -translate-x-full bg-gray-900/10 sm:-ml-4 lg:static lg:-mr-6 lg:ml-8 lg:w-auto lg:flex-auto lg:translate-x-0"
-                                        aria-hidden="true"
+                <div className="pb-24">
+                    <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 sm:px-6 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
+                        <div>
+                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl">Was du von uns erwarten kannst</h2>
+                            <p className="mt-8 text-gray-500">
+                                Wir legen sehr viel Wert darauf, dass du dich auf das fokussierst, was dir Spaß macht. Mit PeopleEat genießt
+                                du unzählige Vorteile. Hier findest du ein Paar davon:
+                            </p>
+
+                            <dl className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
+                                {features.map((feature) => (
+                                    <div key={feature.name} className="border-t border-gray-200 pt-4">
+                                        <dt className="font-medium text-gray-900">{feature.name}</dt>
+                                        <dd className="mt-2 text-sm text-gray-500">{feature.description}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        </div>
+                        <div>
+                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
+                                <Image
+                                    src="/how-to-become-a-chef/1.jpg"
+                                    alt="Black kettle with long pour spot and angled body on marble counter next to coffee mug and pour-over system."
+                                    className="h-full w-full object-cover object-center"
+                                    width={800}
+                                    height={800}
+                                />
+                            </div>
+                            <div className="mt-4 grid grid-cols-2 gap-4 sm:mt-6 sm:gap-6 lg:mt-8 lg:gap-8">
+                                <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
+                                    <Image
+                                        src="/how-to-become-a-chef/2.jpg"
+                                        alt="Detail of temperature setting button on kettle bass with digital degree readout."
+                                        className="h-full w-full object-cover object-center"
+                                        width={600}
+                                        height={600}
                                     />
-                                </time>
-                                <p className="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">{item.name}</p>
-                                <p className="mt-1 text-base leading-7 text-gray-600">{item.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            <div className="pb-24">
-                <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 sm:px-6 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl">Was du von uns erwarten kannst</h2>
-                        <p className="mt-8 text-gray-500">
-                            Wir legen sehr viel Wert darauf, dass du dich auf das fokussierst, was dir Spaß macht. Mit PeopleEat genießt du
-                            unzählige Vorteile. Hier findest du ein Paar davon:
-                        </p>
-
-                        <dl className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
-                            {features.map((feature) => (
-                                <div key={feature.name} className="border-t border-gray-200 pt-4">
-                                    <dt className="font-medium text-gray-900">{feature.name}</dt>
-                                    <dd className="mt-2 text-sm text-gray-500">{feature.description}</dd>
                                 </div>
-                            ))}
-                        </dl>
-                    </div>
-                    <div>
-                        <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
-                            <Image
-                                src="/how-to-become-a-chef/1.jpg"
-                                alt="Black kettle with long pour spot and angled body on marble counter next to coffee mug and pour-over system."
-                                className="h-full w-full object-cover object-center"
-                                width={800}
-                                height={800}
-                            />
-                        </div>
-                        <div className="mt-4 grid grid-cols-2 gap-4 sm:mt-6 sm:gap-6 lg:mt-8 lg:gap-8">
-                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
-                                <Image
-                                    src="/how-to-become-a-chef/2.jpg"
-                                    alt="Detail of temperature setting button on kettle bass with digital degree readout."
-                                    className="h-full w-full object-cover object-center"
-                                    width={600}
-                                    height={600}
-                                />
-                            </div>
-                            <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
-                                <Image
-                                    src="/how-to-become-a-chef/3.jpg"
-                                    alt="Kettle spout pouring boiling water into coffee grounds in pour-over mug."
-                                    className="h-full w-full object-cover object-center"
-                                    width={600}
-                                    height={600}
-                                />
+                                <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100">
+                                    <Image
+                                        src="/how-to-become-a-chef/3.jpg"
+                                        alt="Kettle spout pouring boiling water into coffee grounds in pour-over mug."
+                                        className="h-full w-full object-cover object-center"
+                                        width={600}
+                                        height={600}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="pb-24">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                        Bist du bereit zu starten?
-                        <br />
-                        Werde Teil des am schnellsten wachsenden Kochnetzwerks.
-                    </h2>
-                    <div className="mt-10 flex items-center gap-x-6">
-                        {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
-                        {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
-                    </div>
-                </div>
-            </div>
-
-            <section className="pb-24">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-                        <div className="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
-                            <figure className="mt-10 flex flex-auto flex-col justify-between">
-                                <blockquote className="text-lg leading-8 text-gray-900">
-                                    <p>
-                                        Sollte es mal Probleme mit einem Kunden geben, werden schnelle Lösungen durch den Support gefunden,
-                                        sodass beide Seiten happy sind. Das Team legt sehr viel Wert auf eine erfolgreiche Zusammenarbeit.
-                                        Klasse Idee, macht weiter so.
-                                    </p>
-                                </blockquote>
-                                <figcaption className="mt-10 flex items-center gap-x-6">
-                                    <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
-                                        <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    </span>
-                                    <div className="text-base">
-                                        <div className="font-semibold text-gray-900">René W.</div>
-                                        <div className="mt-1 text-gray-500">Professioneller Koch</div>
-                                    </div>
-                                </figcaption>
-                            </figure>
-                        </div>
-                        <div className="flex flex-col border-t border-gray-900/10 pt-10 sm:pt-16 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 xl:pl-20">
-                            <figure className="mt-10 flex flex-auto flex-col justify-between">
-                                <blockquote className="text-lg leading-8 text-gray-900">
-                                    <p>
-                                        Ohne die simple Lösung, Kochdienstleistungen online zu managen, hätte ich meinen Weg zum Privatkoch
-                                        nie so einfach gemeistert. Ich habe bereits sehr enge Kundenbindungen aufbauen können und freue mich
-                                        stetig diese zu erweitern. Falls du mit dem Gedanken spielst dein Talent mit mehr Menschen zu teilen
-                                        mach es mit PeopleEat.
-                                    </p>
-                                </blockquote>
-                                <figcaption className="mt-10 flex items-center gap-x-6">
-                                    <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
-                                        <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    </span>
-                                    <div className="text-base">
-                                        <div className="font-semibold text-gray-900">Chris K.</div>
-                                        <div className="mt-1 text-gray-500">Privatkoch</div>
-                                    </div>
-                                </figcaption>
-                            </figure>
+                <div className="pb-24">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            Bist du bereit zu starten?
+                            <br />
+                            Werde Teil des am schnellsten wachsenden Kochnetzwerks.
+                        </h2>
+                        <div className="mt-10 flex items-center gap-x-6">
+                            {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
+                            {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <div className="pb-24">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
-                        <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
-                        <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
-                            {faqs.map((faq) => (
-                                <Disclosure as="div" key={faq.question} className="pt-6">
-                                    {({ open }) => (
-                                        <>
-                                            <dt>
-                                                <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900">
-                                                    <span className="text-base font-semibold leading-7">{faq.question}</span>
-                                                    <span className="ml-6 flex h-7 items-center">
-                                                        {open ? (
-                                                            <MinusIcon className="h-6 w-6" aria-hidden="true" />
-                                                        ) : (
-                                                            <PlusIcon className="h-6 w-6" aria-hidden="true" />
-                                                        )}
-                                                    </span>
-                                                </Disclosure.Button>
-                                            </dt>
-                                            <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                                                <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
-                                            </Disclosure.Panel>
-                                        </>
-                                    )}
-                                </Disclosure>
-                            ))}
-                        </dl>
+                <section className="pb-24">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+                            <div className="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
+                                <figure className="mt-10 flex flex-auto flex-col justify-between">
+                                    <blockquote className="text-lg leading-8 text-gray-900">
+                                        <p>
+                                            Sollte es mal Probleme mit einem Kunden geben, werden schnelle Lösungen durch den Support
+                                            gefunden, sodass beide Seiten happy sind. Das Team legt sehr viel Wert auf eine erfolgreiche
+                                            Zusammenarbeit. Klasse Idee, macht weiter so.
+                                        </p>
+                                    </blockquote>
+                                    <figcaption className="mt-10 flex items-center gap-x-6">
+                                        <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
+                                            <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                        </span>
+                                        <div className="text-base">
+                                            <div className="font-semibold text-gray-900">René W.</div>
+                                            <div className="mt-1 text-gray-500">Professioneller Koch</div>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                            <div className="flex flex-col border-t border-gray-900/10 pt-10 sm:pt-16 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 xl:pl-20">
+                                <figure className="mt-10 flex flex-auto flex-col justify-between">
+                                    <blockquote className="text-lg leading-8 text-gray-900">
+                                        <p>
+                                            Ohne die simple Lösung, Kochdienstleistungen online zu managen, hätte ich meinen Weg zum
+                                            Privatkoch nie so einfach gemeistert. Ich habe bereits sehr enge Kundenbindungen aufbauen können
+                                            und freue mich stetig diese zu erweitern. Falls du mit dem Gedanken spielst dein Talent mit mehr
+                                            Menschen zu teilen mach es mit PeopleEat.
+                                        </p>
+                                    </blockquote>
+                                    <figcaption className="mt-10 flex items-center gap-x-6">
+                                        <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
+                                            <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                        </span>
+                                        <div className="text-base">
+                                            <div className="font-semibold text-gray-900">Chris K.</div>
+                                            <div className="mt-1 text-gray-500">Privatkoch</div>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div className="pb-24">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
+                            <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
+                            <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
+                                {faqs.map((faq) => (
+                                    <Disclosure as="div" key={faq.question} className="pt-6">
+                                        {({ open }) => (
+                                            <>
+                                                <dt>
+                                                    <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900">
+                                                        <span className="text-base font-semibold leading-7">{faq.question}</span>
+                                                        <span className="ml-6 flex h-7 items-center">
+                                                            {open ? (
+                                                                <MinusIcon className="h-6 w-6" aria-hidden="true" />
+                                                            ) : (
+                                                                <PlusIcon className="h-6 w-6" aria-hidden="true" />
+                                                            )}
+                                                        </span>
+                                                    </Disclosure.Button>
+                                                </dt>
+                                                <Disclosure.Panel as="dd" className="mt-2 pr-12">
+                                                    <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
+                                                </Disclosure.Panel>
+                                            </>
+                                        )}
+                                    </Disclosure>
+                                ))}
+                            </dl>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <PEFooter />
-        </div>
+                <PEFooter />
+            </div>
+        </>
     );
 }

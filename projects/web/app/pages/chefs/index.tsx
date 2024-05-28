@@ -18,6 +18,7 @@ import { useCallback, useState } from 'react';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { PELink } from '@people-eat/web-core-components';
+import Head from 'next/head';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -89,94 +90,113 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
     );
 
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <Head>
+                <title>Finde einen Privatkoch in deiner Umgebung</title>
 
-            <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Köche in deiner Umgebung</h1>
-                <div className="flex flex-col items-stretch gap-8 lg:items-center lg:flex-row">
-                    <PESearchBar
-                        onLocationSearchTextChange={onLocationSearchTextChange}
-                        locationSearchResults={locationSearchResults}
-                        selectedLocation={selectedLocation}
-                        setSelectedLocation={setSelectedLocation}
-                        adults={adults}
-                        setAdults={setAdults}
-                        kids={children}
-                        setKids={setChildren}
-                        date={date}
-                        setDate={setDate}
-                        searchMode={searchMode}
-                        setSearchMode={setSearchMode}
-                        onSearchCooks={() =>
-                            router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                        }
-                        onSearchMenus={() =>
-                            router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                        }
-                    />
-                    <div className="hidden lg:block">
-                        <SearchModeSwitch
-                            activeMode={searchMode}
-                            onChange={(changedSearchMode) => {
-                                if (changedSearchMode === 'MENUS') {
-                                    router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) });
-                                }
-                            }}
+                <meta name="title" content="Finde einen Privatkoch in deiner Umgebung" />
+                <meta
+                    name="description"
+                    content="Hier kannst du einen Privatkoch für Zuhause zu buchen. Du wirst es kaum glauben, aber es war nie einfacher"
+                />
+                <meta name="keywords" content="Koch buchen, Koch für Zuhause, Mietkoch" />
+                <link rel="alternate" href="https://people-eat.com/chefs/" hrefLang="x-default" />
+                <link rel="alternate" href="https://people-eat.com/chefs/" hrefLang="de" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <div>
+                <PEHeader signedInUser={signedInUser} />
+
+                <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Köche in deiner Umgebung</h1>
+                    <div className="flex flex-col items-stretch gap-8 lg:items-center lg:flex-row">
+                        <PESearchBar
+                            onLocationSearchTextChange={onLocationSearchTextChange}
+                            locationSearchResults={locationSearchResults}
+                            selectedLocation={selectedLocation}
+                            setSelectedLocation={setSelectedLocation}
+                            adults={adults}
+                            setAdults={setAdults}
+                            kids={children}
+                            setKids={setChildren}
+                            date={date}
+                            setDate={setDate}
+                            searchMode={searchMode}
+                            setSearchMode={setSearchMode}
+                            onSearchCooks={() =>
+                                router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                            }
+                            onSearchMenus={() =>
+                                router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                            }
                         />
+                        <div className="hidden lg:block">
+                            <SearchModeSwitch
+                                activeMode={searchMode}
+                                onChange={(changedSearchMode) => {
+                                    if (changedSearchMode === 'MENUS') {
+                                        router.push({
+                                            pathname: '/menus',
+                                            query: toQueryParams({ selectedLocation, date, adults, children }),
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
-                {cooks.length > 0 && (
-                    <ul
-                        role="list"
-                        className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4"
-                    >
-                        {cooks.map(({ cookId, user, rank, city, location, menuCount }) => (
-                            <Link
-                                key={cookId}
+                <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
+                    {cooks.length > 0 && (
+                        <ul
+                            role="list"
+                            className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4"
+                        >
+                            {cooks.map(({ cookId, user, rank, city, location, menuCount }) => (
+                                <Link
+                                    key={cookId}
+                                    href={{
+                                        pathname: '/chefs/' + cookId,
+                                        query: toQueryParams({ selectedLocation, date, adults, children }),
+                                    }}
+                                >
+                                    <CookCard
+                                        user={{
+                                            firstName: user.firstName,
+                                            profilePictureUrl: user.profilePictureUrl ?? null,
+                                        }}
+                                        rank={rank}
+                                        menuCount={menuCount}
+                                        cityName={city}
+                                        travelDistance={
+                                            selectedLocation
+                                                ? geoDistance({ location1: selectedLocation, location2: location }).toFixed(0)
+                                                : undefined
+                                        }
+                                    />
+                                </Link>
+                            ))}
+                        </ul>
+                    )}
+
+                    {cooks.length < 1 && (
+                        <div className="flex flex-col gap-10 items-center">
+                            <div>Ups, es konnte kein Koch in deiner Nähe gefunden werden :(</div>
+                            <div>Erstelle eine globale Anfrage und wir finden einen Koch für dich der dir ein Angebot macht</div>
+                            <PELink
+                                title={'Globale Anfrage Senden'}
                                 href={{
-                                    pathname: '/chefs/' + cookId,
+                                    pathname: '/global-booking-request',
                                     query: toQueryParams({ selectedLocation, date, adults, children }),
                                 }}
-                            >
-                                <CookCard
-                                    user={{
-                                        firstName: user.firstName,
-                                        profilePictureUrl: user.profilePictureUrl ?? null,
-                                    }}
-                                    rank={rank}
-                                    menuCount={menuCount}
-                                    cityName={city}
-                                    travelDistance={
-                                        selectedLocation
-                                            ? geoDistance({ location1: selectedLocation, location2: location }).toFixed(0)
-                                            : undefined
-                                    }
-                                />
-                            </Link>
-                        ))}
-                    </ul>
-                )}
+                            />
+                        </div>
+                    )}
+                </div>
 
-                {cooks.length < 1 && (
-                    <div className="flex flex-col gap-10 items-center">
-                        <div>Ups, es konnte kein Koch in deiner Nähe gefunden werden :(</div>
-                        <div>Erstelle eine globale Anfrage und wir finden einen Koch für dich der dir ein Angebot macht</div>
-                        <PELink
-                            title={'Globale Anfrage Senden'}
-                            href={{
-                                pathname: '/global-booking-request',
-                                query: toQueryParams({ selectedLocation, date, adults, children }),
-                            }}
-                        />
-                    </div>
-                )}
+                <PEFooter />
             </div>
-
-            <PEFooter />
-        </div>
+        </>
     );
 }

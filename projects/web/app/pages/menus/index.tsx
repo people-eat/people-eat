@@ -19,6 +19,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { PELink } from '@people-eat/web-core-components';
+import Head from 'next/head';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -102,117 +103,133 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
     }, [menus, adults, children]);
 
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <Head>
+                <title>Entdecke Menüs</title>
 
-            <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Menüs in deiner Umgebung</h1>
-                <div className="flex flex-col items-stretch gap-8 lg:items-center lg:flex-row">
-                    <PESearchBar
-                        onLocationSearchTextChange={onLocationSearchTextChange}
-                        locationSearchResults={locationSearchResults}
-                        selectedLocation={selectedLocation}
-                        setSelectedLocation={setSelectedLocation}
-                        adults={adults}
-                        setAdults={setAdults}
-                        kids={children}
-                        setKids={setChildren}
-                        date={date}
-                        setDate={setDate}
-                        searchMode={searchMode}
-                        setSearchMode={setSearchMode}
-                        onSearchCooks={() =>
-                            router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                        }
-                        onSearchMenus={() =>
-                            router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                        }
-                    />
-                    <div className="hidden lg:block">
-                        <SearchModeSwitch
-                            activeMode={searchMode}
-                            onChange={(changedSearchMode) => {
-                                if (changedSearchMode === 'COOKS') {
-                                    router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) });
-                                }
-                            }}
+                <meta name="title" content="Entdecke Menüs" />
+                <meta name="description" content="Erstelle eigene Menüs und genieße kulinarische Erlebnismomente bei dir Zuhause" />
+                <meta name="keywords" content="Speisekarte, Menü für Zuhause, Essen für Zuhause bestellen" />
+                <link rel="alternate" href="https://people-eat.com/menus/" hrefLang="x-default" />
+                <link rel="alternate" href="https://people-eat.com/menus/" hrefLang="de" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <div>
+                <PEHeader signedInUser={signedInUser} />
+
+                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Menüs in deiner Umgebung</h1>
+                    <div className="flex flex-col items-stretch gap-8 lg:items-center lg:flex-row">
+                        <PESearchBar
+                            onLocationSearchTextChange={onLocationSearchTextChange}
+                            locationSearchResults={locationSearchResults}
+                            selectedLocation={selectedLocation}
+                            setSelectedLocation={setSelectedLocation}
+                            adults={adults}
+                            setAdults={setAdults}
+                            kids={children}
+                            setKids={setChildren}
+                            date={date}
+                            setDate={setDate}
+                            searchMode={searchMode}
+                            setSearchMode={setSearchMode}
+                            onSearchCooks={() =>
+                                router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                            }
+                            onSearchMenus={() =>
+                                router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
+                            }
                         />
+                        <div className="hidden lg:block">
+                            <SearchModeSwitch
+                                activeMode={searchMode}
+                                onChange={(changedSearchMode) => {
+                                    if (changedSearchMode === 'COOKS') {
+                                        router.push({
+                                            pathname: '/chefs',
+                                            query: toQueryParams({ selectedLocation, date, adults, children }),
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 my-8" aria-label="Global">
-                {menus.length > 0 && (
-                    <ul
-                        role="list"
-                        className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4"
-                    >
-                        {sortedMenus.map(
-                            ({
-                                menuId,
-                                title,
-                                imageUrl,
-                                kitchen,
-                                cook,
-                                categories,
-                                basePrice,
-                                basePriceCustomers,
-                                pricePerAdult,
-                                pricePerChild,
-                                courseCount,
-                            }) => (
-                                <Link
-                                    key={menuId}
-                                    href={{
-                                        pathname: '/menus/' + menuId,
-                                        query: toQueryParams({ selectedLocation, date, adults, children }),
-                                    }}
-                                >
-                                    <MenuCard
-                                        title={title}
-                                        imageUrls={imageUrl ? [imageUrl] : []}
-                                        kitchenTitle={kitchen?.title}
-                                        cook={{
-                                            firstName: cook.user.firstName,
-                                            profilePictureUrl: cook.user.profilePictureUrl ?? null,
+                <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 my-8" aria-label="Global">
+                    {menus.length > 0 && (
+                        <ul
+                            role="list"
+                            className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4"
+                        >
+                            {sortedMenus.map(
+                                ({
+                                    menuId,
+                                    title,
+                                    imageUrl,
+                                    kitchen,
+                                    cook,
+                                    categories,
+                                    basePrice,
+                                    basePriceCustomers,
+                                    pricePerAdult,
+                                    pricePerChild,
+                                    courseCount,
+                                }) => (
+                                    <Link
+                                        key={menuId}
+                                        href={{
+                                            pathname: '/menus/' + menuId,
+                                            query: toQueryParams({ selectedLocation, date, adults, children }),
                                         }}
-                                        courseCount={courseCount}
-                                        pricePerPerson={formatPrice({
-                                            amount:
-                                                calculateMenuPrice(
-                                                    adults,
-                                                    children,
-                                                    basePrice,
-                                                    basePriceCustomers,
-                                                    pricePerAdult,
-                                                    pricePerChild,
-                                                ) /
-                                                (adults + children),
-                                            currencyCode: '€',
-                                        })}
-                                        categoryTitles={categories.map(({ title }) => title)}
-                                    />
-                                </Link>
-                            ),
-                        )}
-                    </ul>
-                )}
-                {menus.length < 1 && (
-                    <div className="flex flex-col gap-10 items-center">
-                        <div>Ups, leider konnten keine Menüs von Köchen in deiner Nähe gefunden werden</div>
-                        <div>Erstelle eine globale Anfrage und wir finden einen Koch für dich der dir ein Angebot macht</div>
-                        <PELink
-                            title={'Globale Anfrage Senden'}
-                            href={{
-                                pathname: '/global-booking-request',
-                                query: toQueryParams({ selectedLocation, date, adults, children }),
-                            }}
-                        />
-                    </div>
-                )}
-            </div>
+                                    >
+                                        <MenuCard
+                                            title={title}
+                                            imageUrls={imageUrl ? [imageUrl] : []}
+                                            kitchenTitle={kitchen?.title}
+                                            cook={{
+                                                firstName: cook.user.firstName,
+                                                profilePictureUrl: cook.user.profilePictureUrl ?? null,
+                                            }}
+                                            courseCount={courseCount}
+                                            pricePerPerson={formatPrice({
+                                                amount:
+                                                    calculateMenuPrice(
+                                                        adults,
+                                                        children,
+                                                        basePrice,
+                                                        basePriceCustomers,
+                                                        pricePerAdult,
+                                                        pricePerChild,
+                                                    ) /
+                                                    (adults + children),
+                                                currencyCode: '€',
+                                            })}
+                                            categoryTitles={categories.map(({ title }) => title)}
+                                        />
+                                    </Link>
+                                ),
+                            )}
+                        </ul>
+                    )}
+                    {menus.length < 1 && (
+                        <div className="flex flex-col gap-10 items-center">
+                            <div>Ups, leider konnten keine Menüs von Köchen in deiner Nähe gefunden werden</div>
+                            <div>Erstelle eine globale Anfrage und wir finden einen Koch für dich der dir ein Angebot macht</div>
+                            <PELink
+                                title={'Globale Anfrage Senden'}
+                                href={{
+                                    pathname: '/global-booking-request',
+                                    query: toQueryParams({ selectedLocation, date, adults, children }),
+                                }}
+                            />
+                        </div>
+                    )}
+                </div>
 
-            <PEFooter />
-        </div>
+                <PEFooter />
+            </div>
+        </>
     );
 }

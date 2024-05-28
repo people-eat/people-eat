@@ -30,6 +30,7 @@ import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 const publicCooksRedirect = { redirect: { permanent: false, destination: '/chefs' } };
 
@@ -229,180 +230,57 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
     const showFailedAlert = data ? !data.users.globalBookingRequests.success : false;
 
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <Head>
+                <title>
+                    Privatkoch {cook.user.firstName} {cook.city}
+                </title>
 
-            <PEAuthDialog
-                open={authDialogOpen}
-                onClose={() => setAuthDialogOpen(false)}
-                signInButtonTitle="Anfrage senden"
-                signUpButtonTitle="Registrieren"
-                onSignedInUserFetched={(changedSignedInUser) => {
-                    setAuthDialogOpen(false);
-                    setSignedInUser(changedSignedInUser);
-                    createOneGlobalBookingRequest({ variables: { userId: changedSignedInUser.userId, request } });
-                }}
-            />
+                <meta name="title" content="Finde einen Privatkoch in deiner Umgebung" />
+                <meta
+                    name="description"
+                    content="Hier kannst du einen Privatkoch für Zuhause zu buchen. Du wirst es kaum glauben, aber es war nie einfacher"
+                />
+                <meta name="keywords" content="Koch buchen, Koch für Zuhause, Mietkoch" />
+                <link rel="alternate" href={`https://people-eat.com/chefs/${cook.cookId}`} hrefLang="x-default" />
+                <link rel="alternate" href={`https://people-eat.com/chefs/${cook.cookId}`} hrefLang="de" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
 
-            <PEAlert
-                open={showSuccessAlert}
-                title="Anfrage erfolgreich gesendet"
-                subtitle="In deinem Emailpostfach findest du eine Bestätigung deiner Buchungsnafrage. Wir werden uns bald bei dir melden."
-                primaryButton={{ title: 'Fertig', onClick: () => router.push('/') }}
-            />
+            <div>
+                <PEHeader signedInUser={signedInUser} />
 
-            <PEAlert
-                type="ERROR"
-                open={showFailedAlert}
-                title="Leider ist ein Fehler aufgetreten"
-                subtitle="Bitte versuche es später erneut"
-                primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
-            />
-
-            <LoadingDialog active={loading} />
-
-            <PEFullPageSheet title="Event Details" open={shopBook} onClose={() => setShowBook(false)}>
-                <BookForm
-                    onLocationSearchTextChange={onLocationSearchTextChange}
-                    locationSearchResults={locationSearchResults}
-                    selectedLocation={selectedLocation}
-                    setSelectedLocation={setSelectedLocation}
-                    isOutOfTravelRadius={isOutOfCookTravelRadius}
-                    adults={adults}
-                    setAdults={setAdults}
-                    kids={children}
-                    setKids={setChildren}
-                    date={date}
-                    setDate={setDate}
-                    time={time}
-                    setTime={setTime}
-                    message={message}
-                    setMessage={setMessage}
-                    occasion={occasion}
-                    setOccasion={setOccasion}
-                    searchButton={{
-                        title: 'Anfrage senden',
-                        onClick: () => (signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true)),
-                    }}
-                    categories={{
-                        categoryOptions: categories,
-                        selectedCategories: selectedCategories,
-                        onChange: setSelectedCategories,
-                    }}
-                    kitchens={{
-                        kitchenOptions: kitchens,
-                        selectedKitchen: selectedKitchen,
-                        onChange: setSelectedKitchen,
-                    }}
-                    allergies={{
-                        allergyOptions: allergies,
-                        selectedAllergies: selectedAllergies,
-                        onChange: setSelectedAllergies,
-                    }}
-                    priceClass={{
-                        value: priceClass,
-                        onChange: setPriceClass,
+                <PEAuthDialog
+                    open={authDialogOpen}
+                    onClose={() => setAuthDialogOpen(false)}
+                    signInButtonTitle="Anfrage senden"
+                    signUpButtonTitle="Registrieren"
+                    onSignedInUserFetched={(changedSignedInUser) => {
+                        setAuthDialogOpen(false);
+                        setSignedInUser(changedSignedInUser);
+                        createOneGlobalBookingRequest({ variables: { userId: changedSignedInUser.userId, request } });
                     }}
                 />
-            </PEFullPageSheet>
 
-            <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-                <div className="flex gap-8">
-                    <div className="flex-1 flex flex-col gap-12">
-                        <div className="flex gap-8 items-center">
-                            {cook.user.profilePictureUrl && (
-                                <Image
-                                    src={cook.user.profilePictureUrl}
-                                    alt=""
-                                    width={400}
-                                    height={400}
-                                    className="object-cover object-center rounded-lg w-44"
-                                />
-                            )}
+                <PEAlert
+                    open={showSuccessAlert}
+                    title="Anfrage erfolgreich gesendet"
+                    subtitle="In deinem Emailpostfach findest du eine Bestätigung deiner Buchungsnafrage. Wir werden uns bald bei dir melden."
+                    primaryButton={{ title: 'Fertig', onClick: () => router.push('/') }}
+                />
 
-                            <div className="flex-1 flex flex-col gap-8">
-                                <div>
-                                    <h1 className="font-bold text-3xl tracking-tight text-gray-900">{cook.user.firstName}</h1>
-                                    <span className="text-gray-500">{translatedCookRanks[cook.rank]}</span>
-                                </div>
+                <PEAlert
+                    type="ERROR"
+                    open={showFailedAlert}
+                    title="Leider ist ein Fehler aufgetreten"
+                    subtitle="Bitte versuche es später erneut"
+                    primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
+                />
 
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex gap-4">
-                                        <MapPin strokeWidth={1.5} />
-                                        <span>{cook.city}</span>
-                                    </div>
+                <LoadingDialog active={loading} />
 
-                                    {cook.languages.length > 0 && (
-                                        <div className="flex gap-4 ">
-                                            <Globe strokeWidth={1.5} />
-                                            <span>{cook.languages.map(({ title }) => title).join(', ')}</span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        {cook.biography && (
-                            <div className="flex flex-col gap-2">
-                                <h2 className="text-3xl font-bold tracking-tight text-gray-900">Über {cook.user.firstName}</h2>
-                                <span
-                                    className="text-gray-500"
-                                    dangerouslySetInnerHTML={{ __html: cook.biography.split('\n').join('<br />') }}
-                                />
-                            </div>
-                        )}
-
-                        <div className="flex flex-col gap-2">
-                            <h2 className="text-3xl font-bold tracking-tight text-gray-900">Menüauswahl</h2>
-                            {cook.menus.length < 1 && <span className="text-gray-500">Dieser Koch hat noch keine Menüs erstellt.</span>}
-                            <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 xl:gap-x-8 m-4">
-                                {cook.menus.map(
-                                    ({
-                                        menuId,
-                                        title,
-                                        imageUrl,
-                                        kitchen,
-                                        categories,
-                                        basePrice,
-                                        basePriceCustomers,
-                                        pricePerAdult,
-                                        pricePerChild,
-                                    }) => (
-                                        <Link key={menuId} href={'/menus/' + menuId}>
-                                            <MenuCard
-                                                title={title}
-                                                imageUrls={imageUrl ? [imageUrl] : []}
-                                                kitchenTitle={kitchen?.title}
-                                                cook={{
-                                                    firstName: '',
-                                                    profilePictureUrl: null,
-                                                }}
-                                                courseCount={3}
-                                                pricePerPerson={formatPrice({
-                                                    amount:
-                                                        calculateMenuPrice(
-                                                            adults,
-                                                            children,
-                                                            basePrice,
-                                                            basePriceCustomers,
-                                                            pricePerAdult,
-                                                            pricePerChild,
-                                                        ) /
-                                                        (adults + children),
-                                                    currencyCode: '€',
-                                                })}
-                                                categoryTitles={categories.map(({ title }) => title)}
-                                            />
-                                        </Link>
-                                    ),
-                                )}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <BookBar
-                        title="Du hast kein Menü gefunden?"
-                        subtitle={`Sende ${cook.user.firstName} direkt eine Anfrage nach deinen Präferenzen`}
+                <PEFullPageSheet title="Event Details" open={shopBook} onClose={() => setShowBook(false)}>
+                    <BookForm
                         onLocationSearchTextChange={onLocationSearchTextChange}
                         locationSearchResults={locationSearchResults}
                         selectedLocation={selectedLocation}
@@ -444,75 +322,216 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                             onChange: setPriceClass,
                         }}
                     />
-                </div>
+                </PEFullPageSheet>
 
-                <div className="mx-auto max-w-7xl sm:px-2 lg:px-4 block py-10">
-                    <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
-                        <div className="max-w-3xl">
-                            <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-                                Du bist der Gastgeber, wir kümmern uns um den Rest
-                            </h2>
-                            <p className="mt-4 text-gray-500">
-                                Spare Zeit und kümmere dich voll und ganz auf deine Gäste, währenddessen versorgt dein Koch dich und deine
-                                Gäste mit erstklassigen kulinarischen Menükreationen.
-                            </p>
-                        </div>
-                        <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">
-                            {incentives.map((incentive) => (
-                                <div key={incentive.name} className="sm:flex lg:block">
-                                    <div className="sm:flex-shrink-0">
-                                        <incentive.imageSrc strokeWidth={1.5} className="h-8 w-8 text-orange-500" />
+                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+                    <div className="flex gap-8">
+                        <div className="flex-1 flex flex-col gap-12">
+                            <div className="flex gap-8 items-center">
+                                {cook.user.profilePictureUrl && (
+                                    <Image
+                                        src={cook.user.profilePictureUrl}
+                                        alt=""
+                                        width={400}
+                                        height={400}
+                                        className="object-cover object-center rounded-lg w-44"
+                                    />
+                                )}
+
+                                <div className="flex-1 flex flex-col gap-8">
+                                    <div>
+                                        <h1 className="font-bold text-3xl tracking-tight text-gray-900">{cook.user.firstName}</h1>
+                                        <span className="text-gray-500">{translatedCookRanks[cook.rank]}</span>
                                     </div>
-                                    <div className="mt-4 sm:ml-6 sm:mt-0 lg:ml-0 lg:mt-6">
-                                        <h3 className="text-sm font-medium text-gray-900">{incentive.name}</h3>
-                                        <p className="mt-2 text-sm text-gray-500">{incentive.description}</p>
+
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex gap-4">
+                                            <MapPin strokeWidth={1.5} />
+                                            <span>{cook.city}</span>
+                                        </div>
+
+                                        {cook.languages.length > 0 && (
+                                            <div className="flex gap-4 ">
+                                                <Globe strokeWidth={1.5} />
+                                                <span>{cook.languages.map(({ title }) => title).join(', ')}</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                            ))}
+                            </div>
+
+                            {cook.biography && (
+                                <div className="flex flex-col gap-2">
+                                    <h2 className="text-3xl font-bold tracking-tight text-gray-900">Über {cook.user.firstName}</h2>
+                                    <span
+                                        className="text-gray-500"
+                                        dangerouslySetInnerHTML={{ __html: cook.biography.split('\n').join('<br />') }}
+                                    />
+                                </div>
+                            )}
+
+                            <div className="flex flex-col gap-2">
+                                <h2 className="text-3xl font-bold tracking-tight text-gray-900">Menüauswahl</h2>
+                                {cook.menus.length < 1 && <span className="text-gray-500">Dieser Koch hat noch keine Menüs erstellt.</span>}
+                                <ul role="list" className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 xl:gap-x-8 m-4">
+                                    {cook.menus.map(
+                                        ({
+                                            menuId,
+                                            title,
+                                            imageUrl,
+                                            kitchen,
+                                            categories,
+                                            basePrice,
+                                            basePriceCustomers,
+                                            pricePerAdult,
+                                            pricePerChild,
+                                        }) => (
+                                            <Link key={menuId} href={'/menus/' + menuId}>
+                                                <MenuCard
+                                                    title={title}
+                                                    imageUrls={imageUrl ? [imageUrl] : []}
+                                                    kitchenTitle={kitchen?.title}
+                                                    cook={{
+                                                        firstName: '',
+                                                        profilePictureUrl: null,
+                                                    }}
+                                                    courseCount={3}
+                                                    pricePerPerson={formatPrice({
+                                                        amount:
+                                                            calculateMenuPrice(
+                                                                adults,
+                                                                children,
+                                                                basePrice,
+                                                                basePriceCustomers,
+                                                                pricePerAdult,
+                                                                pricePerChild,
+                                                            ) /
+                                                            (adults + children),
+                                                        currencyCode: '€',
+                                                    })}
+                                                    categoryTitles={categories.map(({ title }) => title)}
+                                                />
+                                            </Link>
+                                        ),
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <BookBar
+                            title="Du hast kein Menü gefunden?"
+                            subtitle={`Sende ${cook.user.firstName} direkt eine Anfrage nach deinen Präferenzen`}
+                            onLocationSearchTextChange={onLocationSearchTextChange}
+                            locationSearchResults={locationSearchResults}
+                            selectedLocation={selectedLocation}
+                            setSelectedLocation={setSelectedLocation}
+                            isOutOfTravelRadius={isOutOfCookTravelRadius}
+                            adults={adults}
+                            setAdults={setAdults}
+                            kids={children}
+                            setKids={setChildren}
+                            date={date}
+                            setDate={setDate}
+                            time={time}
+                            setTime={setTime}
+                            message={message}
+                            setMessage={setMessage}
+                            occasion={occasion}
+                            setOccasion={setOccasion}
+                            searchButton={{
+                                title: 'Anfrage senden',
+                                onClick: () => (signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true)),
+                            }}
+                            categories={{
+                                categoryOptions: categories,
+                                selectedCategories: selectedCategories,
+                                onChange: setSelectedCategories,
+                            }}
+                            kitchens={{
+                                kitchenOptions: kitchens,
+                                selectedKitchen: selectedKitchen,
+                                onChange: setSelectedKitchen,
+                            }}
+                            allergies={{
+                                allergyOptions: allergies,
+                                selectedAllergies: selectedAllergies,
+                                onChange: setSelectedAllergies,
+                            }}
+                            priceClass={{
+                                value: priceClass,
+                                onChange: setPriceClass,
+                            }}
+                        />
+                    </div>
+
+                    <div className="mx-auto max-w-7xl sm:px-2 lg:px-4 block py-10">
+                        <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
+                            <div className="max-w-3xl">
+                                <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+                                    Du bist der Gastgeber, wir kümmern uns um den Rest
+                                </h2>
+                                <p className="mt-4 text-gray-500">
+                                    Spare Zeit und kümmere dich voll und ganz auf deine Gäste, währenddessen versorgt dein Koch dich und
+                                    deine Gäste mit erstklassigen kulinarischen Menükreationen.
+                                </p>
+                            </div>
+                            <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">
+                                {incentives.map((incentive) => (
+                                    <div key={incentive.name} className="sm:flex lg:block">
+                                        <div className="sm:flex-shrink-0">
+                                            <incentive.imageSrc strokeWidth={1.5} className="h-8 w-8 text-orange-500" />
+                                        </div>
+                                        <div className="mt-4 sm:ml-6 sm:mt-0 lg:ml-0 lg:mt-6">
+                                            <h3 className="text-sm font-medium text-gray-900">{incentive.name}</h3>
+                                            <p className="mt-2 text-sm text-gray-500">{incentive.description}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
+                        <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
+                            <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
+                            <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
+                                {faqs.map((faq) => (
+                                    <Disclosure as="div" key={faq.question} className="pt-6">
+                                        {({ open }) => (
+                                            <>
+                                                <dt>
+                                                    <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900">
+                                                        <span className="text-base font-semibold leading-7">{faq.question}</span>
+                                                        <span className="ml-6 flex h-7 items-center">
+                                                            {open ? (
+                                                                <MinusIcon className="h-6 w-6" aria-hidden="true" />
+                                                            ) : (
+                                                                <PlusIcon className="h-6 w-6" aria-hidden="true" />
+                                                            )}
+                                                        </span>
+                                                    </Disclosure.Button>
+                                                </dt>
+                                                <Disclosure.Panel as="dd" className="mt-2 pr-12">
+                                                    <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
+                                                </Disclosure.Panel>
+                                            </>
+                                        )}
+                                    </Disclosure>
+                                ))}
+                            </dl>
                         </div>
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
-                    <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
-                        <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
-                        <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
-                            {faqs.map((faq) => (
-                                <Disclosure as="div" key={faq.question} className="pt-6">
-                                    {({ open }) => (
-                                        <>
-                                            <dt>
-                                                <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900">
-                                                    <span className="text-base font-semibold leading-7">{faq.question}</span>
-                                                    <span className="ml-6 flex h-7 items-center">
-                                                        {open ? (
-                                                            <MinusIcon className="h-6 w-6" aria-hidden="true" />
-                                                        ) : (
-                                                            <PlusIcon className="h-6 w-6" aria-hidden="true" />
-                                                        )}
-                                                    </span>
-                                                </Disclosure.Button>
-                                            </dt>
-                                            <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                                                <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
-                                            </Disclosure.Panel>
-                                        </>
-                                    )}
-                                </Disclosure>
-                            ))}
-                        </dl>
+                <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
+                    <div className="flex justify-between w-full">
+                        <span></span>
+                        <PEButton title="Anfrage senden" onClick={() => setShowBook(true)} />
                     </div>
                 </div>
-            </div>
 
-            <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
-                <div className="flex justify-between w-full">
-                    <span></span>
-                    <PEButton title="Anfrage senden" onClick={() => setShowBook(true)} />
-                </div>
+                <PEFooter />
             </div>
-
-            <PEFooter />
-        </div>
+        </>
     );
 }
