@@ -29,6 +29,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 
@@ -247,6 +248,8 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
+
+            <NewsletterDialog />
 
             <div>
                 <div className="relative bg-gray-900">

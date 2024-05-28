@@ -10,10 +10,10 @@ import {
     FindManyCookBookingRequestChatMessagesDocument,
     GetCookProfileBookingsPageDataQuery,
 } from '@people-eat/web-domain';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEChatMessage } from './PEChatMessage';
-import { useRouter } from 'next/router';
 
 export interface CookProfileBookingRequestChatProps {
     cookId: string;

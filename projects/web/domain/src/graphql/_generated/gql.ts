@@ -21,6 +21,7 @@ const documents = {
     "fragment LanguageOption on Language {\n  languageId\n  title\n}": types.LanguageOptionFragmentDoc,
     "fragment SignedInUser on User {\n  userId\n  firstName\n  profilePictureUrl\n  isCook\n  isAdmin\n}": types.SignedInUserFragmentDoc,
     "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGIftCardPromoCodeDocument,
+    "mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}": types.CreateOneNewsletterSubscriptionDocument,
     "mutation AdminAssignOneSession($userId: String!) {\n  sessions {\n    success: assignOne(userId: $userId)\n  }\n}": types.AdminAssignOneSessionDocument,
     "mutation AssignOneSessionByEmailAddress($request: CreateOneSessionByEmailAddressRequest!) {\n  sessions {\n    success: assignOneByEmailAddress(request: $request)\n  }\n}": types.AssignOneSessionByEmailAddressDocument,
     "mutation CreateOneCook($cookId: String!, $request: CreateOneCookRequest!) {\n  cooks {\n    success: createOne(cookId: $cookId, request: $request)\n  }\n}": types.CreateOneCookDocument,
@@ -172,6 +173,10 @@ export function gql(source: "fragment SignedInUser on User {\n  userId\n  firstN
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}"): (typeof documents)["mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,0 +1,5 @@
+mutation CreateOneNewsletterSubscription($emailAddress: String!) {
+    newsletterSubscriptions {
+        success: createOne(emailAddress: $emailAddress)
+    }
+}
