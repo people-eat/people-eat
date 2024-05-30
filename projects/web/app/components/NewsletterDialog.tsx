@@ -23,8 +23,7 @@ export function NewsletterDialog() {
     useEffect(() => {
         const isAcknowledged = localStorage.getItem(newsletterAcknowledgedKey);
         if (!isAcknowledged) {
-            // setTimeout(() => setOpen(true), 5000);
-            setOpen(true);
+            setTimeout(() => setOpen(true), 5000);
         }
     }, []);
 
