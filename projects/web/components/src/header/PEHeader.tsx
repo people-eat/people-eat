@@ -112,6 +112,20 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                                             )}
                                         </Menu.Item>
                                     )}
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                type="button"
+                                                className={classNames(
+                                                    active ? 'bg-gray-100' : '',
+                                                    'block px-4 py-2 text-sm text-gray-700 w-full text-start',
+                                                )}
+                                                onClick={onOpenNewsletter}
+                                            >
+                                                Promocode erhalten
+                                            </button>
+                                        )}
+                                    </Menu.Item>
                                     {signedInUser.isAdmin && (
                                         <Menu.Item>
                                             {({ active }) => (
