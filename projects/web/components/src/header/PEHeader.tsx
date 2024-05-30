@@ -112,20 +112,6 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                                             )}
                                         </Menu.Item>
                                     )}
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button
-                                                type="button"
-                                                className={classNames(
-                                                    active ? 'bg-gray-100' : '',
-                                                    'block px-4 py-2 text-sm text-gray-700 w-full text-start',
-                                                )}
-                                                onClick={onOpenNewsletter}
-                                            >
-                                                Promocode erhalten
-                                            </button>
-                                        )}
-                                    </Menu.Item>
                                     {signedInUser.isAdmin && (
                                         <Menu.Item>
                                             {({ active }) => (
@@ -203,6 +189,14 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                                         {item.name}
                                     </a>
                                 ))}
+                                {onOpenNewsletter && (
+                                    <button
+                                        onClick={onOpenNewsletter}
+                                        className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-orange-500 hover:bg-gray-50"
+                                    >
+                                        Promocode erhalten
+                                    </button>
+                                )}
                             </div>
 
                             {!signedInUser && (
