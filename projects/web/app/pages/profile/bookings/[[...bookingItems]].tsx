@@ -137,22 +137,23 @@ export default function ProfileBookingsPage({
     const totalNumberOfBookingRequests = globalBookingRequests.length + bookingRequests.length;
 
     return (
-        <div>
+        <div className={classNames('absolute top-0 bottom-0 left-0 right-0', 'flex flex-col')}>
             <PEHeader
                 signedInUser={signedInUser}
                 className={classNames({ 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}
             />
 
-            <div className={classNames('mx-auto max-w-7xl px-0 sm:px-8', 'flex flex-col gap-8')}>
+            <div className={classNames('max-w-7xl w-full', 'flex-1', 'mx-auto px-0 sm:px-8 pb-4', 'flex flex-col gap-8 overflow-hidden')}>
+                {/* check if overflow-hidden can be removed later */}
                 <PEProfileNavigation
                     current="BOOKINGS"
                     className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest })}
                 />
 
-                <div className="flex gap-4">
+                <div className="flex gap-4 bg-red-400 flex-1">
                     {/* Start of side bar */}
                     <div
-                        className={classNames('flex-1 px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
+                        className={classNames('flex-1 flex flex-col', 'px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
                             'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest,
                         })}
                     >
@@ -162,7 +163,7 @@ export default function ProfileBookingsPage({
                         </div>
 
                         {totalNumberOfBookingRequests > 0 && (
-                            <ul>
+                            <ul className="overflow-y-scroll bg-green-400 flex-1">
                                 {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
                                     <GlobalBookingRequestRow
                                         key={globalBookingRequestId}
@@ -175,19 +176,23 @@ export default function ProfileBookingsPage({
                                         }
                                     />
                                 ))}
-                                {bookingRequests.map(({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
-                                    <BookingRequestRow
-                                        key={bookingRequestId}
-                                        status={status}
-                                        occasion={occasion}
-                                        dateTime={dateTime}
-                                        selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
-                                        price={price}
-                                        configuredMenuTitle={configuredMenu?.title}
-                                        cookFirstName={cook.user.firstName}
-                                        onSelect={() => router.push(`/profile/bookings/${bookingRequestId}`, undefined, { scroll: false })}
-                                    />
-                                ))}
+                                {[...bookingRequests, ...bookingRequests, ...bookingRequests, ...bookingRequests].map(
+                                    ({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
+                                        <BookingRequestRow
+                                            key={bookingRequestId}
+                                            status={status}
+                                            occasion={occasion}
+                                            dateTime={dateTime}
+                                            selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
+                                            price={price}
+                                            configuredMenuTitle={configuredMenu?.title}
+                                            cookFirstName={cook.user.firstName}
+                                            onSelect={() =>
+                                                router.push(`/profile/bookings/${bookingRequestId}`, undefined, { scroll: false })
+                                            }
+                                        />
+                                    ),
+                                )}
                             </ul>
                         )}
 

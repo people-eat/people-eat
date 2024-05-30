@@ -1,0 +1,5 @@
+mutation ConfirmOneGiftCard($giftCardId: String!) {
+    giftCards {
+        success: confirmOne(giftCardId: $giftCardId)
+    }
+}

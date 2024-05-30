@@ -20,7 +20,9 @@ const documents = {
     "fragment KitchenOption on Kitchen {\n  kitchenId\n  title\n}": types.KitchenOptionFragmentDoc,
     "fragment LanguageOption on Language {\n  languageId\n  title\n}": types.LanguageOptionFragmentDoc,
     "fragment SignedInUser on User {\n  userId\n  firstName\n  profilePictureUrl\n  isCook\n  isAdmin\n}": types.SignedInUserFragmentDoc,
+    "mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}": types.ConfirmOneGiftCardDocument,
     "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGIftCardPromoCodeDocument,
+    "mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}": types.CreateOneGiftCardDocument,
     "mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}": types.CreateOneNewsletterSubscriptionDocument,
     "mutation AdminAssignOneSession($userId: String!) {\n  sessions {\n    success: assignOne(userId: $userId)\n  }\n}": types.AdminAssignOneSessionDocument,
     "mutation AssignOneSessionByEmailAddress($request: CreateOneSessionByEmailAddressRequest!) {\n  sessions {\n    success: assignOneByEmailAddress(request: $request)\n  }\n}": types.AssignOneSessionByEmailAddressDocument,
@@ -85,6 +87,7 @@ const documents = {
     "mutation CreateOnePhoneNumberUpdate($phoneNumber: PhoneNumber!, $userId: String!) {\n  users {\n    phoneNumberUpdate(userId: $userId) {\n      success: createOne(phoneNumber: $phoneNumber)\n    }\n  }\n}": types.CreateOnePhoneNumberUpdateDocument,
     "mutation UpdateUserPassword($userId: String!, $password: String!) {\n  users {\n    success: updatePassword(userId: $userId, password: $password)\n  }\n}": types.UpdateUserPasswordDocument,
     "mutation UpdateUserProfilePicture($userId: String!, $profilePicture: Upload) {\n  users {\n    success: updateProfilePicture(userId: $userId, profilePicture: $profilePicture)\n  }\n}": types.UpdateUserProfilePictureDocument,
+    "query GetGiftCardPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  stripePublishableKey\n}": types.GetGiftCardPageDataDocument,
     "query GetOneGiftCardPromoCode($giftCardPromoCodeId: String!) {\n  giftCardPromoCodes {\n    findOne(giftCardPromoCodeId: $giftCardPromoCodeId) {\n      giftCardPromoCodeId\n      redeemCode\n      balance {\n        amount\n        currencyCode\n      }\n      expiresAt\n      createdAt\n    }\n  }\n}": types.GetOneGiftCardPromoCodeDocument,
     "query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetPageDataDocument,
     "query GetPrivacyPolicyPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicPrivacyPolicyUpdates {\n    findLatest {\n      privacyPolicyUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetPrivacyPolicyPageDataDocument,
@@ -172,7 +175,15 @@ export function gql(source: "fragment SignedInUser on User {\n  userId\n  firstN
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}"): (typeof documents)["mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -429,6 +440,10 @@ export function gql(source: "mutation UpdateUserPassword($userId: String!, $pass
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation UpdateUserProfilePicture($userId: String!, $profilePicture: Upload) {\n  users {\n    success: updateProfilePicture(userId: $userId, profilePicture: $profilePicture)\n  }\n}"): (typeof documents)["mutation UpdateUserProfilePicture($userId: String!, $profilePicture: Upload) {\n  users {\n    success: updateProfilePicture(userId: $userId, profilePicture: $profilePicture)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query GetGiftCardPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  stripePublishableKey\n}"): (typeof documents)["query GetGiftCardPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  stripePublishableKey\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

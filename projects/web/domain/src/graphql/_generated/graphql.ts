@@ -155,6 +155,8 @@ export type BookingRequest = {
   createdAt: Scalars['DateTime']['output'];
   dateTime: Scalars['DateTime']['output'];
   duration: Scalars['UnsignedInt']['output'];
+  giftCard?: Maybe<GiftCard>;
+  giftCardPromoCode?: Maybe<GiftCardPromoCode>;
   globalBookingRequestId?: Maybe<Scalars['String']['output']>;
   kitchenId?: Maybe<Scalars['String']['output']>;
   location: Location;
@@ -1026,10 +1028,28 @@ export type CreateOneCourseRequest = {
   title: Scalars['String']['input'];
 };
 
+export type CreateOneGiftCardFailedResponse = {
+  __typename?: 'CreateOneGiftCardFailedResponse';
+  failed: Scalars['Boolean']['output'];
+};
+
 export type CreateOneGiftCardPromoCodeRequest = {
   balance: PriceInput;
   expiresAt: Scalars['DateTime']['input'];
   redeemCode: Scalars['String']['input'];
+};
+
+export type CreateOneGiftCardRequest = {
+  balance: Scalars['UnsignedInt']['input'];
+  message: Scalars['String']['input'];
+};
+
+export type CreateOneGiftCardResponse = CreateOneGiftCardFailedResponse | CreateOneGiftCardSuccessResponse;
+
+export type CreateOneGiftCardSuccessResponse = {
+  __typename?: 'CreateOneGiftCardSuccessResponse';
+  giftCardId: Scalars['String']['output'];
+  stripeClientSecret: Scalars['String']['output'];
 };
 
 export type CreateOneGlobalBookingRequestRequest = {
@@ -1277,6 +1297,32 @@ export type Gender =
   | 'MALE'
   | 'NO_INFORMATION';
 
+export type GiftCard = {
+  __typename?: 'GiftCard';
+  balance: Price;
+  createdAt: Scalars['DateTime']['output'];
+  expiresAt: Scalars['DateTime']['output'];
+  giftCardId: Scalars['String']['output'];
+  redeemCode: Scalars['String']['output'];
+  status: GiftCardStatus;
+};
+
+export type GiftCardMutation = {
+  __typename?: 'GiftCardMutation';
+  confirmOne: Scalars['Boolean']['output'];
+  createOne: CreateOneGiftCardResponse;
+};
+
+
+export type GiftCardMutationConfirmOneArgs = {
+  giftCardId: Scalars['String']['input'];
+};
+
+
+export type GiftCardMutationCreateOneArgs = {
+  request: CreateOneGiftCardRequest;
+};
+
 export type GiftCardPromoCode = {
   __typename?: 'GiftCardPromoCode';
   balance: Price;
@@ -1295,6 +1341,21 @@ export type GiftCardPromoCodeQuery = {
 export type GiftCardPromoCodeQueryFindOneArgs = {
   giftCardPromoCodeId: Scalars['String']['input'];
 };
+
+export type GiftCardQuery = {
+  __typename?: 'GiftCardQuery';
+  findAll: Array<GiftCard>;
+  findOne?: Maybe<GiftCard>;
+};
+
+
+export type GiftCardQueryFindOneArgs = {
+  redeemCode: Scalars['String']['input'];
+};
+
+export type GiftCardStatus =
+  | 'CREATED'
+  | 'PAYED';
 
 export type GlobalBookingRequest = {
   __typename?: 'GlobalBookingRequest';
@@ -1480,6 +1541,7 @@ export type Mutation = {
   cookSpecificFees: CookSpecificFeeMutation;
   cooks: CookMutation;
   customerFeeUpdates: CustomerFeeUpdateMutation;
+  giftCards: GiftCardMutation;
   kitchens: KitchenMutation;
   languages: LanguageMutation;
   newsletterSubscriptions: NewsletterSubscriptionMutation;
@@ -1762,6 +1824,7 @@ export type Query = {
   cooks: CookQuery;
   customerFeeUpdates: CustomerFeeUpdateQuery;
   giftCardPromoCodes: GiftCardPromoCodeQuery;
+  giftCards: GiftCardQuery;
   globalBookingRequests: GlobalBookingRequestQuery;
   kitchens: KitchenQuery;
   languages: LanguageQuery;
@@ -2613,12 +2676,26 @@ export type LanguageOptionFragment = { __typename?: 'Language', languageId: stri
 
 export type SignedInUserFragment = { __typename?: 'User', userId: string, firstName: string, profilePictureUrl?: string | null, isCook: boolean, isAdmin: boolean };
 
+export type ConfirmOneGiftCardMutationVariables = Exact<{
+  giftCardId: Scalars['String']['input'];
+}>;
+
+
+export type ConfirmOneGiftCardMutation = { __typename?: 'Mutation', giftCards: { __typename?: 'GiftCardMutation', success: boolean } };
+
 export type CreateOneGIftCardPromoCodeMutationVariables = Exact<{
   giftCardPromoCode: CreateOneGiftCardPromoCodeRequest;
 }>;
 
 
 export type CreateOneGIftCardPromoCodeMutation = { __typename?: 'Mutation', admins: { __typename?: 'AdminMutation', giftCardPromoCodes: { __typename?: 'AdminGiftCardPromoCodeMutation', success: boolean } } };
+
+export type CreateOneGiftCardMutationVariables = Exact<{
+  request: CreateOneGiftCardRequest;
+}>;
+
+
+export type CreateOneGiftCardMutation = { __typename?: 'Mutation', giftCards: { __typename?: 'GiftCardMutation', createOne: { __typename?: 'CreateOneGiftCardFailedResponse', failed: boolean } | { __typename?: 'CreateOneGiftCardSuccessResponse', giftCardId: string, stripeClientSecret: string } } };
 
 export type CreateOneNewsletterSubscriptionMutationVariables = Exact<{
   emailAddress: Scalars['String']['input'];
@@ -3147,6 +3224,11 @@ export type UpdateUserProfilePictureMutationVariables = Exact<{
 
 export type UpdateUserProfilePictureMutation = { __typename?: 'Mutation', users: { __typename?: 'UserMutation', success: boolean } };
 
+export type GetGiftCardPageDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGiftCardPageDataQuery = { __typename?: 'Query', stripePublishableKey?: string | null, users: { __typename?: 'UserQuery', signedInUser?: { __typename?: 'User', userId: string, firstName: string, profilePictureUrl?: string | null, isCook: boolean, isAdmin: boolean } | null } };
+
 export type GetOneGiftCardPromoCodeQueryVariables = Exact<{
   giftCardPromoCodeId: Scalars['String']['input'];
 }>;
@@ -3419,7 +3501,9 @@ export const ConfiguredMenuFragmentDoc = {"kind":"Document","definitions":[{"kin
 export const KitchenOptionFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KitchenOption"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Kitchen"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kitchenId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]} as unknown as DocumentNode<KitchenOptionFragment, unknown>;
 export const LanguageOptionFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"LanguageOption"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Language"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"languageId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]} as unknown as DocumentNode<LanguageOptionFragment, unknown>;
 export const SignedInUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SignedInUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUrl"}},{"kind":"Field","name":{"kind":"Name","value":"isCook"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}}]}}]} as unknown as DocumentNode<SignedInUserFragment, unknown>;
+export const ConfirmOneGiftCardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ConfirmOneGiftCard"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftCardId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"giftCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"confirmOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"giftCardId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftCardId"}}}]}]}}]}}]} as unknown as DocumentNode<ConfirmOneGiftCardMutation, ConfirmOneGiftCardMutationVariables>;
 export const CreateOneGIftCardPromoCodeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOneGIftCardPromoCode"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneGiftCardPromoCodeRequest"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"admins"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"giftCardPromoCodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"createOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"giftCardPromoCode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCode"}}}]}]}}]}}]}}]} as unknown as DocumentNode<CreateOneGIftCardPromoCodeMutation, CreateOneGIftCardPromoCodeMutationVariables>;
+export const CreateOneGiftCardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOneGiftCard"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneGiftCardRequest"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"giftCards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneGiftCardSuccessResponse"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"giftCardId"}},{"kind":"Field","name":{"kind":"Name","value":"stripeClientSecret"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneGiftCardFailedResponse"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"failed"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateOneGiftCardMutation, CreateOneGiftCardMutationVariables>;
 export const CreateOneNewsletterSubscriptionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOneNewsletterSubscription"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"emailAddress"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newsletterSubscriptions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"createOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"emailAddress"},"value":{"kind":"Variable","name":{"kind":"Name","value":"emailAddress"}}}]}]}}]}}]} as unknown as DocumentNode<CreateOneNewsletterSubscriptionMutation, CreateOneNewsletterSubscriptionMutationVariables>;
 export const AdminAssignOneSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AdminAssignOneSession"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"assignOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}]}]}}]}}]} as unknown as DocumentNode<AdminAssignOneSessionMutation, AdminAssignOneSessionMutationVariables>;
 export const AssignOneSessionByEmailAddressDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AssignOneSessionByEmailAddress"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneSessionByEmailAddressRequest"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"assignOneByEmailAddress"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}}]}]}}]}}]} as unknown as DocumentNode<AssignOneSessionByEmailAddressMutation, AssignOneSessionByEmailAddressMutationVariables>;
@@ -3484,6 +3568,7 @@ export const ConfirmOnePhoneNumberUpdateDocument = {"kind":"Document","definitio
 export const CreateOnePhoneNumberUpdateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOnePhoneNumberUpdate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"phoneNumber"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PhoneNumber"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"phoneNumberUpdate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"createOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"phoneNumber"},"value":{"kind":"Variable","name":{"kind":"Name","value":"phoneNumber"}}}]}]}}]}}]}}]} as unknown as DocumentNode<CreateOnePhoneNumberUpdateMutation, CreateOnePhoneNumberUpdateMutationVariables>;
 export const UpdateUserPasswordDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateUserPassword"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"updatePassword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}]}]}}]}}]} as unknown as DocumentNode<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>;
 export const UpdateUserProfilePictureDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateUserProfilePicture"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"profilePicture"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"updateProfilePicture"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}},{"kind":"Argument","name":{"kind":"Name","value":"profilePicture"},"value":{"kind":"Variable","name":{"kind":"Name","value":"profilePicture"}}}]}]}}]}}]} as unknown as DocumentNode<UpdateUserProfilePictureMutation, UpdateUserProfilePictureMutationVariables>;
+export const GetGiftCardPageDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGiftCardPageData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"signedInUser"},"name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SignedInUser"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stripePublishableKey"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SignedInUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUrl"}},{"kind":"Field","name":{"kind":"Name","value":"isCook"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}}]}}]} as unknown as DocumentNode<GetGiftCardPageDataQuery, GetGiftCardPageDataQueryVariables>;
 export const GetOneGiftCardPromoCodeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOneGiftCardPromoCode"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCodeId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"giftCardPromoCodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"findOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"giftCardPromoCodeId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCodeId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"giftCardPromoCodeId"}},{"kind":"Field","name":{"kind":"Name","value":"redeemCode"}},{"kind":"Field","name":{"kind":"Name","value":"balance"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]} as unknown as DocumentNode<GetOneGiftCardPromoCodeQuery, GetOneGiftCardPromoCodeQueryVariables>;
 export const GetPageDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPageData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"signedInUser"},"name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SignedInUser"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SignedInUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUrl"}},{"kind":"Field","name":{"kind":"Name","value":"isCook"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}}]}}]} as unknown as DocumentNode<GetPageDataQuery, GetPageDataQueryVariables>;
 export const GetPrivacyPolicyPageDataDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPrivacyPolicyPageData"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"signedInUser"},"name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SignedInUser"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"publicPrivacyPolicyUpdates"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"findLatest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"privacyPolicyUpdateId"}},{"kind":"Field","name":{"kind":"Name","value":"englishText"}},{"kind":"Field","name":{"kind":"Name","value":"germanText"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SignedInUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUrl"}},{"kind":"Field","name":{"kind":"Name","value":"isCook"}},{"kind":"Field","name":{"kind":"Name","value":"isAdmin"}}]}}]} as unknown as DocumentNode<GetPrivacyPolicyPageDataQuery, GetPrivacyPolicyPageDataQueryVariables>;

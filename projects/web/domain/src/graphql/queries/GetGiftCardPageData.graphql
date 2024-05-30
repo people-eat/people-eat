@@ -1,0 +1,8 @@
+query GetGiftCardPageData {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+        }
+    }
+    stripePublishableKey
+}

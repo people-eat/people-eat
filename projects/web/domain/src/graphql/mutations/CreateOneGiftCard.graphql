@@ -1,0 +1,13 @@
+mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {
+    giftCards {
+        createOne(request: $request) {
+            ... on CreateOneGiftCardSuccessResponse {
+                giftCardId
+                stripeClientSecret
+            }
+            ... on CreateOneGiftCardFailedResponse {
+                failed
+            }
+        }
+    }
+}
