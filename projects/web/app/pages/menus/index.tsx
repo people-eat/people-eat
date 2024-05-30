@@ -118,8 +118,8 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
             <div>
                 <PEHeader signedInUser={signedInUser} />
 
-                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Menüs in deiner Umgebung</h1>
+                <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-8">Menüs in deiner Umgebung</h1>
                     <div className="flex flex-col items-stretch gap-8 lg:items-center lg:flex-row">
                         <PESearchBar
                             onLocationSearchTextChange={onLocationSearchTextChange}
@@ -157,7 +157,7 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 my-8" aria-label="Global">
+                <div className="mx-auto max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8 mb-8" aria-label="Global">
                     {menus.length > 0 && (
                         <ul
                             role="list"
