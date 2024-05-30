@@ -19,6 +19,7 @@ import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { PELink } from '@people-eat/web-core-components';
 import Head from 'next/head';
+import { NewsletterDialog } from '../../components/NewsletterDialog';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -71,6 +72,8 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
     const [children, setChildren] = useState(searchParams.children);
     const [date, setDate] = useState(new Date(searchParams.dateString));
 
+    const [newsletterOpen, setNewsletterOpen] = useState(false);
+
     const [locationSearchResults, setLocationSearchResults] = useState<LocationSearchResult[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>(
         searchParams.locationText && searchParams.locationLatitude && searchParams.locationLongitude
@@ -106,7 +109,9 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
             </Head>
 
             <div>
-                <PEHeader signedInUser={signedInUser} />
+                <PEHeader signedInUser={signedInUser} onOpenNewsletter={() => setNewsletterOpen(true)} />
+
+                <NewsletterDialog open={newsletterOpen} />
 
                 <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Köche in deiner Umgebung</h1>
