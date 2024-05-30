@@ -9,10 +9,16 @@ import { useForm } from 'react-hook-form';
 
 const newsletterAcknowledgedKey = 'newsletter-acknowledged';
 
-export function NewsletterDialog() {
-    const [open, setOpen] = useState(false);
+interface NewsletterDialogProps {
+    open: boolean;
+}
+
+export function NewsletterDialog({ open: o }: NewsletterDialogProps) {
+    const [open, setOpen] = useState(o);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [createOne, { loading }] = useMutation(CreateOneNewsletterSubscriptionDocument);
+
+    useEffect(() => setOpen(o), [o]);
 
     const {
         register,

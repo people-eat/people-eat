@@ -25,6 +25,7 @@ import {
     Utensils,
 } from 'lucide-react';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -32,7 +33,6 @@ import { useCallback, useState } from 'react';
 import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
-import Head from 'next/head';
 
 const faqs = [
     {
@@ -228,6 +228,8 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
     const [children, setChildren] = useState(searchParams.children);
     const [date, setDate] = useState(new Date(searchParams.dateString));
 
+    const [newsletterOpen, setNewsletterOpen] = useState(false);
+
     const [locationSearchResults, setLocationSearchResults] = useState<LocationSearchResult[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>(
         searchParams.locationText && searchParams.locationLatitude && searchParams.locationLongitude
@@ -264,9 +266,9 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
             </Head>
 
             <div>
-                <PEHeader signedInUser={signedInUser} />
+                <PEHeader signedInUser={signedInUser} onOpenNewsletter={() => setNewsletterOpen(true)} />
 
-                <NewsletterDialog />
+                <NewsletterDialog open={newsletterOpen} />
 
                 <div>
                     <div className="relative bg-gray-900">
