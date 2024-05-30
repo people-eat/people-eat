@@ -5,6 +5,7 @@ import { ChevronDownIcon } from 'lucide-react';
 import { Fragment } from 'react';
 
 export interface PETimePickerProps {
+    labelTitle?: string;
     value: Time;
     onChange: (changedValue: Time) => void;
 }
@@ -12,11 +13,11 @@ export interface PETimePickerProps {
 const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 const minutes = [0, 15, 30, 45];
 
-export function PETimePicker({ value, onChange }: PETimePickerProps) {
+export function PETimePicker({ labelTitle, value, onChange }: PETimePickerProps) {
     return (
         <div>
             <label htmlFor="name" className="ml-px block text-base font-medium leading-6 text-gray-900 text-left">
-                Uhrzeit
+                {labelTitle ?? 'Uhrzeit'}
             </label>
             <div className="flex gap-1 mt-2">
                 <Menu as="div" className="relative inline-block text-left">

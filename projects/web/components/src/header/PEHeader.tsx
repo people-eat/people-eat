@@ -13,15 +13,16 @@ const navigationItems = [
     { name: 'Individuelle Anfrage', href: '/global-booking-request' },
     { name: 'Privatkoch werden', href: '/how-to-become-a-chef' },
     { name: 'Über uns', href: '/about-us' },
-    { name: 'Blog', href: '/blogs' },
 ];
 
 export interface PEHeaderProps {
     signedInUser: SignedInUser | null;
     className?: string;
+
+    onOpenNewsletter?: () => void;
 }
 
-export function PEHeader({ signedInUser, className }: PEHeaderProps) {
+export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeaderProps) {
     const router = useRouter();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -33,7 +34,14 @@ export function PEHeader({ signedInUser, className }: PEHeaderProps) {
                 <div className="flex lg:flex-1">
                     <Link href="/">
                         <span className="sr-only">PeopleEat</span>
-                        <Image src="/people-eat-logo-title.png" alt="" width={256} height={256} className="h-8 w-auto" unoptimized />
+                        <Image
+                            src="/people-eat-logo-title.png"
+                            alt=""
+                            width={256}
+                            height={256}
+                            className="h-8 w-auto object-contain"
+                            unoptimized
+                        />
                     </Link>
                 </div>
                 <div className="hidden lg:flex lg:gap-x-12">
@@ -42,6 +50,11 @@ export function PEHeader({ signedInUser, className }: PEHeaderProps) {
                             {item.name}
                         </Link>
                     ))}
+                    {onOpenNewsletter && (
+                        <button onClick={onOpenNewsletter} className="text-sm font-semibold leading-6 text-orange-500">
+                            Promocode erhalten
+                        </button>
+                    )}
                 </div>
                 {!signedInUser && (
                     <div className="flex flex-1 items-center justify-end gap-x-6">

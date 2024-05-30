@@ -46,15 +46,17 @@ export function PEDialog({ open, onClose, title, closeOnClickAround, children, c
                                     className,
                                 )}
                             >
-                                <header className="flex gap-4">
-                                    {title && <h2 className="font-semibold text-xl">{title}</h2>}
-                                    <span className="flex-1" />
-                                    {onClose && (
-                                        <button type="button" onClick={onClose}>
-                                            <X />
-                                        </button>
-                                    )}
-                                </header>
+                                {(title || onClose) && (
+                                    <header className="flex gap-4">
+                                        {title && <h2 className="font-semibold text-xl">{title}</h2>}
+                                        <span className="flex-1" />
+                                        {onClose && (
+                                            <button type="button" onClick={onClose}>
+                                                <X />
+                                            </button>
+                                        )}
+                                    </header>
+                                )}
                                 {children}
                             </Dialog.Panel>
                         </Transition.Child>
