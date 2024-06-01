@@ -1041,7 +1041,18 @@ export type CreateOneGiftCardPromoCodeRequest = {
 
 export type CreateOneGiftCardRequest = {
   balance: Scalars['UnsignedInt']['input'];
+  buyer?: InputMaybe<CreateOneGiftCardRequestBuyer>;
+  /** The day the recipient should be notified about him receiving the gift card */
+  deliveryDate?: InputMaybe<Scalars['DateTime']['input']>;
   message: Scalars['String']['input'];
+  recipient: GiftCardRecipient;
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateOneGiftCardRequestBuyer = {
+  emailAddress: Scalars['EmailAddress']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
 };
 
 export type CreateOneGiftCardResponse = CreateOneGiftCardFailedResponse | CreateOneGiftCardSuccessResponse;
@@ -1351,6 +1362,12 @@ export type GiftCardQuery = {
 
 export type GiftCardQueryFindOneArgs = {
   redeemCode: Scalars['String']['input'];
+};
+
+export type GiftCardRecipient = {
+  emailAddress?: InputMaybe<Scalars['String']['input']>;
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
 };
 
 export type GiftCardStatus =

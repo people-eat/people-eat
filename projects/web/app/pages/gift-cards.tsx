@@ -30,11 +30,10 @@ import { createApolloClient } from '../network/apolloClients';
 
 const balances = [100, 150, 200, 300, 500];
 
-type DeliveryMethod = 'EMAIL' | 'PRINT';
-const deliveryMethods: DeliveryMethod[] = ['PRINT', 'EMAIL'];
+type DeliveryMethod = 'EMAIL';
+const deliveryMethods: DeliveryMethod[] = ['EMAIL'];
 const deliveryMethodTranslations: Record<DeliveryMethod, string> = {
-    EMAIL: 'E-Mail',
-    PRINT: 'Ausdrucken',
+    EMAIL: 'Email',
 };
 
 interface PaymentFormProps {
@@ -122,7 +121,6 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
         handleSubmit,
         formState: { errors },
     } = useForm<{
-        emailAddress: string;
         message: string;
         balance: number;
         showCustomBalance: boolean;
@@ -134,9 +132,13 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
             lastName: string;
             emailAddress: string;
         };
+        recipient: {
+            firstName: string;
+            lastName: string;
+            emailAddress: string;
+        };
     }>({
         defaultValues: {
-            emailAddress: '',
             message: '',
             balance: 50,
             showCustomBalance: false,
@@ -145,6 +147,16 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
             deliveryTime: {
                 hours: 12,
                 minutes: 0,
+            },
+            buyer: {
+                firstName: '',
+                lastName: '',
+                emailAddress: '',
+            },
+            recipient: {
+                firstName: '',
+                lastName: '',
+                emailAddress: '',
             },
         },
     });
@@ -188,11 +200,23 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
 
                             <form
                                 className="mt-16 flex flex-col gap-16"
-                                onSubmit={handleSubmit(() => createGiftCard({ variables: { request: { balance, message } } }))}
+                                onSubmit={handleSubmit(() =>
+                                    createGiftCard({
+                                        variables: {
+                                            // request: {
+                                            //     userId: signed
+                                            //     buyer: {},
+                                            //     recipient: {},
+                                            //     balance,
+                                            //     message,
+                                            // },
+                                        },
+                                    }),
+                                )}
                             >
                                 <fieldset className="flex flex-col gap-8">
-                                    <legend className="text-base font-medium text-gray-900">
-                                        Wie möchtest du deinen Gutschein versenden?
+                                    <legend className="text-lg font-medium text-gray-900">
+                                        Wie möchtest du den Gutschein verschenken?
                                     </legend>
 
                                     <RadioGroup
@@ -237,40 +261,74 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                         ))}
                                     </RadioGroup>
 
-                                    {deliveryMethod === 'EMAIL' && (
-                                        <div className="flex flex-col gap-4">
+                                    <div className="flex flex-col gap-4">
+                                        <legend className="text-lg font-medium text-gray-900">
+                                            Wem möchtest du den Gutschein schenken?
+                                        </legend>
+
+                                        <div className="flex gap-4">
                                             <PETextField
-                                                labelTitle="Email Adresse des Empfängers"
-                                                id="email-address"
-                                                placeholder="Email Adresse"
-                                                type="email"
-                                                errorMessage={errors.emailAddress?.message}
-                                                {...register('emailAddress', {
-                                                    required: 'Bitte gib deine Email Adresse ein.',
-                                                    pattern: {
-                                                        value: /\S+@\S+\.\S+/,
-                                                        message: 'Bitte eine gültige Email Adresse eingeben.',
-                                                    },
-                                                })}
+                                                id="first-name"
+                                                labelTitle="Vorname"
+                                                type="text"
+                                                autoComplete="given-name"
+                                                errorMessage={errors.buyer?.firstName?.message}
+                                                {...register('buyer.firstName', { required: 'This field is required' })}
                                             />
-                                            <div className="flex flex-col md:flex-row gap-4">
-                                                <PEDatePicker
-                                                    labelTitle="Zustellungsdatum"
-                                                    date={deliveryDate}
-                                                    setDate={(d) => setValue('deliveryDate', d)}
-                                                />
-                                                <PETimePicker
-                                                    labelTitle="Zustellungsuhrzeit"
-                                                    value={deliveryTime}
-                                                    onChange={(t) => setValue('deliveryTime', t)}
-                                                />
-                                            </div>
+
+                                            <PETextField
+                                                id="last-name"
+                                                labelTitle="Nachname"
+                                                type="text"
+                                                autoComplete="family-name"
+                                                errorMessage={errors.buyer?.lastName?.message}
+                                                {...register('buyer.lastName', { required: 'This field is required' })}
+                                            />
                                         </div>
-                                    )}
+
+                                        {deliveryMethod === 'EMAIL' && (
+                                            <div className="flex flex-col gap-8">
+                                                <div className="flex flex-col gap-4">
+                                                    <PETextField
+                                                        labelTitle="Email Adresse"
+                                                        placeholder="Email Adresse des Beschenkten"
+                                                        id="email-address"
+                                                        type="email"
+                                                        errorMessage={errors.recipient?.emailAddress?.message}
+                                                        {...register('recipient.emailAddress', {
+                                                            required: 'Bitte gib deine Email Adresse ein.',
+                                                            pattern: {
+                                                                value: /\S+@\S+\.\S+/,
+                                                                message: 'Bitte eine gültige Email Adresse eingeben.',
+                                                            },
+                                                        })}
+                                                    />
+                                                </div>
+
+                                                <div className="flex flex-col gap-4">
+                                                    <legend className="text-lg font-medium text-gray-900">
+                                                        Wann soll der Beschenkte den Gutschein erhalten?
+                                                    </legend>
+                                                    <div className="flex flex-col md:flex-row gap-4">
+                                                        <PEDatePicker
+                                                            labelTitle="Zustellungsdatum"
+                                                            date={deliveryDate}
+                                                            setDate={(d) => setValue('deliveryDate', d)}
+                                                        />
+                                                        <PETimePicker
+                                                            labelTitle="Zustellungsuhrzeit"
+                                                            value={deliveryTime}
+                                                            onChange={(t) => setValue('deliveryTime', t)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </fieldset>
 
                                 <div className="flex flex-col gap-4">
-                                    <legend className="text-base font-medium text-gray-900">Wähle einen Betrag aus</legend>
+                                    <legend className="text-lg font-medium text-gray-900">Wähle einen Betrag aus</legend>
 
                                     <div className="flex gap-4 flex-wrap">
                                         {balances.map((b) => (
