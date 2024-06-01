@@ -67,6 +67,10 @@ export function SignUpForm({ completeTitle, onSignUp, onSignIn }: SignUpFormProp
                     errorMessage={errors.phoneNumber?.message}
                     {...register('phoneNumber', {
                         required: 'This field is required',
+                        pattern: {
+                            value: /\+49\d+/,
+                            message: 'Keine gültige Ländervorwahl (z.B +49).',
+                        },
                         onChange: (event) => (event.target.value = event.target.value.replaceAll(' ', '')),
                     })}
                 />

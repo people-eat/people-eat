@@ -20,6 +20,10 @@ export const Primary: StoryObj<typeof PEPhoneNumberTextField> = {
                         id="phoneNumber"
                         {...register('phoneNumber', {
                             required: true,
+                            pattern: {
+                                value: /\+49\d+/,
+                                message: 'Keine gültige Ländervorwahl (z.B +49).',
+                            },
                             // onChange: (event) => event.target.value =  event.target.value,
                         })}
                     />
