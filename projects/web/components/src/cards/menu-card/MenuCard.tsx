@@ -22,20 +22,14 @@ export function MenuCard({ title, imageUrls, cook, kitchenTitle, courseCount, pr
                 {imageUrls.length > 0 && (
                     <Image
                         src={imageUrls[0]}
-                        alt="image 1"
+                        alt={title}
                         className="pointer-events-none object-cover group-hover:opacity-75"
                         width={500}
                         height={400}
                     />
                 )}
                 {imageUrls.length < 1 && (
-                    <Image
-                        src="/placeholders/menu.png"
-                        alt="image 1"
-                        className="pointer-events-none object-cover"
-                        width={500}
-                        height={400}
-                    />
+                    <Image src="/placeholders/menu.png" alt={title} className="pointer-events-none object-cover" width={500} height={400} />
                 )}
                 <button type="button" className="absolute inset-0 focus:outline-none">
                     <span className="sr-only">View details for {title}</span>

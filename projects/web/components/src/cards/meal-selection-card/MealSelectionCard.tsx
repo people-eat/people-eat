@@ -20,7 +20,7 @@ export function MealSelectionCard({ title, description, imageUrl, selected, onSe
             <div className="group aspect-h-5 aspect-w-10 block w-full overflow-hidden rounded-t-xl bg-gray-100">
                 <Image
                     src={imageUrl ?? '/placeholders/meal.png'}
-                    alt=""
+                    alt={title}
                     width={600}
                     height={400}
                     className="pointer-events-none object-cover group-hover:opacity-75"
