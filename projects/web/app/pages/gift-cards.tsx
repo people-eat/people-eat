@@ -161,7 +161,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
         },
     });
 
-    const { message, deliveryMethod, balance, showCustomBalance, deliveryDate, deliveryTime } = watch();
+    const { message, deliveryMethod, balance, showCustomBalance, deliveryDate, deliveryTime, recipient, buyer } = watch();
 
     return (
         <div>
@@ -203,13 +203,13 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                 onSubmit={handleSubmit(() =>
                                     createGiftCard({
                                         variables: {
-                                            // request: {
-                                            //     userId: signed
-                                            //     buyer: {},
-                                            //     recipient: {},
-                                            //     balance,
-                                            //     message,
-                                            // },
+                                            request: {
+                                                userId: signedInUser ? signedInUser.userId : null,
+                                                buyer,
+                                                recipient,
+                                                balance,
+                                                message,
+                                            },
                                         },
                                     }),
                                 )}
