@@ -1,27 +1,25 @@
 import { useMutation } from '@apollo/client';
-import { RadioGroup } from '@headlessui/react';
 import { LoadingDialog, PEHeader } from '@people-eat/web-components';
 import {
     PEButton,
     PEDatePicker,
     PELabelButton,
+    PELabelSingleSelection,
     PENumberTextField,
     PETextArea,
     PETextField,
-    PETimePicker,
 } from '@people-eat/web-core-components';
 import {
     ConfirmOneGiftCardDocument,
     CreateOneGiftCardDocument,
     GetGiftCardPageDataDocument,
     SignedInUser,
-    Time,
     formatPrice,
+    toDBDateString,
 } from '@people-eat/web-domain';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import classNames from 'classnames';
-import { CheckCircleIcon } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -29,12 +27,6 @@ import { useForm } from 'react-hook-form';
 import { createApolloClient } from '../network/apolloClients';
 
 const balances = [100, 150, 200, 300, 500];
-
-type DeliveryMethod = 'EMAIL';
-const deliveryMethods: DeliveryMethod[] = ['EMAIL'];
-const deliveryMethodTranslations: Record<DeliveryMethod, string> = {
-    EMAIL: 'Email',
-};
 
 interface PaymentFormProps {
     giftCardId: string;
@@ -122,11 +114,10 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
         formState: { errors },
     } = useForm<{
         message: string;
+        occasion: string;
+        customOccasion: string;
         balance: number;
-        showCustomBalance: boolean;
-        deliveryMethod: DeliveryMethod;
-        deliveryDate: Date;
-        deliveryTime: Time;
+        customBalance: string;
         buyer: {
             firstName: string;
             lastName: string;
@@ -135,19 +126,18 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
         recipient: {
             firstName: string;
             lastName: string;
-            emailAddress: string;
+            deliveryInformation?: {
+                date: Date;
+                emailAddress: string;
+            };
         };
     }>({
         defaultValues: {
             message: '',
-            balance: 50,
-            showCustomBalance: false,
-            deliveryMethod: 'EMAIL',
-            deliveryDate: new Date(),
-            deliveryTime: {
-                hours: 12,
-                minutes: 0,
-            },
+            occasion: '',
+            customOccasion: '',
+            balance: 100,
+            customBalance: '',
             buyer: {
                 firstName: '',
                 lastName: '',
@@ -156,12 +146,15 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
             recipient: {
                 firstName: '',
                 lastName: '',
-                emailAddress: '',
+                deliveryInformation: {
+                    date: new Date(),
+                    emailAddress: '',
+                },
             },
         },
     });
 
-    const { message, deliveryMethod, balance, showCustomBalance, deliveryDate, deliveryTime, recipient, buyer } = watch();
+    const { message, occasion, customOccasion, balance, customBalance, recipient, buyer } = watch();
 
     return (
         <div>
@@ -179,7 +172,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                 <div className="lg:absolute lg:inset-0 lg:left-1/2">
                     <Image
                         className="h-64 w-full bg-gray-50 object-cover sm:h-80 lg:absolute lg:h-full"
-                        src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-x=.4&w=2560&h=3413&&q=80"
+                        src="/gift-cards/Privatkochgutschein.jpg"
                         width={600}
                         height={800}
                         alt=""
@@ -206,61 +199,69 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                             request: {
                                                 userId: signedInUser ? signedInUser.userId : null,
                                                 buyer,
-                                                recipient,
-                                                balance,
+                                                recipient: {
+                                                    firstName: recipient.firstName,
+                                                    lastName: recipient.lastName,
+                                                    deliveryInformation: recipient.deliveryInformation
+                                                        ? {
+                                                              date: toDBDateString(recipient.deliveryInformation.date),
+                                                              emailAddress: recipient.deliveryInformation.emailAddress,
+                                                          }
+                                                        : undefined,
+                                                },
+                                                balance: balance ?? customBalance,
                                                 message,
+                                                occasion: occasion ?? customOccasion,
                                             },
                                         },
                                     }),
                                 )}
                             >
-                                <fieldset className="flex flex-col gap-8">
+                                <div className="flex gap-4 flex-wrap">
+                                    {['/gift-cards/orange.jpg'].map((imageUrl) => (
+                                        <Image
+                                            key={imageUrl}
+                                            src={imageUrl}
+                                            width={240}
+                                            height={150}
+                                            alt=""
+                                            className={classNames('w-[240px] h-[150px] object-cover rounded-lg shadow-md', {
+                                                'ring-orange-500 ring-2': true, // todo: only if selected
+                                            })}
+                                        />
+                                    ))}
+                                </div>
+
+                                <div className="flex flex-col gap-4">
                                     <legend className="text-lg font-medium text-gray-900">
-                                        Wie möchtest du den Gutschein verschenken?
+                                        Für welchen Anlass möchtest du den Gutschein verschenken?
                                     </legend>
 
-                                    <RadioGroup
-                                        value={deliveryMethod}
-                                        onChange={(v) => setValue('deliveryMethod', v)}
-                                        className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4"
-                                    >
-                                        {deliveryMethods.map((deliveryMethod) => (
-                                            <RadioGroup.Option
-                                                key={deliveryMethod}
-                                                value={deliveryMethod}
-                                                aria-label={deliveryMethodTranslations[deliveryMethod]}
-                                                className={({ checked, active }) =>
-                                                    classNames(
-                                                        checked ? 'border-transparent' : 'border-gray-300',
-                                                        active ? 'ring-2 ring-orange-500' : '',
-                                                        'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none',
-                                                    )
-                                                }
-                                            >
-                                                {({ checked, active }) => (
-                                                    <>
-                                                        <span className="flex-1 block text-sm font-medium text-gray-900">
-                                                            {deliveryMethodTranslations[deliveryMethod]}
-                                                        </span>
-
-                                                        {checked && (
-                                                            <CheckCircleIcon className="h-5 w-5 text-orange-600" aria-hidden="true" />
-                                                        )}
-
-                                                        <span
-                                                            className={classNames(
-                                                                checked ? 'border-orange-500' : 'border-transparent',
-                                                                active ? 'border' : 'border-2',
-                                                                'pointer-events-none absolute -inset-px rounded-lg',
-                                                            )}
-                                                            aria-hidden="true"
-                                                        />
-                                                    </>
-                                                )}
-                                            </RadioGroup.Option>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['Geburtstag', 'Hochzeit', 'Candle Light Dinner', 'Abschlussfeier', 'Jahrestag'].map((o) => (
+                                            <PELabelButton
+                                                key={o}
+                                                selected={o === occasion}
+                                                title={o}
+                                                onSelect={() => {
+                                                    setValue('customOccasion', '');
+                                                    setValue('occasion', o);
+                                                }}
+                                                onDeselect={() => setValue('occasion', '')}
+                                            />
                                         ))}
-                                    </RadioGroup>
+                                    </div>
 
+                                    <PETextField
+                                        id="occasion"
+                                        type="text"
+                                        labelTitle="Einen anderen Anlass angeben"
+                                        errorMessage={errors.customOccasion?.message}
+                                        {...register('customOccasion', { onChange: () => setValue('occasion', '') })}
+                                    />
+                                </div>
+
+                                <fieldset className="flex flex-col gap-8">
                                     <div className="flex flex-col gap-4">
                                         <legend className="text-lg font-medium text-gray-900">
                                             Wem möchtest du den Gutschein schenken?
@@ -268,64 +269,67 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
 
                                         <div className="flex gap-4">
                                             <PETextField
-                                                id="first-name"
+                                                id="recipient-first-name"
                                                 labelTitle="Vorname"
                                                 type="text"
-                                                autoComplete="given-name"
-                                                errorMessage={errors.buyer?.firstName?.message}
-                                                {...register('buyer.firstName', { required: 'This field is required' })}
+                                                errorMessage={errors.recipient?.firstName?.message}
+                                                {...register('recipient.firstName', { required: 'This field is required' })}
                                             />
 
                                             <PETextField
-                                                id="last-name"
+                                                id="recipient-last-name"
                                                 labelTitle="Nachname"
                                                 type="text"
-                                                autoComplete="family-name"
-                                                errorMessage={errors.buyer?.lastName?.message}
-                                                {...register('buyer.lastName', { required: 'This field is required' })}
+                                                errorMessage={errors.recipient?.lastName?.message}
+                                                {...register('recipient.lastName', { required: 'This field is required' })}
                                             />
                                         </div>
-
-                                        {deliveryMethod === 'EMAIL' && (
-                                            <div className="flex flex-col gap-8">
-                                                <div className="flex flex-col gap-4">
-                                                    <PETextField
-                                                        labelTitle="Email Adresse"
-                                                        placeholder="Email Adresse des Beschenkten"
-                                                        id="email-address"
-                                                        type="email"
-                                                        errorMessage={errors.recipient?.emailAddress?.message}
-                                                        {...register('recipient.emailAddress', {
-                                                            required: 'Bitte gib deine Email Adresse ein.',
-                                                            pattern: {
-                                                                value: /\S+@\S+\.\S+/,
-                                                                message: 'Bitte eine gültige Email Adresse eingeben.',
-                                                            },
-                                                        })}
-                                                    />
-                                                </div>
-
-                                                <div className="flex flex-col gap-4">
-                                                    <legend className="text-lg font-medium text-gray-900">
-                                                        Wann soll der Beschenkte den Gutschein erhalten?
-                                                    </legend>
-                                                    <div className="flex flex-col md:flex-row gap-4">
-                                                        <PEDatePicker
-                                                            labelTitle="Zustellungsdatum"
-                                                            date={deliveryDate}
-                                                            setDate={(d) => setValue('deliveryDate', d)}
-                                                        />
-                                                        <PETimePicker
-                                                            labelTitle="Zustellungsuhrzeit"
-                                                            value={deliveryTime}
-                                                            onChange={(t) => setValue('deliveryTime', t)}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
                                 </fieldset>
+
+                                <div className="flex flex-col gap-4">
+                                    <legend className="text-lg font-medium text-gray-900">
+                                        Soll der Beschenkte den Gutschein zu einem gewünschten Datum per Email erhalten?
+                                    </legend>
+                                    <PELabelSingleSelection
+                                        options={['Ja', 'Nein']}
+                                        selectedOption={recipient.deliveryInformation ? 'Ja' : 'Nein'}
+                                        selectedOptionChanged={(o) =>
+                                            setValue(
+                                                'recipient.deliveryInformation',
+                                                o === 'Ja' ? { emailAddress: '', date: new Date() } : undefined,
+                                            )
+                                        }
+                                        optionTitle={(o) => o}
+                                        optionIdentifier={(o) => o}
+                                    />
+                                    {recipient.deliveryInformation && (
+                                        <div className="flex flex-col gap-8">
+                                            <div className="flex flex-col gap-4">
+                                                <PETextField
+                                                    labelTitle="Email Adresse"
+                                                    placeholder="Email Adresse des Beschenkten"
+                                                    id="email-address"
+                                                    type="email"
+                                                    errorMessage={errors.recipient?.deliveryInformation?.emailAddress?.message}
+                                                    {...register('recipient.deliveryInformation.emailAddress', {
+                                                        required: 'Bitte gib deine Email Adresse ein.',
+                                                        pattern: {
+                                                            value: /\S+@\S+\.\S+/,
+                                                            message: 'Bitte eine gültige Email Adresse eingeben.',
+                                                        },
+                                                    })}
+                                                />
+                                            </div>
+
+                                            <PEDatePicker
+                                                labelTitle="Zustellungsdatum"
+                                                date={recipient.deliveryInformation?.date}
+                                                setDate={(d) => setValue('recipient.deliveryInformation.date', d)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
 
                                 <div className="flex flex-col gap-4">
                                     <legend className="text-lg font-medium text-gray-900">Wähle einen Betrag aus</legend>
@@ -334,37 +338,34 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                         {balances.map((b) => (
                                             <PELabelButton
                                                 key={b}
-                                                selected={b === balance && !showCustomBalance}
+                                                selected={b === balance}
                                                 title={formatPrice({ amount: b * 100, currencyCode: '€' })}
                                                 onSelect={() => {
-                                                    setValue('showCustomBalance', false);
+                                                    setValue('customBalance', '');
                                                     setValue('balance', b);
                                                 }}
                                                 onDeselect={() => undefined}
                                             />
                                         ))}
-                                        <PELabelButton
-                                            selected={showCustomBalance}
-                                            title="Einen individuellen Betrag angeben"
-                                            onSelect={() => setValue('showCustomBalance', true)}
-                                            onDeselect={() => undefined}
-                                            className="max-w-40"
-                                        />
                                     </div>
 
-                                    {showCustomBalance && (
-                                        <PENumberTextField
-                                            labelTitle="Individueller Betrag"
-                                            id="basePriceCustomers"
-                                            errorMessage={errors.balance?.message}
-                                            {...register('balance', {
-                                                required: 'Ungültig',
-                                                min: { value: 1, message: 'Ungültig' },
-                                                max: { value: 100, message: 'Ungültig' },
-                                                valueAsNumber: true,
-                                            })}
-                                        />
-                                    )}
+                                    <PENumberTextField
+                                        labelTitle="Individueller Betrag"
+                                        id="basePriceCustomers"
+                                        errorMessage={errors.customBalance?.message}
+                                        {...register(
+                                            'customBalance',
+                                            balance === 0
+                                                ? {
+                                                      required: 'Ungültig',
+                                                      min: { value: 1, message: 'Ungültig' },
+                                                      max: { value: 1000, message: 'Ungültig' },
+                                                      valueAsNumber: true,
+                                                      onChange: () => setValue('balance', 0),
+                                                  }
+                                                : { onChange: () => setValue('balance', 0) },
+                                        )}
+                                    />
                                 </div>
 
                                 <PETextArea
@@ -380,7 +381,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
 
                                         <div className="flex gap-4">
                                             <PETextField
-                                                id="first-name"
+                                                id="buyer-first-name"
                                                 labelTitle="Vorname"
                                                 type="text"
                                                 autoComplete="given-name"
@@ -389,7 +390,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                             />
 
                                             <PETextField
-                                                id="last-name"
+                                                id="buyer-last-name"
                                                 labelTitle="Nachname"
                                                 type="text"
                                                 autoComplete="family-name"
@@ -399,7 +400,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                         </div>
 
                                         <PETextField
-                                            id="email-address"
+                                            id="buyer-email-address"
                                             labelTitle="E-Mail Adresse"
                                             type="email"
                                             autoComplete="email"

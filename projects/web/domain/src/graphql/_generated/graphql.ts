@@ -1045,6 +1045,7 @@ export type CreateOneGiftCardRequest = {
   /** The day the recipient should be notified about him receiving the gift card */
   deliveryDate?: InputMaybe<Scalars['DateTime']['input']>;
   message: Scalars['String']['input'];
+  occasion: Scalars['String']['input'];
   recipient: GiftCardRecipient;
   userId?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1365,9 +1366,14 @@ export type GiftCardQueryFindOneArgs = {
 };
 
 export type GiftCardRecipient = {
-  emailAddress?: InputMaybe<Scalars['String']['input']>;
+  deliveryInformation?: InputMaybe<GiftCardRecipientDeliveryInformation>;
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
+};
+
+export type GiftCardRecipientDeliveryInformation = {
+  date: Scalars['Date']['input'];
+  emailAddress: Scalars['String']['input'];
 };
 
 export type GiftCardStatus =
