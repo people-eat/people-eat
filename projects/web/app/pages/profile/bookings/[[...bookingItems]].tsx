@@ -150,7 +150,8 @@ export default function ProfileBookingsPage({
                     className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest })}
                 />
 
-                <div className="flex gap-4 bg-red-400 flex-1">
+                {/* bg-red-400 */}
+                <div className="flex gap-4  flex-1">
                     {/* Start of side bar */}
                     <div
                         className={classNames('flex-1 flex flex-col', 'px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
@@ -163,7 +164,8 @@ export default function ProfileBookingsPage({
                         </div>
 
                         {totalNumberOfBookingRequests > 0 && (
-                            <ul className="overflow-y-scroll bg-green-400 flex-1">
+                            // bg-green-400
+                            <ul className="overflow-y-scroll flex-1">
                                 {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
                                     <GlobalBookingRequestRow
                                         key={globalBookingRequestId}
