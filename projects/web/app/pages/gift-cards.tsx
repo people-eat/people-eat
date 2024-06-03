@@ -3,6 +3,7 @@ import { LoadingDialog, PEHeader } from '@people-eat/web-components';
 import {
     PEButton,
     PEDatePicker,
+    PEDialog,
     PELabelButton,
     PELabelSingleSelection,
     PENumberTextField,
@@ -162,11 +163,13 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
 
             <LoadingDialog active={loading} />
 
-            {successResult && (
-                <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: successResult.stripeClientSecret }}>
-                    <PaymentForm giftCardId={successResult.giftCardId} />
-                </Elements>
-            )}
+            <PEDialog open={Boolean(successResult)}>
+                {successResult && (
+                    <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: successResult.stripeClientSecret }}>
+                        <PaymentForm giftCardId={successResult.giftCardId} />
+                    </Elements>
+                )}
+            </PEDialog>
 
             <div className="relative bg-white">
                 <div className="lg:absolute lg:inset-0 lg:left-1/2">
