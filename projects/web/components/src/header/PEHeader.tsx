@@ -12,6 +12,7 @@ import { Fragment, useState } from 'react';
 const navigationItems = [
     { name: 'Individuelle Anfrage', href: '/global-booking-request' },
     { name: 'Privatkoch werden', href: '/how-to-become-a-chef' },
+    { name: 'Gutscheine', href: '/gift-cards' },
     { name: 'Über uns', href: '/about-us' },
 ];
 
@@ -50,11 +51,11 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                             {item.name}
                         </Link>
                     ))}
-                    {onOpenNewsletter && (
+                    {/* {onOpenNewsletter && (
                         <button onClick={onOpenNewsletter} className="text-sm font-semibold leading-6 text-orange-500">
                             Promocode erhalten
                         </button>
-                    )}
+                    )} */}
                 </div>
                 {!signedInUser && (
                     <div className="flex flex-1 items-center justify-end gap-x-6">

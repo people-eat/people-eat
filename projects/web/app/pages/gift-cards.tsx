@@ -277,7 +277,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                                           }
                                                         : undefined,
                                                 },
-                                                balance: (balance ?? customBalance) * 100,
+                                                balance: (Number(customBalance) === 0 ? Number(balance) : Number(customBalance)) * 100,
                                                 message,
                                                 occasion: occasion ?? customOccasion,
                                             },
@@ -306,18 +306,20 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                     </legend>
 
                                     <div className="flex flex-wrap gap-2">
-                                        {['Geburtstag', 'Hochzeit', 'Candle Light Dinner', 'Abschlussfeier', 'Jahrestag'].map((o) => (
-                                            <PELabelButton
-                                                key={o}
-                                                selected={o === occasion}
-                                                title={o}
-                                                onSelect={() => {
-                                                    setValue('customOccasion', '');
-                                                    setValue('occasion', o);
-                                                }}
-                                                onDeselect={() => setValue('occasion', '')}
-                                            />
-                                        ))}
+                                        {['Geburtstag', 'Hochzeit', 'Candle Light Dinner', 'Abschlussfeier', 'Jahrestag', 'Dankeschön'].map(
+                                            (o) => (
+                                                <PELabelButton
+                                                    key={o}
+                                                    selected={o === occasion}
+                                                    title={o}
+                                                    onSelect={() => {
+                                                        setValue('customOccasion', '');
+                                                        setValue('occasion', o);
+                                                    }}
+                                                    onDeselect={() => setValue('occasion', '')}
+                                                />
+                                            ),
+                                        )}
                                     </div>
 
                                     <PETextField
