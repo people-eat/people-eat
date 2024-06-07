@@ -3,6 +3,7 @@ import { LoadingDialog, PECostBreakdownPanel, PEHeader } from '@people-eat/web-c
 import {
     PEAlert,
     PEButton,
+    PECheckbox,
     PEDatePicker,
     PEDialog,
     PELabelButton,
@@ -139,6 +140,8 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                 emailAddress: string;
             };
         };
+        acceptedTermsAndConditions: boolean;
+        acceptedPrivacyPolicy: boolean;
     }>({
         defaultValues: {
             message: '',
@@ -173,11 +176,11 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
         costBreakdown = {
             lineItems: [
                 {
-                    title: 'Gutscheinpreis',
+                    title: 'Gutscheinwert',
                     price: { amount: b, currencyCode: '€' },
                 },
                 {
-                    title: 'Servicegebühr',
+                    title: 'Transaktionsgebühr',
                     price: { amount: (b + 25) / (1 - 0.015) - b, currencyCode: '€' },
                 },
             ],
@@ -474,6 +477,31 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                         />
                                     </div>
                                 )}
+
+                                <fieldset className="space-y-5">
+                                    <PECheckbox
+                                        id="accepted-terms-and-conditions"
+                                        label={{
+                                            title: 'Allgemeine Geschäftsbedingungen',
+                                            description: 'Ich habe die allgemeinen Geschäftsbedingungen gelesen und akzeptiere sie',
+                                        }}
+                                        errorMessage={errors.acceptedTermsAndConditions?.message}
+                                        {...register('acceptedTermsAndConditions', {
+                                            required: 'Die allgemeinen Geschäftsbedingungen müssen akzeptiert werden um fortzufahren',
+                                        })}
+                                    />
+                                    <PECheckbox
+                                        id="accepted-privacy-policy"
+                                        label={{
+                                            title: 'Datenschutzerklärung',
+                                            description: 'Ich habe die Datenschutzerklärung gelesen und akzeptiere sie',
+                                        }}
+                                        errorMessage={errors.acceptedPrivacyPolicy?.message}
+                                        {...register('acceptedPrivacyPolicy', {
+                                            required: 'Die Datenschutzerklärung muss akzeptiert werden um fortzufahren',
+                                        })}
+                                    />
+                                </fieldset>
 
                                 <div className="flex justify-end">
                                     <PEButton title="Gutschein kaufen" type="submit" />
