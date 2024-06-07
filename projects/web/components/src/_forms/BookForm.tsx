@@ -239,7 +239,7 @@ export function BookForm({
                             {...register('couponCode', { onChange: () => coupon.onChange(getValues().couponCode) })}
                         />
                         {coupon.state && 'balance' in coupon.state && (
-                            <span className="text-green-500 text-sm">Rabattcode erfolgreich angewendet</span>
+                            <span className="text-green-500 text-sm">Code erfolgreich angewendet</span>
                         )}
                         {coupon.state && 'failed' in coupon.state && (
                             <span className="text-red-500 text-sm">Angegebener Code ungültig</span>

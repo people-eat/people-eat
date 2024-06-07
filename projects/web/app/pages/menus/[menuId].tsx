@@ -17,7 +17,6 @@ import {
     CostLineItem,
     CreateBookingRequestRequest,
     CreateOneUserBookingRequestDocument,
-    GetOneGiftCardPromoCodeDocument,
     GetPublicMenuPageDataDocument,
     GetPublicMenuPageDataQuery,
     LocationSearchResult,
@@ -37,7 +36,7 @@ import { CheckCircleIcon, Circle, CircleUser, HandPlatter, MinusIcon, PlusIcon, 
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { GetOneGiftCardPromoCodeQuery, Price } from 'projects/web/domain/src/graphql/_generated/graphql';
+import { GetOneCouponCodeDocument, GetOneCouponCodeQuery, Price } from 'projects/web/domain/src/graphql/_generated/graphql';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
@@ -318,14 +317,14 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
     // loading: getGiftCardPromoCodeLoading
 
-    const [giftCardPromoCodeId, setGiftCardPromoCodeId] = useState('');
-    const [getGiftCardPromoCodeData, setGetGiftCardPromoCodeData] = useState<GetOneGiftCardPromoCodeQuery | undefined>();
+    const [couponCodeId, setCouponCodeId] = useState('');
+    const [getGiftCardPromoCodeData, setGetGiftCardPromoCodeData] = useState<GetOneCouponCodeQuery | undefined>();
 
     const apolloClient = useApolloClient();
 
     let couponState: { balance: Price } | { expirationDate: Date } | { failed: boolean } | undefined = undefined;
 
-    const giftCardPromoCode = getGiftCardPromoCodeData?.giftCardPromoCodes.findOne;
+    const giftCardPromoCode = getGiftCardPromoCodeData?.couponCodes.findOne;
 
     if (getGiftCardPromoCodeData) {
         couponState = { failed: true };
@@ -514,13 +513,13 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                         coupon={{
                             onApply: async () => {
                                 const { data } = await apolloClient.query({
-                                    query: GetOneGiftCardPromoCodeDocument,
-                                    variables: { giftCardPromoCodeId },
+                                    query: GetOneCouponCodeDocument,
+                                    variables: { couponCodeId },
                                 });
                                 setGetGiftCardPromoCodeData(data);
                             },
-                            onChange: (id) => {
-                                setGiftCardPromoCodeId(id);
+                            onChange: (i) => {
+                                setCouponCodeId(i);
                                 setGetGiftCardPromoCodeData(undefined);
                             },
                             state: couponState,
@@ -647,13 +646,13 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                             coupon={{
                                 onApply: async () => {
                                     const { data } = await apolloClient.query({
-                                        query: GetOneGiftCardPromoCodeDocument,
-                                        variables: { giftCardPromoCodeId },
+                                        query: GetOneCouponCodeDocument,
+                                        variables: { couponCodeId },
                                     });
                                     setGetGiftCardPromoCodeData(data);
                                 },
                                 onChange: (i) => {
-                                    setGiftCardPromoCodeId(i);
+                                    setCouponCodeId(i);
                                     setGetGiftCardPromoCodeData(undefined);
                                 },
                                 state: couponState,

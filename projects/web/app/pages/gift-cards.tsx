@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
-import { LoadingDialog, PEHeader } from '@people-eat/web-components';
+import { LoadingDialog, PECostBreakdownPanel, PEHeader } from '@people-eat/web-components';
 import {
+    PEAlert,
     PEButton,
     PEDatePicker,
     PEDialog,
@@ -12,6 +13,7 @@ import {
 } from '@people-eat/web-core-components';
 import {
     ConfirmOneGiftCardDocument,
+    CostBreakdown,
     CreateOneGiftCardDocument,
     GetGiftCardPageDataDocument,
     SignedInUser,
@@ -26,14 +28,17 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createApolloClient } from '../network/apolloClients';
+import Router from 'next/router';
 
 const balances = [100, 150, 200, 300, 500];
 
 interface PaymentFormProps {
     giftCardId: string;
+    onSuccess: () => void;
+    onFailure: () => void;
 }
 
-function PaymentForm({ giftCardId }: PaymentFormProps) {
+function PaymentForm({ giftCardId, onSuccess, onFailure }: PaymentFormProps) {
     const stripe = useStripe();
     const elements = useElements();
 
@@ -55,9 +60,11 @@ function PaymentForm({ giftCardId }: PaymentFormProps) {
         } else if (paymentIntent && paymentIntent.status === 'succeeded') {
             const { data } = await confirmGiftCard({ variables: { giftCardId } });
             if (data?.giftCards.success) {
-                alert(`Gutschein in Höhe von ${formatPrice({ amount: paymentIntent.amount, currencyCode: '€' })} erfolgreich gekauft!`);
+                onSuccess();
+                // alert(`Gutschein in Höhe von ${formatPrice({ amount: paymentIntent.amount, currencyCode: '€' })} erfolgreich gekauft!`);
             } else {
-                alert('Leider ist im letzte Schritt noch ein Fehler aufgetreten.');
+                onFailure();
+                // alert('Leider ist im letzte Schritt noch ein Fehler aufgetreten.');
             }
         }
     }
@@ -157,17 +164,72 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
 
     const { message, occasion, customOccasion, balance, customBalance, recipient, buyer } = watch();
 
+    const [paymentState, setPaymentState] = useState<'SUCCEEDED' | 'FAILED' | 'NOT_STARTED'>('NOT_STARTED');
+
+    let costBreakdown: CostBreakdown | undefined;
+
+    if (successResult) {
+        const b = (Number(customBalance) === 0 ? Number(balance) : Number(customBalance)) * 100;
+        costBreakdown = {
+            lineItems: [
+                {
+                    title: 'Gutscheinpreis',
+                    price: { amount: b, currencyCode: '€' },
+                },
+                {
+                    title: 'Servicegebühr',
+                    price: { amount: (b + 25) / (1 - 0.015) - b, currencyCode: '€' },
+                },
+            ],
+            total: {
+                title: 'Gesamtpreis',
+                price: {
+                    amount: (b + 25) / (1 - 0.015),
+                    currencyCode: '€',
+                },
+            },
+        };
+    }
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
 
             <LoadingDialog active={loading} />
 
+            <PEAlert
+                open={paymentState === 'SUCCEEDED'}
+                type="SUCCESS"
+                title="Gutschein erfolgreich gekauft und bezahlt"
+                subtitle="In deinem Postfach solltest du eine Email mit allen relevanten Information vorfinden."
+                primaryButton={{
+                    title: 'Fertig',
+                    onClick: () => Router.reload(),
+                }}
+            />
+
+            <PEAlert
+                open={paymentState === 'FAILED'}
+                type="ERROR"
+                title="Leider ist ein unerwarteter Fehler aufgetreten"
+                primaryButton={{
+                    title: 'Seite neu laden',
+                    onClick: () => Router.reload(),
+                }}
+            />
+
             <PEDialog open={Boolean(successResult)}>
                 {successResult && (
-                    <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: successResult.stripeClientSecret }}>
-                        <PaymentForm giftCardId={successResult.giftCardId} />
-                    </Elements>
+                    <div className="flex gap-8 [&>*]:flex-1 flex-col md:flex-row">
+                        {costBreakdown && <PECostBreakdownPanel costBreakdown={costBreakdown} />}
+                        <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: successResult.stripeClientSecret }}>
+                            <PaymentForm
+                                giftCardId={successResult.giftCardId}
+                                onSuccess={() => setPaymentState('SUCCEEDED')}
+                                onFailure={() => setPaymentState('FAILED')}
+                            />
+                        </Elements>
+                    </div>
                 )}
             </PEDialog>
 
@@ -201,7 +263,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                         variables: {
                                             request: {
                                                 userId: signedInUser ? signedInUser.userId : null,
-                                                buyer,
+                                                buyer: signedInUser ? null : buyer,
                                                 recipient: {
                                                     firstName: recipient.firstName,
                                                     lastName: recipient.lastName,
@@ -212,7 +274,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                                           }
                                                         : undefined,
                                                 },
-                                                balance: balance ?? customBalance,
+                                                balance: (balance ?? customBalance) * 100,
                                                 message,
                                                 occasion: occasion ?? customOccasion,
                                             },
@@ -416,6 +478,8 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                 <div className="flex justify-end">
                                     <PEButton title="Gutschein kaufen" type="submit" />
                                 </div>
+                                {/* <div>customBalance: {customBalance}</div>
+                                <div>balance: {balance}</div> */}
                             </form>
                         </div>
                     </div>

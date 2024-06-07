@@ -1,0 +1,24 @@
+query GetOneCouponCode($couponCodeId: String!) {
+    couponCodes {
+        findOne(couponCodeId: $couponCodeId) {
+            ... on GiftCardPromoCode {
+                giftCardPromoCodeId
+                redeemCode
+                balance {
+                    amount
+                    currencyCode
+                }
+                expiresAt
+                createdAt
+            }
+            ... on GiftCard {
+                redeemCode
+                balance {
+                    amount
+                    currencyCode
+                }
+                expiresAt
+            }
+        }
+    }
+}
