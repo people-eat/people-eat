@@ -725,8 +725,19 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                 </div>
 
                 <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
-                    <div className="flex justify-between w-full">
-                        {costBreakdown.total?.price && <span>{formatPrice(costBreakdown.total.price)}</span>}
+                    <div className="flex justify-between w-full items-center">
+                        <div className="grid grid-cols-2 gap-x-4">
+                            {costBreakdown.totalPerPerson?.price && (
+                                <>
+                                    <span>Preis pro Person</span> <b>{formatPrice(costBreakdown.totalPerPerson.price)}</b>
+                                </>
+                            )}
+                            {costBreakdown.total?.price && (
+                                <>
+                                    <span>Gesamtpreis</span> <span>{formatPrice(costBreakdown.total.price)}</span>
+                                </>
+                            )}
+                        </div>
                         <PEButton title="Jetzt buchen" onClick={() => setShowBook(true)} />
                     </div>
                 </div>
