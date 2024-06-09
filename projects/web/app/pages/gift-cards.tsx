@@ -30,6 +30,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createApolloClient } from '../network/apolloClients';
 import Router from 'next/router';
+import Head from 'next/head';
 
 const balances = [100, 150, 200, 300, 500];
 
@@ -196,19 +197,21 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
 
     return (
         <>
-            <title>Geschenkgutscheine - PeopleEat: Verschenke einzigartige kulinarische Erlebnisse</title>
+            <Head>
+                <title>Geschenkgutscheine - PeopleEat: Verschenke einzigartige kulinarische Erlebnisse</title>
 
-            <meta
-                name="description"
-                content="Verschenke mit PeopleEat Geschenkgutscheinen einzigartige kulinarische Erlebnisse. Ideal als Geburtstagsgeschenk, für ein Candle-Light-Dinner, als Hochzeitsgeschenk oder um einfach Danke zu sagen."
-            />
-            <meta
-                name="keywords"
-                content="PeopleEat, Geschenkgutscheine, kulinarische Erlebnisse, Geburtstagsgeschenk, Candle-Light-Dinner, Hochzeitsgeschenk, Dankeschön, exklusive Menüs, besondere Anlässe, Geschenkideen"
-            />
-            <link rel="alternate" href={`https://people-eat.com/gift-cards`} hrefLang="x-default" />
-            <link rel="alternate" href={`https://people-eat.com/gift-cards`} hrefLang="de" />
-            <link rel="icon" href="/favicon.ico" />
+                <meta
+                    name="description"
+                    content="Verschenke mit PeopleEat Geschenkgutscheinen einzigartige kulinarische Erlebnisse. Ideal als Geburtstagsgeschenk, für ein Candle-Light-Dinner, als Hochzeitsgeschenk oder um einfach Danke zu sagen."
+                />
+                <meta
+                    name="keywords"
+                    content="PeopleEat, Geschenkgutscheine, kulinarische Erlebnisse, Geburtstagsgeschenk, Candle-Light-Dinner, Hochzeitsgeschenk, Dankeschön, exklusive Menüs, besondere Anlässe, Geschenkideen"
+                />
+                <link rel="alternate" href={`https://people-eat.com/gift-cards`} hrefLang="x-default" />
+                <link rel="alternate" href={`https://people-eat.com/gift-cards`} hrefLang="de" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
 
             <div>
                 <PEHeader signedInUser={signedInUser} />
