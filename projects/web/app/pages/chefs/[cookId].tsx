@@ -234,14 +234,16 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
         <>
             <Head>
                 <title>
-                    Privatkoch {cook.user.firstName} {cook.city}
+                    Privatkoch {cook.user.firstName} {cook.city} | PeopleEat
                 </title>
-
                 <meta
                     name="description"
-                    content="Hier kannst du einen Privatkoch für Zuhause zu buchen. Du wirst es kaum glauben, aber es war nie einfacher"
+                    content="Hier kannst du einen Privatkoch für Zuhause buchen. Buche Privatköche bei PeopleEat für einzigartige kulinarische Erlebnisse und maßgeschneiderte Menüs. Erfahre mehr über die Spezialitäten und Erfahrungen unserer talentierten Privatköche."
                 />
-                <meta name="keywords" content="Koch buchen, Koch für Zuhause, Mietkoch" />
+                <meta
+                    name="keywords"
+                    content="PeopleEat, Privatköche, kulinarische Erlebnisse, Gourmet, Fine Dining, Chefkoch buchen, Kochservice"
+                />
                 <link rel="alternate" href={`https://people-eat.com/chefs/${cook.cookId}`} hrefLang="x-default" />
                 <link rel="alternate" href={`https://people-eat.com/chefs/${cook.cookId}`} hrefLang="de" />
                 <link rel="icon" href="/favicon.ico" />

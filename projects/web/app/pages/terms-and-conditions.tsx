@@ -2,6 +2,7 @@ import { GetTermsAndConditionsPageDataDocument, GetTermsAndConditionsPageDataQue
 import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../network/apolloClients';
 import { PEFooter, PEHeader } from '@people-eat/web-components';
+import Head from 'next/head';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -27,17 +28,30 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
 export default function Index({ signedInUser, latestTermsAndConditions }: ServerSideProps) {
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <Head>
+                <title>Allgemeine Geschäftsbedingungen – PeopleEat: Privatkoch für Zuhause</title>
+                <meta
+                    name="description"
+                    content="Erfahre mehr über die Allgemeinen Geschäftsbedingungen von PeopleEat. Informiere dich über die Regeln und Richtlinien zur Buchung eines Privatkochs für Zuhause. Transparenz und Klarheit für dein kulinarisches Erlebnis."
+                />
+                <meta
+                    name="keywords"
+                    content="Allgemeine Geschäftsbedingungen, PeopleEat, Privatkoch für Zuhause, Buchungsbedingungen, rechtliche Hinweise, AGB, Nutzungsbedingungen, kulinarisches Erlebnis"
+                />
+            </Head>
+            <div>
+                <PEHeader signedInUser={signedInUser} />
 
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 my-16">Allgemeine Geschäftsbedingungen</h1>
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 my-16">Allgemeine Geschäftsbedingungen</h1>
 
-                {latestTermsAndConditions && <div dangerouslySetInnerHTML={{ __html: latestTermsAndConditions.germanText }} />}
-                {!latestTermsAndConditions && <>Currently no terms and conditions are available</>}
+                    {latestTermsAndConditions && <div dangerouslySetInnerHTML={{ __html: latestTermsAndConditions.germanText }} />}
+                    {!latestTermsAndConditions && <>Currently no terms and conditions are available</>}
+                </div>
+
+                <PEFooter />
             </div>
-
-            <PEFooter />
-        </div>
+        </>
     );
 }

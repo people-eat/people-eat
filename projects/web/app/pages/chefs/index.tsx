@@ -95,14 +95,15 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
     return (
         <>
             <Head>
-                <title>Finde einen Privatkoch in deiner Umgebung</title>
-
-                <meta name="title" content="Finde einen Privatkoch in deiner Umgebung" />
+                <title>Finde deinen Privatkoch - Top Köche in deiner Nähe | PeopleEat</title>
                 <meta
                     name="description"
-                    content="Hier kannst du einen Privatkoch für Zuhause zu buchen. Du wirst es kaum glauben, aber es war nie einfacher"
+                    content="Finde den perfekten Privatkoch für dein Zuhause bei PeopleEat. Wähle aus einer Vielzahl professioneller Köche und genieße individuell gestaltete Menüs. Erlebe exklusive kulinarische Momente bei dir zu Hause. Jetzt deinen persönlichen Koch entdecken!"
                 />
-                <meta name="keywords" content="Koch buchen, Koch für Zuhause, Mietkoch" />
+                <meta
+                    name="keywords"
+                    content="Koch nach hause bestellen, Privatkoch für einen Abend, Koch buchen, Kochkurs, Mietkoch in der nähe, Eventkoch mieten, Sushi Koch mieten, personal Chef, kosten Privatkoch"
+                />
                 <link rel="alternate" href="https://people-eat.com/chefs/" hrefLang="x-default" />
                 <link rel="alternate" href="https://people-eat.com/chefs/" hrefLang="de" />
                 <link rel="icon" href="/favicon.ico" />

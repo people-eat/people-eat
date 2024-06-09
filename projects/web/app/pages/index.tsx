@@ -258,7 +258,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 />
                 <meta
                     name="keywords"
-                    content="PeopleEat, Koch für Zuhause, Privatkoch, Koch mieten, Private Chef, Frankfurt, Hamburg, München, Köln, Berlin"
+                    content="PeopleEat, Koch für Zuhause, Privatkoch, Koch mieten, Private Chef, Frankfurt, Hamburg, München, Köln, Berlin, Kundenevent, Team Event, Geburtstag, Jugendseeleabschied Ideen"
                 />
                 <link rel="alternate" href="https://people-eat.com/" hrefLang="x-default" />
                 <link rel="alternate" href="https://people-eat.com/" hrefLang="de" />
@@ -383,12 +383,16 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                         </div>
 
                         <div className="relative bg-orange-200 lg:col-span-10 lg:col-start-3 lg:row-start-1 lg:grid lg:grid-cols-10 lg:items-center lg:rounded-3xl">
-                            <div className="relative mx-auto max-w-md space-y-6 px-6 py-12 sm:max-w-3xl sm:py-16 lg:col-span-6 lg:col-start-4 lg:max-w-none lg:p-0 flex flex-col gap-8">
+                            <div className="relative mx-auto max-w-md space-y-6 px-6 py-12 sm:max-w-3xl sm:py-16 lg:col-span-6 lg:col-start-4 lg:max-w-none lg:p-0 flex flex-col gap-2">
                                 <h2 className="text-3xl sm:4xl font-bold tracking-tight text-indigo-950" id="join-heading">
                                     Bereite deinen Lieben ein <br /> unvergessliches Geschenk
                                 </h2>
                                 <p className="text-lg text-indigo-950">
-                                    Ein Privater Koch für zuhause ist die neue Art, besondere Momente zu feiern
+                                    Verschenke deinen Lieben ein unvergessliches kulinarisches Erlebnis und bringe Restaurant Erlebnisse zu
+                                    ihnen nachhause. Dieses außergewöhnliche Geschenk ist eine völlig neue Art, um einzigartige
+                                    Menükreationen, zubereitet von einem Privatkoch zu genießen. Der Erlebnisgutschein eignet sich perfekt
+                                    für romantische Abende, besondere Genussmomente Zuhause, entspannte Dinnerpartys oder um einfach mal
+                                    jemandem danke zu sagen. Ein Moment, der für immer in Erinnerung bleiben wird.
                                 </p>
 
                                 <div>

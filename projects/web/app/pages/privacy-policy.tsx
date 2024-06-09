@@ -2,6 +2,7 @@ import { GetPrivacyPolicyPageDataDocument, GetPrivacyPolicyPageDataQuery, Signed
 import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../network/apolloClients';
 import { PEFooter, PEHeader } from '@people-eat/web-components';
+import Head from 'next/head';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -27,18 +28,31 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
 export default function PrivacyPolicyPage({ signedInUser, latestPrivacyPolicy }: ServerSideProps) {
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <Head>
+                <title>Datenschutzerklärung – PeopleEat: Privatkoch für Zuhause</title>
+                <meta
+                    name="description"
+                    content="Erfahre mehr über die Datenschutzrichtlinien von PeopleEat. Informiere dich, wie deine Daten beim Buchen eines Privatkochs für Zuhause geschützt und verarbeitet werden. Transparenz und Sicherheit für dein kulinarisches Erlebnis."
+                />
+                <meta
+                    name="keywords"
+                    content="Datenschutzerklärung, PeopleEat, Privatkoch für Zuhause, Datenschutzrichtlinien, Datensicherheit, Datenverarbeitung"
+                />
+            </Head>
+            <div>
+                <PEHeader signedInUser={signedInUser} />
 
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 my-16">Datenschutzerklärung</h1>
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 my-16">Datenschutzerklärung</h1>
 
-                {latestPrivacyPolicy && <div dangerouslySetInnerHTML={{ __html: latestPrivacyPolicy.germanText }} />}
+                    {latestPrivacyPolicy && <div dangerouslySetInnerHTML={{ __html: latestPrivacyPolicy.germanText }} />}
 
-                {!latestPrivacyPolicy && <>Currently no terms and conditions are available</>}
+                    {!latestPrivacyPolicy && <>Currently no terms and conditions are available</>}
+                </div>
+
+                <PEFooter />
             </div>
-
-            <PEFooter />
-        </div>
+        </>
     );
 }

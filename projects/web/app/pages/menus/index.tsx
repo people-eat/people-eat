@@ -108,11 +108,9 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
     return (
         <>
             <Head>
-                <title>Entdecke Menüs</title>
-
-                <meta name="title" content="Entdecke Menüs" />
+                <title>Exklusive Menüs für Zuhause – Buche deinen Privatkoch bei PeopleEat</title>
                 <meta name="description" content="Erstelle eigene Menüs und genieße kulinarische Erlebnismomente bei dir Zuhause" />
-                <meta name="keywords" content="Speisekarte, Menü für Zuhause, Essen für Zuhause bestellen" />
+                <meta name="keywords" content="kulinarische Erlebnisse, 3-Gänge Menüs, Koch buchen, Event Menüs, Privatkoch Menüs" />
                 <link rel="alternate" href="https://people-eat.com/menus/" hrefLang="x-default" />
                 <link rel="alternate" href="https://people-eat.com/menus/" hrefLang="de" />
                 <link rel="icon" href="/favicon.ico" />

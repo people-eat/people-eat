@@ -25,6 +25,7 @@ import {
     Time,
     Unpacked,
     calculateMenuPrice,
+    dateDistanceInDays,
     formatPrice,
     geoDistance,
     toQueryParams,
@@ -409,18 +410,22 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [signedInUser]);
 
+    const moreThanTwoWeeksInTheFuture = dateDistanceInDays(new Date(), dateTime);
+
     return (
         <>
             <Head>
                 <title>
-                    {menu.title} von {menu.cook.user.firstName}
+                    Fine Dining Menü {menu.title} von Koch {menu.cook.user.firstName}
                 </title>
-
                 <meta
                     name="description"
-                    content="Hier kannst du einen Privatkoch für Zuhause zu buchen. Du wirst es kaum glauben, aber es war nie einfacher"
+                    content="Entdecke eine Vielfalt an Menüs für dein Zuhause bei PeopleEat. Buche einen Privatkoch und genieße Gourmet-, vegetarische, vegane und internationale Menüs, die nach deinen Wünschen zubereitet werden. Perfekt für besondere Anlässe und unvergessliche kulinarische Erlebnisse."
                 />
-                <meta name="keywords" content="Koch buchen, Koch für Zuhause, Mietkoch" />
+                <meta
+                    name="keywords"
+                    content="3-Gänge Menü, 4-Gänge Menü, Fine-Dining, Gourmet Menü Zuhause, vegetarisches Menü, veganes Menü, PeopleEat, exklusives Essen, kulinarische Erlebnisse, koch mieten"
+                />
                 <link rel="alternate" href={`https://people-eat.com/menus/${menu.menuId}`} hrefLang="x-default" />
                 <link rel="alternate" href={`https://people-eat.com/menus/${menu.menuId}`} hrefLang="de" />
                 <link rel="icon" href="/favicon.ico" />
@@ -445,24 +450,20 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                         </VStack>
                                     ))} */}
 
-                                    {/* <Spacer /> */}
-
-                                    {/*<Divider flexItem /> */}
-
                                     <PECostBreakdownPanel costBreakdown={costBreakdown} />
 
-                                    {/* {moreThanTwoWeeksInTheFuture <= 14 && (
-                                        <div className="text-text-sm" style={{ color: 'gray' }}>
+                                    {moreThanTwoWeeksInTheFuture <= 14 && (
+                                        <div className="text-sm" style={{ color: 'gray' }}>
                                             Der Gesamtbetrag wird erst dann eingezogen wenn der Koch die Anfrage akzeptiert hat.
                                         </div>
                                     )}
 
                                     {moreThanTwoWeeksInTheFuture > 14 && (
-                                        <div className="text-text-sm" style={{ color: 'gray' }}>
-                                            Nachdem der Koch die Anfrage akzeptiert hat, wird die Gesamtsumme 2 Wochen vor dem Event eingezogen
-                                            (zuvor wird eine Ankündigungsmail verschickt).
+                                        <div className="text-sm" style={{ color: 'gray' }}>
+                                            Nachdem der Koch die Anfrage akzeptiert hat, wird die Gesamtsumme 2 Wochen vor dem Event
+                                            eingezogen (zuvor wird eine Ankündigungsmail verschickt).
                                         </div>
-                                    )} */}
+                                    )}
                                 </div>
                             </Payment>
                         </Elements>
@@ -725,21 +726,11 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                 </div>
 
                 <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
-                    <div className="flex justify-between w-full items-center">
-                        <div className="grid grid-cols-2 gap-x-4">
-                            {costBreakdown.totalPerPerson?.price && (
-                                <>
-                                    <span>Preis pro Person</span> <b>{formatPrice(costBreakdown.totalPerPerson.price)}</b>
-                                </>
-                            )}
-                            {costBreakdown.total?.price && (
-                                <>
-                                    <span>Gesamtpreis</span> <span>{formatPrice(costBreakdown.total.price)}</span>
-                                </>
-                            )}
-                        </div>
-                        <PEButton title="Jetzt buchen" onClick={() => setShowBook(true)} />
-                    </div>
+                    <PEButton
+                        title={`Jetzt buchen (${formatPrice(costBreakdown.totalPerPerson!.price)} pro Person)`}
+                        onClick={() => setShowBook(true)}
+                        className="w-full"
+                    />
                 </div>
 
                 <Transition.Root show={Boolean(selectedMeal)} as={Fragment}>

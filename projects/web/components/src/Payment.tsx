@@ -54,11 +54,9 @@ export function Payment({
     return (
         <>
             <div className="flex flex-col gap-4">
-                <div className="flex gap-8 w-full">
+                <div className="flex gap-8 w-full flex-col md:flex-row">
                     <div className="flex-1">{children}</div>
-                    <div className="flex flex-1 items-stretch">
-                        <PaymentElement id="payment-element" />
-                    </div>
+                    <PaymentElement id="payment-element" className="flex-1" options={{ layout: 'tabs' }} />
                 </div>
 
                 <PEButton title="Fertig" onClick={(): void => void pay()} />

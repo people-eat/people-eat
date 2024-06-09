@@ -187,7 +187,7 @@ export default function ProfileBookingsPage({
                                         }
                                     />
                                 ))}
-                                {[...bookingRequests, ...bookingRequests, ...bookingRequests, ...bookingRequests].map(
+                                {[...bookingRequests].map(
                                     ({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
                                         <BookingRequestRow
                                             key={bookingRequestId}

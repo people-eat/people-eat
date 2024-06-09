@@ -90,6 +90,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
 
             {status === 'PENDING' && (
                 <form
+                    autoComplete="off"
                     onSubmit={handleSubmit(({ message }) =>
                         send({ variables: { userId, bookingRequestId, request: { message } } }).then(
                             ({ data }) => data?.users.bookingRequests.chatMessages.success && setValue('message', ''),
