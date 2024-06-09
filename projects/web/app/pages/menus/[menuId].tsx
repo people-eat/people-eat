@@ -27,6 +27,7 @@ import {
     calculateMenuPrice,
     formatPrice,
     geoDistance,
+    toQueryParams,
     toValidatedSearchParams,
 } from '@people-eat/web-domain';
 import { Elements } from '@stripe/react-stripe-js';
@@ -544,7 +545,12 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                 </div>
                             )}
 
-                            <Link href={'/chefs/' + menu.cook.cookId}>
+                            <Link
+                                href={{
+                                    pathname: '/chefs/' + menu.cook.cookId,
+                                    query: toQueryParams({ selectedLocation, date, adults, children }),
+                                }}
+                            >
                                 <figcaption className="flex items-center gap-x-4">
                                     {!menu.cook.user.profilePictureUrl && (
                                         <CircleUser strokeWidth={1.5} className="text-orange-500 w-10 h-10" />
