@@ -19,6 +19,7 @@ import {
     geoDistance,
     translatedCookRanks,
     toValidatedSearchParams,
+    toQueryParams,
 } from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import { Globe, HandPlatter, MapPin, MinusIcon, PlusIcon, ShoppingBasket, Sparkles } from 'lucide-react';
@@ -385,7 +386,13 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                                             pricePerAdult,
                                             pricePerChild,
                                         }) => (
-                                            <Link key={menuId} href={'/menus/' + menuId}>
+                                            <Link
+                                                key={menuId}
+                                                href={{
+                                                    pathname: '/menus/' + menuId,
+                                                    query: toQueryParams({ selectedLocation, date, adults, children }),
+                                                }}
+                                            >
                                                 <MenuCard
                                                     title={title}
                                                     imageUrls={imageUrl ? [imageUrl] : []}
