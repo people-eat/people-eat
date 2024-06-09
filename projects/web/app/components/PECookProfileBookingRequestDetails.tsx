@@ -53,7 +53,7 @@ export function PECookProfileBookingRequestDetails({
     const router = useRouter();
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 flex-1">
             <Link href="/profile/bookings" className="lg:hidden flex gap-2">
                 <ArrowLeft />
                 Buchungsanfragen
@@ -70,12 +70,12 @@ export function PECookProfileBookingRequestDetails({
             />
 
             {selectedTab === 'EVENT_DETAILS' && (
-                <div>
+                <div className="overflow-y-scroll">
                     <dl className="space-y-6 divide-y divide-gray-100 text-sm leading-6">
                         <div className="pt-6 sm:flex">
                             <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Status</dt>
                             <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">
+                                <div className="text-gray-900 flex justify-between w-full pr-4">
                                     {translatedBookingRequestStatus[bookingRequest.status]}
                                     <BookingStatusInfoPopover currentBookingRequestStatus={bookingRequest.status} />
                                 </div>
@@ -146,14 +146,12 @@ export function PECookProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'CHAT' && (
-                <div className="flex flex-col gap-8">
-                    <CookProfileBookingRequestChat
-                        cookId={userId}
-                        hasStripePayoutMethodActivated={hasStripePayoutMethodActivated}
-                        bookingRequest={bookingRequest}
-                        onRequireUpdate={onRequireUpdate}
-                    />
-                </div>
+                <CookProfileBookingRequestChat
+                    cookId={userId}
+                    hasStripePayoutMethodActivated={hasStripePayoutMethodActivated}
+                    bookingRequest={bookingRequest}
+                    onRequireUpdate={onRequireUpdate}
+                />
             )}
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (

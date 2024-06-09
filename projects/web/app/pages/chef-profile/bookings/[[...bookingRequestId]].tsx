@@ -18,6 +18,7 @@ import {
 import { createApolloClient } from '../../../network/apolloClients';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -101,20 +102,32 @@ export default function CookProfileBookingsPage({
     useEffect(() => setSelectedBookingRequest(initialSelectedBookingRequest), [initialSelectedBookingRequest]);
 
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} className={classNames({ 'hidden lg:block': selectedBookingRequest })} />
+        <>
+            <Head>
+                <title>
+                    PeopleEat {'>'} Chef Profile {'>'} Bookings
+                </title>
+            </Head>
 
-            <div className={classNames('mx-auto max-w-7xl px-0 sm:px-8', 'flex flex-col gap-8')}>
-                <PECookProfileNavigation
-                    current="BOOKINGS"
-                    className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest })}
-                />
+            <div className={classNames('absolute inset-0 flex flex-col gap-8')}>
+                <PEHeader signedInUser={signedInUser} className={classNames({ 'hidden lg:block': selectedBookingRequest })} />
 
-                <div className="flex gap-4">
+                <div
+                    className={classNames('max-w-7xl mx-auto w-full p-6', {
+                        'hidden lg:flex': selectedBookingRequest,
+                    })}
+                >
+                    <PECookProfileNavigation
+                        current="BOOKINGS"
+                        className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest })}
+                    />
+                </div>
+
+                <div className="max-w-7xl w-full mx-auto px-0 sm:px-8 pb-4 flex gap-4 overflow-hidden flex-1">
                     {/* Start of side bar */}
                     <div
-                        className={classNames('flex-1 px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
-                            'hidden lg:block': selectedBookingRequest,
+                        className={classNames('flex-1 flex flex-col', 'px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
+                            'hidden lg:flex': selectedBookingRequest,
                         })}
                     >
                         <div className="px-4 pb-4 flex justify-between items-center">
@@ -123,22 +136,24 @@ export default function CookProfileBookingsPage({
                         </div>
 
                         {bookingRequests.length > 0 && (
-                            <ul>
-                                {bookingRequests.map(({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
-                                    <BookingRequestRow
-                                        key={bookingRequestId}
-                                        status={status}
-                                        occasion={occasion}
-                                        dateTime={dateTime}
-                                        selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
-                                        price={price}
-                                        configuredMenuTitle={configuredMenu?.title}
-                                        cookFirstName={cook.user.firstName}
-                                        onSelect={() =>
-                                            router.push(`/chef-profile/bookings/${bookingRequestId}`, undefined, { scroll: false })
-                                        }
-                                    />
-                                ))}
+                            <ul className="overflow-y-scroll flex-1">
+                                {[...bookingRequests, ...bookingRequests, ...bookingRequests, ...bookingRequests, ...bookingRequests].map(
+                                    ({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
+                                        <BookingRequestRow
+                                            key={bookingRequestId}
+                                            status={status}
+                                            occasion={occasion}
+                                            dateTime={dateTime}
+                                            selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
+                                            price={price}
+                                            configuredMenuTitle={configuredMenu?.title}
+                                            cookFirstName={cook.user.firstName}
+                                            onSelect={() =>
+                                                router.push(`/chef-profile/bookings/${bookingRequestId}`, undefined, { scroll: false })
+                                            }
+                                        />
+                                    ),
+                                )}
                             </ul>
                         )}
 
@@ -147,8 +162,8 @@ export default function CookProfileBookingsPage({
 
                     {/* Start of details */}
                     <div
-                        className={classNames('flex-[2] lg:rounded-2xl lg:shadow-lg p-8', {
-                            'hidden lg:block': !selectedBookingRequest,
+                        className={classNames('flex-[2] flex lg:rounded-2xl lg:shadow-lg p-8', {
+                            'hidden lg:flex': !selectedBookingRequest,
                         })}
                     >
                         {!selectedBookingRequest && 'Wähle eine Buchungsanfrage aus'}
@@ -165,6 +180,6 @@ export default function CookProfileBookingsPage({
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

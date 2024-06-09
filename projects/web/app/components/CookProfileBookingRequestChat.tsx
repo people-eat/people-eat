@@ -89,8 +89,8 @@ export function CookProfileBookingRequestChat({
     );
 
     return (
-        <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+            <div className="flex flex-col gap-4 flex-1 overflow-y-scroll">
                 {sortedChatMessages.map((chatMessage) => (
                     <PEChatMessage key={chatMessage.chatMessageId} chatMessage={chatMessage} isAuthor={chatMessage.createdBy === cookId} />
                 ))}
@@ -99,6 +99,7 @@ export function CookProfileBookingRequestChat({
 
             {status === 'PENDING' && (
                 <form
+                    autoComplete="off"
                     onSubmit={handleSubmit(({ message }) =>
                         send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
                             ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),

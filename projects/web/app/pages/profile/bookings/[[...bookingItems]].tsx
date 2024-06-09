@@ -187,23 +187,19 @@ export default function ProfileBookingsPage({
                                         }
                                     />
                                 ))}
-                                {[...bookingRequests].map(
-                                    ({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
-                                        <BookingRequestRow
-                                            key={bookingRequestId}
-                                            status={status}
-                                            occasion={occasion}
-                                            dateTime={dateTime}
-                                            selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
-                                            price={price}
-                                            configuredMenuTitle={configuredMenu?.title}
-                                            cookFirstName={cook.user.firstName}
-                                            onSelect={() =>
-                                                router.push(`/profile/bookings/${bookingRequestId}`, undefined, { scroll: false })
-                                            }
-                                        />
-                                    ),
-                                )}
+                                {bookingRequests.map(({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
+                                    <BookingRequestRow
+                                        key={bookingRequestId}
+                                        status={status}
+                                        occasion={occasion}
+                                        dateTime={dateTime}
+                                        selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
+                                        price={price}
+                                        configuredMenuTitle={configuredMenu?.title}
+                                        cookFirstName={cook.user.firstName}
+                                        onSelect={() => router.push(`/profile/bookings/${bookingRequestId}`, undefined, { scroll: false })}
+                                    />
+                                ))}
                             </ul>
                         )}
 
