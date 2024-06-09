@@ -23,6 +23,7 @@ import {
     toProfileGlobalBookingRequestDetailsTab,
 } from '../../../components/PEProfileGlobalBookingRequestDetails';
 import { createApolloClient } from '../../../network/apolloClients';
+import Head from 'next/head';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
@@ -137,25 +138,33 @@ export default function ProfileBookingsPage({
     const totalNumberOfBookingRequests = globalBookingRequests.length + bookingRequests.length;
 
     return (
-        <div className={classNames('absolute top-0 bottom-0 left-0 right-0', 'flex flex-col')}>
-            <PEHeader
-                signedInUser={signedInUser}
-                className={classNames({ 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}
-            />
+        <>
+            <Head>
+                <title>
+                    PeopleEat {'>'} User Profile {'>'} Bookings
+                </title>
+            </Head>
 
-            <div className={classNames('max-w-7xl w-full', 'flex-1', 'mx-auto px-0 sm:px-8 pb-4', 'flex flex-col gap-8 overflow-hidden')}>
-                {/* check if overflow-hidden can be removed later */}
-                <PEProfileNavigation
-                    current="BOOKINGS"
-                    className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest })}
+            <div className={classNames('absolute inset-0 flex flex-col gap-8')}>
+                <PEHeader
+                    signedInUser={signedInUser}
+                    className={classNames({ 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}
                 />
 
-                {/* bg-red-400 */}
-                <div className="flex gap-4  flex-1">
+                <div className="max-w-7xl mx-auto w-full p-6">
+                    <PEProfileNavigation
+                        current="BOOKINGS"
+                        className={classNames('px-4 sm:px-0 flex-auto', {
+                            'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest,
+                        })}
+                    />
+                </div>
+
+                <div className="max-w-7xl w-full mx-auto px-0 sm:px-8 pb-4 flex gap-4 overflow-hidden flex-1">
                     {/* Start of side bar */}
                     <div
                         className={classNames('flex-1 flex flex-col', 'px-0 lg:rounded-2xl lg:shadow-lg lg:py-8', {
-                            'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest,
+                            'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest,
                         })}
                     >
                         <div className="px-4 pb-4 flex justify-between items-center">
@@ -164,7 +173,6 @@ export default function ProfileBookingsPage({
                         </div>
 
                         {totalNumberOfBookingRequests > 0 && (
-                            // bg-green-400
                             <ul className="overflow-y-scroll flex-1">
                                 {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
                                     <GlobalBookingRequestRow
@@ -174,7 +182,9 @@ export default function ProfileBookingsPage({
                                         dateTime={dateTime}
                                         selected={globalBookingRequestId === selectedGlobalBookingRequest?.globalBookingRequestId}
                                         onSelect={() =>
-                                            router.push(`/profile/bookings/global/${globalBookingRequestId}`, undefined, { scroll: false })
+                                            router.push(`/profile/bookings/global/${globalBookingRequestId}`, undefined, {
+                                                scroll: false,
+                                            })
                                         }
                                     />
                                 ))}
@@ -203,8 +213,8 @@ export default function ProfileBookingsPage({
 
                     {/* Start of details */}
                     <div
-                        className={classNames('flex-[2] lg:rounded-2xl lg:shadow-lg p-8', {
-                            'hidden lg:block': !selectedBookingRequest && !selectedGlobalBookingRequest,
+                        className={classNames('flex-[2] flex lg:rounded-2xl lg:shadow-lg p-8', {
+                            'hidden lg:flex': !selectedBookingRequest && !selectedGlobalBookingRequest,
                         })}
                     >
                         {!selectedBookingRequest && !selectedGlobalBookingRequest && 'Wähle eine Buchungsanfrage aus'}
@@ -228,6 +238,6 @@ export default function ProfileBookingsPage({
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

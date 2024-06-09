@@ -52,10 +52,9 @@ export function PEProfileGlobalBookingRequestDetails({
     const showFailedAlert = data ? !data.users.supportRequests.createOne : false;
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 flex-1">
             <Link href="/profile/bookings" className="lg:hidden flex gap-2">
                 <ArrowLeft />
-                Buchungsanfragen
             </Link>
 
             <PETabSingleSelection
@@ -69,7 +68,7 @@ export function PEProfileGlobalBookingRequestDetails({
             />
 
             {selectedTab === 'EVENT_DETAILS' && (
-                <div>
+                <div className="overflow-y-scroll">
                     <dl className="space-y-6 divide-y divide-gray-100 text-sm leading-6">
                         <div className="pt-6 sm:flex">
                             <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Anlass</dt>

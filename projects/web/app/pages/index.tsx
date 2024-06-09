@@ -365,27 +365,36 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl py-10 sm:px-6 lg:px-8">
-                    <div className="relative isolate overflow-hidden bg-orange-200 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-                        <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-                            <h2 className="text-3xl font-bold tracking-tight text-indigo-950 sm:text-4xl">
-                                Bereite deinen Lieben ein unvergessliches Geschenk
-                            </h2>
-                            <p className="mt-6 text-lg leading-8 text-indigo-950">
-                                Ein Privater Koch für zuhause ist die neue Art, besondere Momente zu feiern
-                            </p>
-                            <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                                <PELink title="Gutschein kaufen" href="/gift-cards" />
+                <div className="mx-auto max-w-7xl bg-orange-200 lg:bg-transparent lg:px-8">
+                    <div className="lg:grid lg:grid-cols-12">
+                        <div className="relative z-10 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:bg-transparent lg:py-16">
+                            <div className="absolute inset-x-0 h-1/2 bg-gray-50 lg:hidden" aria-hidden="true" />
+                            <div className="mx-auto max-w-md px-6 sm:max-w-3xl lg:max-w-none lg:p-0">
+                                <div className="aspect-h-6 aspect-w-10 sm:aspect-h-1 sm:aspect-w-2 lg:aspect-w-1">
+                                    <Image
+                                        className="rounded-3xl object-cover object-center shadow-2xl"
+                                        src="/home/Gutschein Koch.png"
+                                        alt=""
+                                        width={1824}
+                                        height={1080}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div className="relative mt-16 h-80 lg:mt-8">
-                            <Image
-                                className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
-                                src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-                                alt=""
-                                width={1824}
-                                height={1080}
-                            />
+
+                        <div className="relative bg-orange-200 lg:col-span-10 lg:col-start-3 lg:row-start-1 lg:grid lg:grid-cols-10 lg:items-center lg:rounded-3xl">
+                            <div className="relative mx-auto max-w-md space-y-6 px-6 py-12 sm:max-w-3xl sm:py-16 lg:col-span-6 lg:col-start-4 lg:max-w-none lg:p-0 flex flex-col gap-8">
+                                <h2 className="text-3xl sm:4xl font-bold tracking-tight text-indigo-950" id="join-heading">
+                                    Bereite deinen Lieben ein <br /> unvergessliches Geschenk
+                                </h2>
+                                <p className="text-lg text-indigo-950">
+                                    Ein Privater Koch für zuhause ist die neue Art, besondere Momente zu feiern
+                                </p>
+
+                                <div>
+                                    <PELink title="Gutschein kaufen" href="/gift-cards" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
