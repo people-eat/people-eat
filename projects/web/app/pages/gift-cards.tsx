@@ -195,119 +195,143 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
     }
 
     return (
-        <div>
-            <PEHeader signedInUser={signedInUser} />
+        <>
+            <title>Geschenkgutscheine - PeopleEat: Verschenke einzigartige kulinarische Erlebnisse</title>
 
-            <LoadingDialog active={loading} />
-
-            <PEAlert
-                open={paymentState === 'SUCCEEDED'}
-                type="SUCCESS"
-                title="Gutschein erfolgreich gekauft und bezahlt"
-                subtitle="In deinem Postfach solltest du eine Email mit allen relevanten Information vorfinden."
-                primaryButton={{
-                    title: 'Fertig',
-                    onClick: () => Router.reload(),
-                }}
+            <meta
+                name="description"
+                content="Verschenke mit PeopleEat Geschenkgutscheinen einzigartige kulinarische Erlebnisse. Ideal als Geburtstagsgeschenk, für ein Candle-Light-Dinner, als Hochzeitsgeschenk oder um einfach Danke zu sagen."
             />
-
-            <PEAlert
-                open={paymentState === 'FAILED'}
-                type="ERROR"
-                title="Leider ist ein unerwarteter Fehler aufgetreten"
-                primaryButton={{
-                    title: 'Seite neu laden',
-                    onClick: () => Router.reload(),
-                }}
+            <meta
+                name="keywords"
+                content="PeopleEat, Geschenkgutscheine, kulinarische Erlebnisse, Geburtstagsgeschenk, Candle-Light-Dinner, Hochzeitsgeschenk, Dankeschön, exklusive Menüs, besondere Anlässe, Geschenkideen"
             />
+            <link rel="alternate" href={`https://people-eat.com/gift-cards`} hrefLang="x-default" />
+            <link rel="alternate" href={`https://people-eat.com/gift-cards`} hrefLang="de" />
+            <link rel="icon" href="/favicon.ico" />
 
-            <PEDialog open={Boolean(successResult)}>
-                {successResult && (
-                    <div className="flex gap-8 [&>*]:flex-1 flex-col md:flex-row">
-                        {costBreakdown && <PECostBreakdownPanel costBreakdown={costBreakdown} />}
-                        <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: successResult.stripeClientSecret }}>
-                            <PaymentForm
-                                giftCardId={successResult.giftCardId}
-                                onSuccess={() => setPaymentState('SUCCEEDED')}
-                                onFailure={() => setPaymentState('FAILED')}
-                            />
-                        </Elements>
-                    </div>
-                )}
-            </PEDialog>
+            <div>
+                <PEHeader signedInUser={signedInUser} />
 
-            <div className="relative bg-white">
-                <div className="lg:absolute lg:inset-0 lg:left-1/2">
-                    <Image
-                        className="h-64 w-full bg-gray-50 object-cover sm:h-80 lg:absolute lg:h-full"
-                        src="/gift-cards/Privatkochgutschein.jpg"
-                        width={600}
-                        height={800}
-                        alt=""
-                    />
-                </div>
+                <LoadingDialog active={loading} />
 
-                <div className="pb-24 pt-16 sm:pb-32 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">
-                    <div className="px-6 lg:px-8">
-                        <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-                            <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-                                Geschenkgutscheine für besondere Menschen in den eigenen vier Wänden
-                            </h2>
+                <PEAlert
+                    open={paymentState === 'SUCCEEDED'}
+                    type="SUCCESS"
+                    title="Gutschein erfolgreich gekauft und bezahlt"
+                    subtitle="In deinem Postfach solltest du eine Email mit allen relevanten Information vorfinden."
+                    primaryButton={{
+                        title: 'Fertig',
+                        onClick: () => Router.reload(),
+                    }}
+                />
 
-                            <p className="mt-2 text-lg leading-8 text-gray-600">
-                                Verschenke kulinarische Erlebnisse an deine Lieben. Egal ob ein romantisches Candle-Light dinner, ein
-                                Familienesen, oder Genussmomente Zuhause. Der PeopleEat Gutschein ist flexibel einlösbar.
-                            </p>
+                <PEAlert
+                    open={paymentState === 'FAILED'}
+                    type="ERROR"
+                    title="Leider ist ein unerwarteter Fehler aufgetreten"
+                    primaryButton={{
+                        title: 'Seite neu laden',
+                        onClick: () => Router.reload(),
+                    }}
+                />
 
-                            <form
-                                className="mt-16 flex flex-col gap-16"
-                                onSubmit={handleSubmit(() =>
-                                    createGiftCard({
-                                        variables: {
-                                            request: {
-                                                userId: signedInUser ? signedInUser.userId : null,
-                                                buyer: signedInUser ? null : buyer,
-                                                recipient: {
-                                                    firstName: recipient.firstName,
-                                                    lastName: recipient.lastName,
-                                                    deliveryInformation: recipient.deliveryInformation
-                                                        ? {
-                                                              date: toDBDateString(recipient.deliveryInformation.date),
-                                                              emailAddress: recipient.deliveryInformation.emailAddress,
-                                                          }
-                                                        : undefined,
-                                                },
-                                                balance: (Number(customBalance) === 0 ? Number(balance) : Number(customBalance)) * 100,
-                                                message,
-                                                occasion: occasion ?? customOccasion,
-                                            },
-                                        },
-                                    }),
-                                )}
+                <PEDialog open={Boolean(successResult)}>
+                    {successResult && (
+                        <div className="flex gap-8 [&>*]:flex-1 flex-col md:flex-row">
+                            {costBreakdown && <PECostBreakdownPanel costBreakdown={costBreakdown} />}
+                            <Elements
+                                stripe={loadStripe(stripePublishableKey)}
+                                options={{ clientSecret: successResult.stripeClientSecret }}
                             >
-                                <div className="flex gap-4 flex-wrap">
-                                    {['/gift-cards/orange.jpg'].map((imageUrl) => (
-                                        <Image
-                                            key={imageUrl}
-                                            src={imageUrl}
-                                            width={240}
-                                            height={150}
-                                            alt=""
-                                            className={classNames('w-[240px] h-[150px] object-cover rounded-lg shadow-md', {
-                                                'ring-orange-500 ring-2': true, // todo: only if selected
-                                            })}
-                                        />
-                                    ))}
-                                </div>
+                                <PaymentForm
+                                    giftCardId={successResult.giftCardId}
+                                    onSuccess={() => setPaymentState('SUCCEEDED')}
+                                    onFailure={() => setPaymentState('FAILED')}
+                                />
+                            </Elements>
+                        </div>
+                    )}
+                </PEDialog>
 
-                                <div className="flex flex-col gap-4">
-                                    <legend className="text-lg font-medium text-gray-900">
-                                        Für welchen Anlass möchtest du den Gutschein verschenken?
-                                    </legend>
+                <div className="relative bg-white">
+                    <div className="lg:absolute lg:inset-0 lg:left-1/2">
+                        <Image
+                            className="h-64 w-full bg-gray-50 object-cover sm:h-80 lg:absolute lg:h-full"
+                            src="/gift-cards/Privatkochgutschein.jpg"
+                            width={600}
+                            height={800}
+                            alt=""
+                        />
+                    </div>
 
-                                    <div className="flex flex-wrap gap-2">
-                                        {['Geburtstag', 'Hochzeit', 'Candle Light Dinner', 'Abschlussfeier', 'Jahrestag', 'Dankeschön'].map(
-                                            (o) => (
+                    <div className="pb-24 pt-16 sm:pb-32 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">
+                        <div className="px-6 lg:px-8">
+                            <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
+                                <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+                                    Geschenkgutscheine für besondere Menschen in den eigenen vier Wänden
+                                </h2>
+
+                                <p className="mt-2 text-lg leading-8 text-gray-600">
+                                    Verschenke kulinarische Erlebnisse an deine Lieben. Egal ob ein romantisches Candle-Light dinner, ein
+                                    Familienesen, oder Genussmomente Zuhause. Der PeopleEat Gutschein ist flexibel einlösbar.
+                                </p>
+
+                                <form
+                                    className="mt-16 flex flex-col gap-16"
+                                    onSubmit={handleSubmit(() =>
+                                        createGiftCard({
+                                            variables: {
+                                                request: {
+                                                    userId: signedInUser ? signedInUser.userId : null,
+                                                    buyer: signedInUser ? null : buyer,
+                                                    recipient: {
+                                                        firstName: recipient.firstName,
+                                                        lastName: recipient.lastName,
+                                                        deliveryInformation: recipient.deliveryInformation
+                                                            ? {
+                                                                  date: toDBDateString(recipient.deliveryInformation.date),
+                                                                  emailAddress: recipient.deliveryInformation.emailAddress,
+                                                              }
+                                                            : undefined,
+                                                    },
+                                                    balance: (Number(customBalance) === 0 ? Number(balance) : Number(customBalance)) * 100,
+                                                    message,
+                                                    occasion: occasion ?? customOccasion,
+                                                },
+                                            },
+                                        }),
+                                    )}
+                                >
+                                    <div className="flex gap-4 flex-wrap">
+                                        {['/gift-cards/orange.jpg'].map((imageUrl) => (
+                                            <Image
+                                                key={imageUrl}
+                                                src={imageUrl}
+                                                width={240}
+                                                height={150}
+                                                alt=""
+                                                className={classNames('w-[240px] h-[150px] object-cover rounded-lg shadow-md', {
+                                                    'ring-orange-500 ring-2': true, // todo: only if selected
+                                                })}
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <div className="flex flex-col gap-4">
+                                        <legend className="text-lg font-medium text-gray-900">
+                                            Für welchen Anlass möchtest du den Gutschein verschenken?
+                                        </legend>
+
+                                        <div className="flex flex-wrap gap-2">
+                                            {[
+                                                'Geburtstag',
+                                                'Hochzeit',
+                                                'Candle Light Dinner',
+                                                'Abschlussfeier',
+                                                'Jahrestag',
+                                                'Dankeschön',
+                                            ].map((o) => (
                                                 <PELabelButton
                                                     key={o}
                                                     selected={o === occasion}
@@ -318,203 +342,203 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                                     }}
                                                     onDeselect={() => setValue('occasion', '')}
                                                 />
-                                            ),
-                                        )}
-                                    </div>
-
-                                    <PETextField
-                                        id="occasion"
-                                        type="text"
-                                        labelTitle="Einen anderen Anlass angeben"
-                                        errorMessage={errors.customOccasion?.message}
-                                        {...register('customOccasion', { onChange: () => setValue('occasion', '') })}
-                                    />
-                                </div>
-
-                                <fieldset className="flex flex-col gap-8">
-                                    <div className="flex flex-col gap-4">
-                                        <legend className="text-lg font-medium text-gray-900">
-                                            Wem möchtest du den Gutschein schenken?
-                                        </legend>
-
-                                        <div className="flex gap-4">
-                                            <PETextField
-                                                id="recipient-first-name"
-                                                labelTitle="Vorname"
-                                                type="text"
-                                                errorMessage={errors.recipient?.firstName?.message}
-                                                {...register('recipient.firstName', { required: 'This field is required' })}
-                                            />
-
-                                            <PETextField
-                                                id="recipient-last-name"
-                                                labelTitle="Nachname"
-                                                type="text"
-                                                errorMessage={errors.recipient?.lastName?.message}
-                                                {...register('recipient.lastName', { required: 'This field is required' })}
-                                            />
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <div className="flex flex-col gap-4">
-                                    <legend className="text-lg font-medium text-gray-900">
-                                        Soll der Beschenkte den Gutschein zu einem gewünschten Datum per Email erhalten?
-                                    </legend>
-                                    <PELabelSingleSelection
-                                        options={['Ja', 'Nein']}
-                                        selectedOption={recipient.deliveryInformation ? 'Ja' : 'Nein'}
-                                        selectedOptionChanged={(o) =>
-                                            setValue(
-                                                'recipient.deliveryInformation',
-                                                o === 'Ja' ? { emailAddress: '', date: new Date() } : undefined,
-                                            )
-                                        }
-                                        optionTitle={(o) => o}
-                                        optionIdentifier={(o) => o}
-                                    />
-                                    {recipient.deliveryInformation && (
-                                        <div className="flex flex-col gap-8">
-                                            <div className="flex flex-col gap-4">
-                                                <PETextField
-                                                    labelTitle="Email Adresse"
-                                                    placeholder="Email Adresse des Beschenkten"
-                                                    id="email-address"
-                                                    type="email"
-                                                    errorMessage={errors.recipient?.deliveryInformation?.emailAddress?.message}
-                                                    {...register('recipient.deliveryInformation.emailAddress', {
-                                                        required: 'Bitte gib deine Email Adresse ein.',
-                                                        pattern: {
-                                                            value: /\S+@\S+\.\S+/,
-                                                            message: 'Bitte eine gültige Email Adresse eingeben.',
-                                                        },
-                                                    })}
-                                                />
-                                            </div>
-
-                                            <PEDatePicker
-                                                labelTitle="Zustellungsdatum"
-                                                date={recipient.deliveryInformation?.date}
-                                                setDate={(d) => setValue('recipient.deliveryInformation.date', d)}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex flex-col gap-4">
-                                    <legend className="text-lg font-medium text-gray-900">Wähle einen Betrag aus</legend>
-
-                                    <div className="flex gap-4 flex-wrap">
-                                        {balances.map((b) => (
-                                            <PELabelButton
-                                                key={b}
-                                                selected={b === balance}
-                                                title={formatPrice({ amount: b * 100, currencyCode: '€' })}
-                                                onSelect={() => {
-                                                    setValue('customBalance', '');
-                                                    setValue('balance', b);
-                                                }}
-                                                onDeselect={() => undefined}
-                                            />
-                                        ))}
-                                    </div>
-
-                                    <PENumberTextField
-                                        labelTitle="Individueller Betrag"
-                                        id="basePriceCustomers"
-                                        errorMessage={errors.customBalance?.message}
-                                        {...register(
-                                            'customBalance',
-                                            balance === 0
-                                                ? {
-                                                      required: 'Ungültig',
-                                                      min: { value: 1, message: 'Ungültig' },
-                                                      max: { value: 1000, message: 'Ungültig' },
-                                                      valueAsNumber: true,
-                                                      onChange: () => setValue('balance', 0),
-                                                  }
-                                                : { onChange: () => setValue('balance', 0) },
-                                        )}
-                                    />
-                                </div>
-
-                                <PETextArea
-                                    id="description"
-                                    labelTitle="Eine persönliche Nachricht an den Empfänger"
-                                    errorMessage={errors.message?.message}
-                                    {...register('message')}
-                                />
-
-                                {!signedInUser && (
-                                    <div className="flex flex-col gap-4">
-                                        <legend className="text-lg font-medium text-gray-900">Rechnungsinformationen</legend>
-
-                                        <div className="flex gap-4">
-                                            <PETextField
-                                                id="buyer-first-name"
-                                                labelTitle="Vorname"
-                                                type="text"
-                                                autoComplete="given-name"
-                                                errorMessage={errors.buyer?.firstName?.message}
-                                                {...register('buyer.firstName', { required: 'This field is required' })}
-                                            />
-
-                                            <PETextField
-                                                id="buyer-last-name"
-                                                labelTitle="Nachname"
-                                                type="text"
-                                                autoComplete="family-name"
-                                                errorMessage={errors.buyer?.lastName?.message}
-                                                {...register('buyer.lastName', { required: 'This field is required' })}
-                                            />
+                                            ))}
                                         </div>
 
                                         <PETextField
-                                            id="buyer-email-address"
-                                            labelTitle="E-Mail Adresse"
-                                            type="email"
-                                            autoComplete="email"
-                                            errorMessage={errors.buyer?.emailAddress?.message}
-                                            {...register('buyer.emailAddress', { required: 'This field is required' })}
+                                            id="occasion"
+                                            type="text"
+                                            labelTitle="Einen anderen Anlass angeben"
+                                            errorMessage={errors.customOccasion?.message}
+                                            {...register('customOccasion', { onChange: () => setValue('occasion', '') })}
                                         />
                                     </div>
-                                )}
 
-                                <fieldset className="space-y-5">
-                                    <PECheckbox
-                                        id="accepted-terms-and-conditions"
-                                        label={{
-                                            title: 'Allgemeine Geschäftsbedingungen',
-                                            description: 'Ich habe die allgemeinen Geschäftsbedingungen gelesen und akzeptiere sie',
-                                        }}
-                                        errorMessage={errors.acceptedTermsAndConditions?.message}
-                                        {...register('acceptedTermsAndConditions', {
-                                            required: 'Die allgemeinen Geschäftsbedingungen müssen akzeptiert werden um fortzufahren',
-                                        })}
-                                    />
-                                    <PECheckbox
-                                        id="accepted-privacy-policy"
-                                        label={{
-                                            title: 'Datenschutzerklärung',
-                                            description: 'Ich habe die Datenschutzerklärung gelesen und akzeptiere sie',
-                                        }}
-                                        errorMessage={errors.acceptedPrivacyPolicy?.message}
-                                        {...register('acceptedPrivacyPolicy', {
-                                            required: 'Die Datenschutzerklärung muss akzeptiert werden um fortzufahren',
-                                        })}
-                                    />
-                                </fieldset>
+                                    <fieldset className="flex flex-col gap-8">
+                                        <div className="flex flex-col gap-4">
+                                            <legend className="text-lg font-medium text-gray-900">
+                                                Wem möchtest du den Gutschein schenken?
+                                            </legend>
 
-                                <div className="flex justify-end">
-                                    <PEButton title="Gutschein kaufen" type="submit" />
-                                </div>
-                                {/* <div>customBalance: {customBalance}</div>
+                                            <div className="flex gap-4">
+                                                <PETextField
+                                                    id="recipient-first-name"
+                                                    labelTitle="Vorname"
+                                                    type="text"
+                                                    errorMessage={errors.recipient?.firstName?.message}
+                                                    {...register('recipient.firstName', { required: 'This field is required' })}
+                                                />
+
+                                                <PETextField
+                                                    id="recipient-last-name"
+                                                    labelTitle="Nachname"
+                                                    type="text"
+                                                    errorMessage={errors.recipient?.lastName?.message}
+                                                    {...register('recipient.lastName', { required: 'This field is required' })}
+                                                />
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <div className="flex flex-col gap-4">
+                                        <legend className="text-lg font-medium text-gray-900">
+                                            Soll der Beschenkte den Gutschein zu einem gewünschten Datum per Email erhalten?
+                                        </legend>
+                                        <PELabelSingleSelection
+                                            options={['Ja', 'Nein']}
+                                            selectedOption={recipient.deliveryInformation ? 'Ja' : 'Nein'}
+                                            selectedOptionChanged={(o) =>
+                                                setValue(
+                                                    'recipient.deliveryInformation',
+                                                    o === 'Ja' ? { emailAddress: '', date: new Date() } : undefined,
+                                                )
+                                            }
+                                            optionTitle={(o) => o}
+                                            optionIdentifier={(o) => o}
+                                        />
+                                        {recipient.deliveryInformation && (
+                                            <div className="flex flex-col gap-8">
+                                                <div className="flex flex-col gap-4">
+                                                    <PETextField
+                                                        labelTitle="Email Adresse"
+                                                        placeholder="Email Adresse des Beschenkten"
+                                                        id="email-address"
+                                                        type="email"
+                                                        errorMessage={errors.recipient?.deliveryInformation?.emailAddress?.message}
+                                                        {...register('recipient.deliveryInformation.emailAddress', {
+                                                            required: 'Bitte gib deine Email Adresse ein.',
+                                                            pattern: {
+                                                                value: /\S+@\S+\.\S+/,
+                                                                message: 'Bitte eine gültige Email Adresse eingeben.',
+                                                            },
+                                                        })}
+                                                    />
+                                                </div>
+
+                                                <PEDatePicker
+                                                    labelTitle="Zustellungsdatum"
+                                                    date={recipient.deliveryInformation?.date}
+                                                    setDate={(d) => setValue('recipient.deliveryInformation.date', d)}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex flex-col gap-4">
+                                        <legend className="text-lg font-medium text-gray-900">Wähle einen Betrag aus</legend>
+
+                                        <div className="flex gap-4 flex-wrap">
+                                            {balances.map((b) => (
+                                                <PELabelButton
+                                                    key={b}
+                                                    selected={b === balance}
+                                                    title={formatPrice({ amount: b * 100, currencyCode: '€' })}
+                                                    onSelect={() => {
+                                                        setValue('customBalance', '');
+                                                        setValue('balance', b);
+                                                    }}
+                                                    onDeselect={() => undefined}
+                                                />
+                                            ))}
+                                        </div>
+
+                                        <PENumberTextField
+                                            labelTitle="Individueller Betrag"
+                                            id="basePriceCustomers"
+                                            errorMessage={errors.customBalance?.message}
+                                            {...register(
+                                                'customBalance',
+                                                balance === 0
+                                                    ? {
+                                                          required: 'Ungültig',
+                                                          min: { value: 1, message: 'Ungültig' },
+                                                          max: { value: 1000, message: 'Ungültig' },
+                                                          valueAsNumber: true,
+                                                          onChange: () => setValue('balance', 0),
+                                                      }
+                                                    : { onChange: () => setValue('balance', 0) },
+                                            )}
+                                        />
+                                    </div>
+
+                                    <PETextArea
+                                        id="description"
+                                        labelTitle="Eine persönliche Nachricht an den Empfänger"
+                                        errorMessage={errors.message?.message}
+                                        {...register('message')}
+                                    />
+
+                                    {!signedInUser && (
+                                        <div className="flex flex-col gap-4">
+                                            <legend className="text-lg font-medium text-gray-900">Rechnungsinformationen</legend>
+
+                                            <div className="flex gap-4">
+                                                <PETextField
+                                                    id="buyer-first-name"
+                                                    labelTitle="Vorname"
+                                                    type="text"
+                                                    autoComplete="given-name"
+                                                    errorMessage={errors.buyer?.firstName?.message}
+                                                    {...register('buyer.firstName', { required: 'This field is required' })}
+                                                />
+
+                                                <PETextField
+                                                    id="buyer-last-name"
+                                                    labelTitle="Nachname"
+                                                    type="text"
+                                                    autoComplete="family-name"
+                                                    errorMessage={errors.buyer?.lastName?.message}
+                                                    {...register('buyer.lastName', { required: 'This field is required' })}
+                                                />
+                                            </div>
+
+                                            <PETextField
+                                                id="buyer-email-address"
+                                                labelTitle="E-Mail Adresse"
+                                                type="email"
+                                                autoComplete="email"
+                                                errorMessage={errors.buyer?.emailAddress?.message}
+                                                {...register('buyer.emailAddress', { required: 'This field is required' })}
+                                            />
+                                        </div>
+                                    )}
+
+                                    <fieldset className="space-y-5">
+                                        <PECheckbox
+                                            id="accepted-terms-and-conditions"
+                                            label={{
+                                                title: 'Allgemeine Geschäftsbedingungen',
+                                                description: 'Ich habe die allgemeinen Geschäftsbedingungen gelesen und akzeptiere sie',
+                                            }}
+                                            errorMessage={errors.acceptedTermsAndConditions?.message}
+                                            {...register('acceptedTermsAndConditions', {
+                                                required: 'Die allgemeinen Geschäftsbedingungen müssen akzeptiert werden um fortzufahren',
+                                            })}
+                                        />
+                                        <PECheckbox
+                                            id="accepted-privacy-policy"
+                                            label={{
+                                                title: 'Datenschutzerklärung',
+                                                description: 'Ich habe die Datenschutzerklärung gelesen und akzeptiere sie',
+                                            }}
+                                            errorMessage={errors.acceptedPrivacyPolicy?.message}
+                                            {...register('acceptedPrivacyPolicy', {
+                                                required: 'Die Datenschutzerklärung muss akzeptiert werden um fortzufahren',
+                                            })}
+                                        />
+                                    </fieldset>
+
+                                    <div className="flex justify-end">
+                                        <PEButton title="Gutschein kaufen" type="submit" />
+                                    </div>
+                                    {/* <div>customBalance: {customBalance}</div>
                                 <div>balance: {balance}</div> */}
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
