@@ -30,10 +30,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { CookieBannerDialog } from '../components/CookieBannerDialog';
 import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
-import { CookieBannerDialog } from '../components/CookieBannerDialog';
 
 const faqs = [
     {
@@ -387,7 +387,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
 
                         <div className="relative bg-orange-200 lg:col-span-10 lg:col-start-3 lg:row-start-1 lg:grid lg:grid-cols-10 lg:items-center lg:rounded-3xl">
                             <div className="relative mx-auto max-w-md space-y-6 px-6 py-12 sm:max-w-3xl sm:py-16 lg:col-span-6 lg:col-start-4 lg:max-w-none lg:p-0 flex flex-col gap-2">
-                                <h2 className="text-3xl sm:4xl font-bold tracking-tight text-indigo-950" id="join-heading">
+                                <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-indigo-950" id="join-heading">
                                     Bereite deinen Lieben ein <br /> unvergessliches Geschenk
                                 </h2>
                                 <p className="text-lg text-indigo-950">
@@ -584,92 +584,41 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                     </div>
                 </div>
 
-                <div className="relative py-16">
-                    <div className="absolute inset-x-0 top-0 hidden h-1/2 lg:block" aria-hidden="true" />
-                    <div className="mx-auto max-w-7xl bg-violet-950 lg:bg-transparent lg:px-8">
-                        <div className="lg:grid lg:grid-cols-12">
-                            <div className="relative z-10 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:bg-transparent lg:py-16">
-                                <div className="mx-auto max-w-md px-6 sm:max-w-3xl lg:max-w-none lg:p-0">
-                                    <div className="aspect-h-6 aspect-w-10 sm:aspect-h-1 sm:aspect-w-2 lg:aspect-w-1">
-                                        <Image
-                                            unoptimized
-                                            className="rounded-3xl object-cover object-center shadow-2xl"
-                                            src="/home/diing-2.jpg"
-                                            alt=""
-                                            width={500}
-                                            height={500}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="relative bg-violet-950 lg:col-span-10 lg:col-start-3 lg:row-start-1 lg:grid lg:grid-cols-10 lg:items-center lg:rounded-3xl">
-                                <div className="absolute inset-0 hidden overflow-hidden rounded-3xl lg:block" aria-hidden="true">
-                                    <svg
-                                        className="absolute bottom-full left-full -translate-x-2/3 translate-y-1/3 transform xl:bottom-auto xl:top-0 xl:translate-y-0"
-                                        width={404}
-                                        height={384}
-                                        fill="none"
-                                        viewBox="0 0 404 384"
-                                        aria-hidden="true"
-                                    >
-                                        <defs>
-                                            <pattern
-                                                id="64e643ad-2176-4f86-b3d7-f2c5da3b6a6d"
-                                                x={0}
-                                                y={0}
-                                                width={20}
-                                                height={20}
-                                                patternUnits="userSpaceOnUse"
-                                            >
-                                                text-
-                                                <rect x={0} y={0} width={4} height={4} className="text-orange-500" fill="currentColor" />
-                                            </pattern>
-                                        </defs>
-                                        <rect width={404} height={384} fill="url(#64e643ad-2176-4f86-b3d7-f2c5da3b6a6d)" />
-                                    </svg>
-                                    <svg
-                                        className="absolute top-full -translate-x-1/3 -translate-y-1/3 transform xl:-translate-y-1/2"
-                                        width={404}
-                                        height={384}
-                                        fill="none"
-                                        viewBox="0 0 404 384"
-                                        aria-hidden="true"
-                                    >
-                                        <defs>
-                                            <pattern
-                                                id="64e643ad-2176-4f86-b3d7-f2c5da3b6a6d"
-                                                x={0}
-                                                y={0}
-                                                width={20}
-                                                height={20}
-                                                patternUnits="userSpaceOnUse"
-                                            >
-                                                <rect x={0} y={0} width={4} height={4} className="text-orange-500" fill="currentColor" />
-                                            </pattern>
-                                        </defs>
-                                        <rect width={404} height={384} fill="url(#64e643ad-2176-4f86-b3d7-f2c5da3b6a6d)" />
-                                    </svg>
-                                </div>
-                                <div className="relative mx-auto max-w-md space-y-6 px-6 py-12 sm:max-w-3xl sm:py-16 lg:col-span-6 lg:col-start-4 lg:max-w-none lg:p-0">
-                                    <h2 className="text-3xl font-bold tracking-tight text-white" id="join-heading">
+                <div className="bg-gray-50 my-12">
+                    <div className="mx-auto max-w-7xl py-24 sm:px-2 sm:py-32 lg:px-4">
+                        <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
+                            <div className="grid grid-cols-1 items-center gap-x-16 gap-y-10 lg:grid-cols-2">
+                                <div className="flex flex-col gap-8">
+                                    <h2 className="text-4xl font-bold tracking-tight text-gray-900">
                                         Kein passendes Menü gefunden?
                                         <br />
                                         Sende uns eine individuelle Anfrage
                                     </h2>
-                                    <p className="text-lg text-white pb-8">
-                                        1. Setze dein Budget sowie individuelle Präferenzen fest
-                                        <br />
-                                        2. Erhalte einen personalisierten Menüvorschlag
-                                        <br />
-                                        3. Bestätige und stimme dich direkt via Chat mit deinem PeopleEat Chef ab.
-                                    </p>
-                                    <PELink
-                                        title="Jetzt Buchen"
-                                        href={{
-                                            pathname: '/global-booking-request',
-                                            query: toQueryParams({ selectedLocation, date, adults, children }),
-                                        }}
+
+                                    <ol className="text-lg text-gray-500">
+                                        <li>1. Setze dein Budget sowie individuelle Präferenzen fest</li>
+                                        <li>2. Erhalte einen personalisierten Menüvorschlag</li>
+                                        <li>3. Stimme dich direkt via Chat mit deinem PeopleEat Chef ab.</li>
+                                    </ol>
+
+                                    <div>
+                                        <PELink
+                                            title="Jetzt Buchen"
+                                            href={{
+                                                pathname: '/global-booking-request',
+                                                query: toQueryParams({ selectedLocation, date, adults, children }),
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg bg-gray-100">
+                                    <Image
+                                        unoptimized
+                                        className="object-cover object-center"
+                                        src="/home/diing-2.jpg"
+                                        alt=""
+                                        width={500}
+                                        height={500}
                                     />
                                 </div>
                             </div>
