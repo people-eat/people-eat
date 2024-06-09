@@ -49,6 +49,7 @@ export function CookieBannerDialog() {
                         href="privacy-policy"
                         className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 text-orange-500"
                         target="_blank"
+                        tabIndex={-1}
                     >
                         Datenschutzrichtlinien
                     </Link>{' '}
