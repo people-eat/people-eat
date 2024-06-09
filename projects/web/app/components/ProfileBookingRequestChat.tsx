@@ -80,8 +80,8 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
     );
 
     return (
-        <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 flex-1 overflow-hidden">
+            <div className="flex flex-col gap-4 flex-1 overflow-y-scroll">
                 {sortedChatMessages.map((chatMessage) => (
                     <PEChatMessage key={chatMessage.chatMessageId} chatMessage={chatMessage} isAuthor={chatMessage.createdBy === userId} />
                 ))}

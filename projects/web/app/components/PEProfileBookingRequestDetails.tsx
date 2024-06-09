@@ -87,7 +87,7 @@ export function PEProfileBookingRequestDetails({
                         <div className="pt-6 sm:flex">
                             <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Status</dt>
                             <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900 flex justify-between w-full">
+                                <div className="text-gray-900 flex justify-between w-full pr-4">
                                     <span>{translatedBookingRequestStatus[bookingRequest.status]}</span>
                                     <BookingStatusInfoPopover currentBookingRequestStatus={bookingRequest.status} />
                                 </div>
@@ -158,9 +158,7 @@ export function PEProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'CHAT' && (
-                <div className="flex flex-col gap-8">
-                    <ProfileBookingRequestChat userId={userId} bookingRequest={bookingRequest} onRequireUpdate={onRequireUpdate} />
-                </div>
+                <ProfileBookingRequestChat userId={userId} bookingRequest={bookingRequest} onRequireUpdate={onRequireUpdate} />
             )}
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (

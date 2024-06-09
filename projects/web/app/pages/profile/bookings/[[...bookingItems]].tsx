@@ -151,13 +151,12 @@ export default function ProfileBookingsPage({
                     className={classNames({ 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}
                 />
 
-                <div className="max-w-7xl mx-auto w-full p-6">
-                    <PEProfileNavigation
-                        current="BOOKINGS"
-                        className={classNames('px-4 sm:px-0 flex-auto', {
-                            'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest,
-                        })}
-                    />
+                <div
+                    className={classNames('max-w-7xl mx-auto w-full p-6', {
+                        'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest,
+                    })}
+                >
+                    <PEProfileNavigation current="BOOKINGS" className={classNames('px-4 sm:px-0 flex-auto')} />
                 </div>
 
                 <div className="max-w-7xl w-full mx-auto px-0 sm:px-8 pb-4 flex gap-4 overflow-hidden flex-1">
