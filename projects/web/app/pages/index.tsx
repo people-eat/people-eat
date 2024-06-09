@@ -33,6 +33,7 @@ import { useCallback, useState } from 'react';
 import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
+import { CookieBannerDialog } from '../components/CookieBannerDialog';
 
 const faqs = [
     {
@@ -269,6 +270,8 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 <PEHeader signedInUser={signedInUser} onOpenNewsletter={() => setNewsletterOpen(true)} />
 
                 <NewsletterDialog open={newsletterOpen} />
+
+                <CookieBannerDialog />
 
                 <div>
                     <div className="relative bg-gray-900">
