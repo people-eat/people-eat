@@ -24,6 +24,7 @@ const documents = {
     "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGIftCardPromoCodeDocument,
     "mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}": types.CreateOneGiftCardDocument,
     "mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}": types.CreateOneNewsletterSubscriptionDocument,
+    "mutation CreateOneSearchRequest($request: CreateOneSearchRequestRequest!) {\n  searchRequests {\n    success: createOne(request: $request)\n  }\n}": types.CreateOneSearchRequestDocument,
     "mutation UpdateSessionCookieSettings($request: SessionCookieSettingsInput!) {\n  sessions {\n    success: updateCookieSettings(request: $request)\n  }\n}": types.UpdateSessionCookieSettingsDocument,
     "mutation AdminAssignOneSession($userId: String!) {\n  sessions {\n    success: assignOne(userId: $userId)\n  }\n}": types.AdminAssignOneSessionDocument,
     "mutation AssignOneSessionByEmailAddress($request: CreateOneSessionByEmailAddressRequest!) {\n  sessions {\n    success: assignOneByEmailAddress(request: $request)\n  }\n}": types.AssignOneSessionByEmailAddressDocument,
@@ -190,6 +191,10 @@ export function gql(source: "mutation CreateOneGiftCard($request: CreateOneGiftC
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}"): (typeof documents)["mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateOneSearchRequest($request: CreateOneSearchRequestRequest!) {\n  searchRequests {\n    success: createOne(request: $request)\n  }\n}"): (typeof documents)["mutation CreateOneSearchRequest($request: CreateOneSearchRequestRequest!) {\n  searchRequests {\n    success: createOne(request: $request)\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

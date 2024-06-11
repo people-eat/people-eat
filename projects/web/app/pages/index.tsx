@@ -2,11 +2,13 @@ import { Disclosure } from '@headlessui/react';
 import { PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
+    CreateOneSearchRequestDocument,
     GetPageDataDocument,
     LocationSearchResult,
     SearchMode,
     SearchParams,
     SignedInUser,
+    toDBDateString,
     toQueryParams,
     toValidatedSearchParams,
 } from '@people-eat/web-domain';
@@ -34,6 +36,7 @@ import { CookieBannerDialog } from '../components/CookieBannerDialog';
 import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
+import { useMutation } from '@apollo/client';
 
 const faqs = [
     {
@@ -249,6 +252,8 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
         [],
     );
 
+    const [createOneSearchRequest] = useMutation(CreateOneSearchRequestDocument);
+
     return (
         <>
             <Head>
@@ -310,12 +315,34 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                                 setDate={setDate}
                                 searchMode={searchMode}
                                 setSearchMode={setSearchMode}
-                                onSearchCooks={() =>
-                                    router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                                }
-                                onSearchMenus={() =>
-                                    router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                                }
+                                onSearchCooks={() => {
+                                    router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) });
+                                    void createOneSearchRequest({
+                                        variables: {
+                                            request: {
+                                                adults,
+                                                children,
+                                                date: toDBDateString(date),
+                                                locationText: selectedLocation?.text ?? '',
+                                                origin: 'HOME',
+                                            },
+                                        },
+                                    });
+                                }}
+                                onSearchMenus={() => {
+                                    router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) });
+                                    void createOneSearchRequest({
+                                        variables: {
+                                            request: {
+                                                adults,
+                                                children,
+                                                date: toDBDateString(date),
+                                                locationText: selectedLocation?.text ?? '',
+                                                origin: 'HOME',
+                                            },
+                                        },
+                                    });
+                                }}
                             />
 
                             <div className="sm:flex mt-8 self-center">

@@ -1,5 +1,6 @@
 import { MenuCard, PEFooter, PEHeader, PESearchBar, SearchModeSwitch } from '@people-eat/web-components';
 import {
+    CreateOneSearchRequestDocument,
     GetPublicMenusPageDataDocument,
     GetPublicMenusPageDataQuery,
     LocationSearchResult,
@@ -8,6 +9,7 @@ import {
     SignedInUser,
     calculateMenuPrice,
     formatPrice,
+    toDBDateString,
     toQueryParams,
     toValidatedSearchParams,
 } from '@people-eat/web-domain';
@@ -21,6 +23,7 @@ import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { PELink } from '@people-eat/web-core-components';
 import Head from 'next/head';
 import { NewsletterDialog } from '../../components/NewsletterDialog';
+import { useMutation } from '@apollo/client';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -93,7 +96,6 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
     const [sortedMenus, setSortedMenus] = useState(menus);
 
     useEffect(() => {
-        console.log('sorted again');
         const menusSorted = [...menus];
         menusSorted.sort(
             (a, b) =>
@@ -104,6 +106,8 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
         );
         setSortedMenus(menusSorted);
     }, [menus, adults, children]);
+
+    const [createOneSearchRequest] = useMutation(CreateOneSearchRequestDocument);
 
     return (
         <>
@@ -137,12 +141,34 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
                             setDate={setDate}
                             searchMode={searchMode}
                             setSearchMode={setSearchMode}
-                            onSearchCooks={() =>
-                                router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                            }
-                            onSearchMenus={() =>
-                                router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) })
-                            }
+                            onSearchCooks={() => {
+                                router.push({ pathname: '/chefs', query: toQueryParams({ selectedLocation, date, adults, children }) });
+                                void createOneSearchRequest({
+                                    variables: {
+                                        request: {
+                                            adults,
+                                            children,
+                                            date: toDBDateString(date),
+                                            locationText: selectedLocation?.text ?? '',
+                                            origin: 'PUBLIC_MENUS',
+                                        },
+                                    },
+                                });
+                            }}
+                            onSearchMenus={() => {
+                                router.push({ pathname: '/menus', query: toQueryParams({ selectedLocation, date, adults, children }) });
+                                void createOneSearchRequest({
+                                    variables: {
+                                        request: {
+                                            adults,
+                                            children,
+                                            date: toDBDateString(date),
+                                            locationText: selectedLocation?.text ?? '',
+                                            origin: 'PUBLIC_MENUS',
+                                        },
+                                    },
+                                });
+                            }}
                         />
                         <div className="hidden lg:block">
                             <SearchModeSwitch
