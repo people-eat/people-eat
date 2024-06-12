@@ -189,7 +189,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                         <br />
                         Wir freuen uns auf deine Nachricht.
                     </h2>
-                    <PELink href="" title="Nachricht senden" />
+                    <PELink href="mailto:contact@people-eat.com" title="Nachricht senden" />
                 </div>
 
                 <PEFooter />
