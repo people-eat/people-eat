@@ -38,7 +38,12 @@ import { CheckCircleIcon, Circle, CircleUser, HandPlatter, MinusIcon, PlusIcon, 
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { GetOneCouponCodeDocument, GetOneCouponCodeQuery, Price } from 'projects/web/domain/src/graphql/_generated/graphql';
+import {
+    CreateOneMenuVisitDocument,
+    GetOneCouponCodeDocument,
+    GetOneCouponCodeQuery,
+    Price,
+} from 'projects/web/domain/src/graphql/_generated/graphql';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
@@ -217,7 +222,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         });
 
-        const menu = result.data.publicMenus.findOne!;
+        const menu = result.data.publicMenus.findOne;
+
+        if (!menu) return publicMenusRedirect;
+
+        apolloClient
+            .mutate({ mutation: CreateOneMenuVisitDocument, variables: { menuId } })
+            .then(() => undefined)
+            .catch(() => undefined);
 
         return {
             props: {

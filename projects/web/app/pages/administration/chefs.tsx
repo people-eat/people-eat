@@ -86,6 +86,15 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                     Stadt
                                 </th>
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    Aufrufe (letzte Woche)
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    Aufrufe (letzter Monat)
+                                </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    Aufrufe (gesamt)
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,6 +124,9 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                             }}
                                         />
                                     </td>
+                                    <td className="px-3 py-4 text-sm text-gray-500">{cook.visitStatistics.visitCountLastWeek}</td>
+                                    <td className="px-3 py-4 text-sm text-gray-500">{cook.visitStatistics.visitCountLastMonth}</td>
+                                    <td className="px-3 py-4 text-sm text-gray-500">{cook.visitStatistics.visitCountTotal}</td>
                                 </tr>
                             ))}
                         </tbody>

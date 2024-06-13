@@ -20,6 +20,7 @@ import {
     translatedCookRanks,
     toValidatedSearchParams,
     toQueryParams,
+    CreateOneCookVisitDocument,
 } from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import { Globe, HandPlatter, MapPin, MinusIcon, PlusIcon, ShoppingBasket, Sparkles } from 'lucide-react';
@@ -134,6 +135,11 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         const cook = result.data.publicCooks.findOne;
 
         if (!cook) return publicCooksRedirect;
+
+        apolloClient
+            .mutate({ mutation: CreateOneCookVisitDocument, variables: { cookId } })
+            .then(() => undefined)
+            .catch(() => undefined);
 
         return {
             props: {

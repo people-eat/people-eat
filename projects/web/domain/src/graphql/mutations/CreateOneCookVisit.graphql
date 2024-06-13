@@ -1,0 +1,5 @@
+mutation CreateOneCookVisit($cookId: String!) {
+    cookVisits {
+        success: createOne(cookId: $cookId)
+    }
+}

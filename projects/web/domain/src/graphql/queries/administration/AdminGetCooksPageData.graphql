@@ -9,6 +9,11 @@ query AdminGetCooksPageData {
             }
             isVisible
             city
+            visitStatistics {
+                visitCountTotal
+                visitCountLastWeek
+                visitCountLastMonth
+            }
         }
     }
 }

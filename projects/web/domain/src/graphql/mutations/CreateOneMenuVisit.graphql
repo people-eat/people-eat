@@ -1,0 +1,5 @@
+mutation CreateOneMenuVisit($menuId: String!) {
+    menuVisits {
+        success: createOne(menuId: $menuId)
+    }
+}
