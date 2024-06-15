@@ -85,6 +85,9 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Stadt
                                 </th>
+                                <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    Stripe aktiv
+                                </th>
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"></th>
                                 <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Aufrufe (letzte Woche)
@@ -111,6 +114,7 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                         {cook.isVisible ? 'Ja' : 'Nein'}
                                     </td>
                                     <td className="px-3 py-4 text-sm text-gray-500">{cook.city}</td>
+                                    <td className="px-3 py-4 text-sm text-gray-500">{cook.hasStripePayoutMethodActivated}</td>
                                     <td className="px-3 py-4 text-sm text-gray-500">
                                         <PEButton
                                             type="secondary"

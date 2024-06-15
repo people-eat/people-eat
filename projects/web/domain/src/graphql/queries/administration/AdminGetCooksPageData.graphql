@@ -14,6 +14,7 @@ query AdminGetCooksPageData {
                 visitCountLastWeek
                 visitCountLastMonth
             }
+            hasStripePayoutMethodActivated
         }
     }
 }
