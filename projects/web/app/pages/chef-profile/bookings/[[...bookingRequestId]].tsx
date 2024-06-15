@@ -137,23 +137,21 @@ export default function CookProfileBookingsPage({
 
                         {bookingRequests.length > 0 && (
                             <ul className="overflow-y-scroll flex-1">
-                                {[...bookingRequests, ...bookingRequests, ...bookingRequests, ...bookingRequests, ...bookingRequests].map(
-                                    ({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
-                                        <BookingRequestRow
-                                            key={bookingRequestId}
-                                            status={status}
-                                            occasion={occasion}
-                                            dateTime={dateTime}
-                                            selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
-                                            price={price}
-                                            configuredMenuTitle={configuredMenu?.title}
-                                            cookFirstName={cook.user.firstName}
-                                            onSelect={() =>
-                                                router.push(`/chef-profile/bookings/${bookingRequestId}`, undefined, { scroll: false })
-                                            }
-                                        />
-                                    ),
-                                )}
+                                {bookingRequests.map(({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
+                                    <BookingRequestRow
+                                        key={bookingRequestId}
+                                        status={status}
+                                        occasion={occasion}
+                                        dateTime={dateTime}
+                                        selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
+                                        price={price}
+                                        configuredMenuTitle={configuredMenu?.title}
+                                        cookFirstName={cook.user.firstName}
+                                        onSelect={() =>
+                                            router.push(`/chef-profile/bookings/${bookingRequestId}`, undefined, { scroll: false })
+                                        }
+                                    />
+                                ))}
                             </ul>
                         )}
 
