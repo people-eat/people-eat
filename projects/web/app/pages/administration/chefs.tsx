@@ -114,7 +114,9 @@ export default function AdministrationCooksPage({ signedInUser, initialCooks: co
                                         {cook.isVisible ? 'Ja' : 'Nein'}
                                     </td>
                                     <td className="px-3 py-4 text-sm text-gray-500">{cook.city}</td>
-                                    <td className="px-3 py-4 text-sm text-gray-500">{cook.hasStripePayoutMethodActivated}</td>
+                                    <td className="px-3 py-4 text-sm text-gray-500">
+                                        {cook.hasStripePayoutMethodActivated ? 'Ja' : 'Nein'}
+                                    </td>
                                     <td className="px-3 py-4 text-sm text-gray-500">
                                         <PEButton
                                             type="secondary"
