@@ -388,7 +388,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                         mealId: mealOption.meal.mealId,
                     })),
                 },
-                travelExpensesAmount: 0,
+                travelExpensesAmount: costBreakdown.lineItems.find((li) => li.title === 'Reisekosten')?.price.amount ?? 0,
                 giftCardPromoCodeId: giftCardPromoCode?.redeemCode,
             },
         };
