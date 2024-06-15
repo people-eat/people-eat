@@ -17,6 +17,8 @@ export function Payment({
     const [resultMessage, setResultMessage] = useState<string | undefined>();
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
+    const [payLoading, setPayLoading] = useState(false);
+
     const [confirmPaymentSetup, { loading }] = useMutation(UserBookingRequestConfirmPaymentSetupDocument, {
         variables: { userId, bookingRequestId },
     });
@@ -28,6 +30,8 @@ export function Payment({
             return;
         }
 
+        setPayLoading(true);
+
         // Make sure to change this to your payment completion page ${window.location.origin}
         // const { error } = await stripe.confirmPayment({
         //     elements,
@@ -38,6 +42,8 @@ export function Payment({
             confirmParams: { return_url: `${window.location.origin}/profile/bookings/${bookingRequestId}` },
             redirect: 'if_required',
         });
+
+        setPayLoading(false);
 
         if (error) {
             if (error.type === 'card_error' || error.type === 'validation_error') setResultMessage(error.message);
@@ -64,7 +70,7 @@ export function Payment({
                 {resultMessage && <span>{resultMessage}</span>}
             </div>
 
-            <LoadingDialog title="Zahlungsdaten werden verarbeitet." active={loading} />
+            <LoadingDialog title="Zahlungsdaten werden verarbeitet." active={loading || payLoading} />
 
             <PEAlert
                 open={showSuccessAlert}
