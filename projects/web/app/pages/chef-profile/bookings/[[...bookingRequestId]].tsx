@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         const hasStripePayoutMethodActivated = result.data.cooks.findOne?.hasStripePayoutMethodActivated ?? false;
         const bookingRequests = result.data.cooks.bookingRequests.findMany ?? [];
         const selectedBookingRequest = result.data.cooks.bookingRequests.findOne ?? null;
-        console.log('executed');
+
         return {
             props: {
                 signedInUser,
