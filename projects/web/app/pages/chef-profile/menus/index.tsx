@@ -88,7 +88,15 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                                     courseCount={courseCount}
                                     pricePerPerson={formatPrice({
                                         amount:
-                                            calculateMenuPrice(2, 0, basePrice, basePriceCustomers, pricePerAdult, pricePerChild) / (2 + 0),
+                                            calculateMenuPrice(
+                                                basePriceCustomers,
+                                                0,
+                                                basePrice,
+                                                basePriceCustomers,
+                                                pricePerAdult,
+                                                pricePerChild,
+                                            ) /
+                                            (basePriceCustomers + 0),
                                         currencyCode: '€',
                                     })}
                                     categoryTitles={categories.map(({ title }) => title)}

@@ -40,7 +40,7 @@ export function BookingRequestRow({
                     </div>
                     <div className="flex shrink-0 items-center gap-x-4">
                         <div className="flex flex-col items-end">
-                            <p className="text-sm leading-6 text-green-500">{formatPrice(price)}</p>
+                            <p className="text-sm leading-6 text-green-500">{formatPrice(price, true)}</p>
                             <p className="mt-1 text-xs leading-5 text-gray-500">{translatedDateDistanceToToday(dateTime)}</p>
                         </div>
                         <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />

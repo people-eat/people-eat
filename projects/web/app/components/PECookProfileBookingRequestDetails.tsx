@@ -120,7 +120,7 @@ export function PECookProfileBookingRequestDetails({
                         <div className="pt-6 sm:flex">
                             <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Gesamtpreis</dt>
                             <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{formatPrice(bookingRequest.price)}</div>
+                                <div className="text-gray-900">{formatPrice(bookingRequest.price, true)}</div>
                             </dd>
                         </div>
                         <div className="pt-6 sm:flex">
