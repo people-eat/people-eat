@@ -155,9 +155,9 @@ export function PECookProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-8 overflow-y-auto">
                     <h2 className="text-2xl font-bold">{bookingRequest.configuredMenu.title}</h2>
-                    <h3>{bookingRequest.configuredMenu.description}</h3>
+                    {bookingRequest.configuredMenu.description && <h3>{bookingRequest.configuredMenu.description}</h3>}
                     {bookingRequest.configuredMenu.greetingFromKitchen && bookingRequest.configuredMenu.greetingFromKitchen !== '' && (
                         <div>{bookingRequest.configuredMenu.greetingFromKitchen}</div>
                     )}

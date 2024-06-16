@@ -474,7 +474,9 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
                                     {moreThanTwoWeeksInTheFuture > 14 && (
                                         <div className="text-sm" style={{ color: 'gray' }}>
-                                            Nachdem der Koch die Anfrage akzeptiert hat, wird die Gesamtsumme 2 Wochen vor dem Event
+                                            Mit dem Klick auf den Fertig button wird lediglich dein Zahlungsmittel vorgemerkt. Je nach
+                                            Zahlungsdienstleister kann das bedeuten, dass eine Zahkungsfreigabe über 0€ bestätigt werden
+                                            muss. Nachdem der Koch die Anfrage akzeptiert hat, wird die Gesamtsumme 2 Wochen vor dem Event
                                             eingezogen (zuvor wird eine Ankündigungsmail verschickt).
                                         </div>
                                     )}

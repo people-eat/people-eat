@@ -48,13 +48,13 @@ export function MealCard(props: MealCardProps) {
 
     return (
         <li className={classNames('flex flex-col gap-2 rounded-xl shadow-md', 'group-hover:opacity-75')}>
-            <div className="group aspect-h-5 aspect-w-10 block w-full overflow-hidden rounded-t-xl bg-gray-100 focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
+            <div className="group aspect-h-5 aspect-w-10 block w-full overflow-hidden rounded-t-xl bg-gray-100">
                 <Image
                     src={imageUrl ?? '/placeholders/meal.png'}
                     alt=""
                     width={600}
                     height={400}
-                    className="pointer-events-none object-cover"
+                    className="pointer-events-none object-cover group-hover:opacity-75"
                 />
                 {/* {!isButtonMealCard(props) && !isSelectionMealCard(props) && (
                     <button type="button" className="absolute inset-0 focus:outline-none" onClick={onClick}>

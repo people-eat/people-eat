@@ -65,7 +65,7 @@ export function Payment({
                     <PaymentElement id="payment-element" className="flex-1" options={{ layout: 'tabs' }} />
                 </div>
 
-                <PEButton title="Fertig" onClick={(): void => void pay()} />
+                <PEButton title="Buchungsanfrage senden" onClick={(): void => void pay()} />
 
                 {resultMessage && <span>{resultMessage}</span>}
             </div>

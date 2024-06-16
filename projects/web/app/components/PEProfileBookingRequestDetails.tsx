@@ -162,9 +162,9 @@ export function PEProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-8 overflow-y-auto">
                     <h2 className="text-2xl font-bold">{bookingRequest.configuredMenu.title}</h2>
-                    <h3>{bookingRequest.configuredMenu.description}</h3>
+                    {bookingRequest.configuredMenu.description && <h3>{bookingRequest.configuredMenu.description}</h3>}
                     {bookingRequest.configuredMenu.greetingFromKitchen && bookingRequest.configuredMenu.greetingFromKitchen !== '' && (
                         <div>{bookingRequest.configuredMenu.greetingFromKitchen}</div>
                     )}
@@ -172,13 +172,13 @@ export function PEProfileBookingRequestDetails({
                         {bookingRequest.configuredMenu.courses.map((course) => (
                             <div key={course.index} className="flex flex-col gap-4">
                                 <div>{course.title}</div>
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-2 gap-4 p-4">
                                     <MealCard
                                         key={course.index}
                                         type="SIMPLE"
                                         title={course.mealTitle}
                                         description={course.mealDescription}
-                                        imageUrl={course.mealImageUrl}
+                                        imageUrl={course.mealImageUrl ?? undefined}
                                         onInfoClick={() => undefined}
                                     />
                                 </div>

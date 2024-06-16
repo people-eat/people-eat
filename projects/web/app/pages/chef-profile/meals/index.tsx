@@ -13,11 +13,11 @@ import {
     mealTypes,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { CookProfileMealDialog } from '../../../components/CookProfileMealDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
-import { useRouter } from 'next/router';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -137,6 +137,15 @@ export default function CookProfileMealsPage({ signedInUser, initialMeals }: Ser
                             imageUrl={imageUrl}
                             onInfoClick={() => setSelectedMealIndex(index)}
                         />
+                        // <OldMealCard
+                        //     key={mealId}
+                        //     title={title}
+                        //     description={description}
+                        //     onClick={() => undefined}
+                        //     active={false}
+                        //     displayOnly={false}
+                        //     imageUrl={imageUrl ?? undefined}
+                        // />
                     ))}
                 </ul>
 
