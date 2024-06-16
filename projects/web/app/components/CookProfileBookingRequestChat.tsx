@@ -63,6 +63,7 @@ export function CookProfileBookingRequestChat({
             if (!newChatMessage) return;
             setChatMessages([...chatMessages, newChatMessage]);
             setTimeout(() => scrollToChatBottom(), 200);
+            if (newChatMessage.generated) onRequireUpdate();
         },
     });
 

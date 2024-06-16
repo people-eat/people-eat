@@ -54,6 +54,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
             if (!newChatMessage) return;
             setChatMessages([...chatMessages, newChatMessage]);
             setTimeout(() => scrollToChatBottom(), 200);
+            if (newChatMessage.generated) onRequireUpdate();
         },
     });
 

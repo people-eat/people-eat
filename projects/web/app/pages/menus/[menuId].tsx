@@ -450,7 +450,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
                 {completionState === 'SUCCESSFUL' && stripeClientSecret && stripePublishableKey && (
                     <PEDialog open={showPaymentDialog} onClose={() => setShowPaymentDialog(false)} title="Zahlungsmittel hinterlegen">
-                        <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret }}>
+                        <Elements stripe={loadStripe(stripePublishableKey)} options={{ clientSecret: stripeClientSecret, locale: 'de' }}>
                             <Payment userId={signedInUser!.userId} bookingRequestId={bookingRequestId!}>
                                 <div className="flex flex-col gap-4">
                                     <h3 className="text-lg font-semibold">{menu.title}</h3>
@@ -466,7 +466,9 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
                                     {moreThanTwoWeeksInTheFuture <= 14 && (
                                         <div className="text-sm" style={{ color: 'gray' }}>
-                                            Der Gesamtbetrag wird erst dann eingezogen wenn der Koch die Anfrage akzeptiert hat.
+                                            Mit dem Klick auf den Fertig button wird lediglich dein Zahlungsmittel vorgemerkt. Je nach
+                                            Zahlungsdienstleister kann das bedeuten, dass eine Zahkungsfreigabe über 0€ bestätigt werden
+                                            muss. Der Gesamtbetrag wird erst dann eingezogen wenn der Koch die Anfrage akzeptiert hat.
                                         </div>
                                     )}
 

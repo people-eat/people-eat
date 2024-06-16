@@ -1,0 +1,5 @@
+subscription BookingRequestUpdatesByUserId($bookingRequestId: String!) {
+    bookingRequestUpdatesByUserId(bookingRequestId: $bookingRequestId) {
+        ...ChatMessage
+    }
+}
