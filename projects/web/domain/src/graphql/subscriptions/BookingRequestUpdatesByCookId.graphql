@@ -1,5 +1,0 @@
-subscription BookingRequestUpdatesByCookId($bookingRequestId: String!) {
-    bookingRequestUpdatesByCookId(bookingRequestId: $bookingRequestId) {
-        ...ChatMessage
-    }
-}

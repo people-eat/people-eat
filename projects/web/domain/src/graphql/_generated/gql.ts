@@ -21,6 +21,7 @@ const documents = {
     "fragment LanguageOption on Language {\n  languageId\n  title\n}": types.LanguageOptionFragmentDoc,
     "fragment SignedInUser on User {\n  userId\n  firstName\n  profilePictureUrl\n  isCook\n  isAdmin\n}": types.SignedInUserFragmentDoc,
     "mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}": types.ConfirmOneGiftCardDocument,
+    "mutation CreateBookingRequestByGlobalBookingRequestId($globalBookingRequestId: String!, $cookId: String!) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      success: createOne(globalBookingRequestId: $globalBookingRequestId)\n    }\n  }\n}": types.CreateBookingRequestByGlobalBookingRequestIdDocument,
     "mutation CreateOneCookVisit($cookId: String!) {\n  cookVisits {\n    success: createOne(cookId: $cookId)\n  }\n}": types.CreateOneCookVisitDocument,
     "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGIftCardPromoCodeDocument,
     "mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}": types.CreateOneGiftCardDocument,
@@ -98,6 +99,7 @@ const documents = {
     "query GetPrivacyPolicyPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicPrivacyPolicyUpdates {\n    findLatest {\n      privacyPolicyUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetPrivacyPolicyPageDataDocument,
     "query GetSignedInUser {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetSignedInUserDocument,
     "query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetTermsAndConditionsPageDataDocument,
+    "query AdminGetCooks {\n  cooks {\n    findMany(request: {}) {\n      cookId\n      user {\n        firstName\n        lastName\n        profilePictureUrl\n      }\n      isVisible\n      city\n    }\n  }\n}": types.AdminGetCooksDocument,
     "query AdminGetCooksPageData {\n  cooks {\n    findMany(request: {}) {\n      cookId\n      user {\n        firstName\n        lastName\n        profilePictureUrl\n      }\n      isVisible\n      city\n      visitStatistics {\n        visitCountTotal\n        visitCountLastWeek\n        visitCountLastMonth\n      }\n      hasStripePayoutMethodActivated\n    }\n  }\n}": types.AdminGetCooksPageDataDocument,
     "query AdminGetGiftCardPromoCodesPageData {\n  admins {\n    giftCardPromoCodes {\n      findMany {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n    }\n  }\n}": types.AdminGetGiftCardPromoCodesPageDataDocument,
     "query AdminGetGlobalBookingRequestsPageData {\n  globalBookingRequests {\n    findMany {\n      globalBookingRequestId\n      dateTime\n      adultParticipants\n      children\n      occasion\n      priceClass {\n        type\n        min\n        max\n        currencyCode\n      }\n      location {\n        text\n      }\n      user {\n        userId\n        firstName\n        profilePictureUrl\n      }\n      createdAt\n    }\n  }\n}": types.AdminGetGlobalBookingRequestsPageDataDocument,
@@ -181,6 +183,10 @@ export function gql(source: "fragment SignedInUser on User {\n  userId\n  firstN
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}"): (typeof documents)["mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateBookingRequestByGlobalBookingRequestId($globalBookingRequestId: String!, $cookId: String!) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      success: createOne(globalBookingRequestId: $globalBookingRequestId)\n    }\n  }\n}"): (typeof documents)["mutation CreateBookingRequestByGlobalBookingRequestId($globalBookingRequestId: String!, $cookId: String!) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      success: createOne(globalBookingRequestId: $globalBookingRequestId)\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -489,6 +495,10 @@ export function gql(source: "query GetSignedInUser {\n  users {\n    signedInUse
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}"): (typeof documents)["query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "query AdminGetCooks {\n  cooks {\n    findMany(request: {}) {\n      cookId\n      user {\n        firstName\n        lastName\n        profilePictureUrl\n      }\n      isVisible\n      city\n    }\n  }\n}"): (typeof documents)["query AdminGetCooks {\n  cooks {\n    findMany(request: {}) {\n      cookId\n      user {\n        firstName\n        lastName\n        profilePictureUrl\n      }\n      isVisible\n      city\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

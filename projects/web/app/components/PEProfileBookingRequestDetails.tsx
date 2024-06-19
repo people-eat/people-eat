@@ -30,6 +30,7 @@ export function toProfileBookingRequestDetailsTab(value: any): ProfileBookingReq
 export type ProfileBookingRequestDetailsTab = 'CHAT' | 'EVENT_DETAILS' | 'MENU' | 'SUPPORT';
 
 const profileBookingRequestDetailsTabs: ProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'MENU', 'SUPPORT'];
+const profileBookingRequestDetailsTabsWithoutMenu: ProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'SUPPORT'];
 
 const profileBookingRequestDetailsTabTranslations: Record<ProfileBookingRequestDetailsTab, string> = {
     CHAT: 'Chat',
@@ -72,7 +73,7 @@ export function PEProfileBookingRequestDetails({
             </Link>
 
             <PETabSingleSelection
-                options={profileBookingRequestDetailsTabs}
+                options={bookingRequest.configuredMenu ? profileBookingRequestDetailsTabs : profileBookingRequestDetailsTabsWithoutMenu}
                 selectedOption={selectedTab}
                 selectedOptionChanged={(tab) => tab && router.replace({ query: { ...router.query, tab } }, undefined, { scroll: false })}
                 optionTitle={(o) => profileBookingRequestDetailsTabTranslations[o]}
