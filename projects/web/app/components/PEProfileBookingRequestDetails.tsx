@@ -20,7 +20,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ProfileBookingRequestChat } from './ProfileBookingRequestChat';
 
-const defaultProfileBookingRequestDetailsTab: ProfileBookingRequestDetailsTab = 'EVENT_DETAILS';
+const defaultProfileBookingRequestDetailsTab: ProfileBookingRequestDetailsTab = 'CHAT';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toProfileBookingRequestDetailsTab(value: any): ProfileBookingRequestDetailsTab {
