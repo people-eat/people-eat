@@ -83,10 +83,7 @@ export function AdminGlobalBookingRequestCookMenuDialog({
                 },
                 price: priceMode === 'CUSTOM' ? { amount: price * 100, currencyCode: 'EUR' } : undefined,
             },
-        })
-            .then(({ data }) => {})
-            .catch(() => undefined)
-            .finally(() => undefined);
+        });
     }
 
     const [priceMode, setPriceMode] = useState<PriceMode>('AUTOMATED');
@@ -116,29 +113,32 @@ export function AdminGlobalBookingRequestCookMenuDialog({
                         <div className="flex flex-col gap-4">
                             <h2 className="text-xl font-semibold tracking-tight text-gray-900">Preis</h2>
 
-                            <PELabelSingleSelection
-                                options={priceModes}
-                                selectedOption={priceMode}
-                                selectedOptionChanged={(o) => o && setPriceMode(o)}
-                                optionTitle={(o) => priceModeTranslations[o]}
-                                optionIdentifier={(o) => o}
-                            />
+                            <div className="flex gap-8">
+                                <PELabelSingleSelection
+                                    options={priceModes}
+                                    selectedOption={priceMode}
+                                    selectedOptionChanged={(o) => o && setPriceMode(o)}
+                                    optionTitle={(o) => priceModeTranslations[o]}
+                                    optionIdentifier={(o) => o}
+                                />
 
-                            {priceMode === 'CUSTOM' && (
-                                <form>
-                                    <PENumberTextField
-                                        className="w-16"
-                                        id="basePriceCustomers"
-                                        errorMessage={errors.price?.message}
-                                        {...register('price', {
-                                            required: 'Ungültig',
-                                            min: { value: 1, message: 'Ungültig' },
-                                            max: { value: 100, message: 'Ungültig' },
-                                            valueAsNumber: true,
-                                        })}
-                                    />
-                                </form>
-                            )}
+                                {priceMode === 'CUSTOM' && (
+                                    <form className="flex-1">
+                                        <PENumberTextField
+                                            placeholder="Preis"
+                                            className="w-16"
+                                            id="basePriceCustomers"
+                                            errorMessage={errors.price?.message}
+                                            {...register('price', {
+                                                required: 'Ungültig',
+                                                min: { value: 1, message: 'Ungültig' },
+                                                max: { value: 100, message: 'Ungültig' },
+                                                valueAsNumber: true,
+                                            })}
+                                        />
+                                    </form>
+                                )}
+                            </div>
                         </div>
 
                         {menu.courses.map(({ courseId, title, mealOptions }) => (
