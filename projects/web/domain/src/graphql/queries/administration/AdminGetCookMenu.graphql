@@ -1,0 +1,31 @@
+query AdminGetCookMenu($cookId: String!, $menuId: String!) {
+    cooks {
+        menus(cookId: $cookId) {
+            findOne(menuId: $menuId) {
+                menuId
+                title
+                isVisible
+                basePrice
+                basePriceCustomers
+                pricePerAdult
+                pricePerChild
+
+                courses {
+                    index
+                    courseId
+                    title
+                    mealOptions {
+                        index
+                        meal {
+                            mealId
+                            title
+                            description
+                            type
+                            imageUrl
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

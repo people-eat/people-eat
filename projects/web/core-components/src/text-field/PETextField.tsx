@@ -1,5 +1,6 @@
 import { ForwardedRef, HTMLInputTypeAttribute, ReactElement, forwardRef } from 'react';
 
+// extends InputHTMLAttributes<never>
 export interface PETextFieldProps {
     id: string;
     labelTitle?: string;

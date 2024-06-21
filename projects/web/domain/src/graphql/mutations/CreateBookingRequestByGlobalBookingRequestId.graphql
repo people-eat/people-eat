@@ -1,7 +1,12 @@
-mutation CreateBookingRequestByGlobalBookingRequestId($globalBookingRequestId: String!, $cookId: String!) {
+mutation CreateBookingRequestByGlobalBookingRequestId(
+    $globalBookingRequestId: String!
+    $cookId: String!
+    $configuredMenu: CreateConfiguredMenuRequest
+    $price: PriceInput
+) {
     cooks {
         bookingRequests(cookId: $cookId) {
-            success: createOne(globalBookingRequestId: $globalBookingRequestId)
+            success: createOne(globalBookingRequestId: $globalBookingRequestId, configuredMenu: $configuredMenu, price: $price)
         }
     }
 }

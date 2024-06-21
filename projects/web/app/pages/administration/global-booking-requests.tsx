@@ -1,20 +1,17 @@
-import { LoadingDialog, PEHeader } from '@people-eat/web-components';
+import { PEHeader } from '@people-eat/web-components';
+import { PEButton } from '@people-eat/web-core-components';
 import {
-    AdminGetCooksDocument,
     AdminGetGlobalBookingRequestsPageDataDocument,
     AdminGetGlobalBookingRequestsPageDataQuery,
-    CreateBookingRequestByGlobalBookingRequestIdDocument,
     GetSignedInUserDocument,
     SignedInUser,
     toTranslatedFormattedDate,
     translatedPriceClasses,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import { createApolloClient } from '../../network/apolloClients';
-import { useLazyQuery, useMutation } from '@apollo/client';
-import { PEAlert, PEButton, PEDialog } from '@people-eat/web-core-components';
 import { useState } from 'react';
-import Router from 'next/router';
+import { AdminGlobalBookingRequestCooksDialog } from '../../components/administration/AdminGlobalBookingRequestCooksDialog';
+import { createApolloClient } from '../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
@@ -55,86 +52,15 @@ export default function AdministrationGlobalBookingRequestsPage({
 }: ServerSideProps) {
     const [selectedGlobalBookingRequestId, setSelectedGlobalBookingRequestId] = useState<string | undefined>();
 
-    const [getCooks, { loading: getCooksLoading, data: getCooksData }] = useLazyQuery(AdminGetCooksDocument);
-    const [createBookingRequest, { loading: createBookingRequestLoading, data: createBookingRequestData, reset }] = useMutation(
-        CreateBookingRequestByGlobalBookingRequestIdDocument,
-    );
-
-    const loading = getCooksLoading || createBookingRequestLoading;
-
-    const showSuccessAlert = createBookingRequestData?.cooks.bookingRequests.success ?? false;
-    const showFailedAlert = createBookingRequestData ? !createBookingRequestData?.cooks.bookingRequests.success : false;
-
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
 
-            <LoadingDialog active={loading} />
-
-            <PEAlert
-                open={showSuccessAlert}
-                title="Anfrage erfolgreich gematcht"
-                subtitle="Die Globale Buchungsanfrage verschwindet nun aus der Liste dieser Seite. Sie taucht in den normalen Buchungsanfragen auf."
-                primaryButton={{ title: 'Fertig', onClick: () => Router.reload() }}
-            />
-
-            <PEAlert
-                type="ERROR"
-                open={showFailedAlert}
-                title="Leider ist ein Fehler aufgetreten"
-                subtitle="Bitte versuche es später erneut"
-                primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
-            />
-
-            <PEDialog
+            <AdminGlobalBookingRequestCooksDialog
                 open={Boolean(selectedGlobalBookingRequestId)}
                 onClose={() => setSelectedGlobalBookingRequestId(undefined)}
-                title="Globale Anfrage matchen"
-            >
-                <table className="w-full text-left">
-                    <thead className="bg-white">
-                        <tr>
-                            <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
-                                Vorname
-                            </th>
-                            <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
-                                Nachname
-                            </th>
-                            <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
-                                Öffentlich
-                            </th>
-                            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                Stadt
-                            </th>
-                            <th scope="col" className="px-3 py-3.5" />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {getCooksData?.cooks.findMany?.map((cook) => (
-                            <tr key={cook.cookId}>
-                                <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{cook.user.firstName}</td>
-                                <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{cook.user.lastName}</td>
-                                <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{cook.isVisible ? 'Ja' : 'Nein'}</td>
-                                <td className="px-3 py-4 text-sm text-gray-500">{cook.city}</td>
-                                <td className="px-3 py-4 text-sm">
-                                    <PEButton
-                                        title="match"
-                                        type="secondary"
-                                        onClick={() =>
-                                            createBookingRequest({
-                                                variables: {
-                                                    globalBookingRequestId: selectedGlobalBookingRequestId!,
-                                                    cookId: cook.cookId,
-                                                },
-                                            })
-                                        }
-                                    />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </PEDialog>
+                globalBookingRequestId={selectedGlobalBookingRequestId!}
+            />
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="sm:flex sm:items-center">
@@ -204,11 +130,8 @@ export default function AdministrationGlobalBookingRequestsPage({
                                     <td className="px-3 py-4 text-sm text-gray-500">
                                         <PEButton
                                             type="secondary"
-                                            onClick={() => {
-                                                getCooks();
-                                                setSelectedGlobalBookingRequestId(globalBookingRequest.globalBookingRequestId);
-                                            }}
-                                            title="match"
+                                            onClick={() => setSelectedGlobalBookingRequestId(globalBookingRequest.globalBookingRequestId)}
+                                            title="anzeigen"
                                         />
                                     </td>
                                 </tr>

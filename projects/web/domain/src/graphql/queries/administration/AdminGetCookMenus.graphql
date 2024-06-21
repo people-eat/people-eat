@@ -1,0 +1,15 @@
+query AdminGetCookMenus($cookId: String!) {
+    cooks {
+        menus(cookId: $cookId) {
+            findMany {
+                menuId
+                title
+                isVisible
+                basePrice
+                basePriceCustomers
+                pricePerAdult
+                pricePerChild
+            }
+        }
+    }
+}
