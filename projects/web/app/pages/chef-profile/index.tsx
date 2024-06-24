@@ -375,7 +375,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                         labelTitle="Reisekosten je gefahrener Kilometer"
                         step={1}
                         min={0}
-                        max={70}
+                        max={50}
                         {...register('travelExpenses', { min: 0, max: 70, valueAsNumber: true })}
                     >
                         {(travelExpenses / 100).toFixed(2)} €
@@ -386,7 +386,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
                         labelTitle="Maximale Reisestrecke"
                         step={1}
                         min={5}
-                        max={200}
+                        max={100}
                         {...register('maximumTravelDistance', { min: 5, max: 200, valueAsNumber: true })}
                     >
                         {maximumTravelDistance} km
