@@ -1,4 +1,9 @@
-query GetPublicMenusPageData($request: FindManyPublicMenusRequest!) {
+query GetPublicMenusPageData(
+    $request: FindManyPublicMenusRequest!
+    $location: LocationInput
+    $adults: UnsignedInt!
+    $children: UnsignedInt!
+) {
     users {
         signedInUser: me {
             ...SignedInUser
@@ -31,6 +36,10 @@ query GetPublicMenusPageData($request: FindManyPublicMenusRequest!) {
             pricePerAdult
             pricePerChild
             currencyCode
+            totalPrice(location: $location, adults: $adults, children: $children) {
+                amount
+                currencyCode
+            }
             courseCount
         }
     }

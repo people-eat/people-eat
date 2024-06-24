@@ -1,4 +1,6 @@
+import { useMutation } from '@apollo/client';
 import { MenuCard, PEFooter, PEHeader, PESearchBar, SearchModeSwitch } from '@people-eat/web-components';
+import { PELink } from '@people-eat/web-core-components';
 import {
     CreateOneSearchRequestDocument,
     GetPublicMenusPageDataDocument,
@@ -7,7 +9,6 @@ import {
     SearchMode,
     SearchParams,
     SignedInUser,
-    calculateMenuPrice,
     formatPrice,
     toDBDateString,
     toQueryParams,
@@ -15,15 +16,13 @@ import {
 } from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
+import { NewsletterDialog } from '../../components/NewsletterDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
-import { PELink } from '@people-eat/web-core-components';
-import Head from 'next/head';
-import { NewsletterDialog } from '../../components/NewsletterDialog';
-import { useMutation } from '@apollo/client';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -50,6 +49,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                     children: 0,
                     dateTime: new Date(),
                 },
+                location,
+                adults: searchParams.adults,
+                children: searchParams.children,
             },
         });
 
@@ -97,13 +99,7 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
 
     useEffect(() => {
         const menusSorted = [...menus];
-        menusSorted.sort(
-            (a, b) =>
-                calculateMenuPrice(adults, children, a.basePrice, a.basePriceCustomers, a.pricePerAdult, a.pricePerChild) /
-                    (adults + children) -
-                calculateMenuPrice(adults, children, b.basePrice, b.basePriceCustomers, b.pricePerAdult, b.pricePerChild) /
-                    (adults + children),
-        );
+        menusSorted.sort((a, b) => a.totalPrice.amount - b.totalPrice.amount);
         setSortedMenus(menusSorted);
     }, [menus, adults, children]);
 
@@ -192,54 +188,31 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
                             role="list"
                             className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4"
                         >
-                            {sortedMenus.map(
-                                ({
-                                    menuId,
-                                    title,
-                                    imageUrl,
-                                    kitchen,
-                                    cook,
-                                    categories,
-                                    basePrice,
-                                    basePriceCustomers,
-                                    pricePerAdult,
-                                    pricePerChild,
-                                    courseCount,
-                                }) => (
-                                    <Link
-                                        key={menuId}
-                                        href={{
-                                            pathname: '/menus/' + menuId,
-                                            query: toQueryParams({ selectedLocation, date, adults, children }),
+                            {sortedMenus.map(({ menuId, title, imageUrl, kitchen, cook, categories, courseCount, totalPrice }) => (
+                                <Link
+                                    key={menuId}
+                                    href={{
+                                        pathname: '/menus/' + menuId,
+                                        query: toQueryParams({ selectedLocation, date, adults, children }),
+                                    }}
+                                >
+                                    <MenuCard
+                                        title={title}
+                                        imageUrls={imageUrl ? [imageUrl] : []}
+                                        kitchenTitle={kitchen?.title}
+                                        cook={{
+                                            firstName: cook.user.firstName,
+                                            profilePictureUrl: cook.user.profilePictureUrl ?? null,
                                         }}
-                                    >
-                                        <MenuCard
-                                            title={title}
-                                            imageUrls={imageUrl ? [imageUrl] : []}
-                                            kitchenTitle={kitchen?.title}
-                                            cook={{
-                                                firstName: cook.user.firstName,
-                                                profilePictureUrl: cook.user.profilePictureUrl ?? null,
-                                            }}
-                                            courseCount={courseCount}
-                                            pricePerPerson={formatPrice({
-                                                amount:
-                                                    calculateMenuPrice(
-                                                        adults,
-                                                        children,
-                                                        basePrice,
-                                                        basePriceCustomers,
-                                                        pricePerAdult,
-                                                        pricePerChild,
-                                                    ) /
-                                                    (adults + children),
-                                                currencyCode: '€',
-                                            })}
-                                            categoryTitles={categories.map(({ title }) => title)}
-                                        />
-                                    </Link>
-                                ),
-                            )}
+                                        courseCount={courseCount}
+                                        pricePerPerson={formatPrice({
+                                            amount: totalPrice.amount / (searchParams.adults + searchParams.children),
+                                            currencyCode: '€',
+                                        })}
+                                        categoryTitles={categories.map(({ title }) => title)}
+                                    />
+                                </Link>
+                            ))}
                         </ul>
                     )}
                     {menus.length < 1 && (
