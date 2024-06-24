@@ -168,7 +168,6 @@ export function BookForm({
                     errorMessage={errors.message?.message}
                     rows={4}
                     {...register('message', {
-                        required: 'This field is required',
                         onChange: (e) => setMessage(e.target.value),
                         value: message,
                     })}
