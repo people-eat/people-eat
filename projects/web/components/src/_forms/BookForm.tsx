@@ -164,7 +164,7 @@ export function BookForm({
 
                 <PETextArea
                     id="message"
-                    labelTitle="Nachricht"
+                    labelTitle="Nachricht (optional)"
                     errorMessage={errors.message?.message}
                     rows={4}
                     {...register('message', {
