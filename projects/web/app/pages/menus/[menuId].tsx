@@ -815,8 +815,14 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
                                                             <div className="mt-6">
                                                                 <h4 className="sr-only">Description</h4>
-                                                                <p className="text-sm text-gray-700">{selectedMeal.meal.description}</p>
+                                                                <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-normal text-black">
+                                                                    {selectedMeal.meal.description === ''
+                                                                        ? 'Ohne Beschreibung'
+                                                                        : selectedMeal.meal.description}
+                                                                </p>
                                                             </div>
+
+                                                            <div className="flex justify-between items-center gap-4"></div>
                                                         </section>
 
                                                         <section aria-labelledby="options-heading" className="mt-6">
