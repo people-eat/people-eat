@@ -6,7 +6,7 @@ export default function NotFoundPage() {
         <div>
             <PEHeader signedInUser={null} />
 
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900 my-16">Seite nicht gefunden</h1>
 
                 <div className="flex flex-col gap-16 items-center">

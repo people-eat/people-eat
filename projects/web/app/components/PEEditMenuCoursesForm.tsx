@@ -107,7 +107,7 @@ export function PEEditMenuCoursesForm({
             {!coursesInEditMode && menu.greetingFromKitchen && (
                 <div className="flex flex-col gap-2">
                     <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
-                    <span className="textxl text-gray-500">{menu.greetingFromKitchen}</span>
+                    <span className="text-xl text-gray-500">{menu.greetingFromKitchen}</span>
                 </div>
             )}
 
@@ -198,7 +198,7 @@ export function PEEditMenuCoursesForm({
                             </button>
                         )}
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:grid-cols-3 xl:gap-x-8">
                         {coursesInEditMode && (
                             <button
                                 type="button"
@@ -213,11 +213,11 @@ export function PEEditMenuCoursesForm({
                             </button>
                         )}
                         {course.mealOptions.map((mealOption) => (
-                            <div key={mealOption.index}>
+                            <>
                                 {coursesInEditMode && (
                                     <MealCard
-                                        type="BUTTON"
                                         key={mealOption.meal.mealId}
+                                        type="BUTTON"
                                         title={mealOption.meal.title}
                                         description={mealOption.meal.description}
                                         imageUrl={mealOption.meal.imageUrl}
@@ -239,17 +239,17 @@ export function PEEditMenuCoursesForm({
                                 )}
                                 {!coursesInEditMode && (
                                     <MealCard
-                                        type="SIMPLE"
                                         key={mealOption.meal.mealId}
+                                        type="SIMPLE"
                                         title={mealOption.meal.title}
                                         description={mealOption.meal.description}
                                         imageUrl={mealOption.meal.imageUrl}
                                         onInfoClick={() => undefined}
                                     />
                                 )}
-                            </div>
+                            </>
                         ))}
-                    </div>
+                    </ul>
 
                     {coursesInEditMode && (
                         <button

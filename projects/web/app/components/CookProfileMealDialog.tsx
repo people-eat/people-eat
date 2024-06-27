@@ -34,7 +34,7 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
 
     const [showDeleteMealAlert, setShowDeleteMealAlert] = useState(false);
     const [showUpdateImageDialog, setShowUpdateImageDialog] = useState(false);
-    const [editSelectedMealOn, setEditSelectedMealOn] = useState(false);
+    const [editSelectedMealOn, setEditSelectedMealOn] = useState(true);
 
     const {
         register,

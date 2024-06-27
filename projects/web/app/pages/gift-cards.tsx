@@ -267,7 +267,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                         />
                     </div>
 
-                    <div className="pb-24 pt-16 sm:pb-32 sm:pt-24 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:pt-32">
+                    <div className="pb-24 pt-16 sm:pb-32 sm:pt-24 lg:mx-auto lg:grid lg:max-w-[88rem] lg:grid-cols-2 lg:pt-32">
                         <div className="px-6 lg:px-8">
                             <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
                                 <h2 className="text-3xl font-bold tracking-tight text-gray-900">

@@ -365,7 +365,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div className="py-24 sm:py-32">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                                 Spare deine Zeit und Energie auf der Suche nach deinem Privatkoch
@@ -395,7 +395,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl bg-orange-200 lg:bg-transparent lg:px-8">
+                <div className="mx-auto max-w-[88rem] bg-orange-200 lg:bg-transparent lg:px-8">
                     <div className="lg:grid lg:grid-cols-12">
                         <div className="relative z-10 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:bg-transparent lg:py-16">
                             <div className="absolute inset-x-0 h-1/2 bg-gray-50 lg:hidden" aria-hidden="true" />
@@ -434,7 +434,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div className="overflow-hidden py-32">
-                    <div className="mx-auto max-w-7xl px-6 lg:flex lg:px-8 overflow-hidden">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:flex lg:px-8 overflow-hidden">
                         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:min-w-full lg:max-w-none lg:flex-none lg:gap-y-8">
                             <div className="lg:col-end-1 lg:w-full lg:max-w-lg lg:pb-8">
                                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -504,7 +504,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div className="overflow-hidden py-16 lg:py-24">
-                    <div className="relative mx-auto max-w-xl px-6 lg:max-w-7xl lg:px-8">
+                    <div className="relative mx-auto max-w-xl px-6 lg:max-w-[88rem] lg:px-8">
                         <svg
                             className="absolute left-full hidden -translate-x-1/2 -translate-y-1/4 transform lg:block"
                             width={404}
@@ -612,7 +612,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div className="bg-gray-50 my-12">
-                    <div className="mx-auto max-w-7xl py-24 sm:px-2 sm:py-32 lg:px-4">
+                    <div className="mx-auto max-w-[88rem] py-24 sm:px-2 sm:py-32 lg:px-4">
                         <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
                             <div className="grid grid-cols-1 items-center gap-x-16 gap-y-10 lg:grid-cols-2">
                                 <div className="flex flex-col gap-8">
@@ -654,7 +654,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div className="bg-white">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto flex max-w-2xl flex-col items-center justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
                             <div className="w-full lg:max-w-lg lg:flex-auto">
                                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -692,7 +692,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div className="py-24 sm:py-32">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="max-w-2xl">
                             <h2 className="text-lg font-semibold leading-8 tracking-tight text-orange-500">Gastgeberstimmen</h2>
                             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -710,8 +710,8 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div>
-                    <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
-                        <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
+                    <div className="mx-auto max-w-[88rem] px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
+                        <div className="mx-auto max-w-[88rem] divide-y divide-gray-900/10">
                             <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
                             <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
                                 {faqs.map((faq) => (
@@ -743,7 +743,7 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
                 </div>
 
                 <div className="py-24 sm:py-32">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:max-w-none">
                             <h2 className="text-lg font-semibold leading-8 text-gray-900">Wir werden unterstützt von</h2>
                             <div className="mx-auto mt-10 grid grid-cols-4 items-start gap-x-8 gap-y-10 sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:grid-cols-5">

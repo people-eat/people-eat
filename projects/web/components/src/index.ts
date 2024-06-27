@@ -17,7 +17,6 @@ export { BookingStatusInfoPopover, type BookingStatusInfoPopoverProps } from './
 export { BookingRequestStatusPill, type BookingRequestStatusPillProps } from './booking-status-pill/BookingStatusPill';
 export { CookCard, type CookCardProps } from './cards/cook-card/CookCard';
 export { MealCard, type MealCardProps } from './cards/meal-card/MealCard';
-export { MealSelectionCard, type MealSelectionCardProps } from './cards/meal-selection-card/MealSelectionCard';
 export { MenuCard, type MenuCardProps } from './cards/menu-card/MenuCard';
 export { RatingCard, type RatingCardProps } from './cards/rating-card/RatingCard';
 export { PECookProfileNavigation, type PECookProfileNavigationProps } from './cook-profile-navigation/PECookProfileNavigation';

@@ -52,7 +52,7 @@ export function PEProfileGlobalBookingRequestDetails({
     const showFailedAlert = data ? !data.users.supportRequests.createOne : false;
 
     return (
-        <div className="flex flex-col gap-8 flex-1">
+        <div className="flex flex-col gap-8 flex-1 p-8">
             <Link href="/profile/bookings" className="lg:hidden flex gap-2">
                 <ArrowLeft />
             </Link>

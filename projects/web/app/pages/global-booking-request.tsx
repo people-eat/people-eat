@@ -173,7 +173,7 @@ export default function GlobalBookingRequestPage({ initialSignedInUser, categori
                 />
 
                 <div className="bg-white">
-                    <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-7xl lg:px-8 flex flex-col gap-10">
+                    <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-[88rem] lg:px-8 flex flex-col gap-10">
                         <div className="flex flex-col gap-4">
                             <h1 className="font-bold text-3xl tracking-tight text-gray-900">Individuelle Anfrage</h1>
                             <span className="text-gray-500">

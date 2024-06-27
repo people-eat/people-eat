@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { LoadingDialog, MealSelectionCard } from '@people-eat/web-components';
+import { LoadingDialog, MealCard } from '@people-eat/web-components';
 import { PEAlert, PEButton, PEDialog, PELabelSingleSelection, PENumberTextField } from '@people-eat/web-core-components';
 import {
     AdminGetCookMenuDocument,
@@ -149,8 +149,9 @@ export function AdminGlobalBookingRequestCookMenuDialog({
 
                                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
                                     {mealOptions.map(({ index, meal }) => (
-                                        <MealSelectionCard
+                                        <MealCard
                                             key={meal.mealId}
+                                            type="SELECTION"
                                             title={meal.title}
                                             description={meal.description}
                                             imageUrl={meal.imageUrl}

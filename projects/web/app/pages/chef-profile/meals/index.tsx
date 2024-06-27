@@ -110,7 +110,7 @@ export default function CookProfileMealsPage({ signedInUser, initialMeals }: Ser
                 }}
             />
 
-            <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
+            <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="MEALS" />
 
                 <PEProfileCard className="flex gap-8 justify-end items-center">
@@ -127,25 +127,21 @@ export default function CookProfileMealsPage({ signedInUser, initialMeals }: Ser
                     optionIdentifier={(mealType) => mealType}
                 />
 
-                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
-                    {filteredMeals.map(({ mealId, type, title, description, imageUrl, createdAt }, index) => (
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 sm:grid-cols-2 xl:gap-x-8">
+                    {filteredMeals.map(({ mealId, title, description, imageUrl }, index) => (
                         <MealCard
                             key={mealId}
-                            type="SIMPLE"
+                            type="BUTTON"
                             title={title}
                             description={description}
                             imageUrl={imageUrl}
-                            onInfoClick={() => setSelectedMealIndex(index)}
+                            // onInfoClick={() => setSelectedMealIndex(index)}
+                            button={{
+                                type: 'SECONDARY',
+                                title: 'Bearbeiten',
+                                onClick: () => setSelectedMealIndex(index),
+                            }}
                         />
-                        // <OldMealCard
-                        //     key={mealId}
-                        //     title={title}
-                        //     description={description}
-                        //     onClick={() => undefined}
-                        //     active={false}
-                        //     displayOnly={false}
-                        //     imageUrl={imageUrl ?? undefined}
-                        // />
                     ))}
                 </ul>
 

@@ -90,51 +90,55 @@ export function CookProfileBookingRequestChat({
     );
 
     return (
-        <div className="flex flex-col gap-2 flex-1 overflow-hidden">
-            <div className="flex flex-col gap-4 flex-1 overflow-y-scroll">
+        <div className="flex flex-col gap-2 flex-1 overflow-hidden pb-8">
+            <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-8 ml-8">
                 {sortedChatMessages.map((chatMessage) => (
                     <PEChatMessage key={chatMessage.chatMessageId} chatMessage={chatMessage} isAuthor={chatMessage.createdBy === cookId} />
                 ))}
                 <div data-element="chat-bottom" ref={chatBottom} />
             </div>
 
-            {status === 'PENDING' && (
-                <form
-                    autoComplete="off"
-                    onSubmit={handleSubmit(({ message }) =>
-                        send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
-                            ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),
-                        ),
-                    )}
-                    className="flex gap-4 items-center"
-                >
-                    <PETextField
-                        id="chat-message"
-                        placeholder="Deine Nachricht"
-                        type="text"
-                        errorMessage={errors.message?.message}
-                        {...register('message', { required: 'This field is required' })}
-                    />
-                    <PEButton type="submit" title="Senden" />
-                </form>
-            )}
+            <div className="pr-8 ml-8">
+                {status === 'PENDING' && (
+                    <form
+                        autoComplete="off"
+                        onSubmit={handleSubmit(({ message }) =>
+                            send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
+                                ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),
+                            ),
+                        )}
+                        className="flex gap-4 items-center"
+                    >
+                        <PETextField
+                            id="chat-message"
+                            placeholder="Deine Nachricht"
+                            type="text"
+                            errorMessage={errors.message?.message}
+                            {...register('message', { required: 'This field is required' })}
+                        />
+                        <PEButton type="submit" title="Senden" />
+                    </form>
+                )}
 
-            {status === 'OPEN' && (
-                <div className="flex justify-end gap-4">
-                    {userAccepted === true && cookAccepted === null && (
-                        <>
-                            <PEButton title="Ablehnen" onClick={() => setShowDeclineDialog(true)} type="secondary" />
-                            <PEButton
-                                onClick={() => (hasStripePayoutMethodActivated ? setShowAcceptDialog(true) : setStripeNotSetupDialog(true))}
-                                title="Akzeptieren"
-                            />
-                        </>
-                    )}
-                    {userAccepted === null && cookAccepted === true && (
-                        <PEButton onClick={() => setShowDeclineDialog(true)} title="Ablehnen" />
-                    )}
-                </div>
-            )}
+                {status === 'OPEN' && (
+                    <div className="flex justify-end gap-4">
+                        {userAccepted === true && cookAccepted === null && (
+                            <>
+                                <PEButton title="Ablehnen" onClick={() => setShowDeclineDialog(true)} type="secondary" />
+                                <PEButton
+                                    onClick={() =>
+                                        hasStripePayoutMethodActivated ? setShowAcceptDialog(true) : setStripeNotSetupDialog(true)
+                                    }
+                                    title="Akzeptieren"
+                                />
+                            </>
+                        )}
+                        {userAccepted === null && cookAccepted === true && (
+                            <PEButton onClick={() => setShowDeclineDialog(true)} title="Ablehnen" />
+                        )}
+                    </div>
+                )}
+            </div>
 
             <PEAlert
                 open={showAcceptDialog}

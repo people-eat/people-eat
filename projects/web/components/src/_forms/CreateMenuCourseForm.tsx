@@ -2,7 +2,7 @@ import { PEButton, PELabelMultiSelection, PETextField } from '@people-eat/web-co
 import { MealType, mealTypeTranslations, mealTypes } from '@people-eat/web-domain';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { MealSelectionCard } from '../cards/meal-selection-card/MealSelectionCard';
+import { MealCard } from '../cards/meal-card/MealCard';
 
 export interface CreateMenuCourseFormProps {
     meals: {
@@ -90,9 +90,10 @@ export function CreateMenuCourseForm({ meals, onCreateMeal, onCreate }: CreateMe
                 </>
             )}
 
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
                 {filteredMeals.map((meal) => (
-                    <MealSelectionCard
+                    <MealCard
+                        type="SELECTION"
                         key={meal.mealId}
                         title={meal.title}
                         description={meal.description}

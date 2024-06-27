@@ -332,7 +332,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                     />
                 </PEFullPageSheet>
 
-                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8">
                     <div className="flex gap-8">
                         <div className="flex-1 flex flex-col gap-12">
                             <div className="flex gap-8 items-center">
@@ -478,7 +478,7 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                         />
                     </div>
 
-                    <div className="mx-auto max-w-7xl sm:px-2 lg:px-4 block py-10">
+                    <div className="mx-auto max-w-[88rem] sm:px-2 lg:px-4 block py-10">
                         <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
                             <div className="max-w-3xl">
                                 <h2 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -505,8 +505,8 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
                         </div>
                     </div>
 
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8 py-10">
-                        <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8 py-10">
+                        <div className="mx-auto max-w-[88rem] divide-y divide-gray-900/10">
                             <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
                             <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
                                 {faqs.map((faq) => (

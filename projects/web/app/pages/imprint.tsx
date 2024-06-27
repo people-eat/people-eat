@@ -38,11 +38,11 @@ export default function ImprintPage({ signedInUser }: ServerSideProps) {
             <div>
                 <PEHeader signedInUser={signedInUser} />
 
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-16">Impressum</h1>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
                     <p>
                         Unser Impressum gilt für die Seiten www.people-eat.com sowie für die People-Eat-Seiten auf Facebook, Instagram,
                         Google+, LinkedIn, Google my Business und Twitter. Angaben gemäß § 5 TMG: PeopleEat UG. Montgolfier-Allee 24, 60486

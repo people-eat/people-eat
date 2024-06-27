@@ -67,23 +67,27 @@ export function PEProfileBookingRequestDetails({
 
     return (
         <div className="flex flex-col gap-8 flex-1">
-            <Link href="/profile/bookings" className="lg:hidden flex gap-2">
-                <ArrowLeft />
-                Buchungsanfragen
-            </Link>
+            <div className="flex flex-col gap-8 p-8">
+                <Link href="/profile/bookings" className="lg:hidden flex gap-2">
+                    <ArrowLeft />
+                    Buchungsanfragen
+                </Link>
 
-            <PETabSingleSelection
-                options={bookingRequest.configuredMenu ? profileBookingRequestDetailsTabs : profileBookingRequestDetailsTabsWithoutMenu}
-                selectedOption={selectedTab}
-                selectedOptionChanged={(tab) => tab && router.replace({ query: { ...router.query, tab } }, undefined, { scroll: false })}
-                optionTitle={(o) => profileBookingRequestDetailsTabTranslations[o]}
-                optionIdentifier={(o) => o}
-                optionIcon={(o) => profileBookingRequestDetailsTabIcons[o]}
-                optionNotificationCount={undefined}
-            />
+                <PETabSingleSelection
+                    options={bookingRequest.configuredMenu ? profileBookingRequestDetailsTabs : profileBookingRequestDetailsTabsWithoutMenu}
+                    selectedOption={selectedTab}
+                    selectedOptionChanged={(tab) =>
+                        tab && router.replace({ query: { ...router.query, tab } }, undefined, { scroll: false })
+                    }
+                    optionTitle={(o) => profileBookingRequestDetailsTabTranslations[o]}
+                    optionIdentifier={(o) => o}
+                    optionIcon={(o) => profileBookingRequestDetailsTabIcons[o]}
+                    optionNotificationCount={undefined}
+                />
+            </div>
 
             {selectedTab === 'EVENT_DETAILS' && (
-                <div className="overflow-y-scroll">
+                <div className="overflow-y-auto pr-8 ml-8 pb-8">
                     <dl className="space-y-6 divide-y divide-gray-100 text-sm leading-6">
                         <div className="pt-6 sm:flex">
                             <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Status</dt>
@@ -163,7 +167,7 @@ export function PEProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (
-                <div className="flex flex-col gap-8 overflow-y-auto">
+                <div className="flex flex-col gap-8 overflow-y-auto pr-8 ml-8">
                     <h2 className="text-2xl font-bold">{bookingRequest.configuredMenu.title}</h2>
                     {bookingRequest.configuredMenu.description && <h3>{bookingRequest.configuredMenu.description}</h3>}
                     {bookingRequest.configuredMenu.greetingFromKitchen && bookingRequest.configuredMenu.greetingFromKitchen !== '' && (
@@ -171,9 +175,9 @@ export function PEProfileBookingRequestDetails({
                     )}
                     <div className="flex flex-col gap-4">
                         {bookingRequest.configuredMenu.courses.map((course) => (
-                            <div key={course.index} className="flex flex-col gap-4">
+                            <div key={course.index} className="flex flex-col gap-4 ml-2">
                                 <div>{course.title}</div>
-                                <div className="grid grid-cols-2 gap-4 p-4">
+                                <ul className="grid grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
                                     <MealCard
                                         key={course.index}
                                         type="SIMPLE"
@@ -182,7 +186,7 @@ export function PEProfileBookingRequestDetails({
                                         imageUrl={course.mealImageUrl ?? undefined}
                                         onInfoClick={() => undefined}
                                     />
-                                </div>
+                                </ul>
                             </div>
                         ))}
                     </div>

@@ -51,7 +51,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                 </div>
 
                 <div className="bg-white">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto grid max-w-2xl grid-cols-1 items-start gap-x-8 gap-y-16 sm:gap-y-24 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                             <div className="lg:pr-4">
                                 <Image
@@ -92,7 +92,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 py-20 mt-8">
+                <div className="mx-auto max-w-[88rem] sm:px-6 lg:px-8 py-20 mt-8">
                     <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 text-center shadow-2xl sm:rounded-3xl sm:px-16">
                         <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">Unsere Mission</h2>
                         <p className="mx-auto mt-6 max-w-4xl text-lg leading-8 text-gray-300">
@@ -135,7 +135,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                             />
                         </div>
                         <div className="py-24 sm:py-32 lg:pb-40">
-                            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                            <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                                 <div className="mx-auto max-w-2xl text-center">
                                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Lerne unser Team kennen</h1>
                                     <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -183,7 +183,7 @@ export default function AboutUsPage({ signedInUser }: ServerSideProps) {
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-7xl px-6 py-24 sm:py-20 lg:px-8">
+                <div className="mx-auto max-w-[88rem] px-6 py-24 sm:py-20 lg:px-8">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-10">
                         Möchtest du Teil unseres Teams werden?
                         <br />

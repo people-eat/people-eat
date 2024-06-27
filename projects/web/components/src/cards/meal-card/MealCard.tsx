@@ -9,6 +9,7 @@ interface MealCardBaseProps {
     description: string;
     imageUrl: string | null | undefined;
     onInfoClick?: () => void;
+    className?: string;
 }
 
 type MealCardType = 'SIMPLE' | 'SELECTION' | 'BUTTON';
@@ -44,43 +45,28 @@ function isButtonMealCard(props: MealCardProps): props is MealCardButtonProps {
 export type MealCardProps = MealCardSimpleProps | MealCardSelectionProps | MealCardButtonProps;
 
 export function MealCard(props: MealCardProps) {
-    const { title, description, imageUrl, onInfoClick } = props;
+    const { title, description, imageUrl, onInfoClick, className } = props;
 
     return (
-        <li className={classNames('flex flex-col gap-2 rounded-xl shadow-md', 'group-hover:opacity-75')}>
-            <div className="group aspect-h-5 aspect-w-10 block w-full overflow-hidden rounded-t-xl bg-gray-100">
-                <Image
-                    src={imageUrl ?? '/placeholders/meal.png'}
-                    alt=""
-                    width={600}
-                    height={400}
-                    className="pointer-events-none object-cover group-hover:opacity-75"
-                />
-                {/* {!isButtonMealCard(props) && !isSelectionMealCard(props) && (
-                    <button type="button" className="absolute inset-0 focus:outline-none" onClick={onClick}>
-                        <span className="sr-only">View details for </span>
-                    </button>
-                )} */}
-            </div>
-            <div className="p-4">
-                <div className="flex justify-between items-center gap-4">
-                    <p className="pointer-events-none line-clamp-1 text-md md:text-xl font-medium text-gray-900">{title}</p>
+        <li className={classNames('flex flex-col lg:flex-row-reverse rounded-xl shadow-md bg-white', className)}>
+            <Image
+                src={imageUrl || '/placeholders/meal.png'}
+                alt=""
+                width={200}
+                height={200}
+                className="pointer-events-none object-cover aspect-[1/1] rounded-t-xl lg:rounded-t-none lg:rounded-tr-xl lg:rounded-br-xl w-full lg:w-[200px]"
+            />
+            <div className="p-4 flex flex-col gap-2 flex-1">
+                <div className="flex flex-col gap-2 flex-1">
+                    <div className="flex justify-between items-center gap-4">
+                        <p className="pointer-events-none line-clamp-2 text-md md:text-xl font-semibold text-gray-900">{title}</p>
+                    </div>
+                    <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-normal text-black">
+                        {description === '' ? 'Ohne Beschreibung' : description}
+                    </p>
                 </div>
-                <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-medium text-gray-500">
-                    {description === '' ? 'Ohne Beschreibung' : description}
-                </p>
 
-                <div className="mt-4 flex justify-between items-center">
-                    {onInfoClick && (
-                        <button
-                            type="button"
-                            onClick={onInfoClick}
-                            className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
-                        >
-                            <InfoIcon strokeWidth={1} className="text-xs md:text-sm" />
-                        </button>
-                    )}
-
+                <div className="flex gap-2">
                     {isButtonMealCard(props) && props.button && (
                         <PEButton
                             title={props.button.title}
@@ -118,6 +104,16 @@ export function MealCard(props: MealCardProps) {
                                 </button>
                             )}
                         </>
+                    )}
+
+                    {onInfoClick && (
+                        <button
+                            type="button"
+                            onClick={onInfoClick}
+                            className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 ml-auto"
+                        >
+                            <InfoIcon strokeWidth={1} className="text-xs md:text-sm" />
+                        </button>
                     )}
                 </div>
             </div>

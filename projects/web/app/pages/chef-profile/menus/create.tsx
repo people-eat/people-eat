@@ -242,7 +242,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
         <div>
             <PEHeader signedInUser={signedInUser} />
 
-            <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
+            <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="MENUS" />
 
                 <PEProfileCard className="flex flex-col gap-8">
@@ -387,7 +387,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                 Gang entfernen
                                             </button>
                                         </div>
-                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:grid-cols-3 xl:gap-x-8">
                                             <button
                                                 type="button"
                                                 className="relative block rounded-lg border-2 border-dashed border-gray-300 p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
@@ -421,7 +421,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                     }
                                                 />
                                             ))}
-                                        </div>
+                                        </ul>
                                     </div>
                                 ))}
 

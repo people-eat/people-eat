@@ -1,15 +1,6 @@
 import { useApolloClient, useMutation } from '@apollo/client';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
-import {
-    BookBar,
-    BookForm,
-    LoadingDialog,
-    MealSelectionCard,
-    PECostBreakdownPanel,
-    PEFooter,
-    PEHeader,
-    Payment,
-} from '@people-eat/web-components';
+import { BookBar, BookForm, LoadingDialog, MealCard, PECostBreakdownPanel, PEFooter, PEHeader, Payment } from '@people-eat/web-components';
 import { PEButton, PEDialog, PEFullPageSheet } from '@people-eat/web-core-components';
 import {
     AllergyOption,
@@ -49,6 +40,7 @@ import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import Head from 'next/head';
+import classNames from 'classnames';
 
 const publicMenusRedirect = { redirect: { permanent: false, destination: '/menus' } };
 
@@ -544,80 +536,91 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                     />
                 </PEFullPageSheet>
 
-                <div className="mx-auto max-w-7xl px-4 md:py-8 sm:px-6 lg:px-8">
-                    <div className="flex gap-8">
-                        <div className="flex-1 flex flex-col gap-4">
-                            <h1 className="font-bold text-3xl tracking-tight text-gray-900 break-all">{menu.title}</h1>
+                <div className="mx-auto max-w-[88rem] md:pt-8">
+                    <div className="flex gap-8 lg:px-8">
+                        <div className="flex-1 flex flex-col gap-4 w-full">
+                            <div className="flex flex-col gap-4 p-4">
+                                <h1 className="font-bold text-3xl tracking-tight text-gray-900 break-all">{menu.title}</h1>
 
-                            {menu.kitchen && (
-                                <div className="flex gap-4 text-gray-500 text-base font-semibold">
-                                    <Utensils />
-                                    <div>{menu.kitchen.title}</div>
-                                </div>
-                            )}
+                                {menu.kitchen && (
+                                    <div className="flex gap-4 text-gray-500 text-base font-semibold">
+                                        <Utensils />
+                                        <div>{menu.kitchen.title}</div>
+                                    </div>
+                                )}
 
-                            {menu.categories.length > 0 && (
-                                <div className="flex gap-4 text-gray-500 text-base font-semibold">
-                                    {menu.categories.map(({ title }) => title).join(', ')}
-                                </div>
-                            )}
+                                {menu.categories.length > 0 && (
+                                    <div className="flex gap-4 text-gray-500 text-base font-semibold">
+                                        {menu.categories.map(({ title }) => title).join(', ')}
+                                    </div>
+                                )}
 
-                            <Link
-                                href={{
-                                    pathname: '/chefs/' + menu.cook.cookId,
-                                    query: toQueryParams({ selectedLocation, date, adults, children }),
-                                }}
-                            >
-                                <figcaption className="flex items-center gap-x-4">
-                                    {!menu.cook.user.profilePictureUrl && (
-                                        <CircleUser strokeWidth={1.5} className="text-orange-500 w-10 h-10" />
-                                    )}
-                                    {menu.cook.user.profilePictureUrl && (
-                                        <Image
-                                            src={menu.cook.user.profilePictureUrl}
-                                            width={100}
-                                            height={100}
-                                            alt=""
-                                            className="object-cover object-center rounded-full w-10"
-                                        />
-                                    )}
-                                    <span className="text-gray-900 text-2xl">{menu.cook.user.firstName}</span>
-                                </figcaption>
-                            </Link>
+                                <Link
+                                    href={{
+                                        pathname: '/chefs/' + menu.cook.cookId,
+                                        query: toQueryParams({ selectedLocation, date, adults, children }),
+                                    }}
+                                >
+                                    <figcaption className="flex items-center gap-x-4">
+                                        {!menu.cook.user.profilePictureUrl && (
+                                            <CircleUser strokeWidth={1.5} className="text-orange-500 w-10 h-10" />
+                                        )}
+                                        {menu.cook.user.profilePictureUrl && (
+                                            <Image
+                                                src={menu.cook.user.profilePictureUrl}
+                                                width={100}
+                                                height={100}
+                                                alt=""
+                                                className="object-cover object-center rounded-full w-10"
+                                            />
+                                        )}
+                                        <span className="text-gray-900 text-2xl">{menu.cook.user.firstName}</span>
+                                    </figcaption>
+                                </Link>
 
-                            {menu.description && (
+                                {menu.description && (
+                                    <div className="flex flex-col gap-2">
+                                        <div className="text-gray-500">{menu.description}</div>
+                                    </div>
+                                )}
+
                                 <div className="flex flex-col gap-2">
-                                    <div className="text-gray-500">{menu.description}</div>
+                                    <div className="font-bold text-gray-900 text-xl">Stelle dein Wunschmenü zusammen</div>
+                                    <span className="text-xl text-gray-500">
+                                        Klicke auf <i>Auswählen</i> und stelle dein Menü zusammen. Wird nur ein Gericht in einem Gang
+                                        angezeigt, so ist dieses automatisch ausgewählt.
+                                    </span>
                                 </div>
-                            )}
 
-                            <div className="flex flex-col gap-2">
-                                <div className="font-bold text-gray-900 text-xl">Stelle dein Wunschmenü zusammen</div>
-                                <span className="textxl text-gray-500">
-                                    Klicke auf <i>Auswählen</i> und stelle dein Menü zusammen. Wird nur ein Gericht in einem Gang angezeigt,
-                                    so ist dieses automatisch ausgewählt.
-                                </span>
+                                {menu.greetingFromKitchen && (
+                                    <div className="flex flex-col gap-2">
+                                        <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
+                                        <span className="text-xl text-gray-500">{menu.greetingFromKitchen}</span>
+                                    </div>
+                                )}
                             </div>
-
-                            {menu.greetingFromKitchen && (
-                                <div className="flex flex-col gap-2">
-                                    <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
-                                    <span className="textxl text-gray-500">{menu.greetingFromKitchen}</span>
-                                </div>
-                            )}
 
                             {sortedCourses.map(({ courseId, title, mealOptions }) => (
                                 <div key={courseId} className="flex flex-col gap-10 mb-8">
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-2 px-4">
                                         <h2 className="text-xl font-semibold tracking-tight text-gray-900">{title}</h2>
-                                        <span className="textxl text-gray-500">
+                                        <span className="text-xl text-gray-500">
                                             {courseMealSelections.get(courseId)?.meal.title} ausgewählt
                                         </span>
                                     </div>
 
-                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
+                                    {/* className="lg:grid lg:grid-cols-1 2xl:grid-cols-2 lg:gap-x-4 lg:gap-y-8 xl:gap-x-8" */}
+
+                                    <ul
+                                        className={classNames(
+                                            'overflow-x-auto',
+                                            'grid grid-flow-col auto-cols-min gap-4 p-4',
+                                            'lg:grid lg:grid-flow-row lg:grid-cols-1 2xl:grid-cols-2 lg:gap-x-4 lg:gap-y-8 xl:gap-x-8',
+                                        )}
+                                    >
                                         {mealOptions.map(({ index, meal }) => (
-                                            <MealSelectionCard
+                                            <MealCard
+                                                type="SELECTION"
                                                 key={meal.mealId}
                                                 title={meal.title}
                                                 description={meal.description}
@@ -681,8 +684,10 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                             }}
                         />
                     </div>
+                </div>
 
-                    <div className="mx-auto max-w-7xl py-10 sm:px-2 md:py-32 lg:px-4 block">
+                <div className="mx-auto max-w-[88rem] px-4 md:pb-8 sm:px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] py-10 sm:px-2 md:py-32 lg:px-4 block">
                         <div className="mx-auto max-w-2xl px-4 lg:max-w-none">
                             <div className="max-w-3xl">
                                 <h2 className="text-2xl font-bold tracking-tight text-gray-900">
@@ -709,8 +714,8 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                         </div>
                     </div>
 
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                        <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
+                        <div className="mx-auto max-w-[88rem] divide-y divide-gray-900/10">
                             <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
                             <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
                                 {faqs.map((faq) => (

@@ -42,7 +42,7 @@ export function PEAddMealToCourseDialog({ open, onClose, meals, selectedMealIds,
                     <p>Füge einer dieser Kategorien jetzt dein erstes Gericht hinzu.</p>
                 </>
             )}
-            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
                 {filteredMeals.map((meal) => (
                     <MealCard
                         key={meal.mealId}

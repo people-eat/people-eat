@@ -147,7 +147,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                             className="absolute inset-y-0 right-1/2 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:-mr-80 lg:-mr-96"
                             aria-hidden="true"
                         />
-                        <div className="mx-auto max-w-7xl px-6 py-32 sm:py-40 lg:px-8">
+                        <div className="mx-auto max-w-[88rem] px-6 py-32 sm:py-40 lg:px-8">
                             <div className="mx-auto max-w-2xl lg:mx-0 lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6 xl:grid-cols-1 xl:grid-rows-1 xl:gap-x-8">
                                 <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:col-span-2 xl:col-auto">
                                     Koche deine Menüs. <br />
@@ -179,7 +179,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                 </div>
 
                 <div className="pb-24">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0">
                             <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                                 Beginne in nur wenigen Schritten
@@ -193,7 +193,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                 </div>
 
                 <div className="pb-24">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-8 overflow-hidden lg:mx-0 lg:max-w-none lg:grid-cols-4">
                             {timeline.map((item) => (
                                 <div key={item.name}>
@@ -219,7 +219,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                 </div>
 
                 <div className="pb-24">
-                    <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 sm:px-6 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
+                    <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 sm:px-6 lg:max-w-[88rem] lg:grid-cols-2 lg:px-8">
                         <div>
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-6xl">Was du von uns erwarten kannst</h2>
                             <p className="mt-8 text-gray-500">
@@ -271,7 +271,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                 </div>
 
                 <div className="pb-24">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                             Bist du bereit zu starten?
                             <br />
@@ -285,7 +285,7 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                 </div>
 
                 <section className="pb-24">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                             <div className="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
                                 <figure className="mt-10 flex flex-auto flex-col justify-between">
@@ -337,8 +337,8 @@ export default function HowToBecomeAChefPage({ signedInUser }: ServerSideProps) 
                 </section>
 
                 <div className="pb-24">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                        <div className="mx-auto max-w-7xl divide-y divide-gray-900/10">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
+                        <div className="mx-auto max-w-[88rem] divide-y divide-gray-900/10">
                             <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">Häufig gestellte Fragen</h2>
                             <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
                                 {faqs.map((faq) => (

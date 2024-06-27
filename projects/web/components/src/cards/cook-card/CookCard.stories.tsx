@@ -20,7 +20,7 @@ export default meta;
 //     },
 //     render: ({ user, rank, menuCount, cityName }) => {
 //         return (
-//             <div className="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+//             <div className="mx-auto max-w-[88rem] overflow-hidden sm:px-6 lg:px-8">
 //                 <h2 className="sr-only">Köche</h2>
 
 //                 <div className="-mx-px grid grid-cols-2 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">

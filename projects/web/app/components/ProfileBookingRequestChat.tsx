@@ -81,48 +81,50 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
     );
 
     return (
-        <div className="flex flex-col gap-2 flex-1 overflow-hidden">
-            <div className="flex flex-col gap-4 flex-1 overflow-y-scroll">
+        <div className="flex flex-col gap-2 flex-1 overflow-hidden pb-8">
+            <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-8 ml-8">
                 {sortedChatMessages.map((chatMessage) => (
                     <PEChatMessage key={chatMessage.chatMessageId} chatMessage={chatMessage} isAuthor={chatMessage.createdBy === userId} />
                 ))}
                 <div data-element="chat-bottom" ref={chatBottom} />
             </div>
 
-            {status === 'PENDING' && (
-                <form
-                    autoComplete="off"
-                    onSubmit={handleSubmit(({ message }) =>
-                        send({ variables: { userId, bookingRequestId, request: { message } } }).then(
-                            ({ data }) => data?.users.bookingRequests.chatMessages.success && setValue('message', ''),
-                        ),
-                    )}
-                    className="flex gap-4 items-center"
-                >
-                    <PETextField
-                        id="chat-message"
-                        placeholder="Deine Nachricht"
-                        type="text"
-                        errorMessage={errors.message?.message}
-                        {...register('message', { required: 'This field is required' })}
-                    />
-                    <PEButton type="submit" title="Senden" />
-                </form>
-            )}
+            <div className="pr-8 ml-8">
+                {status === 'PENDING' && (
+                    <form
+                        autoComplete="off"
+                        onSubmit={handleSubmit(({ message }) =>
+                            send({ variables: { userId, bookingRequestId, request: { message } } }).then(
+                                ({ data }) => data?.users.bookingRequests.chatMessages.success && setValue('message', ''),
+                            ),
+                        )}
+                        className="flex gap-4 items-center"
+                    >
+                        <PETextField
+                            id="chat-message"
+                            placeholder="Deine Nachricht"
+                            type="text"
+                            errorMessage={errors.message?.message}
+                            {...register('message', { required: 'This field is required' })}
+                        />
+                        <PEButton type="submit" title="Senden" />
+                    </form>
+                )}
 
-            {status === 'OPEN' && (
-                <div className="flex justify-end gap-4">
-                    {cookAccepted === true && userAccepted === null && (
-                        <>
-                            <PEButton title="Ablehnen" onClick={() => setShowDeclineDialog(true)} type="secondary" />
-                            <PEButton onClick={() => setShowAcceptDialog(true)} title="Akzeptieren" />
-                        </>
-                    )}
-                    {cookAccepted === null && userAccepted === true && (
-                        <PEButton onClick={() => setShowDeclineDialog(true)} title="Ablehnen" />
-                    )}
-                </div>
-            )}
+                {status === 'OPEN' && (
+                    <div className="flex justify-end gap-4">
+                        {cookAccepted === true && userAccepted === null && (
+                            <>
+                                <PEButton title="Ablehnen" onClick={() => setShowDeclineDialog(true)} type="secondary" />
+                                <PEButton onClick={() => setShowAcceptDialog(true)} title="Akzeptieren" />
+                            </>
+                        )}
+                        {cookAccepted === null && userAccepted === true && (
+                            <PEButton onClick={() => setShowDeclineDialog(true)} title="Ablehnen" />
+                        )}
+                    </div>
+                )}
+            </div>
 
             <PEAlert
                 open={showAcceptDialog}
