@@ -574,7 +574,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                                 className="object-cover object-center rounded-full w-10"
                                             />
                                         )}
-                                        <span className="text-gray-900 text-2xl">{menu.cook.user.firstName}</span>
+                                        <span className="text-gray-900 text-xl md:text-2xl">{menu.cook.user.firstName}</span>
                                     </figcaption>
                                 </Link>
 
@@ -584,13 +584,13 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
                                     </div>
                                 )}
 
-                                <div className="flex flex-col gap-2">
+                                {/* <div className="flex flex-col gap-2">
                                     <div className="font-bold text-gray-900 text-xl">Stelle dein Wunschmenü zusammen</div>
                                     <span className="text-xl text-gray-500">
                                         Klicke auf <i>Auswählen</i> und stelle dein Menü zusammen. Wird nur ein Gericht in einem Gang
                                         angezeigt, so ist dieses automatisch ausgewählt.
                                     </span>
-                                </div>
+                                </div> */}
 
                                 {menu.greetingFromKitchen && (
                                     <div className="flex flex-col gap-2">
@@ -748,6 +748,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
                 <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
                     <PEButton
+                        size="constant"
                         title={`Jetzt buchen (${formatPrice(costBreakdown.totalPerPerson!.price)} pro Person)`}
                         onClick={() => setShowBook(true)}
                         className="w-full"
@@ -815,7 +816,7 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
                                                             <div className="mt-6">
                                                                 <h4 className="sr-only">Description</h4>
-                                                                <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-normal text-black">
+                                                                <p className="pointer-events-none text-md font-normal text-black">
                                                                     {selectedMeal.meal.description === ''
                                                                         ? 'Ohne Beschreibung'
                                                                         : selectedMeal.meal.description}

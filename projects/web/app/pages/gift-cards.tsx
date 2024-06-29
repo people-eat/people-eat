@@ -75,7 +75,7 @@ function PaymentForm({ giftCardId, onSuccess, onFailure }: PaymentFormProps) {
         <div className="flex flex-col gap-8">
             <PaymentElement id="payment-element" />
 
-            <PEButton title="Jetzt kaufen" onClick={pay} />
+            <PEButton title="Jetzt kaufen" onClick={pay} size="constant" />
 
             {errorMessage && <span className="text-red-400">{errorMessage}</span>}
         </div>
@@ -531,7 +531,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
                                     </fieldset>
 
                                     <div className="flex justify-end">
-                                        <PEButton title="Gutschein kaufen" type="submit" />
+                                        <PEButton title="Gutschein kaufen" type="submit" size="constant" />
                                     </div>
                                     {/* <div>customBalance: {customBalance}</div>
                                 <div>balance: {balance}</div> */}

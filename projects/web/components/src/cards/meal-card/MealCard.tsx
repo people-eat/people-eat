@@ -1,6 +1,6 @@
 import { PEButton } from '@people-eat/web-core-components';
 import classNames from 'classnames';
-import { CheckCircleIcon, Circle, InfoIcon } from 'lucide-react';
+import { CheckCircleIcon, Circle } from 'lucide-react';
 import Image from 'next/image';
 
 interface MealCardBaseProps {
@@ -45,7 +45,7 @@ function isButtonMealCard(props: MealCardProps): props is MealCardButtonProps {
 export type MealCardProps = MealCardSimpleProps | MealCardSelectionProps | MealCardButtonProps;
 
 export function MealCard(props: MealCardProps) {
-    const { title, description, imageUrl, onInfoClick, className } = props;
+    const { title, imageUrl, onInfoClick, className } = props;
 
     return (
         <li className={classNames('flex flex-col lg:flex-row-reverse rounded-xl shadow-md bg-white', className)}>
@@ -59,11 +59,11 @@ export function MealCard(props: MealCardProps) {
             <div className="p-4 flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2 flex-1">
                     <div className="flex justify-between items-center gap-4">
-                        <p className="pointer-events-none line-clamp-2 text-md md:text-xl font-semibold text-gray-900">{title}</p>
+                        <p className="pointer-events-none line-clamp-4 text-md md:text-xl font-semibold text-gray-900">{title}</p>
                     </div>
-                    <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-normal text-black">
+                    {/* <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-normal text-black">
                         {description === '' ? 'Ohne Beschreibung' : description}
-                    </p>
+                    </p> */}
                 </div>
 
                 <div className="flex gap-2">
@@ -78,7 +78,13 @@ export function MealCard(props: MealCardProps) {
                     {isSelectionMealCard(props) && (
                         <>
                             {props.selected && !props.onDeselect && (
-                                <div className="inline-flex items-center gap-x-2 rounded-full bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm">
+                                <div
+                                    className={classNames(
+                                        'inline-flex items-center gap-x-2 rounded-full bg-orange-500 font-semibold text-white shadow-sm',
+                                        'px-2.5 py-1 sm:px-2.5 sm:py-1 md:px-3 md:py-1.5 lg:px-3.5 lg:py-2 xl:px-4 xl:py-2.5',
+                                        'text-xs sm:text-sm',
+                                    )}
+                                >
                                     <span>Ausgewählt</span>
                                     <CheckCircleIcon className="-mr-0.5 h-5 w-5" aria-hidden="true" />
                                 </div>
@@ -86,7 +92,11 @@ export function MealCard(props: MealCardProps) {
                             {props.selected && props.onDeselect && (
                                 <button
                                     type="button"
-                                    className="inline-flex items-center gap-x-2 rounded-full bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm"
+                                    className={classNames(
+                                        'inline-flex items-center gap-x-2 rounded-full bg-orange-500 font-semibold text-white shadow-sm',
+                                        'px-2.5 py-1 sm:px-2.5 sm:py-1 md:px-3 md:py-1.5 lg:px-3.5 lg:py-2 xl:px-4 xl:py-2.5',
+                                        'text-xs sm:text-sm',
+                                    )}
                                     onClick={props.onDeselect}
                                 >
                                     <span>Ausgewählt</span>
@@ -96,7 +106,11 @@ export function MealCard(props: MealCardProps) {
                             {!props.selected && (
                                 <button
                                     type="button"
-                                    className="inline-flex items-center gap-x-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    className={classNames(
+                                        'inline-flex items-center gap-x-2 rounded-full bg-white font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
+                                        'px-2.5 py-1 sm:px-2.5 sm:py-1 md:px-3 md:py-1.5 lg:px-3.5 lg:py-2 xl:px-4 xl:py-2.5',
+                                        'text-xs sm:text-sm',
+                                    )}
                                     onClick={props.onSelect}
                                 >
                                     <span>Auswählen</span>
@@ -110,9 +124,14 @@ export function MealCard(props: MealCardProps) {
                         <button
                             type="button"
                             onClick={onInfoClick}
-                            className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 ml-auto"
+                            className={classNames(
+                                'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 ml-auto',
+                                'text-xs md:text-sm underline',
+                                'text-gray-500',
+                            )}
                         >
-                            <InfoIcon strokeWidth={1} className="text-xs md:text-sm" />
+                            {/* <InfoIcon strokeWidth={1} className="text-xs md:text-sm" /> */}
+                            Info
                         </button>
                     )}
                 </div>

@@ -251,7 +251,7 @@ export function BookForm({
 
                 {costBreakdown && <PECostBreakdownPanel costBreakdown={costBreakdown} />}
 
-                <PEButton title={searchButton.title} type="submit" />
+                <PEButton title={searchButton.title} type="submit" size="constant" />
             </div>
         </form>
     );
