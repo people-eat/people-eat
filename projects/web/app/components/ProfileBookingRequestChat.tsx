@@ -105,7 +105,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
                             placeholder="Deine Nachricht"
                             type="text"
                             errorMessage={errors.message?.message}
-                            {...register('message', { required: 'This field is required' })}
+                            {...register('message', { required: true })}
                         />
                         <PEButton type="submit" title="Senden" />
                     </form>

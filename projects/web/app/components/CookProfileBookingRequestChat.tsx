@@ -102,11 +102,11 @@ export function CookProfileBookingRequestChat({
                 {status === 'PENDING' && (
                     <form
                         autoComplete="off"
-                        onSubmit={handleSubmit(({ message }) =>
+                        onSubmit={handleSubmit(({ message }) => {
                             send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
                                 ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),
-                            ),
-                        )}
+                            );
+                        })}
                         className="flex gap-4 items-center"
                     >
                         <PETextField
@@ -114,7 +114,7 @@ export function CookProfileBookingRequestChat({
                             placeholder="Deine Nachricht"
                             type="text"
                             errorMessage={errors.message?.message}
-                            {...register('message', { required: 'This field is required' })}
+                            {...register('message', { required: true })}
                         />
                         <PEButton type="submit" title="Senden" />
                     </form>
