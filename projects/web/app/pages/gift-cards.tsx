@@ -9,6 +9,7 @@ import {
     PELabelButton,
     PELabelSingleSelection,
     PENumberTextField,
+    PESingleSelection,
     PETextArea,
     PETextField,
 } from '@people-eat/web-core-components';
@@ -17,6 +18,7 @@ import {
     CostBreakdown,
     CreateOneGiftCardDocument,
     GetGiftCardPageDataDocument,
+    GetGiftCardPageDataQuery,
     SignedInUser,
     formatPrice,
     toDBDateString,
@@ -91,6 +93,7 @@ interface ServerSideProps {
     signedInUser: SignedInUser | null;
     cookieSettings: CookieSettings | null;
     stripePublishableKey: string;
+    addresses: NonNullable<NonNullable<GetGiftCardPageDataQuery['users']['signedInUser']>>['addresses'];
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
@@ -109,6 +112,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,
                       }
                     : null,
+                addresses: data.users.signedInUser?.addresses ?? [],
             },
         };
     } catch (error) {
@@ -117,7 +121,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function GiftCardsPage({ signedInUser, stripePublishableKey, cookieSettings }: ServerSideProps) {
+export default function GiftCardsPage({ signedInUser, stripePublishableKey, cookieSettings, addresses }: ServerSideProps) {
     const [createGiftCard, { loading, data }] = useMutation(CreateOneGiftCardDocument);
     const result = data?.giftCards.createOne;
     let successResult: { giftCardId: string; stripeClientSecret: string } | undefined;
@@ -153,6 +157,13 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey, cook
         };
         acceptedTermsAndConditions: boolean;
         acceptedPrivacyPolicy: boolean;
+        invoiceAddress: {
+            country: string;
+            city: string;
+            postCode: string;
+            street: string;
+            houseNumber: string;
+        };
     }>({
         defaultValues: {
             message: '',
@@ -173,10 +184,17 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey, cook
                     emailAddress: '',
                 },
             },
+            invoiceAddress: {
+                country: '',
+                city: '',
+                postCode: '',
+                street: '',
+                houseNumber: '',
+            },
         },
     });
 
-    const { message, occasion, customOccasion, balance, customBalance, recipient, buyer } = watch();
+    const { message, occasion, customOccasion, balance, customBalance, recipient, buyer, invoiceAddress } = watch();
 
     const [paymentState, setPaymentState] = useState<'SUCCEEDED' | 'FAILED' | 'NOT_STARTED'>('NOT_STARTED');
 
@@ -313,6 +331,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey, cook
                                                     balance: (Number(customBalance) === 0 ? Number(balance) : Number(customBalance)) * 100,
                                                     message,
                                                     occasion: occasion ?? customOccasion,
+                                                    invoiceAddress,
                                                 },
                                             },
                                         }),
@@ -517,6 +536,77 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey, cook
                                             />
                                         </div>
                                     )}
+
+                                    <div className="flex flex-col gap-4 justify-stretch items-stretch">
+                                        <legend className="text-lg font-medium text-gray-900">Rechnungsadresse</legend>
+
+                                        {signedInUser && addresses.length > 0 && (
+                                            <PESingleSelection
+                                                noSelectionText="Meine Adressen"
+                                                options={addresses}
+                                                selectedOption={undefined}
+                                                selectedOptionChanged={(o) => {
+                                                    if (!o) return;
+                                                    setValue('invoiceAddress.postCode', o.postCode);
+                                                    setValue('invoiceAddress.city', o.city);
+                                                    setValue('invoiceAddress.street', o.street);
+                                                    setValue('invoiceAddress.houseNumber', o.houseNumber);
+                                                    setValue('invoiceAddress.country', o.country);
+                                                }}
+                                                optionTitle={({ title }) => title}
+                                                optionIdentifier={({ addressId }) => `${addressId}`}
+                                            />
+                                        )}
+
+                                        <div className="flex gap-4">
+                                            <PETextField
+                                                id="invoice-address-post-code"
+                                                labelTitle="Postletzahl"
+                                                type="text"
+                                                // autoComplete=""
+                                                errorMessage={errors.invoiceAddress?.postCode?.message}
+                                                {...register('invoiceAddress.postCode', { required: 'This field is required' })}
+                                            />
+
+                                            <PETextField
+                                                id="invoice-address-city"
+                                                labelTitle="Stadt"
+                                                type="text"
+                                                // autoComplete=""
+                                                errorMessage={errors.invoiceAddress?.city?.message}
+                                                {...register('invoiceAddress.city', { required: 'This field is required' })}
+                                            />
+                                        </div>
+
+                                        <div className="flex gap-4">
+                                            <PETextField
+                                                id="invoice-address-street"
+                                                labelTitle="Straße"
+                                                type="text"
+                                                // autoComplete=""
+                                                errorMessage={errors.invoiceAddress?.street?.message}
+                                                {...register('invoiceAddress.street', { required: 'This field is required' })}
+                                            />
+
+                                            <PETextField
+                                                id="invoice-address-house-number"
+                                                labelTitle="Hausnummer"
+                                                type="text"
+                                                // autoComplete=""
+                                                errorMessage={errors.invoiceAddress?.houseNumber?.message}
+                                                {...register('invoiceAddress.houseNumber', { required: 'This field is required' })}
+                                            />
+                                        </div>
+
+                                        <PETextField
+                                            id="invoice-address-country"
+                                            labelTitle="Land"
+                                            type="text"
+                                            // autoComplete=""
+                                            errorMessage={errors.invoiceAddress?.country?.message}
+                                            {...register('invoiceAddress.country', { required: 'This field is required' })}
+                                        />
+                                    </div>
 
                                     <fieldset className="space-y-5">
                                         <PECheckbox

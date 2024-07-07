@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 
 export interface PESingleSelectionProps<T> {
     labelTitle?: string;
+    noSelectionText?: string;
 
     options: T[];
     selectedOption?: T;
@@ -18,6 +19,7 @@ export interface PESingleSelectionProps<T> {
 
 export function PESingleSelection<T>({
     labelTitle,
+    noSelectionText,
     options,
     selectedOption,
     selectedOptionChanged,
@@ -34,7 +36,9 @@ export function PESingleSelection<T>({
                     )}
                     <div className={classNames('relative mt-2', className)}>
                         <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-600 sm:text-sm sm:leading-6">
-                            <span className="block truncate">{selectedOption ? optionTitle(selectedOption) : 'Keine Auswahl'}</span>
+                            <span className="block truncate">
+                                {selectedOption ? optionTitle(selectedOption) : noSelectionText ?? 'Keine Auswahl'}
+                            </span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronsUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                             </span>
