@@ -109,7 +109,7 @@ export function PESearchBar({
                             <PECalendar selectedDate={date} onSelectDate={setDate} minDate={minDate} />
                         </div>
                         <div className="flex flex-row-reverse mt-4">
-                            <PEButton title="Suchen" type="submit" />
+                            <PEButton title="Suchen" type="submit" size="constant" />
                         </div>
                     </form>
                 </PEFullPageSheet>
