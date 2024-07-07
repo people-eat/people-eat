@@ -274,8 +274,6 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
             <div>
                 <PEHeader signedInUser={signedInUser} onOpenNewsletter={() => setNewsletterOpen(true)} />
 
-                <span>Test</span>
-
                 <NewsletterDialog open={newsletterOpen} />
 
                 <CookieBannerDialog />
