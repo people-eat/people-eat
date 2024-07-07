@@ -4,6 +4,13 @@ query GetPublicMenuPageData($menuId: String!) {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     publicMenus {
         findOne(menuId: $menuId) {
             menuId

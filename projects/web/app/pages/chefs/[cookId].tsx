@@ -33,6 +33,9 @@ import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 
 const publicCooksRedirect = { redirect: { permanent: false, destination: '/chefs' } };
 
@@ -109,6 +112,7 @@ const incentives = [
 
 interface ServerSideProps {
     initialSignedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
     cook: NonNullable<GetPublicCookPageDataQuery['publicCooks']['findOne']>;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
@@ -125,14 +129,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     if (typeof cookId !== 'string') return publicCooksRedirect;
 
     try {
-        const result = await apolloClient.query({
+        const { data } = await apolloClient.query({
             query: GetPublicCookPageDataDocument,
             variables: {
                 cookId,
             },
         });
 
-        const cook = result.data.publicCooks.findOne;
+        const cook = data.publicCooks.findOne;
 
         if (!cook) return publicCooksRedirect;
 
@@ -143,12 +147,18 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                initialSignedInUser: result.data.users.signedInUser ?? null,
+                initialSignedInUser: data.users.signedInUser ?? null,
                 cook,
-                categories: result.data.categories.findAll,
-                kitchens: result.data.kitchens.findAll,
-                allergies: result.data.allergies.findAll,
+                categories: data.categories.findAll,
+                kitchens: data.kitchens.findAll,
+                allergies: data.allergies.findAll,
                 searchParams,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -156,7 +166,15 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function PublicCookPage({ initialSignedInUser, cook, categories, kitchens, allergies, searchParams }: ServerSideProps) {
+export default function PublicCookPage({
+    initialSignedInUser,
+    cook,
+    categories,
+    kitchens,
+    allergies,
+    searchParams,
+    cookieSettings,
+}: ServerSideProps) {
     const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
 
     const router = useRouter();
@@ -238,6 +256,9 @@ export default function PublicCookPage({ initialSignedInUser, cook, categories, 
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>
                     Privatkoch {cook.user.firstName} {cook.city} | PeopleEat

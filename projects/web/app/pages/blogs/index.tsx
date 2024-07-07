@@ -1,8 +1,11 @@
 import { PEFooter, PEHeader } from '@people-eat/web-components';
 import { GetPageDataDocument, SignedInUser } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import { createApolloClient } from '../../network/apolloClients';
 import Image from 'next/image';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { createApolloClient } from '../../network/apolloClients';
 
 const posts = [
     {
@@ -54,17 +57,24 @@ const posts = [
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
 }
 
-export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const result = await apolloClient.query({ query: GetPageDataDocument });
+        const { data } = await apolloClient.query({ query: GetPageDataDocument });
 
         return {
             props: {
-                signedInUser: result.data.users.signedInUser ?? null,
+                signedInUser: data.users.signedInUser ?? null,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -72,9 +82,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function BlogsPage({ signedInUser }: ServerSideProps) {
+export default function BlogsPage({ signedInUser, cookieSettings }: ServerSideProps) {
     return (
-        <div>
+        <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <PEHeader signedInUser={signedInUser} />
 
             <div className="bg-white py-24 sm:py-32">
@@ -169,6 +182,6 @@ export default function BlogsPage({ signedInUser }: ServerSideProps) {
             </div> */}
 
             <PEFooter />
-        </div>
+        </>
     );
 }

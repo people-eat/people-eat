@@ -23,9 +23,13 @@ import { PELink } from '@people-eat/web-core-components';
 import Head from 'next/head';
 import { NewsletterDialog } from '../../components/NewsletterDialog';
 import { useMutation } from '@apollo/client';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
     cooks: NonNullable<GetPublicCooksPageDataQuery['publicCooks']['findMany']>;
     searchParams: SearchParams;
 }
@@ -40,7 +44,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             : undefined;
 
     try {
-        const result = await apolloClient.query({
+        const { data } = await apolloClient.query({
             query: GetPublicCooksPageDataDocument,
             variables: {
                 request: {
@@ -52,14 +56,20 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         });
 
-        const sortedCooks = [...result.data.publicCooks.findMany];
+        const sortedCooks = [...data.publicCooks.findMany];
         sortedCooks.sort((a, b) => b.menuCount - a.menuCount);
 
         return {
             props: {
-                signedInUser: result.data.users.signedInUser ?? null,
+                signedInUser: data.users.signedInUser ?? null,
                 cooks: sortedCooks,
                 searchParams,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -67,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function PublicCooksPage({ signedInUser, cooks, searchParams }: ServerSideProps) {
+export default function PublicCooksPage({ signedInUser, cooks, searchParams, cookieSettings }: ServerSideProps) {
     const router = useRouter();
 
     const [searchMode, setSearchMode] = useState<SearchMode>('COOKS');
@@ -99,6 +109,9 @@ export default function PublicCooksPage({ signedInUser, cooks, searchParams }: S
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>Finde deinen Privatkoch - Top Köche in deiner Nähe | PeopleEat</title>
                 <meta

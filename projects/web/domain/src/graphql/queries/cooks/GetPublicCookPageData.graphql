@@ -4,6 +4,13 @@ query GetPublicCookPageData($cookId: String!) {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     publicCooks {
         findOne(cookId: $cookId) {
             cookId

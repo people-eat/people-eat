@@ -41,6 +41,9 @@ import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import Head from 'next/head';
 import classNames from 'classnames';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 
 const publicMenusRedirect = { redirect: { permanent: false, destination: '/menus' } };
 
@@ -192,6 +195,7 @@ function toCostBreakdown({
 
 interface ServerSideProps {
     initialSignedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
     menu: NonNullable<GetPublicMenuPageDataQuery['publicMenus']['findOne']>;
     allergies: AllergyOption[];
     searchParams: SearchParams;
@@ -207,14 +211,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     if (typeof menuId !== 'string') return publicMenusRedirect;
 
     try {
-        const result = await apolloClient.query({
+        const { data } = await apolloClient.query({
             query: GetPublicMenuPageDataDocument,
             variables: {
                 menuId,
             },
         });
 
-        const menu = result.data.publicMenus.findOne;
+        const menu = data.publicMenus.findOne;
 
         if (!menu) return publicMenusRedirect;
 
@@ -225,11 +229,17 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                initialSignedInUser: result.data.users.signedInUser ?? null,
+                initialSignedInUser: data.users.signedInUser ?? null,
                 menu,
-                allergies: result.data.allergies.findAll,
+                allergies: data.allergies.findAll,
                 searchParams,
-                stripePublishableKey: result.data.stripePublishableKey ?? null,
+                stripePublishableKey: data.stripePublishableKey ?? null,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -237,7 +247,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function PublicMenuPage({ initialSignedInUser, menu, allergies, searchParams, stripePublishableKey }: ServerSideProps) {
+export default function PublicMenuPage({
+    initialSignedInUser,
+    menu,
+    allergies,
+    searchParams,
+    stripePublishableKey,
+    cookieSettings,
+}: ServerSideProps) {
     // hack to not run useEffect for signedInUser change on initial render
     const isInitialMount = useRef(true);
     const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
@@ -418,6 +435,9 @@ export default function PublicMenuPage({ initialSignedInUser, menu, allergies, s
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>
                     Fine Dining Menü {menu.title} von Koch {menu.cook.user.firstName}

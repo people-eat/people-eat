@@ -4,6 +4,13 @@ query GetPublicCooksPageData($request: FindManyPublicCooksRequest!) {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     publicCooks {
         findMany(request: $request) {
             cookId

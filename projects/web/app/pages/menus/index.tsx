@@ -23,9 +23,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { NewsletterDialog } from '../../components/NewsletterDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
     menus: NonNullable<GetPublicMenusPageDataQuery['publicMenus']['findMany']>;
     searchParams: SearchParams;
 }
@@ -40,7 +44,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             : undefined;
 
     try {
-        const result = await apolloClient.query({
+        const { data } = await apolloClient.query({
             query: GetPublicMenusPageDataDocument,
             variables: {
                 request: {
@@ -57,9 +61,15 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                signedInUser: result.data.users.signedInUser ?? null,
-                menus: result.data.publicMenus.findMany,
+                signedInUser: data.users.signedInUser ?? null,
+                menus: data.publicMenus.findMany,
                 searchParams,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -67,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function PublicMenusPage({ signedInUser, menus, searchParams }: ServerSideProps) {
+export default function PublicMenusPage({ signedInUser, menus, searchParams, cookieSettings }: ServerSideProps) {
     const router = useRouter();
 
     const [searchMode, setSearchMode] = useState<SearchMode>('MENUS');
@@ -107,6 +117,9 @@ export default function PublicMenusPage({ signedInUser, menus, searchParams }: S
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>Exklusive Menüs für Zuhause – Buche deinen Privatkoch bei PeopleEat</title>
                 <meta name="description" content="Erstelle eigene Menüs und genieße kulinarische Erlebnismomente bei dir Zuhause" />
