@@ -25,12 +25,12 @@ import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-
 import { loadStripe } from '@stripe/stripe-js';
 import classNames from 'classnames';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
+import Router from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createApolloClient } from '../network/apolloClients';
-import Router from 'next/router';
-import Head from 'next/head';
 
 const balances = [100, 150, 200, 300, 500];
 

@@ -4,9 +4,9 @@ import { PELink } from '@people-eat/web-core-components';
 import { GetPageDataDocument, SignedInUser } from '@people-eat/web-domain';
 import { MinusIcon, PlusIcon } from 'lucide-react';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import { createApolloClient } from '../network/apolloClients';
-import Head from 'next/head';
 
 const faqs = [
     {

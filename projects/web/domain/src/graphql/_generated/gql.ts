@@ -17,6 +17,7 @@ const documents = {
     "fragment CategoryOption on Category {\n  categoryId\n  title\n}": types.CategoryOptionFragmentDoc,
     "fragment ChatMessage on ChatMessage {\n  chatMessageId\n  bookingRequestId\n  message\n  generated\n  createdBy\n  createdAt\n}": types.ChatMessageFragmentDoc,
     "fragment ConfiguredMenu on ConfiguredMenu {\n  menuId\n  title\n  description\n  greetingFromKitchen\n  kitchenId\n  courses {\n    index\n    title\n    mealTitle\n    mealDescription\n    mealImageUrl\n    mealType\n  }\n}": types.ConfiguredMenuFragmentDoc,
+    "fragment CookieSettings on SessionCookieSettings {\n  googleAnalytics\n  clarity\n}": types.CookieSettingsFragmentDoc,
     "fragment KitchenOption on Kitchen {\n  kitchenId\n  title\n}": types.KitchenOptionFragmentDoc,
     "fragment LanguageOption on Language {\n  languageId\n  title\n}": types.LanguageOptionFragmentDoc,
     "fragment SignedInUser on User {\n  userId\n  firstName\n  profilePictureUrl\n  isCook\n  isAdmin\n}": types.SignedInUserFragmentDoc,
@@ -95,7 +96,7 @@ const documents = {
     "query FindCurrentSession {\n  sessions {\n    current {\n      cookieSettings {\n        sessionCookie\n        googleAnalytics\n      }\n    }\n  }\n}": types.FindCurrentSessionDocument,
     "query GetGiftCardPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  stripePublishableKey\n}": types.GetGiftCardPageDataDocument,
     "query GetOneCouponCode($couponCodeId: String!) {\n  couponCodes {\n    findOne(couponCodeId: $couponCodeId) {\n      ... on GiftCardPromoCode {\n        giftCardPromoCodeId\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n        createdAt\n      }\n      ... on GiftCard {\n        redeemCode\n        balance {\n          amount\n          currencyCode\n        }\n        expiresAt\n      }\n    }\n  }\n}": types.GetOneCouponCodeDocument,
-    "query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetPageDataDocument,
+    "query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  sessions {\n    current {\n      cookieSettings {\n        ...CookieSettings\n      }\n    }\n  }\n}": types.GetPageDataDocument,
     "query GetPrivacyPolicyPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicPrivacyPolicyUpdates {\n    findLatest {\n      privacyPolicyUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetPrivacyPolicyPageDataDocument,
     "query GetSignedInUser {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}": types.GetSignedInUserDocument,
     "query GetTermsAndConditionsPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  publicTermsUpdates {\n    findLatest {\n      termsUpdateId\n      englishText\n      germanText\n      createdAt\n    }\n  }\n}": types.GetTermsAndConditionsPageDataDocument,
@@ -169,6 +170,10 @@ export function gql(source: "fragment ChatMessage on ChatMessage {\n  chatMessag
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "fragment ConfiguredMenu on ConfiguredMenu {\n  menuId\n  title\n  description\n  greetingFromKitchen\n  kitchenId\n  courses {\n    index\n    title\n    mealTitle\n    mealDescription\n    mealImageUrl\n    mealType\n  }\n}"): (typeof documents)["fragment ConfiguredMenu on ConfiguredMenu {\n  menuId\n  title\n  description\n  greetingFromKitchen\n  kitchenId\n  courses {\n    index\n    title\n    mealTitle\n    mealDescription\n    mealImageUrl\n    mealType\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "fragment CookieSettings on SessionCookieSettings {\n  googleAnalytics\n  clarity\n}"): (typeof documents)["fragment CookieSettings on SessionCookieSettings {\n  googleAnalytics\n  clarity\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -484,7 +489,7 @@ export function gql(source: "query GetOneCouponCode($couponCodeId: String!) {\n 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}"): (typeof documents)["query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n}"];
+export function gql(source: "query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  sessions {\n    current {\n      cookieSettings {\n        ...CookieSettings\n      }\n    }\n  }\n}"): (typeof documents)["query GetPageData {\n  users {\n    signedInUser: me {\n      ...SignedInUser\n    }\n  }\n  sessions {\n    current {\n      cookieSettings {\n        ...CookieSettings\n      }\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

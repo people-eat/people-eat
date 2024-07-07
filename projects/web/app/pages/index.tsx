@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { Disclosure } from '@headlessui/react';
 import { PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
@@ -32,11 +33,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../components/analytics/CookieSettings';
 import { CookieBannerDialog } from '../components/CookieBannerDialog';
 import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
-import { useMutation } from '@apollo/client';
 
 const faqs = [
     {
@@ -203,6 +206,7 @@ const bulletPointList3 = [
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
     searchParams: SearchParams;
+    cookieSettings: CookieSettings | null;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
@@ -216,6 +220,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             props: {
                 signedInUser: result.data.users.signedInUser ?? null,
                 searchParams,
+                cookieSettings: result.data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: result.data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: result.data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -224,7 +234,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function HomePage({ signedInUser, searchParams }: ServerSideProps) {
+export default function HomePage({ signedInUser, searchParams, cookieSettings }: ServerSideProps) {
     const router = useRouter();
 
     const [searchMode, setSearchMode] = useState<SearchMode>('MENUS');
@@ -256,6 +266,9 @@ export default function HomePage({ signedInUser, searchParams }: ServerSideProps
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>Koch für Zuhause | Privatkoch mieten | PeopleEat</title>
                 <meta

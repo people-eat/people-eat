@@ -1,8 +1,8 @@
+import { PEFooter, PEHeader } from '@people-eat/web-components';
 import { GetPrivacyPolicyPageDataDocument, GetPrivacyPolicyPageDataQuery, SignedInUser } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import { createApolloClient } from '../network/apolloClients';
-import { PEFooter, PEHeader } from '@people-eat/web-components';
 import Head from 'next/head';
+import { createApolloClient } from '../network/apolloClients';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;

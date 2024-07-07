@@ -27,7 +27,6 @@ export function CookieBannerDialog() {
     const { acceptedSessionCookies, acceptedThirdPartyCookies } = watch();
 
     useEffect(() => {
-        console.log('called');
         if (!data?.sessions.current?.cookieSettings && !loading) setShowCookieBanner(true);
 
         if (data?.sessions.current?.cookieSettings) {
@@ -85,6 +84,7 @@ export function CookieBannerDialog() {
                                     request: {
                                         sessionCookie: false,
                                         googleAnalytics: false,
+                                        clarity: false,
                                     },
                                 },
                             }).then((result) => {
@@ -102,6 +102,7 @@ export function CookieBannerDialog() {
                                     request: {
                                         sessionCookie: acceptedSessionCookies,
                                         googleAnalytics: acceptedThirdPartyCookies,
+                                        clarity: acceptedThirdPartyCookies,
                                     },
                                 },
                             }).then((result) => {
@@ -118,6 +119,7 @@ export function CookieBannerDialog() {
                                     request: {
                                         sessionCookie: true,
                                         googleAnalytics: true,
+                                        clarity: true,
                                     },
                                 },
                             }).then((result) => {

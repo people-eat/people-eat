@@ -17,13 +17,13 @@ import {
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { PEAuthDialog } from '../components/PEAuthDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
-import Head from 'next/head';
 
 interface ServerSideProps {
     initialSignedInUser: SignedInUser | null;

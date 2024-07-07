@@ -1,0 +1,4 @@
+fragment CookieSettings on SessionCookieSettings {
+    googleAnalytics
+    clarity
+}
