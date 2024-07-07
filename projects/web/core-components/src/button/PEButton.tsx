@@ -36,6 +36,7 @@ export function PEButton({ title, type = 'primary', size = 'dynamic', onClick, c
                     { 'px-4 py-2.5': size === 'constant' },
                     { 'text-xs sm:text-sm': size === 'dynamic' },
                     { 'text-sm': size === 'constant' },
+                    'text-nowrap',
                     className,
                 )}
                 onClick={onClick}
@@ -53,6 +54,7 @@ export function PEButton({ title, type = 'primary', size = 'dynamic', onClick, c
                 { 'px-4 py-2.5': size === 'constant' },
                 { 'text-xs sm:text-sm': size === 'dynamic' },
                 { 'text-sm': size === 'constant' },
+                'text-nowrap',
                 className,
             )}
             onClick={onClick}
