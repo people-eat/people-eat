@@ -29,6 +29,7 @@ import { useForm } from 'react-hook-form';
 import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
 import { createApolloClient } from '../../network/apolloClients';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -42,6 +43,7 @@ export interface EditCookProfileFormInputs {
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
+    cookieSettings: CookieSettings | null;
     initialCookProfile: NonNullable<GetCookProfilePersonalInformationPageDataQuery['cooks']['findOne']>;
     languages: NonNullable<GetCookProfilePersonalInformationPageDataQuery['languages']['findAll']>;
 }
@@ -56,17 +58,23 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
 
-        const result = await apolloClient.query({ query: GetCookProfilePersonalInformationPageDataDocument, variables: { cookId } });
-        const initialCookProfile = result.data.cooks.findOne;
+        const { data } = await apolloClient.query({ query: GetCookProfilePersonalInformationPageDataDocument, variables: { cookId } });
+        const initialCookProfile = data.cooks.findOne;
         if (!initialCookProfile) return signInPageRedirect;
 
-        const languages = result.data.languages.findAll;
+        const languages = data.languages.findAll;
 
         return {
             props: {
                 signedInUser,
                 initialCookProfile,
                 languages,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {

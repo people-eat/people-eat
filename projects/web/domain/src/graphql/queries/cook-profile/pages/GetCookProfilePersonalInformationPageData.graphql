@@ -4,6 +4,13 @@ query GetCookProfilePersonalInformationPageData($cookId: String!) {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     languages {
         findAll {
             languageId

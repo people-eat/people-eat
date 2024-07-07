@@ -19,12 +19,14 @@ import { createApolloClient } from '../../../network/apolloClients';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
+    cookieSettings: CookieSettings | null;
     hasStripePayoutMethodActivated: boolean;
     bookingRequests: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findMany']>;
     selectedBookingRequest: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']> | null;
@@ -43,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
 
-        const result = await apolloClient.query({
+        const { data } = await apolloClient.query({
             query: GetCookProfileBookingsPageDataDocument,
             variables: {
                 cookId,
@@ -52,9 +54,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         });
 
-        const hasStripePayoutMethodActivated = result.data.cooks.findOne?.hasStripePayoutMethodActivated ?? false;
-        const bookingRequests = result.data.cooks.bookingRequests.findMany ?? [];
-        const selectedBookingRequest = result.data.cooks.bookingRequests.findOne ?? null;
+        const hasStripePayoutMethodActivated = data.cooks.findOne?.hasStripePayoutMethodActivated ?? false;
+        const bookingRequests = data.cooks.bookingRequests.findMany ?? [];
+        const selectedBookingRequest = data.cooks.bookingRequests.findOne ?? null;
 
         return {
             props: {
@@ -63,6 +65,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 bookingRequests,
                 selectedBookingRequest,
                 tab: toCookProfileBookingRequestDetailsTab(query.tab),
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {

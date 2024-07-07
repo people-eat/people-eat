@@ -8,6 +8,9 @@ import {
     Unpacked,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { createApolloClient } from '../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
@@ -15,6 +18,7 @@ const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-i
 interface ServerSideProps {
     signedInUser: SignedInUser;
     favoriteCooks: Unpacked<NonNullable<GetProfileFavoriteCooksPageDataQuery['users']['followings']['findAll']>>[];
+    cookieSettings: CookieSettings | null;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
@@ -26,12 +30,18 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         if (!signedInUser) return signInPageRedirect;
         const userId = signedInUser.userId;
 
-        const result = await apolloClient.query({ query: GetProfileFavoriteCooksPageDataDocument, variables: { userId } });
+        const { data } = await apolloClient.query({ query: GetProfileFavoriteCooksPageDataDocument, variables: { userId } });
 
         return {
             props: {
                 signedInUser,
-                favoriteCooks: result.data.users.followings.findAll ?? [],
+                favoriteCooks: data.users.followings.findAll ?? [],
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -39,9 +49,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function ProfileFavoriteCooksPage({ signedInUser, favoriteCooks }: ServerSideProps) {
+export default function ProfileFavoriteCooksPage({ signedInUser, favoriteCooks, cookieSettings }: ServerSideProps) {
     return (
-        <div>
+        <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <PEHeader signedInUser={signedInUser} />
 
             <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-16">
@@ -59,6 +72,6 @@ export default function ProfileFavoriteCooksPage({ signedInUser, favoriteCooks }
 
                 {/* @todo: display favorite chefs */}
             </div>
-        </div>
+        </>
     );
 }

@@ -18,12 +18,14 @@ import { useState } from 'react';
 import { CookProfileMealDialog } from '../../../components/CookProfileMealDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
+    cookieSettings: CookieSettings | null;
     initialMeals: GetCookProfileMealsPageDataQuery['cooks']['meals']['findMany'];
 }
 
@@ -37,12 +39,18 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
 
-        const result = await apolloClient.query({ query: GetCookProfileMealsPageDataDocument, variables: { cookId } });
+        const { data } = await apolloClient.query({ query: GetCookProfileMealsPageDataDocument, variables: { cookId } });
 
         return {
             props: {
                 signedInUser,
-                initialMeals: result.data.cooks.meals.findMany,
+                initialMeals: data.cooks.meals.findMany,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {

@@ -1,8 +1,16 @@
 query GetProfilePersonalInformationPageData {
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     users {
         signedInUser: me {
             ...SignedInUser
         }
+
         me {
             userId
             firstName

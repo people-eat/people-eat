@@ -11,8 +11,12 @@ import {
 import classNames from 'classnames';
 import { Filter } from 'lucide-react';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { AnalyticsClarity } from '../../../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../../../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import {
     PEProfileBookingRequestDetails,
     ProfileBookingRequestDetailsTab,
@@ -23,12 +27,12 @@ import {
     toProfileGlobalBookingRequestDetailsTab,
 } from '../../../components/PEProfileGlobalBookingRequestDetails';
 import { createApolloClient } from '../../../network/apolloClients';
-import Head from 'next/head';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
+    cookieSettings: CookieSettings | null;
     bookingRequests: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findMany']>>[];
     selectedBookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>> | null;
     globalBookingRequests: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findMany']>>[];
@@ -65,7 +69,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         if (!signedInUser) return signInPageRedirect;
         const userId = signedInUser.userId;
 
-        const result = await apolloClient.query({
+        const { data } = await apolloClient.query({
             query: GetProfileBookingsPageDataDocument,
             variables: {
                 userId,
@@ -76,10 +80,10 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         });
 
-        const bookingRequests = result.data.users.bookingRequests.findMany ?? [];
-        const bookingRequest = result.data.users.bookingRequests.findOne ?? null;
-        const globalBookingRequests = result.data.users.globalBookingRequests.findMany ?? [];
-        const globalBookingRequest = result.data.users.globalBookingRequests.findOne ?? null;
+        const bookingRequests = data.users.bookingRequests.findMany ?? [];
+        const bookingRequest = data.users.bookingRequests.findOne ?? null;
+        const globalBookingRequests = data.users.globalBookingRequests.findMany ?? [];
+        const globalBookingRequest = data.users.globalBookingRequests.findOne ?? null;
 
         return {
             props: {
@@ -89,6 +93,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 globalBookingRequests,
                 selectedGlobalBookingRequest: globalBookingRequest,
                 tab: toProfileBookingRequestDetailsTab(query.tab),
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -104,6 +114,7 @@ export default function ProfileBookingsPage({
     globalBookingRequests: initialGlobalBookingRequests,
     selectedGlobalBookingRequest: initialSelectedGlobalBookingRequest,
     tab,
+    cookieSettings,
 }: ServerSideProps) {
     const router = useRouter();
 
@@ -139,6 +150,9 @@ export default function ProfileBookingsPage({
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>
                     PeopleEat {'>'} User Profile {'>'} Bookings

@@ -10,6 +10,9 @@ import {
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { PEEditPasswordCard } from '../../components/PEEditPasswordCard';
 import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
@@ -20,15 +23,16 @@ const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-i
 interface ServerSideProps {
     signedInUser: SignedInUser;
     initialProfile: NonNullable<GetProfilePersonalInformationPageDataQuery['users']['me']>;
+    cookieSettings: CookieSettings | null;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const result = await apolloClient.query({ query: GetProfilePersonalInformationPageDataDocument });
-        const signedInUser = result.data.users.signedInUser;
-        const initialProfile = result.data.users.me;
+        const { data } = await apolloClient.query({ query: GetProfilePersonalInformationPageDataDocument });
+        const signedInUser = data.users.signedInUser;
+        const initialProfile = data.users.me;
 
         if (!signedInUser || !initialProfile) return signInPageRedirect;
 
@@ -36,6 +40,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             props: {
                 signedInUser,
                 initialProfile,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -43,7 +53,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function ProfilePersonalInformationPage({ signedInUser, initialProfile }: ServerSideProps) {
+export default function ProfilePersonalInformationPage({ signedInUser, initialProfile, cookieSettings }: ServerSideProps) {
     const userId = signedInUser.userId;
     const [profile, setProfile] = useState(initialProfile);
 
@@ -70,7 +80,10 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
     const loading = loadingUpdatedProfile || loadingUpdateProfilePicture;
 
     return (
-        <div>
+        <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <PEHeader signedInUser={signedInUser} />
 
             <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
@@ -155,6 +168,6 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
 
                 <PEEditPasswordCard userId={userId} />
             </div>
-        </div>
+        </>
     );
 }

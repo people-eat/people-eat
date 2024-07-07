@@ -5,6 +5,13 @@ query GetProfileBookings(
     $fetchBookingRequest: Boolean!
     $fetchGlobalBookingRequest: Boolean!
 ) {
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     users {
         bookingRequests(userId: $userId) {
             findMany {

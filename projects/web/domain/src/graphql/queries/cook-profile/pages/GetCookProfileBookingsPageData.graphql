@@ -4,6 +4,13 @@ query GetCookProfileBookingsPageData($cookId: String!, $bookingRequestId: String
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     cooks {
         findOne(cookId: $cookId) {
             hasStripePayoutMethodActivated

@@ -4,6 +4,13 @@ query GetCookProfileMealsPageData($cookId: String!) {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     cooks {
         meals(cookId: $cookId) {
             findMany {

@@ -37,12 +37,14 @@ import { PEAddMealToCourseDialog } from '../../../components/PEAddMealToCourseDi
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
+    cookieSettings: CookieSettings | null;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
     meals: NonNullable<NonNullable<GetCookProfileMenusCreatePageDataQuery['users']['signedInUser']>['cook']>['meals'];
@@ -52,17 +54,23 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const result = await apolloClient.query({ query: GetCookProfileMenusCreatePageDataDocument });
-        const signedInUser = result.data.users.signedInUser;
+        const { data } = await apolloClient.query({ query: GetCookProfileMenusCreatePageDataDocument });
+        const signedInUser = data.users.signedInUser;
         if (!signedInUser) return signInPageRedirect;
         if (!signedInUser.isCook || !signedInUser.cook) return howToBecomeAChefRedirect;
 
         return {
             props: {
                 signedInUser,
-                categories: result.data.categories.findAll,
-                kitchens: result.data.kitchens.findAll,
+                categories: data.categories.findAll,
+                kitchens: data.kitchens.findAll,
                 meals: signedInUser.cook.meals,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {

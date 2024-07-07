@@ -15,6 +15,13 @@ query GetCookProfileMenuPageData($menuId: String!, $cookId: String!) {
             }
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     cooks {
         menus(cookId: $cookId) {
             findOne(menuId: $menuId) {

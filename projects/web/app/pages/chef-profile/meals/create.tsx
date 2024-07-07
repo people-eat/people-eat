@@ -7,12 +7,14 @@ import { useRouter } from 'next/router';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
+    cookieSettings: CookieSettings | null;
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
@@ -27,6 +29,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         return {
             props: {
                 signedInUser,
+                cookieSettings: userData.data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: userData.data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: userData.data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {

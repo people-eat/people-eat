@@ -27,6 +27,7 @@ import { PEEditMenuCommon } from '../../../components/PEEditMenuCommon';
 import { PEEditMenuCoursesForm } from '../../../components/PEEditMenuCoursesForm';
 import { PEEditMenuPriceForm } from '../../../components/PEEditMenuPriceForm';
 import { createApolloClient } from '../../../network/apolloClients';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const tabs = [
     { name: 'Allgemeines', icon: Rows4 },
@@ -40,6 +41,7 @@ const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/
 interface ServerSideProps {
     initialSelectedTab: number;
     signedInUser: SignedInUser;
+    cookieSettings: CookieSettings | null;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
     meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['users']['signedInUser']>['cook']>['meals'];
@@ -60,17 +62,23 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
 
-        const result = await apolloClient.query({ query: GetCookProfileMenuPageDataDocument, variables: { cookId, menuId } });
-        const menu = result.data.cooks.menus.findOne!;
+        const { data } = await apolloClient.query({ query: GetCookProfileMenuPageDataDocument, variables: { cookId, menuId } });
+        const menu = data.cooks.menus.findOne!;
 
         return {
             props: {
                 initialSelectedTab: tab ? Number(tab) ?? 0 : 0,
                 signedInUser,
-                categories: result.data.categories.findAll,
-                kitchens: result.data.kitchens.findAll,
-                meals: result.data.users.signedInUser?.cook?.meals ?? [],
+                categories: data.categories.findAll,
+                kitchens: data.kitchens.findAll,
+                meals: data.users.signedInUser?.cook?.meals ?? [],
                 menu,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {

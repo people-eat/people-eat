@@ -1,4 +1,11 @@
 query GetCookProfileBookings($cookId: String!, $bookingRequestId: String!, $fetchBookingRequest: Boolean!) {
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     cooks {
         findOne(cookId: $cookId) {
             hasStripePayoutMethodActivated
