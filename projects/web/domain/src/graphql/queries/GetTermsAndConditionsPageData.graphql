@@ -4,6 +4,13 @@ query GetTermsAndConditionsPageData {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     publicTermsUpdates {
         findLatest {
             termsUpdateId

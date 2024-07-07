@@ -21,12 +21,16 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../components/analytics/CookieSettings';
 import { PEAuthDialog } from '../components/PEAuthDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 
 interface ServerSideProps {
     initialSignedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
     allergies: AllergyOption[];
@@ -37,16 +41,22 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const result = await apolloClient.query({ query: GetGlobalBookingRequestPageDataDocument });
+        const { data } = await apolloClient.query({ query: GetGlobalBookingRequestPageDataDocument });
         const searchParams = toValidatedSearchParams(query);
 
         return {
             props: {
-                initialSignedInUser: result.data.users.signedInUser ?? null,
-                categories: result.data.categories.findAll,
-                kitchens: result.data.kitchens.findAll,
-                allergies: result.data.allergies.findAll,
+                initialSignedInUser: data.users.signedInUser ?? null,
+                categories: data.categories.findAll,
+                kitchens: data.kitchens.findAll,
+                allergies: data.allergies.findAll,
                 searchParams,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -54,7 +64,14 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function GlobalBookingRequestPage({ initialSignedInUser, categories, kitchens, allergies, searchParams }: ServerSideProps) {
+export default function GlobalBookingRequestPage({
+    initialSignedInUser,
+    categories,
+    kitchens,
+    allergies,
+    searchParams,
+    cookieSettings,
+}: ServerSideProps) {
     const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
 
     const router = useRouter();
@@ -128,6 +145,9 @@ export default function GlobalBookingRequestPage({ initialSignedInUser, categori
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>Privatkoch für einen Abend buchen </title>
                 <meta

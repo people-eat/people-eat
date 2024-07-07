@@ -4,5 +4,12 @@ query GetGiftCardPageData {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     stripePublishableKey
 }

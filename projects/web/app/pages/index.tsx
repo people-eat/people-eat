@@ -214,16 +214,16 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const searchParams = toValidatedSearchParams(query);
 
     try {
-        const result = await apolloClient.query({ query: GetPageDataDocument });
+        const { data } = await apolloClient.query({ query: GetPageDataDocument });
 
         return {
             props: {
-                signedInUser: result.data.users.signedInUser ?? null,
+                signedInUser: data.users.signedInUser ?? null,
                 searchParams,
-                cookieSettings: result.data.sessions.current?.cookieSettings
+                cookieSettings: data.sessions.current?.cookieSettings
                     ? {
-                          googleAnalytics: result.data.sessions.current.cookieSettings.googleAnalytics ?? null,
-                          clarity: result.data.sessions.current.cookieSettings.clarity ?? null,
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
                       }
                     : null,
             },

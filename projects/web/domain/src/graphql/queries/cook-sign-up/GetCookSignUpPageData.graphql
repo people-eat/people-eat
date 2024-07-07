@@ -4,6 +4,13 @@ query GetCookSignUpPageData {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     languages {
         findAll {
             languageId

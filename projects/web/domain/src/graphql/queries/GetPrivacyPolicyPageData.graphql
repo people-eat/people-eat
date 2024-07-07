@@ -4,6 +4,13 @@ query GetPrivacyPolicyPageData {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     publicPrivacyPolicyUpdates {
         findLatest {
             privacyPolicyUpdateId

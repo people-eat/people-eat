@@ -31,6 +31,9 @@ import Router from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createApolloClient } from '../network/apolloClients';
+import { CookieSettings } from '../components/analytics/CookieSettings';
+import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
+import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 
 const balances = [100, 150, 200, 300, 500];
 
@@ -86,6 +89,7 @@ const homePageRedirect = { redirect: { permanent: false, destination: '/' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
     stripePublishableKey: string;
 }
 
@@ -99,6 +103,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             props: {
                 signedInUser: data.users.signedInUser ?? null,
                 stripePublishableKey: data.stripePublishableKey!,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -107,7 +117,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function GiftCardsPage({ signedInUser, stripePublishableKey }: ServerSideProps) {
+export default function GiftCardsPage({ signedInUser, stripePublishableKey, cookieSettings }: ServerSideProps) {
     const [createGiftCard, { loading, data }] = useMutation(CreateOneGiftCardDocument);
     const result = data?.giftCards.createOne;
     let successResult: { giftCardId: string; stripeClientSecret: string } | undefined;
@@ -197,6 +207,9 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey }: Se
 
     return (
         <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <Head>
                 <title>Geschenkgutscheine - PeopleEat: Verschenke Einzigartige Kulinarische Erlebnisse</title>
                 <meta

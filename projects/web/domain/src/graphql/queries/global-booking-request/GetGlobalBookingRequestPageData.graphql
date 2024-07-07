@@ -4,6 +4,13 @@ query GetGlobalBookingRequestPageData {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     categories {
         findAll {
             categoryId

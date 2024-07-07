@@ -11,25 +11,42 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../components/analytics/CookieSettings';
 import { createApolloClient } from '../network/apolloClients';
 
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
 
-export const getServerSideProps: GetServerSideProps<object> = async ({ req }) => {
+interface ServerSideProps {
+    cookieSettings: CookieSettings | null;
+}
+
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const result = await apolloClient.query({ query: GetPageDataDocument });
+        const { data } = await apolloClient.query({ query: GetPageDataDocument });
 
-        const signedInUser = result.data.users.signedInUser;
+        const signedInUser = data.users.signedInUser;
 
         if (signedInUser) {
             return profilePageRedirect;
         }
 
-        return { props: {} };
+        return {
+            props: {
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
+            },
+        };
     } catch (error) {
-        return { props: {} };
+        console.log(error);
+        throw new Error();
     }
 };
 
@@ -38,7 +55,7 @@ interface SignInFormInputs {
     emailAddress: string;
 }
 
-export default function SignInPage() {
+export default function SignInPage({ cookieSettings }: ServerSideProps) {
     const router = useRouter();
     const [showForgotPasswordAlert, setShowForgotPasswordAlert] = useState(false);
 
@@ -62,7 +79,10 @@ export default function SignInPage() {
     const showForgotPasswordFailedAlert = forgotPasswordData ? !forgotPasswordData.users.oneTimeAccessToken.success : false;
 
     return (
-        <div>
+        <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <PEHeader signedInUser={null} />
 
             <LoadingDialog active={loading || createOneTimeAccessTokenLoading} />
@@ -140,6 +160,6 @@ export default function SignInPage() {
                     </form>
                 </PEDialog>
             </div>
-        </div>
+        </>
     );
 }

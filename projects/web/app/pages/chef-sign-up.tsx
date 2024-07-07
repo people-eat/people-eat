@@ -12,6 +12,9 @@ import {
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../components/analytics/CookieSettings';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 
@@ -19,6 +22,7 @@ const cookProfilePageRedirect = { redirect: { permanent: false, destination: '/c
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
+    cookieSettings: CookieSettings | null;
     languages: LanguageOption[];
 }
 
@@ -26,9 +30,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const result = await apolloClient.query({ query: GetCookSignUpPageDataDocument });
+        const { data } = await apolloClient.query({ query: GetCookSignUpPageDataDocument });
 
-        const signedInUser = result.data.users.signedInUser;
+        const signedInUser = data.users.signedInUser;
 
         if (signedInUser?.isCook) {
             return cookProfilePageRedirect;
@@ -37,7 +41,13 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         return {
             props: {
                 signedInUser: signedInUser ?? null,
-                languages: result.data.languages.findAll,
+                languages: data.languages.findAll,
+                cookieSettings: data.sessions.current?.cookieSettings
+                    ? {
+                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
+                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
+                      }
+                    : null,
             },
         };
     } catch (error) {
@@ -45,7 +55,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function ChefSignUpPage({ signedInUser, languages }: ServerSideProps) {
+export default function ChefSignUpPage({ signedInUser, languages, cookieSettings }: ServerSideProps) {
     const router = useRouter();
 
     const [selectedLanguages, setSelectedLanguages] = useState<LanguageOption[]>([]);
@@ -63,7 +73,10 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
     const showSuccessAlertForExistingUser = createCookData?.cooks.success ?? false;
 
     return (
-        <div>
+        <>
+            <AnalyticsGoogle enabled={cookieSettings?.googleAnalytics} />
+            <AnalyticsClarity enabled={cookieSettings?.clarity} />
+
             <PEHeader signedInUser={signedInUser} />
 
             <LoadingDialog active={loading || createCookLoading} />
@@ -222,6 +235,6 @@ export default function ChefSignUpPage({ signedInUser, languages }: ServerSidePr
                     setRank={setRank}
                 />
             </div>
-        </div>
+        </>
     );
 }
