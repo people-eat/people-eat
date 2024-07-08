@@ -2,6 +2,7 @@ import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'tailwindcss/tailwind.css';
+import { CookieBannerDialog } from '../components/CookieBannerDialog';
 import { createComplexApolloClient } from '../network/apolloClients';
 import './styles.css';
 
@@ -17,6 +18,7 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
             <main className="app">
                 <ApolloProvider client={apolloClient}>
                     <Component {...pageProps} />
+                    <CookieBannerDialog />
                 </ApolloProvider>
             </main>
         </>

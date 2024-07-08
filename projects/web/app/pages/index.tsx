@@ -36,7 +36,6 @@ import { useCallback, useState } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
-import { CookieBannerDialog } from '../components/CookieBannerDialog';
 import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
@@ -288,8 +287,6 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings }:
                 <PEHeader signedInUser={signedInUser} onOpenNewsletter={() => setNewsletterOpen(true)} />
 
                 <NewsletterDialog open={newsletterOpen} />
-
-                <CookieBannerDialog />
 
                 <div>
                     <div className="relative bg-gray-900">
