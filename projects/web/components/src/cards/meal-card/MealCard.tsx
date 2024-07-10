@@ -50,7 +50,7 @@ export function MealCard(props: MealCardProps) {
     return (
         <li className={classNames('flex flex-col lg:flex-row-reverse rounded-xl shadow-md bg-white', className)}>
             <Image
-                src={imageUrl || '/placeholders/meal.png'}
+                src={imageUrl ? imageUrl + '?el=720' : '/placeholders/meal.png'}
                 alt=""
                 width={200}
                 height={200}
