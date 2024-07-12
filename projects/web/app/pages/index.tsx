@@ -410,7 +410,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings }:
                         <div className="relative z-4 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:bg-transparent lg:py-16">
                             <div className="absolute inset-x-0 h-1/2 bg-gray-50 lg:hidden" aria-hidden="true" />
                             <div className="mx-auto max-w-md px-6 sm:max-w-3xl lg:max-w-none lg:p-0">
-                                <div className="aspect-h-6 aspect-w-10 sm:aspect-h-1 sm:aspect-w-2 lg:aspect-w-1">
+                                <div className="aspect-h-6 aspect-w-10 sm:aspect-h-1 sm:aspect-w-2 lg:aspect-w-1 z-10">
                                     <Image
                                         className="rounded-3xl object-cover object-center shadow-2xl"
                                         src="/home/Gutschein Koch.png"
