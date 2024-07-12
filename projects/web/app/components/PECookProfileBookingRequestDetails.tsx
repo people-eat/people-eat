@@ -55,7 +55,7 @@ export function PECookProfileBookingRequestDetails({
     return (
         <div className="flex flex-col gap-8 flex-1">
             <div className="flex flex-col gap-8 p-8">
-                <Link href="/profile/bookings" className="lg:hidden flex gap-2">
+                <Link href="/chef-profile/bookings" className="lg:hidden flex gap-2">
                     <ArrowLeft />
                     Buchungsanfragen
                 </Link>
