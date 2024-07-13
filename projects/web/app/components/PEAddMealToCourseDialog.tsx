@@ -1,4 +1,4 @@
-import { MealCard } from '@people-eat/web-components';
+import { MealCard, MealDetailsDialog } from '@people-eat/web-components';
 import { PEDialog, PELabelMultiSelection } from '@people-eat/web-core-components';
 import { MealType, mealTypeTranslations, mealTypes } from '@people-eat/web-domain';
 import { useState } from 'react';
@@ -26,6 +26,15 @@ export function PEAddMealToCourseDialog({ open, onClose, meals, selectedMealIds,
     const filteredMeals = (selectedMealTypes.length > 0 ? meals.filter(({ type }) => selectedMealTypes.includes(type)) : meals).filter(
         (meal) => !selectedMealIds.some((selected) => selected === meal.mealId),
     );
+
+    const [selectedMeal, setSelectedMeal] = useState<
+        | undefined
+        | {
+              title: string;
+              description: string;
+              imageUrl?: string | null;
+          }
+    >(undefined);
 
     return (
         <PEDialog open={open} onClose={onClose} title="Gericht hinzufügen">
@@ -55,10 +64,12 @@ export function PEAddMealToCourseDialog({ open, onClose, meals, selectedMealIds,
                         title={meal.title}
                         description={meal.description}
                         imageUrl={meal.imageUrl}
-                        onInfoClick={() => undefined}
+                        onInfoClick={() => setSelectedMeal(meal)}
                     />
                 ))}
             </ul>
+
+            {selectedMeal && <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />}
         </PEDialog>
     );
 }

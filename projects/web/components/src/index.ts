@@ -1,4 +1,3 @@
-export { Payment } from './Payment';
 export { BookForm, type BookFormProps } from './_forms/BookForm';
 export { CookSignUpForm, type CookSignUpFormInputs, type CookSignUpFormProps } from './_forms/CookSignUpForm';
 export { CreateAddressForm, type CreateAddressFormInputs, type CreateAddressFormProps } from './_forms/CreateAddressForm';
@@ -26,6 +25,8 @@ export { PEHeader, type PEHeaderProps } from './header/PEHeader';
 export { PEImageClipper, type PEImageClipperProps } from './images/PEImageClipper';
 export { PEImagePicker, type PEImagePickerProps } from './images/PEImagePicker';
 export { LoadingDialog, type LoadingDialogProps } from './loading-dialog/LoadingDialog';
+export { MealDetailsDialog, type MealDetailsDialogProps } from './MealDetailsDialog';
+export { Payment } from './Payment';
 export { PEPriceClassSelection, type PEPriceClassSelectionProps } from './price-class-selection/PEPriceClassSelection';
 export { PEProfileNavigation, type PEProfileNavigationProps } from './profile-navigation/PEProfileNavigation';
 export { BookingRequestRow, type BookingRequestRowProps } from './rows/booking-request-row/BookingRequestRow';

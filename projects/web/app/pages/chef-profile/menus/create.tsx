@@ -1,5 +1,12 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { CreateMenuCourseForm, LoadingDialog, MealCard, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
+import {
+    CreateMenuCourseForm,
+    LoadingDialog,
+    MealCard,
+    MealDetailsDialog,
+    PECookProfileNavigation,
+    PEHeader,
+} from '@people-eat/web-components';
 import {
     PEAlert,
     PEButton,
@@ -244,6 +251,15 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
         });
     }
 
+    const [selectedMeal, setSelectedMeal] = useState<
+        | undefined
+        | {
+              title: string;
+              description: string;
+              imageUrl?: string | null;
+          }
+    >(undefined);
+
     useNotLeave();
 
     return (
@@ -411,7 +427,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                     title={meal.title}
                                                     description={meal.description}
                                                     imageUrl={meal.imageUrl}
-                                                    onInfoClick={() => undefined}
+                                                    onInfoClick={() => setSelectedMeal(meal)}
                                                     button={
                                                         course.mealOptions.length > 1
                                                             ? {
@@ -430,6 +446,10 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                                 />
                                             ))}
                                         </ul>
+
+                                        {selectedMeal && (
+                                            <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />
+                                        )}
                                     </div>
                                 ))}
 

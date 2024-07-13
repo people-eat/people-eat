@@ -5,6 +5,7 @@ import {
     CreateSupportRequestFormInputs,
     LoadingDialog,
     MealCard,
+    MealDetailsDialog,
 } from '@people-eat/web-components';
 import { PEAlert, PETabSingleSelection } from '@people-eat/web-core-components';
 import {
@@ -18,6 +19,7 @@ import {
 import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { ProfileBookingRequestChat } from './ProfileBookingRequestChat';
 
 const defaultProfileBookingRequestDetailsTab: ProfileBookingRequestDetailsTab = 'CHAT';
@@ -64,6 +66,15 @@ export function PEProfileBookingRequestDetails({
     const [createSupportRequest, { data, loading, reset }] = useMutation(CreateOneUserSupportRequestDocument);
     const showSuccessAlert = data?.users.supportRequests.createOne ?? false;
     const showFailedAlert = data ? !data.users.supportRequests.createOne : false;
+
+    const [selectedMeal, setSelectedMeal] = useState<
+        | undefined
+        | {
+              title: string;
+              description: string;
+              imageUrl?: string | null;
+          }
+    >(undefined);
 
     return (
         <div className="flex flex-col gap-8 flex-1">
@@ -184,12 +195,20 @@ export function PEProfileBookingRequestDetails({
                                         title={course.mealTitle}
                                         description={course.mealDescription}
                                         imageUrl={course.mealImageUrl ?? undefined}
-                                        onInfoClick={() => undefined}
+                                        onInfoClick={() =>
+                                            setSelectedMeal({
+                                                title: course.mealTitle,
+                                                description: course.mealDescription,
+                                                imageUrl: course.mealImageUrl ?? undefined,
+                                            })
+                                        }
                                     />
                                 </ul>
                             </div>
                         ))}
                     </div>
+
+                    {selectedMeal && <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />}
                 </div>
             )}
 

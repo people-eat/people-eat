@@ -3,6 +3,7 @@ import { MealType, mealTypeTranslations, mealTypes } from '@people-eat/web-domai
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { MealCard } from '../cards/meal-card/MealCard';
+import { MealDetailsDialog } from '../MealDetailsDialog';
 
 export interface CreateMenuCourseFormProps {
     meals: {
@@ -55,6 +56,15 @@ export function CreateMenuCourseForm({ meals, onCreateMeal, onCreate }: CreateMe
         },
     });
 
+    const [selectedMeal, setSelectedMeal] = useState<
+        | undefined
+        | {
+              title: string;
+              description: string;
+              imageUrl?: string | null;
+          }
+    >(undefined);
+
     return (
         <form onSubmit={handleSubmit((data) => onCreate(data))} className="flex flex-col gap-8">
             <p className="font-semibold text-xl">Wie möchtest du deinen Gang nennen?</p>
@@ -101,10 +111,12 @@ export function CreateMenuCourseForm({ meals, onCreateMeal, onCreate }: CreateMe
                         selected={fields.some((selected) => selected.mealId === meal.mealId)}
                         onSelect={() => append(meal)}
                         onDeselect={() => remove(fields.findIndex((f) => f.mealId === meal.mealId))}
-                        onInfoClick={() => undefined}
+                        onInfoClick={() => setSelectedMeal(meal)}
                     />
                 ))}
             </ul>
+
+            {selectedMeal && <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />}
 
             {onCreateMeal && <PEButton title="Neues Gericht erstellen" type="secondary" onClick={onCreateMeal} />}
 

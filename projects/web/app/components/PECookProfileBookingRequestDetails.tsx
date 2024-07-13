@@ -1,4 +1,4 @@
-import { BookingStatusInfoPopover, MealCard } from '@people-eat/web-components';
+import { BookingStatusInfoPopover, MealCard, MealDetailsDialog } from '@people-eat/web-components';
 import { PETabSingleSelection } from '@people-eat/web-core-components';
 import {
     GetCookProfileBookingsPageDataQuery,
@@ -11,6 +11,7 @@ import { ArrowLeft, CookingPot, LucideIcon, MessageCircle, ReceiptText } from 'l
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { CookProfileBookingRequestChat } from './CookProfileBookingRequestChat';
+import { useState } from 'react';
 
 const defaultProfileBookingRequestDetailsTab: CookProfileBookingRequestDetailsTab = 'CHAT';
 
@@ -51,6 +52,15 @@ export function PECookProfileBookingRequestDetails({
     onRequireUpdate,
 }: PECookProfileBookingRequestDetailsProps) {
     const router = useRouter();
+
+    const [selectedMeal, setSelectedMeal] = useState<
+        | undefined
+        | {
+              title: string;
+              description: string;
+              imageUrl?: string | null;
+          }
+    >(undefined);
 
     return (
         <div className="flex flex-col gap-8 flex-1">
@@ -176,12 +186,20 @@ export function PECookProfileBookingRequestDetails({
                                         title={course.mealTitle}
                                         description={course.mealDescription}
                                         imageUrl={course.mealImageUrl}
-                                        onInfoClick={() => undefined}
+                                        onInfoClick={() =>
+                                            setSelectedMeal({
+                                                title: course.mealTitle,
+                                                description: course.mealDescription,
+                                                imageUrl: course.mealImageUrl ?? undefined,
+                                            })
+                                        }
                                     />
                                 </ul>
                             </div>
                         ))}
                     </div>
+
+                    {selectedMeal && <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />}
                 </div>
             )}
         </div>

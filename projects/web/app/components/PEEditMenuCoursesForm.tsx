@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { CreateMenuCourseForm, MealCard } from '@people-eat/web-components';
+import { CreateMenuCourseForm, MealCard, MealDetailsDialog } from '@people-eat/web-components';
 import { PEButton, PEDialog, PELabelSingleSelection, PETextField } from '@people-eat/web-core-components';
 import {
     GetCookProfileMenuPageDataQuery,
@@ -54,6 +54,15 @@ export function PEEditMenuCoursesForm({
 
     const [createCourseDialogOpen, setCreateCourseDialogOpen] = useState(false);
     const [addMealToCourseDialogOpen, setAddMealToCourseDialogOpen] = useState(false);
+
+    const [selectedMeal, setSelectedMeal] = useState<
+        | undefined
+        | {
+              title: string;
+              description: string;
+              imageUrl?: string | null;
+          }
+    >(undefined);
 
     const {
         register,
@@ -221,7 +230,7 @@ export function PEEditMenuCoursesForm({
                                         title={mealOption.meal.title}
                                         description={mealOption.meal.description}
                                         imageUrl={mealOption.meal.imageUrl}
-                                        onInfoClick={() => undefined}
+                                        onInfoClick={() => setSelectedMeal(mealOption.meal)}
                                         button={
                                             course.mealOptions.length > 1
                                                 ? {
@@ -244,12 +253,14 @@ export function PEEditMenuCoursesForm({
                                         title={mealOption.meal.title}
                                         description={mealOption.meal.description}
                                         imageUrl={mealOption.meal.imageUrl}
-                                        onInfoClick={() => undefined}
+                                        onInfoClick={() => setSelectedMeal(mealOption.meal)}
                                     />
                                 )}
                             </>
                         ))}
                     </ul>
+
+                    {selectedMeal && <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />}
 
                     {coursesInEditMode && (
                         <button
