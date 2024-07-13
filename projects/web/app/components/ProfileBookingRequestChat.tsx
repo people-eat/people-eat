@@ -90,7 +90,7 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
             </div>
 
             <div className="pr-8 ml-8">
-                {status === 'PENDING' && (
+                {(status === 'PENDING' || status === 'COMPLETED') && (
                     <form
                         autoComplete="off"
                         onSubmit={handleSubmit(({ message }) =>
