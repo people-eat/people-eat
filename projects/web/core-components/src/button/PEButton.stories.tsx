@@ -3,7 +3,7 @@ import { PEButton } from './PEButton';
 
 const meta: Meta<typeof PEButton> = {
     component: PEButton,
-    title: 'PEButton',
+    title: 'Buttons/PEButton',
 };
 
 export default meta;

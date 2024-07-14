@@ -46,27 +46,33 @@ export function CreateMealForm({ onCreate }: CreateMealFormProps) {
                 {errors.type?.message && <span className="ml-2 mt-1 text-sm font-semibold text-red-500">{errors.type.message}</span>}
             </div>
 
-            <PETextField
-                id="mealTitle"
-                labelTitle="Name"
-                type="text"
-                errorMessage={errors.title?.message}
-                {...register('title', {
-                    required: 'Dein Gericht braucht noch einen Namen.',
-                    minLength: { value: 3, message: 'Der Name des Gerichts muss mindestens 5 Zeichen lang sein' },
-                })}
-            />
+            <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex flex-col gap-6 md:flex-1">
+                    <PETextField
+                        id="mealTitle"
+                        labelTitle="Name"
+                        type="text"
+                        errorMessage={errors.title?.message}
+                        {...register('title', {
+                            required: 'Dein Gericht braucht noch einen Namen.',
+                            minLength: { value: 3, message: 'Der Name des Gerichts muss mindestens 5 Zeichen lang sein' },
+                        })}
+                    />
 
-            <PETextArea
-                id="mealDescription"
-                labelTitle="Beschreibung"
-                errorMessage={errors.description?.message}
-                {...register('description')}
-            />
+                    <PETextArea
+                        id="mealDescription"
+                        labelTitle="Beschreibung"
+                        errorMessage={errors.description?.message}
+                        {...register('description')}
+                    />
+                </div>
 
-            <p className="mt-4">Füge deinem Gericht ein Bild hinzu</p>
+                <div className="flex flex-col gap-2">
+                    <p className="text-base font-medium leading-6 text-gray-900">Bild hinzufügen</p>
 
-            <PEImagePicker onPick={setImage} onRemoveDefaultImage={(): void => setImage(undefined)} />
+                    <PEImagePicker onPick={setImage} onRemoveDefaultImage={(): void => setImage(undefined)} />
+                </div>
+            </div>
 
             <PEButton title="Gericht erstellen" type="submit" />
         </form>

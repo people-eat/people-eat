@@ -80,7 +80,7 @@ export function PESearchBar({
 
                 <PEFullPageSheet title="Suche" open={showMobileDialog} onClose={() => setShowMobileDialog(!showMobileDialog)}>
                     <form
-                        className="flex flex-col gap-16"
+                        className="flex flex-col gap-8"
                         onSubmit={handleSubmit(() => {
                             searchMode === 'COOKS' ? onSearchCooks() : onSearchMenus();
                             setShowMobileDialog(false);
@@ -108,9 +108,8 @@ export function PESearchBar({
                             <h2 className="text-lg font-semibold">Wann soll das Event stattfinden?</h2>
                             <PECalendar selectedDate={date} onSelectDate={setDate} minDate={minDate} />
                         </div>
-                        <div className="flex flex-row-reverse mt-4">
-                            <PEButton title="Suchen" type="submit" size="constant" />
-                        </div>
+
+                        <PEButton title="Suchen" type="submit" />
                     </form>
                 </PEFullPageSheet>
             </div>

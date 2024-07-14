@@ -3,7 +3,7 @@ import { PELabelLink } from './PELabelLink';
 
 const meta: Meta<typeof PELabelLink> = {
     component: PELabelLink,
-    title: 'PELabelLink',
+    title: 'Buttons/PELabelLink',
 };
 
 export default meta;

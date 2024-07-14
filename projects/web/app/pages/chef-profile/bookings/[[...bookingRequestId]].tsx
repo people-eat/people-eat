@@ -120,11 +120,7 @@ export default function CookProfileBookingsPage({
             <div className={classNames('absolute inset-0 flex flex-col gap-8')}>
                 <PEHeader signedInUser={signedInUser} className={classNames({ 'hidden lg:block': selectedBookingRequest })} />
 
-                <div
-                    className={classNames('max-w-[88rem] mx-auto w-full p-6', {
-                        'hidden lg:flex': selectedBookingRequest,
-                    })}
-                >
+                <div className={classNames('max-w-[88rem] mx-auto w-full p-6', { 'hidden lg:flex': selectedBookingRequest })}>
                     <PECookProfileNavigation
                         current="BOOKINGS"
                         className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest })}
@@ -172,7 +168,7 @@ export default function CookProfileBookingsPage({
                             'hidden lg:flex': !selectedBookingRequest,
                         })}
                     >
-                        {!selectedBookingRequest && 'Wähle eine Buchungsanfrage aus'}
+                        {!selectedBookingRequest && <span className="flex-1 p-8">Wähle eine Buchungsanfrage aus</span>}
 
                         {selectedBookingRequest && (
                             <PECookProfileBookingRequestDetails

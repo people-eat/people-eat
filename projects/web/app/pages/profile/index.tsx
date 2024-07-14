@@ -91,7 +91,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
 
                 <LoadingDialog active={loading} />
 
-                <div className="ml-8 flex justify-between items-start flex-col md:flex-row gap-4">
+                <div className="md:ml-8 flex justify-between items-start flex-col md:flex-row gap-4">
                     <div className="flex flex-col gap-2">
                         <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Hallo {profile.firstName}!</span>
                     </div>

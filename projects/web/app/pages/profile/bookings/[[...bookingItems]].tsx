@@ -166,7 +166,7 @@ export default function ProfileBookingsPage({
                 />
 
                 <div
-                    className={classNames('max-w-[88rem] mx-auto w-full p-6', {
+                    className={classNames('max-w-[88rem] mx-auto w-full', {
                         'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest,
                     })}
                 >
@@ -226,7 +226,9 @@ export default function ProfileBookingsPage({
                             'hidden lg:flex': !selectedBookingRequest && !selectedGlobalBookingRequest,
                         })}
                     >
-                        {!selectedBookingRequest && !selectedGlobalBookingRequest && 'Wähle eine Buchungsanfrage aus'}
+                        {!selectedBookingRequest && !selectedGlobalBookingRequest && (
+                            <span className="flex-1 p-8">Wähle eine Buchungsanfrage aus</span>
+                        )}
 
                         {selectedGlobalBookingRequest && (
                             <PEProfileGlobalBookingRequestDetails

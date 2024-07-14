@@ -353,7 +353,7 @@ export default function PublicCookPage({
                     />
                 </PEFullPageSheet>
 
-                <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-[88rem] px-4 pb-16 md:pt-8 sm:px-6 lg:px-8">
                     <div className="flex gap-8">
                         <div className="flex-1 flex flex-col gap-12">
                             <div className="flex gap-8 items-center">
@@ -559,9 +559,7 @@ export default function PublicCookPage({
                 </div>
 
                 <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
-                    <div className="flex justify-between w-full">
-                        <PEButton title="Anfrage senden" onClick={() => setShowBook(true)} size="constant" />
-                    </div>
+                    <PEButton title="Anfrage senden" onClick={() => setShowBook(true)} />
                 </div>
 
                 <PEFooter />

@@ -201,8 +201,8 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                             </div>
 
                             {!signedInUser && (
-                                <div className="py-6 flex items-stretch">
-                                    <PELink title="Anmelden" href="/sign-in" type="secondary" />
+                                <div className="py-6 flex items-stretch w-full">
+                                    <PELink title="Anmelden" href="/sign-in" type="secondary" className="w-full" />
                                 </div>
                             )}
                         </div>

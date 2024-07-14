@@ -778,7 +778,6 @@ export default function PublicMenuPage({
 
                 <div className="lg:hidden fixed inset-x-0 bottom-0 flex flex-col justify-between gap-x-8 gap-y-4 bg-white p-6 ring-1 ring-gray-900/10 md:flex-row md:items-center lg:px-8">
                     <PEButton
-                        size="constant"
                         title={`Jetzt buchen (${formatPrice(costBreakdown.totalPerPerson!.price)} pro Person)`}
                         onClick={() => setShowBook(true)}
                         className="w-full"

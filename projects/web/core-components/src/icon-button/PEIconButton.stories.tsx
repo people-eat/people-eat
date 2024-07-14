@@ -4,7 +4,7 @@ import { PEIconButton } from './PEIconButton';
 
 const meta: Meta<typeof PEIconButton> = {
     component: PEIconButton,
-    title: 'PEIconButton',
+    title: 'Buttons/PEIconButton',
 };
 
 export default meta;

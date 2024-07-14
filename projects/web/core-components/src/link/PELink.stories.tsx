@@ -3,7 +3,7 @@ import { PELink } from './PELink';
 
 const meta: Meta<typeof PELink> = {
     component: PELink,
-    title: 'PELink',
+    title: 'Buttons/PELink',
 };
 
 export default meta;

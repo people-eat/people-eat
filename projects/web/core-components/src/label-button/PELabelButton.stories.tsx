@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const meta: Meta<typeof PELabelButton> = {
     component: PELabelButton,
-    title: 'PELabelButton',
+    title: 'Buttons/PELabelButton',
 };
 
 export default meta;

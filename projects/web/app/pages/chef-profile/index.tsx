@@ -248,7 +248,7 @@ export default function CookProfilePage({ signedInUser, initialCookProfile, lang
             <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="PERSONAL_INFORMATION" />
 
-                <div className="ml-8 flex justify-between items-start flex-col md:flex-row gap-4">
+                <div className="md:ml-8 flex justify-between items-start flex-col md:flex-row gap-4">
                     <div className="flex flex-col gap-2">
                         <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
                             Hallo {cookProfile.user.firstName}!
