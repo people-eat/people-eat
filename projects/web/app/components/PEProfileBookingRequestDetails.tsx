@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
 import {
-    BookingStatusInfoPopover,
     CreateSupportRequestForm,
     CreateSupportRequestFormInputs,
     LoadingDialog,
@@ -8,18 +7,12 @@ import {
     MealDetailsDialog,
 } from '@people-eat/web-components';
 import { PEAlert, PETabSingleSelection } from '@people-eat/web-core-components';
-import {
-    CreateOneUserSupportRequestDocument,
-    GetProfileBookingsPageDataQuery,
-    formatPrice,
-    formatTime,
-    toTranslatedFormattedDate,
-    translatedBookingRequestStatus,
-} from '@people-eat/web-domain';
+import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery } from '@people-eat/web-domain';
 import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { PEBookingDetails } from './PEBookingDetails';
 import { ProfileBookingRequestChat } from './ProfileBookingRequestChat';
 
 const defaultProfileBookingRequestDetailsTab: ProfileBookingRequestDetailsTab = 'CHAT';
@@ -78,7 +71,7 @@ export function PEProfileBookingRequestDetails({
 
     return (
         <div className="flex flex-col gap-8 flex-1">
-            <div className="flex flex-col gap-8 p-8">
+            <div className="flex flex-col gap-8 p-4 sm:p-8">
                 <Link href="/profile/bookings" className="lg:hidden flex gap-2">
                     <ArrowLeft />
                     Buchungsanfragen
@@ -98,79 +91,16 @@ export function PEProfileBookingRequestDetails({
             </div>
 
             {selectedTab === 'EVENT_DETAILS' && (
-                <div className="overflow-y-auto pr-8 ml-8 pb-8">
-                    <dl className="space-y-6 divide-y divide-gray-100 text-sm leading-6">
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Status</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900 flex justify-between w-full pr-4">
-                                    <span>{translatedBookingRequestStatus[bookingRequest.status]}</span>
-                                    <BookingStatusInfoPopover currentBookingRequestStatus={bookingRequest.status} />
-                                </div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Anlass</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{bookingRequest.occasion}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Erwachsene</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{bookingRequest.adultParticipants}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Kinder</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{bookingRequest.children}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Datum</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{toTranslatedFormattedDate(bookingRequest.dateTime)}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Uhrzeit</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{formatTime(bookingRequest.dateTime)}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Wo</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{bookingRequest.location.text}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Gesamtpreis</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{formatPrice(bookingRequest.price, true)}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Allergien</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{'Keine'}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Kategorien</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{'Keine'}</div>
-                            </dd>
-                        </div>
-                        <div className="pt-6 sm:flex">
-                            <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Küche</dt>
-                            <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                                <div className="text-gray-900">{'Keine'}</div>
-                            </dd>
-                        </div>
-                    </dl>
-                </div>
+                <PEBookingDetails
+                    status={bookingRequest.status}
+                    occasion={bookingRequest.occasion}
+                    adultParticipants={bookingRequest.adultParticipants}
+                    // eslint-disable-next-line react/no-children-prop
+                    children={bookingRequest.children}
+                    dateTime={bookingRequest.dateTime}
+                    location={bookingRequest.location}
+                    price={bookingRequest.price}
+                />
             )}
 
             {selectedTab === 'CHAT' && (
@@ -178,7 +108,7 @@ export function PEProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (
-                <div className="flex flex-col gap-8 overflow-y-auto pr-8 ml-8">
+                <div className="flex flex-col gap-8 overflow-y-auto p-4">
                     <h2 className="text-2xl font-bold">{bookingRequest.configuredMenu.title}</h2>
                     {bookingRequest.configuredMenu.description && <h3>{bookingRequest.configuredMenu.description}</h3>}
                     {bookingRequest.configuredMenu.greetingFromKitchen && bookingRequest.configuredMenu.greetingFromKitchen !== '' && (
@@ -213,7 +143,7 @@ export function PEProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'SUPPORT' && (
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-8 p-4">
                     <h2 className="text-2xl font-bold">Support</h2>
 
                     <CreateSupportRequestForm

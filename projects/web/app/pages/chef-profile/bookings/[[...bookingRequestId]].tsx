@@ -112,9 +112,7 @@ export default function CookProfileBookingsPage({
     return (
         <>
             <Head>
-                <title>
-                    PeopleEat {'>'} Chef Profile {'>'} Bookings
-                </title>
+                <title>PeopleEat - Kochprofil - Buchungen</title>
             </Head>
 
             <div className={classNames('absolute inset-0 flex flex-col gap-8')}>

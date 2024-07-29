@@ -90,15 +90,15 @@ export function CookProfileBookingRequestChat({
     );
 
     return (
-        <div className="flex flex-col gap-2 flex-1 overflow-hidden pb-8">
-            <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-8 ml-8">
+        <div className="flex flex-col gap-2 flex-1 overflow-hidden pb-4">
+            <div className="flex flex-col gap-4 flex-1 overflow-y-auto p-4">
                 {sortedChatMessages.map((chatMessage) => (
                     <PEChatMessage key={chatMessage.chatMessageId} chatMessage={chatMessage} isAuthor={chatMessage.createdBy === cookId} />
                 ))}
                 <div data-element="chat-bottom" ref={chatBottom} />
             </div>
 
-            <div className="pr-8 ml-8">
+            <div className="ml-4 mr-4">
                 {(status === 'PENDING' || status === 'COMPLETED') && (
                     <form
                         autoComplete="off"
