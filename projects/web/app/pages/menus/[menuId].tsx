@@ -622,12 +622,12 @@ export default function PublicMenuPage({
                                     </span>
                                 </div> */}
 
-                                {menu.greetingFromKitchen && (
+                                {/* {menu.greetingFromKitchen && (
                                     <div className="flex flex-col gap-2">
                                         <h2 className="text-2xl font-semibold tracking-tight text-gray-900">Gruß aus der Küche</h2>
                                         <span className="text-xl text-gray-500">{menu.greetingFromKitchen}</span>
                                     </div>
-                                )}
+                                )} */}
                             </div>
 
                             {sortedCourses.map(({ courseId, title, mealOptions }) => (
