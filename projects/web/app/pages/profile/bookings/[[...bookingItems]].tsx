@@ -154,9 +154,7 @@ export default function ProfileBookingsPage({
             <AnalyticsClarity enabled={cookieSettings?.clarity} />
 
             <Head>
-                <title>
-                    PeopleEat {'>'} User Profile {'>'} Bookings
-                </title>
+                <title>PeopleEat - Profil - Buchungen</title>
             </Head>
 
             <div className={classNames('absolute inset-0 flex flex-col gap-8')}>
