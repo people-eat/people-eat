@@ -115,7 +115,8 @@ export function PEBookingDetails({
                         <div className="text-gray-900">{'Keine'}</div>
                     </dd>
                 </div>
-                <div className="pt-6 sm:flex">
+                {/* Last child has py instead of pb */}
+                <div className="py-6 sm:flex">
                     <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Küche</dt>
                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
                         <div className="text-gray-900">{'Keine'}</div>

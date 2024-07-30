@@ -70,9 +70,9 @@ export function PEProfileBookingRequestDetails({
     >(undefined);
 
     return (
-        <div className="flex flex-col gap-8 flex-1">
-            <div className="flex flex-col gap-8 p-4 sm:p-8">
-                <Link href="/profile/bookings" className="lg:hidden flex gap-2">
+        <div className="flex flex-col flex-1">
+            <div style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 8 }}>
+                <Link href="/profile/bookings" className="lg:hidden flex gap-2 mb-4">
                     <ArrowLeft />
                     Buchungsanfragen
                 </Link>
