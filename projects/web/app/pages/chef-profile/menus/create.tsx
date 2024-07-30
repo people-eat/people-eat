@@ -266,7 +266,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
         <div>
             <PEHeader signedInUser={signedInUser} />
 
-            <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
+            <div className="mx-auto max-w-[88rem] px-4 pb-16 pt-8 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="MENUS" />
 
                 <PEProfileCard className="flex flex-col gap-8">
@@ -623,6 +623,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                                         hideLabel
                                         adults={adults}
                                         setAdults={setAdults}
+                                        // eslint-disable-next-line react/no-children-prop
                                         children={children}
                                         setChildren={setChildren}
                                     />

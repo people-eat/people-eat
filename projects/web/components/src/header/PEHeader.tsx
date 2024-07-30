@@ -62,7 +62,7 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                         <Link href="/sign-in" className="hidden lg:block lg:text-sm lg:font-semibold lg:leading-6 lg:text-gray-900">
                             Anmelden
                         </Link>
-                        <PELink title="Registrieren" href="/sign-up" />
+                        <PELink title="Werde Koch" href="/chef-sign-up" />
                     </div>
                 )}
 

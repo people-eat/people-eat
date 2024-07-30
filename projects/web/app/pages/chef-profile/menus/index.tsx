@@ -61,7 +61,7 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
         <div>
             <PEHeader signedInUser={signedInUser} />
 
-            <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-8">
+            <div className="mx-auto max-w-[88rem] px-4 pb-16 pt-8 sm:px-6 lg:px-8 flex flex-col gap-8">
                 <PECookProfileNavigation current="MENUS" />
 
                 <PEProfileCard className="flex gap-8 justify-end">

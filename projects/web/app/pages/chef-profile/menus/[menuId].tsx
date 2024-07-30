@@ -138,7 +138,7 @@ export default function CookProfileMenuPage({
         <div>
             <PEHeader signedInUser={signedInUser} />
 
-            <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-16">
+            <div className="mx-auto max-w-[88rem] px-4 pb-16 pt-8 sm:px-6 lg:px-8 flex flex-col gap-16">
                 <PECookProfileNavigation current="MENUS" />
 
                 <Link className="flex gap-2 text-gray-500" href="/chef-profile/menus">

@@ -78,7 +78,7 @@ export default function SignUpPage({ cookieSettings }: ServerSideProps) {
                 primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
             />
 
-            <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 gap-4">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     {/* <Image
                         className="mx-auto h-10 w-auto hidden md:block mb-10"
@@ -94,6 +94,7 @@ export default function SignUpPage({ cookieSettings }: ServerSideProps) {
                         <PELabelLink href="" title="Als Gastgeber" selected />
                         <PELabelLink href="/chef-sign-up" title="Als Koch" selected={false} />
                     </div>
+
                     <h2 className="text-xl font-bold leading-9 tracking-tight text-gray-900">Einen Gastgeberaccount erstellen</h2>
                 </div>
 

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CookSignUpForm, LoadingDialog, PEHeader } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-core-components';
+import { PEAlert, PELabelLink } from '@people-eat/web-core-components';
 import {
     CookRank,
     CreateOneCookDocument,
@@ -109,7 +109,7 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
                 }}
             />
 
-            <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 gap-4">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     {/* <Image
                         className="mx-auto h-10 w-auto hidden md:block mb-10"
@@ -118,7 +118,15 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
                         width={800}
                         height={240}
                     /> */}
-                    <h1 className="text-2xl font-bold leading-9 tracking-tight text-gray-900">Einen Kochaccount erstellen</h1>
+
+                    <h1 className="text-2xl font-bold mb-4">Registrierung</h1>
+
+                    <div className="mb-8 flex gap-2">
+                        <PELabelLink href="/sign-up" title="Als Gastgeber" selected={false} />
+                        <PELabelLink href="" title="Als Koch" selected />
+                    </div>
+
+                    <h2 className="text-xl font-bold leading-9 tracking-tight text-gray-900">Einen Kochaccount erstellen</h2>
                 </div>
 
                 <CookSignUpForm

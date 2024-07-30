@@ -89,7 +89,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
             <div className="absolute inset-0 flex flex-col gap-8">
                 <PEHeader signedInUser={signedInUser} />
 
-                <div className="max-w-[88rem] mx-auto w-full px-4">
+                <div className="max-w-[88rem] mx-auto w-full px-6">
                     <PEProfileNavigation current="PERSONAL_INFORMATION" className="px-4 sm:px-0 flex-auto" />
                 </div>
 

@@ -77,7 +77,7 @@ export function CookSignUpForm({
     const { travelExpenses, maximumTravelDistance, maximumParticipants, password, passwordRepeat } = watch();
 
     return (
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="flex flex-col gap-6" onSubmit={handleSubmit(signedInUser ? onSignUpForExistingUser : onSignUpForNewUser)}>
                 <div className="flex flex-col gap-4">
                     <span className="text-lg font-semibold">Rang</span>

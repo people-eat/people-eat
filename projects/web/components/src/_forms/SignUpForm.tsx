@@ -27,7 +27,7 @@ export function SignUpForm({ completeTitle, onSignUp, onSignIn }: SignUpFormProp
     } = useForm<SignUpFormInputs>({ defaultValues: { phoneNumber: '+49' } });
 
     return (
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSignUp)}>
                 <div className="flex gap-4">
                     <PETextField

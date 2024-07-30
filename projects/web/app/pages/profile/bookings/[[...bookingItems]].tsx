@@ -157,14 +157,14 @@ export default function ProfileBookingsPage({
                 <title>PeopleEat - Profil - Buchungen</title>
             </Head>
 
-            <div className={classNames('absolute inset-0 flex flex-col gap-8')}>
+            <div className="absolute inset-0 flex flex-col gap-8">
                 <PEHeader
                     signedInUser={signedInUser}
                     className={classNames({ 'hidden lg:block': selectedBookingRequest || selectedGlobalBookingRequest })}
                 />
 
                 <div
-                    className={classNames('max-w-[88rem] mx-auto w-full px-4', {
+                    className={classNames('max-w-[88rem] mx-auto w-full px-6', {
                         'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest,
                     })}
                 >

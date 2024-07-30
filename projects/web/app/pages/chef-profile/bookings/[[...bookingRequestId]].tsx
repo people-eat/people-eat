@@ -115,10 +115,10 @@ export default function CookProfileBookingsPage({
                 <title>PeopleEat - Kochprofil - Buchungen</title>
             </Head>
 
-            <div className={classNames('absolute inset-0 flex flex-col gap-8')}>
+            <div className="absolute inset-0 flex flex-col gap-8">
                 <PEHeader signedInUser={signedInUser} className={classNames({ 'hidden lg:block': selectedBookingRequest })} />
 
-                <div className={classNames('max-w-[88rem] mx-auto w-full p-6', { 'hidden lg:flex': selectedBookingRequest })}>
+                <div className={classNames('max-w-[88rem] mx-auto w-full px-6', { 'hidden lg:flex': selectedBookingRequest })}>
                     <PECookProfileNavigation
                         current="BOOKINGS"
                         className={classNames('px-4 sm:px-0', { 'hidden lg:flex': selectedBookingRequest })}
