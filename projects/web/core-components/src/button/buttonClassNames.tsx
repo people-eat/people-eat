@@ -14,3 +14,10 @@ export const secondaryButtonClassName = classNames(
     'text-nowrap',
     'text-center',
 );
+
+export const disabledButtonClassName = classNames(
+    'rounded-full bg-gray-400 font-semibold text-white shadow-sm cursor-pointer',
+    'px-4 py-2.5',
+    'text-sm',
+    'text-nowrap',
+);

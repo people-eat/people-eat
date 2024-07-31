@@ -33,14 +33,11 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
     const mealId = meal.mealId;
 
     const [showDeleteMealAlert, setShowDeleteMealAlert] = useState(false);
-    const [showUpdateImageDialog, setShowUpdateImageDialog] = useState(false);
-    const [editSelectedMealOn, setEditSelectedMealOn] = useState(true);
 
     const {
         register,
         setValue,
         getValues,
-        reset,
         watch,
         handleSubmit,
         formState: { errors },
@@ -51,11 +48,6 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
 
     const [updateTitle] = useMutation(UpdateCookMealTitleDocument);
     const [updateDescription] = useMutation(UpdateCookMealDescriptionDocument);
-
-    function onCancelEdit() {
-        reset();
-        setEditSelectedMealOn(false);
-    }
 
     function onSaveEdit(data: EditMealFormInputs) {
         const promises = [];
@@ -69,9 +61,6 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
         }
 
         Promise.all(promises).then(onChangesApplied);
-
-        reset();
-        setEditSelectedMealOn(false);
     }
 
     const [updateImage] = useMutation(UpdateCookMealImageDocument);
@@ -83,17 +72,11 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
             }
         });
     }
-
     return (
         <>
-            <PEDialog open onClose={editSelectedMealOn || showDeleteMealAlert ? undefined : onClose}>
+            {/* @todo: only kind of working (click around to close never works) editSelectedMealOn || showDeleteMealAlert ? undefined : onClose */}
+            <PEDialog open onClose={changesHaveBeenApplied ? undefined : onClose} title="Gericht bearbeiten">
                 <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSaveEdit)}>
-                    {editSelectedMealOn && (
-                        <section className="flex gap-2">
-                            <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">Gericht bearbeiten</h2>
-                        </section>
-                    )}
-
                     <div className="flex flex-col md:flex-row gap-8">
                         <PEImagePicker
                             onPick={onUpdateImage}
@@ -102,65 +85,45 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
                         />
 
                         <div className={classNames('flex-1', 'flex flex-col gap-6')}>
-                            {!editSelectedMealOn && <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{meal.title}</h2>}
+                            <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{meal.title}</h2>
 
-                            {editSelectedMealOn && (
-                                <PETextField
-                                    id="title"
-                                    labelTitle="Name"
-                                    type="text"
-                                    errorMessage={errors.title?.message}
-                                    {...register('title', {
-                                        required: 'Dein Gericht braucht noch einen Namen.',
-                                        minLength: {
-                                            value: 3,
-                                            message: 'Der Name des Gerichts muss mindestens 5 Zeichen lang sein',
-                                        },
-                                    })}
+                            <PETextField
+                                id="title"
+                                labelTitle="Name"
+                                type="text"
+                                errorMessage={errors.title?.message}
+                                {...register('title', {
+                                    required: 'Dein Gericht braucht noch einen Namen.',
+                                    minLength: {
+                                        value: 3,
+                                        message: 'Der Name des Gerichts muss mindestens 5 Zeichen lang sein',
+                                    },
+                                })}
+                            />
+
+                            <div>
+                                <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">Gerichtsart</label>
+                                <PELabelSingleSelection
+                                    options={mealTypes}
+                                    selectedOption={getValues().type}
+                                    selectedOptionChanged={(type) => type && setValue('type', type, { shouldValidate: true })}
+                                    optionTitle={(mealType) => mealTypeTranslations[mealType]}
+                                    optionIdentifier={(mealType) => mealType}
                                 />
-                            )}
+                            </div>
 
-                            {editSelectedMealOn && (
-                                <div>
-                                    <label className="block text-sm font-medium leading-6 text-gray-900 mb-2">Gerichtsart</label>
-                                    <PELabelSingleSelection
-                                        options={mealTypes}
-                                        selectedOption={getValues().type}
-                                        selectedOptionChanged={(type) => type && setValue('type', type, { shouldValidate: true })}
-                                        optionTitle={(mealType) => mealTypeTranslations[mealType]}
-                                        optionIdentifier={(mealType) => mealType}
-                                    />
-                                </div>
-                            )}
-
-                            {!editSelectedMealOn && <p className="text-gray-500">{mealTypeTranslations[meal.type]}</p>}
-
-                            {editSelectedMealOn && (
-                                <PETextArea
-                                    id="description"
-                                    labelTitle="Beschreibung"
-                                    errorMessage={errors.description?.message}
-                                    {...register('description')}
-                                />
-                            )}
-
-                            {!editSelectedMealOn && <p>{meal.description}</p>}
+                            <PETextArea
+                                id="description"
+                                labelTitle="Beschreibung"
+                                errorMessage={errors.description?.message}
+                                {...register('description')}
+                            />
                         </div>
                     </div>
 
                     <section className="flex justify-end gap-2">
-                        {!editSelectedMealOn && (
-                            <>
-                                <PEButton title="Löschen" type="secondary" onClick={() => setShowDeleteMealAlert(true)} />
-                                <PEButton title="Bearbeiten" type="secondary" onClick={() => setEditSelectedMealOn(true)} />
-                            </>
-                        )}
-                        {editSelectedMealOn && (
-                            <>
-                                <PEButton title="Abbrechen" type="secondary" onClick={onCancelEdit} />
-                                {changesHaveBeenApplied && <PEButton title="Speichern" type="submit" />}
-                            </>
-                        )}
+                        <PEButton title="Löschen" type="secondary" onClick={() => setShowDeleteMealAlert(true)} />
+                        <PEButton title="Speichern" type="submit" disabled={!changesHaveBeenApplied} />
                     </section>
                 </form>
             </PEDialog>
@@ -179,10 +142,6 @@ export function CookProfileMealDialog({ cookId, meal, onClose, onDelete, onChang
                     onClick: () => setShowDeleteMealAlert(false),
                 }}
             />
-
-            <PEDialog open={showUpdateImageDialog} onClose={() => setShowUpdateImageDialog(false)} className="bg-white p-8">
-                Test
-            </PEDialog>
         </>
     );
 }
