@@ -2,14 +2,26 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, PEImagePicker, PEProfileNavigation } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
+    AddOneCookLanguageDocument,
+    CookGetStripeDashboardUrlDocument,
+    CookGetStripeOnboardingUrlDocument,
     GetProfilePersonalInformationDocument,
     GetProfilePersonalInformationPageDataDocument,
     GetProfilePersonalInformationPageDataQuery,
+    RemoveOneCookLanguageDocument,
     SignedInUser,
+    UpdateCookBiographyDocument,
+    UpdateCookHasStripePayoutMethodActivatedDocument,
+    UpdateCookIsVisibleDocument,
+    UpdateCookMaximumParticipantsDocument,
+    UpdateCookMaximumTravelDistanceDocument,
+    UpdateCookTravelExpensesDocument,
     UpdateUserProfilePictureDocument,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../../components/analytics/CookieSettings';
@@ -54,6 +66,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function ProfilePersonalInformationPage({ signedInUser, initialProfile, cookieSettings }: ServerSideProps) {
+    const router = useRouter();
+
     const userId = signedInUser.userId;
     const [profile, setProfile] = useState(initialProfile);
 
@@ -77,7 +91,135 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
         });
     }
 
-    const loading = loadingUpdatedProfile || loadingUpdateProfilePicture;
+    // end of user profile
+
+    const cookId = initialProfile.userId;
+    const [editLanguagesOn, setEditLanguagesOn] = useState(false);
+    const [editBioOn, setEditBioOn] = useState(false);
+
+    // const [getUpdatedCookProfile, { loading: loadingUpdatedCookProfile }] = useLazyQuery(GetCookProfilePersonalInformationDocument, {
+    //     variables: { cookId },
+    // });
+
+    function updateCookProfile() {
+        getUpdatedProfile().then(({ data }) => {
+            const cook = data?.users.me;
+            if (!cook) return;
+            setProfile(cook);
+        });
+    }
+
+    const [getStripeOnboardingUrl, { loading: loadingStripeOnboardingUrl }] = useLazyQuery(CookGetStripeOnboardingUrlDocument, {
+        variables: { cookId },
+    });
+    const [getStripeDashboardUrl, { loading: loadingStripeDashboardUrl }] = useLazyQuery(CookGetStripeDashboardUrlDocument, {
+        variables: { cookId },
+    });
+
+    const {
+        register,
+        // handleSubmit,
+        watch,
+        setValue,
+    } = useForm<EditCookProfileFormInputs>({
+        defaultValues: {
+            biography: profile.biography,
+            travelExpenses: profile.travelExpenses,
+            maximumTravelDistance: profile.maximumTravelDistance ?? 0,
+            maximumParticipants: profile.maximumParticipants ?? 2,
+        },
+    });
+
+    const { biography, travelExpenses, maximumTravelDistance, maximumParticipants } = watch();
+
+    const [requestBioUpdate, { loading: updateBioLoading }] = useMutation(UpdateCookBiographyDocument, {
+        variables: { cookId, biography },
+    });
+
+    function updateBio() {
+        requestBioUpdate().then(({ data }) => {
+            if (!data?.cooks.success) return;
+            setEditBioOn(false);
+            updateCookProfile();
+        });
+    }
+
+    const [requestTravelExpensesUpdate] = useMutation(UpdateCookTravelExpensesDocument, {
+        variables: { cookId, travelExpenses: travelExpenses },
+    });
+
+    const [requestMaximumTravelDistanceUpdate] = useMutation(UpdateCookMaximumTravelDistanceDocument, {
+        variables: { cookId, maximumTravelDistance: maximumTravelDistance },
+    });
+
+    const [requestMaximumParticipantsUpdate] = useMutation(UpdateCookMaximumParticipantsDocument, {
+        variables: { cookId, maximumParticipants: maximumParticipants },
+    });
+
+    const [
+        requestHasStripePayoutMethodActivatedUpdate,
+        { loading: walletUpdateLoading, reset: resetUpdateWallet, data: updateWalletData },
+    ] = useMutation(UpdateCookHasStripePayoutMethodActivatedDocument, { variables: { cookId } });
+
+    function updateBookingDetails() {
+        const updateRequests = [];
+
+        if (travelExpenses !== cookProfile.travelExpenses) updateRequests.push(requestTravelExpensesUpdate());
+        if (maximumTravelDistance !== cookProfile.maximumTravelDistance) updateRequests.push(requestMaximumTravelDistanceUpdate());
+        if (maximumParticipants !== cookProfile.maximumParticipants) updateRequests.push(requestMaximumParticipantsUpdate());
+
+        Promise.all(updateRequests).then(updateCookProfile);
+    }
+
+    const [removeOneCookLanguage] = useMutation(RemoveOneCookLanguageDocument);
+    const [addOneCookLanguage] = useMutation(AddOneCookLanguageDocument);
+
+    const bookingDetailsHasChangesApplied =
+        travelExpenses !== cookProfile.travelExpenses ||
+        maximumTravelDistance !== cookProfile.maximumTravelDistance ||
+        maximumParticipants !== cookProfile.maximumParticipants;
+
+    function resetBookingDetails() {
+        setValue('travelExpenses', profile.c.travelExpenses);
+        setValue('maximumTravelDistance', cookProfile.maximumTravelDistance ?? 0);
+        setValue('maximumParticipants', cookProfile.maximumParticipants ?? 2);
+    }
+
+    const biographyHasChangesApplied = biography !== cookProfile.biography;
+
+    function resetBiography() {
+        setValue('biography', cookProfile.biography);
+    }
+
+    const [requestIsVisibleUpdate, { loading: loadingUpdateIsVisible }] = useMutation(UpdateCookIsVisibleDocument);
+
+    async function updateIsVisible(changedIsVisible: boolean) {
+        await requestIsVisibleUpdate({ variables: { cookId, isVisible: changedIsVisible } });
+        updateCookProfile();
+    }
+
+    const updateWalletStatus = typeof router.query['update-wallet-status'] === 'string';
+
+    function updateHasStripePayoutMethodActivated() {
+        requestHasStripePayoutMethodActivatedUpdate()
+            .then(() => router.replace({ query: {} }, undefined, { scroll: false }))
+            .then(updateCookProfile);
+    }
+
+    useEffect(() => {
+        if (updateWalletStatus) updateHasStripePayoutMethodActivated();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const loading =
+        loadingUpdatedProfile ||
+        loadingUpdateProfilePicture ||
+        loadingStripeOnboardingUrl ||
+        loadingStripeDashboardUrl ||
+        updateBioLoading ||
+        loadingUpdateIsVisible ||
+        loadingUpdateProfilePicture ||
+        walletUpdateLoading;
 
     return (
         <>

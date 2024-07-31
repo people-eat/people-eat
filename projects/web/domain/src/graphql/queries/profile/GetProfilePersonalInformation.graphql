@@ -39,6 +39,30 @@ query GetProfilePersonalInformation {
                 phoneNumber
                 createdAt
             }
+
+            cook {
+                languages {
+                    languageId
+                    title
+                }
+                isLocked
+                isVisible
+                biography
+                location {
+                    latitude
+                    longitude
+                }
+                maximumParticipants
+                maximumPrice
+                maximumTravelDistance
+                minimumParticipants
+                minimumPrice
+                rank
+                travelExpenses
+                ratingAverage
+                ratingCount
+                hasStripePayoutMethodActivated
+            }
         }
     }
 }
