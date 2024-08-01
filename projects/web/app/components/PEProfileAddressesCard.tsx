@@ -89,7 +89,7 @@ export function PEProfileAddressesCard({ userId, addresses, pin, onFetchUpdated 
     const loading = deleteLoading || updateLocationLoading;
 
     return (
-        <PEProfileCard title="Adressen" className="flex flex-col gap-8">
+        <PEProfileCard title="Adressen" className="flex flex-col gap-8 flex-1">
             {addresses.map((address) => (
                 <AddressPreviewCard
                     key={address.addressId}

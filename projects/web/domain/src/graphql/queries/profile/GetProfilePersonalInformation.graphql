@@ -65,4 +65,10 @@ query GetProfilePersonalInformation {
             }
         }
     }
+    languages {
+        findAll {
+            languageId
+            title
+        }
+    }
 }
