@@ -1,14 +1,17 @@
-import { ProfileTab, profileTabPaths, profileTabs, translatedProfileTabs } from '@people-eat/web-domain';
+import { ProfileTab, profileTabPaths, profileTabsForCook, profileTabsForUser, translatedProfileTabs } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
 
 export interface PEProfileNavigationProps {
     current: ProfileTab;
+    isCook: boolean;
     className?: string;
 }
 
-export function PEProfileNavigation({ current, className }: PEProfileNavigationProps) {
+export function PEProfileNavigation({ current, isCook, className }: PEProfileNavigationProps) {
     const router = useRouter();
+
+    const profileTabs = isCook ? profileTabsForCook : profileTabsForUser;
 
     return (
         // <nav className={classNames('flex gap-2 flex-wrap', className)}>

@@ -1,3 +1,5 @@
+// todo delete file
+
 export type CookProfileTab = 'PERSONAL_INFORMATION' | 'BOOKINGS' | 'MEALS' | 'MENUS';
 
 export const cookProfileTabPaths: Record<CookProfileTab, string> = {

@@ -58,7 +58,7 @@ export default function ProfileFavoriteCooksPage({ signedInUser, favoriteCooks, 
             <PEHeader signedInUser={signedInUser} />
 
             <div className="mx-auto max-w-[88rem] px-4 py-16 sm:px-6 lg:px-8 flex flex-col gap-16">
-                <PEProfileNavigation current="FAVORITE_COOKS" />
+                <PEProfileNavigation current="FAVORITE_COOKS" isCook={signedInUser.isCook} />
 
                 {favoriteCooks.length < 1 && (
                     <div className="flex flex-col items-center gap-4">

@@ -168,7 +168,7 @@ export default function ProfileBookingsPage({
                         'hidden lg:flex': selectedBookingRequest || selectedGlobalBookingRequest,
                     })}
                 >
-                    <PEProfileNavigation current="BOOKINGS" className={classNames('px-4 sm:px-0 flex-auto')} />
+                    <PEProfileNavigation current="BOOKINGS" className={classNames('px-4 sm:px-0 flex-auto')} isCook={signedInUser.isCook} />
                 </div>
 
                 <div className="max-w-[88rem] w-full mx-auto px-0 sm:px-8 sm:pb-4 flex gap-4 overflow-hidden flex-1">

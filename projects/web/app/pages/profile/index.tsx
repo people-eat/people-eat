@@ -256,7 +256,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
                 <PEHeader signedInUser={signedInUser} />
 
                 <div className="max-w-[88rem] mx-auto w-full px-6">
-                    <PEProfileNavigation current="PERSONAL_INFORMATION" className="px-4 sm:px-0 flex-auto" />
+                    <PEProfileNavigation current="PERSONAL_INFORMATION" className="px-4 sm:px-0 flex-auto" isCook={signedInUser.isCook} />
                 </div>
 
                 <div className="max-w-[88rem] w-full mx-auto px-8 sm:pb-4 flex flex-col gap-4 flex-1">
