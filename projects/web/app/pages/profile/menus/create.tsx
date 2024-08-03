@@ -4,8 +4,8 @@ import {
     LoadingDialog,
     MealCard,
     MealDetailsDialog,
-    PECookProfileNavigation,
     PEHeader,
+    PEProfileNavigation,
 } from '@people-eat/web-components';
 import {
     PEAlert,
@@ -39,12 +39,12 @@ import { useRouter } from 'next/router';
 import { ParticipantsPicker } from 'projects/web/components/src/search-bar/PEParticipantsPicker';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { CreateMealDialog } from '../../../components/CreateMealDialog';
 import { PEAddMealToCourseDialog } from '../../../components/PEAddMealToCourseDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
-import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -267,7 +267,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
             <PEHeader signedInUser={signedInUser} />
 
             <div className="mx-auto max-w-[88rem] px-4 pb-16 pt-8 sm:px-6 lg:px-8 flex flex-col gap-8">
-                <PECookProfileNavigation current="MENUS" />
+                <PEProfileNavigation current="MENUS" isCook />
 
                 <PEProfileCard className="flex flex-col gap-8">
                     <h1 className="font-bold text-3xl tracking-tight text-gray-900">Menü erstellen</h1>
@@ -783,7 +783,7 @@ export default function CookProfileCreateMenuPage({ signedInUser, categories, ki
                     open={showSuccessAlert}
                     title="Menü erfolgreich angelegt"
                     subtitle="Füge es gleich einem neuen oder einem deiner bestehenden Menüs als Option hinzu."
-                    primaryButton={{ title: 'Zur Menüsübersicht', onClick: () => router.push('/chef-profile/menus') }}
+                    primaryButton={{ title: 'Zur Menüsübersicht', onClick: () => router.push('/profile/menus') }}
                 />
 
                 <PEAlert

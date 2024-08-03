@@ -39,7 +39,7 @@ export function Payment({
         // });
         const { error } = await stripe.confirmSetup({
             elements,
-            confirmParams: { return_url: `${window.location.origin}/profile/bookings/${bookingRequestId}` },
+            confirmParams: { return_url: `${window.location.origin}/profile/bookings/s/${bookingRequestId}` },
             redirect: 'if_required',
         });
 
@@ -79,7 +79,7 @@ export function Payment({
                 subtitle="Vielen Dank für deine Buchung. Wir werden uns in Kürze mit dir in Verbindung setzen."
                 primaryButton={{
                     title: 'Zur Buchungsübersicht',
-                    onClick: () => router.push(`/profile/bookings/${bookingRequestId}`),
+                    onClick: () => router.push(`/profile/bookings/s/${bookingRequestId}`),
                 }}
             />
         </>

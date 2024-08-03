@@ -1,13 +1,13 @@
 import { useMutation } from '@apollo/client';
-import { CreateMealForm, LoadingDialog, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
+import { CreateMealForm, LoadingDialog, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
 import { PEAlert } from '@people-eat/web-core-components';
 import { CreateMealDocument, GetSignedInUserDocument, SignedInUser } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
-import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -61,7 +61,7 @@ export default function CookProfileCreateMealPage({ signedInUser }: ServerSidePr
                 open={showSuccessAlert}
                 title="Gericht erfolgreich angelegt"
                 subtitle="Füge es gleich einem neuen oder einem deiner bestehenden Menüs als Option hinzu."
-                primaryButton={{ title: 'Zur Gerichtsübersicht', onClick: () => router.push('/chef-profile/meals') }}
+                primaryButton={{ title: 'Zur Gerichtsübersicht', onClick: () => router.push('/profile/meals') }}
             />
 
             <PEAlert
@@ -75,7 +75,7 @@ export default function CookProfileCreateMealPage({ signedInUser }: ServerSidePr
             <LoadingDialog active={loading} />
 
             <div className="mx-auto max-w-[88rem] px-4 pb-16 pt-8 sm:px-6 lg:px-8 flex flex-col gap-8">
-                <PECookProfileNavigation current="MEALS" />
+                <PEProfileNavigation current="MEALS" isCook />
 
                 <PEProfileCard className="flex flex-col gap-8">
                     <h1 className="font-bold text-3xl tracking-tight text-gray-900">Gericht erstellen</h1>

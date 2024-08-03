@@ -18,7 +18,7 @@ import { CookieSettings } from '../components/analytics/CookieSettings';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 
-const cookProfilePageRedirect = { redirect: { permanent: false, destination: '/chef-profile' } };
+const cookProfilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -92,7 +92,7 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
                 open={showSuccessAlertForExistingUser}
                 title="Deine Registirung war erfolgreich"
                 subtitle="Sieh sich jetzt in deinem Kochprofil um, dort gibt es einiges zu entdecken. Erstelle Gerichte und Menüs um die Aufmerksamkeit von potentiellen Kunden zu gewinnen."
-                primaryButton={{ title: 'Zu meinem Kochprofil', onClick: () => router.push('/chef-profile') }}
+                primaryButton={{ title: 'Zu meinem Kochprofil', onClick: () => router.push('/profile') }}
             />
 
             <PEAlert

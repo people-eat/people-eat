@@ -134,7 +134,7 @@ export function PEEditMenuCommon({ cookId, onChangesApplied, menu, categories: c
     async function onDelete() {
         const { data } = await deleteMenu({ variables: { cookId, menuId } });
         if (!data?.cooks.menus.success) return;
-        router.push('/chef-profile/menus');
+        router.push('/profile/menus');
     }
 
     const originalCategoryIdSet = new Set(menu.categories.map(({ categoryId }) => categoryId));

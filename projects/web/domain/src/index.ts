@@ -20,7 +20,6 @@ export type CategoryOption = CategoryOptionFragment;
 export type KitchenOption = KitchenOptionFragment;
 export type LanguageOption = LanguageOptionFragment;
 
-export * from './cookProfileTabs';
 export * from './cookRanks';
 export * from './profileTabs';
 

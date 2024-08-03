@@ -1,7 +1,14 @@
-import { MealCard, MealDetailsDialog } from '@people-eat/web-components';
-import { PETabSingleSelection } from '@people-eat/web-core-components';
-import { GetCookProfileBookingsPageDataQuery } from '@people-eat/web-domain';
-import { ArrowLeft, CookingPot, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
+import { useMutation } from '@apollo/client';
+import {
+    CreateSupportRequestForm,
+    CreateSupportRequestFormInputs,
+    LoadingDialog,
+    MealCard,
+    MealDetailsDialog,
+} from '@people-eat/web-components';
+import { PEAlert, PETabSingleSelection } from '@people-eat/web-core-components';
+import { CreateOneUserSupportRequestDocument, GetCookProfileBookingsPageDataQuery } from '@people-eat/web-domain';
+import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -15,20 +22,22 @@ export function toCookProfileBookingRequestDetailsTab(value: any): CookProfileBo
     return cookProfileBookingRequestDetailsTabs.includes(value) ? value : defaultProfileBookingRequestDetailsTab;
 }
 
-export type CookProfileBookingRequestDetailsTab = 'CHAT' | 'EVENT_DETAILS' | 'MENU';
+export type CookProfileBookingRequestDetailsTab = 'CHAT' | 'EVENT_DETAILS' | 'MENU' | 'SUPPORT';
 
-const cookProfileBookingRequestDetailsTabs: CookProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'MENU'];
+const cookProfileBookingRequestDetailsTabs: CookProfileBookingRequestDetailsTab[] = ['EVENT_DETAILS', 'CHAT', 'MENU', 'SUPPORT'];
 
 const cookProfileBookingRequestDetailsTabTranslations: Record<CookProfileBookingRequestDetailsTab, string> = {
     CHAT: 'Chat',
     EVENT_DETAILS: 'Veranstaltung',
     MENU: 'Menü',
+    SUPPORT: 'Support',
 };
 
 const cookProfileBookingRequestDetailsTabIcons: Record<CookProfileBookingRequestDetailsTab, LucideIcon> = {
     CHAT: MessageCircle,
     EVENT_DETAILS: ReceiptText,
     MENU: CookingPot,
+    SUPPORT: Headset,
 };
 
 export interface PECookProfileBookingRequestDetailsProps {
@@ -48,6 +57,10 @@ export function PECookProfileBookingRequestDetails({
 }: PECookProfileBookingRequestDetailsProps) {
     const router = useRouter();
 
+    const [createSupportRequest, { data, loading, reset }] = useMutation(CreateOneUserSupportRequestDocument);
+    const showSuccessAlert = data?.users.supportRequests.createOne ?? false;
+    const showFailedAlert = data ? !data.users.supportRequests.createOne : false;
+
     const [selectedMeal, setSelectedMeal] = useState<
         | undefined
         | {
@@ -60,7 +73,7 @@ export function PECookProfileBookingRequestDetails({
     return (
         <div className="flex flex-col flex-1">
             <div style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 8 }}>
-                <Link href="/chef-profile/bookings" className="lg:hidden flex gap-2 mb-8">
+                <Link href="/profile/bookings" className="lg:hidden flex gap-2 mb-8">
                     <ArrowLeft />
                     Buchungsanfragen
                 </Link>
@@ -134,6 +147,55 @@ export function PECookProfileBookingRequestDetails({
                     {selectedMeal && <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />}
                 </div>
             )}
+
+            {selectedTab === 'SUPPORT' && (
+                <div className="flex flex-col gap-8 p-4">
+                    <h2 className="text-2xl font-bold">Support</h2>
+
+                    <CreateSupportRequestForm
+                        onCreate={function ({ message, title }: CreateSupportRequestFormInputs): void {
+                            createSupportRequest({
+                                variables: {
+                                    userId,
+                                    request: {
+                                        bookingRequestId: bookingRequest.bookingRequestId,
+                                        message,
+                                        subject: title,
+                                    },
+                                },
+                            });
+                        }}
+                    />
+                </div>
+            )}
+
+            <LoadingDialog active={loading} />
+
+            <PEAlert
+                open={showSuccessAlert}
+                type="SUCCESS"
+                title="Support Anfrage erfolgreich eingereicht"
+                subtitle="Wir werden uns schnellstmöglich um dein Anliegen kümmern und treten mit dir in Kontakt."
+                primaryButton={{
+                    title: 'Fertig',
+                    onClick: () => reset(),
+                }}
+            />
+
+            <PEAlert
+                open={showFailedAlert}
+                type="ERROR"
+                title="Leider konnte deine Support Anfrage nicht erfolgreich eingereicht werden"
+                subtitle="Bitte versuche es erneut oder falls dies weiterhin fehlschlägt, versuche später noch einmal. Entuldigung für die Umstände - Dein PeopleEat Support Team."
+                primaryButton={{
+                    title: 'Erneut versuchen',
+                    onClick: () => createSupportRequest(),
+                }}
+                secondaryButton={{
+                    title: 'Abbrechen',
+                    onClick: () => reset(),
+                }}
+            />
         </div>
     );
 }

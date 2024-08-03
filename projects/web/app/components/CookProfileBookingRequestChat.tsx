@@ -184,7 +184,7 @@ export function CookProfileBookingRequestChat({
                 primaryButton={{
                     title: 'Wallet einrichten',
                     onClick: () => {
-                        router.push('/chef-profile');
+                        router.push('/profile');
                         setStripeNotSetupDialog(false);
                     },
                 }}

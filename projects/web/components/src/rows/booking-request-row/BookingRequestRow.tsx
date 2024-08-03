@@ -9,10 +9,12 @@ export interface BookingRequestRowProps {
     status: BookingRequestStatus;
     price: Price;
     configuredMenuTitle?: string;
-    cookFirstName: string;
+    name: string;
 
     selected: boolean;
     onSelect: () => void;
+
+    mode: 'RECEIVED' | 'SENT';
 }
 
 export function BookingRequestRow({
@@ -22,8 +24,9 @@ export function BookingRequestRow({
     selected,
     price,
     configuredMenuTitle,
-    cookFirstName,
+    name,
     onSelect,
+    mode,
 }: BookingRequestRowProps) {
     return (
         <li className={classNames('relative py-5 hover:bg-gray-50', { 'bg-gray-100': selected })} role="button" onClick={onSelect}>
@@ -35,13 +38,15 @@ export function BookingRequestRow({
                             <p className="text-sm font-semibold leading-6 text-gray-900">{occasion}</p>
                             <p className="flex text-xs leading-5 text-gray-500">{toTranslatedFormattedDate(dateTime)}</p>
                             {configuredMenuTitle && <p className="flex text-xs leading-5 text-gray-500">Menü: {configuredMenuTitle}</p>}
-                            {!configuredMenuTitle && <p className="flex text-xs leading-5 text-gray-500">{cookFirstName}</p>}
+                            {!configuredMenuTitle && <p className="flex text-xs leading-5 text-gray-500">{name}</p>}
                         </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-x-4">
                         <div className="flex flex-col items-end">
                             <p className="text-sm leading-6 text-green-500">{formatPrice(price, true)}</p>
                             <p className="mt-1 text-xs leading-5 text-gray-500">{translatedDateDistanceToToday(dateTime)}</p>
+                            {mode === 'RECEIVED' && <span className="mt-1 text-md leading-5 text-gray-500">empfangen</span>}
+                            {mode === 'SENT' && <span className="mt-1 text-md leading-5 text-gray-500">gesendet</span>}
                         </div>
                         <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                     </div>

@@ -175,7 +175,7 @@ export default function HowToBecomeAChefPage({ signedInUser, cookieSettings }: S
                                     </p>
                                     <div className="mt-10 flex items-center gap-x-6">
                                         {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
-                                        {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
+                                        {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/profile" />}
                                     </div>
                                 </div>
                                 <Image
@@ -292,7 +292,7 @@ export default function HowToBecomeAChefPage({ signedInUser, cookieSettings }: S
                         </h2>
                         <div className="mt-10 flex items-center gap-x-6">
                             {!signedInUser?.isCook && <PELink title="Jetzt Registrieren" href="/chef-sign-up" />}
-                            {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/chef-profile" />}
+                            {signedInUser?.isCook && <PELink title="Zu deinem Kochprofil" href="/profile" />}
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { MenuCard, PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
+import { MenuCard, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
     GetCookProfileMenusPageDataDocument,
@@ -11,9 +11,9 @@ import {
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { PEProfileCard } from '../../../components/PEProfileCard';
 import { createApolloClient } from '../../../network/apolloClients';
-import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
@@ -62,11 +62,11 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
             <PEHeader signedInUser={signedInUser} />
 
             <div className="mx-auto max-w-[88rem] px-4 pb-16 pt-8 sm:px-6 lg:px-8 flex flex-col gap-8">
-                <PECookProfileNavigation current="MENUS" />
+                <PEProfileNavigation current="MENUS" isCook />
 
                 <PEProfileCard className="flex gap-8 justify-end">
                     <div>
-                        <PELink title="Neues Menü" href="/chef-profile/menus/create" />
+                        <PELink title="Neues Menü" href="/profile/menus/create" />
                     </div>
                 </PEProfileCard>
 
@@ -84,7 +84,7 @@ export default function CookProfileMenusPage({ signedInUser, initialMenus }: Ser
                             pricePerChild,
                             courseCount,
                         }) => (
-                            <Link key={menuId} href={{ pathname: '/chef-profile/menus/' + menuId }}>
+                            <Link key={menuId} href={{ pathname: '/profile/menus/' + menuId }}>
                                 <MenuCard
                                     title={title}
                                     imageUrls={imageUrl ? [imageUrl] : []}

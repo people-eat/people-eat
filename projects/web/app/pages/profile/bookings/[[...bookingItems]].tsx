@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import { AnalyticsClarity } from '../../../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../../../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../../../components/analytics/CookieSettings';
+import { PECookProfileBookingRequestDetails } from '../../../components/PECookProfileBookingRequestDetails';
 import {
     PEProfileBookingRequestDetails,
     ProfileBookingRequestDetailsTab,
@@ -32,9 +33,16 @@ const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-i
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
+    initialHasStripePayoutMethodActivated: boolean;
     cookieSettings: CookieSettings | null;
-    bookingRequests: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findMany']>>[];
-    selectedBookingRequest: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>> | null;
+    initialBookingRequests: (
+        | Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findMany']>>
+        | Unpacked<NonNullable<GetProfileBookingsPageDataQuery['cooks']['bookingRequests']['findMany']>>
+    )[];
+    initialSelectedBookingRequest:
+        | Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['bookingRequests']['findOne']>>
+        | Unpacked<NonNullable<GetProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>>
+        | null;
     globalBookingRequests: Unpacked<NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findMany']>>[];
     selectedGlobalBookingRequest: Unpacked<
         NonNullable<GetProfileBookingsPageDataQuery['users']['globalBookingRequests']['findOne']>
@@ -47,17 +55,18 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
     const bookingItems = query.bookingItems;
 
-    let bookingType: 'STANDARD' | 'GLOBAL' | 'NONE' = 'NONE';
+    let bookingType: 'COOK' | 'USER' | 'GLOBAL' | 'NONE' = 'NONE';
     let bookingItemId: string | undefined;
 
-    if (!bookingItems) {
-        // do nothing
-    } else if (bookingItems.length < 1) {
+    if (!bookingItems || bookingItems.length < 1) {
         bookingType = 'NONE';
         bookingItemId = undefined;
-    } else if (bookingItems.length === 1) {
-        bookingType = 'STANDARD';
-        bookingItemId = bookingItems[0];
+    } else if (bookingItems[0] === 'r') {
+        bookingType = 'COOK';
+        bookingItemId = bookingItems[1];
+    } else if (bookingItems[0] === 's') {
+        bookingType = 'USER';
+        bookingItemId = bookingItems[1];
     } else {
         bookingType = 'GLOBAL';
         bookingItemId = bookingItems[1];
@@ -75,23 +84,32 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 userId,
                 globalBookingRequestId: bookingType === 'GLOBAL' ? bookingItemId! : '',
                 fetchGlobalBookingRequest: bookingType === 'GLOBAL',
-                bookingRequestId: bookingType === 'STANDARD' ? bookingItemId! : '',
-                fetchBookingRequest: bookingType === 'STANDARD',
+                bookingRequestId: bookingType === 'USER' || bookingType === 'COOK' ? bookingItemId! : '',
+                fetchUserBookingRequest: bookingType === 'USER',
+                fetchCookBookingRequest: bookingType === 'COOK',
             },
         });
 
-        const bookingRequests = data.users.bookingRequests.findMany ?? [];
-        const bookingRequest = data.users.bookingRequests.findOne ?? null;
+        const initialHasStripePayoutMethodActivated = data.cooks.findOne?.hasStripePayoutMethodActivated ?? false;
+        const userBookingRequests = data.users.bookingRequests.findMany ?? [];
+        const selectedUserBookingRequest = data.users.bookingRequests.findOne ?? null;
+        const cookBookingRequests = data.cooks.bookingRequests.findMany ?? [];
+        const selectedCookBookingRequest = data.cooks.bookingRequests.findOne ?? null;
         const globalBookingRequests = data.users.globalBookingRequests.findMany ?? [];
-        const globalBookingRequest = data.users.globalBookingRequests.findOne ?? null;
+        const selectedGlobalBookingRequest = data.users.globalBookingRequests.findOne ?? null;
+
+        const initialBookingRequests = [...userBookingRequests, ...cookBookingRequests];
+
+        initialBookingRequests.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         return {
             props: {
                 signedInUser,
-                bookingRequests,
-                selectedBookingRequest: bookingRequest,
+                initialHasStripePayoutMethodActivated,
+                initialBookingRequests,
+                initialSelectedBookingRequest: selectedUserBookingRequest ?? selectedCookBookingRequest,
                 globalBookingRequests,
-                selectedGlobalBookingRequest: globalBookingRequest,
+                selectedGlobalBookingRequest: selectedGlobalBookingRequest,
                 tab: toProfileBookingRequestDetailsTab(query.tab),
                 cookieSettings: data.sessions.current?.cookieSettings
                     ? {
@@ -109,8 +127,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
 export default function ProfileBookingsPage({
     signedInUser,
-    bookingRequests: initialBookingRequests,
-    selectedBookingRequest: initialSelectedBookingRequest,
+    initialHasStripePayoutMethodActivated,
+    initialBookingRequests,
+    initialSelectedBookingRequest,
     globalBookingRequests: initialGlobalBookingRequests,
     selectedGlobalBookingRequest: initialSelectedGlobalBookingRequest,
     tab,
@@ -118,6 +137,7 @@ export default function ProfileBookingsPage({
 }: ServerSideProps) {
     const router = useRouter();
 
+    const [hasStripePayoutMethodActivated, setHasStripePayoutMethodActivated] = useState(initialHasStripePayoutMethodActivated);
     const [bookingRequests, setBookingRequests] = useState(initialBookingRequests);
     const [selectedBookingRequest, setSelectedBookingRequest] = useState(initialSelectedBookingRequest);
     const [globalBookingRequests, setGlobalBookingRequests] = useState(initialGlobalBookingRequests);
@@ -127,7 +147,8 @@ export default function ProfileBookingsPage({
         variables: {
             userId: signedInUser.userId,
             bookingRequestId: initialSelectedBookingRequest?.bookingRequestId ?? '',
-            fetchBookingRequest: Boolean(initialSelectedBookingRequest),
+            fetchUserBookingRequest: Boolean(initialSelectedBookingRequest),
+            fetchCookBookingRequest: Boolean(initialSelectedBookingRequest),
             globalBookingRequestId: initialSelectedGlobalBookingRequest?.globalBookingRequestId ?? '',
             fetchGlobalBookingRequest: Boolean(initialSelectedGlobalBookingRequest),
         },
@@ -135,7 +156,14 @@ export default function ProfileBookingsPage({
 
     async function update() {
         const { data } = await getUpdatedBookings();
-        setBookingRequests(data?.users.bookingRequests.findMany ?? []);
+        setHasStripePayoutMethodActivated(data?.cooks.findOne?.hasStripePayoutMethodActivated ?? false);
+
+        const userBookingRequests = data?.users.bookingRequests.findMany ?? [];
+        const cookBookingRequests = data?.cooks.bookingRequests.findMany ?? [];
+        const updatedBookingRequests = [...userBookingRequests, ...cookBookingRequests];
+        updatedBookingRequests.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setBookingRequests(updatedBookingRequests);
+
         setSelectedBookingRequest(data?.users.bookingRequests.findOne ?? null);
         setGlobalBookingRequests(data?.users.globalBookingRequests.findMany ?? []);
         setSelectedGlobalBookingRequest(data?.users.globalBookingRequests.findOne ?? null);
@@ -184,7 +212,7 @@ export default function ProfileBookingsPage({
                         </div>
 
                         {totalNumberOfBookingRequests > 0 && (
-                            <ul className="overflow-y-scroll flex-1">
+                            <ul className="overflow-y-auto flex-1">
                                 {globalBookingRequests.map(({ globalBookingRequestId, priceClass, occasion, dateTime }) => (
                                     <GlobalBookingRequestRow
                                         key={globalBookingRequestId}
@@ -199,17 +227,30 @@ export default function ProfileBookingsPage({
                                         }
                                     />
                                 ))}
-                                {bookingRequests.map(({ bookingRequestId, cook, occasion, dateTime, status, price, configuredMenu }) => (
+                                {bookingRequests.map(({ bookingRequestId, occasion, dateTime, status, price, configuredMenu, ...br }) => (
                                     <BookingRequestRow
                                         key={bookingRequestId}
                                         status={status}
                                         occasion={occasion}
                                         dateTime={dateTime}
-                                        selected={bookingRequestId === selectedBookingRequest?.bookingRequestId}
+                                        selected={
+                                            bookingRequestId === selectedBookingRequest?.bookingRequestId &&
+                                            (('user' in br && 'user' in selectedBookingRequest) ||
+                                                ('cook' in br && 'cook' in selectedBookingRequest))
+                                        }
                                         price={price}
                                         configuredMenuTitle={configuredMenu?.title}
-                                        cookFirstName={cook.user.firstName}
-                                        onSelect={() => router.push(`/profile/bookings/${bookingRequestId}`, undefined, { scroll: false })}
+                                        name={'user' in br ? br.user.firstName : br.cook.user.firstName}
+                                        onSelect={() =>
+                                            router.push(
+                                                'user' in br
+                                                    ? `/profile/bookings/r/${bookingRequestId}`
+                                                    : `/profile/bookings/s/${bookingRequestId}`,
+                                                undefined,
+                                                { scroll: false },
+                                            )
+                                        }
+                                        mode={'user' in br ? 'RECEIVED' : 'SENT'}
                                     />
                                 ))}
                             </ul>
@@ -236,10 +277,21 @@ export default function ProfileBookingsPage({
                             />
                         )}
 
-                        {selectedBookingRequest && (
+                        {selectedBookingRequest && 'cook' in selectedBookingRequest && (
                             <PEProfileBookingRequestDetails
                                 userId={signedInUser.userId}
                                 selectedTab={tab}
+                                bookingRequest={selectedBookingRequest}
+                                onRequireUpdate={update}
+                            />
+                        )}
+
+                        {selectedBookingRequest && 'user' in selectedBookingRequest && (
+                            <PECookProfileBookingRequestDetails
+                                userId={signedInUser.userId}
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                selectedTab={tab as any}
+                                hasStripePayoutMethodActivated={hasStripePayoutMethodActivated}
                                 bookingRequest={selectedBookingRequest}
                                 onRequireUpdate={update}
                             />

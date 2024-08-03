@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { PECookProfileNavigation, PEHeader } from '@people-eat/web-components';
+import { PEHeader, PEProfileNavigation } from '@people-eat/web-components';
 import {
     CategoryOption,
     CreateManyCookMenuCourseMealOptionsDocument,
@@ -23,11 +23,11 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { PEEditMenuCommon } from '../../../components/PEEditMenuCommon';
 import { PEEditMenuCoursesForm } from '../../../components/PEEditMenuCoursesForm';
 import { PEEditMenuPriceForm } from '../../../components/PEEditMenuPriceForm';
 import { createApolloClient } from '../../../network/apolloClients';
-import { CookieSettings } from '../../../components/analytics/CookieSettings';
 
 const tabs = [
     { name: 'Allgemeines', icon: Rows4 },
@@ -139,9 +139,9 @@ export default function CookProfileMenuPage({
             <PEHeader signedInUser={signedInUser} />
 
             <div className="mx-auto max-w-[88rem] px-4 pb-16 pt-8 sm:px-6 lg:px-8 flex flex-col gap-16">
-                <PECookProfileNavigation current="MENUS" />
+                <PEProfileNavigation current="MENUS" isCook />
 
-                <Link className="flex gap-2 text-gray-500" href="/chef-profile/menus">
+                <Link className="flex gap-2 text-gray-500" href="/profile/menus">
                     <ArrowLeft strokeWidth={1} />
                     Zurück zur Menü Übersicht
                 </Link>
