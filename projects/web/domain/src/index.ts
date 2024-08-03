@@ -125,7 +125,7 @@ export function geoDistance({ location1, location2 }: GeoDistanceProps): number 
 //
 
 export const formatPrice = (price: Price, withDecimals?: boolean): string =>
-    (price.amount / 100).toFixed(withDecimals ? 2 : 0) + ' ' + price.currencyCode;
+    Math.round(price.amount / 100).toFixed(withDecimals ? 2 : 0) + ' ' + price.currencyCode;
 
 //
 

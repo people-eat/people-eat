@@ -436,6 +436,7 @@ export default function PublicMenuPage({
         if (isInitialMount.current) {
             isInitialMount.current = false;
         } else {
+            // @todo: this is responsible for opening the payment popup
             if (signedInUser) onBook();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -94,25 +94,10 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                                                 href="/profile"
                                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                             >
-                                                Gastgeberprofil
+                                                Profil
                                             </Link>
                                         )}
                                     </Menu.Item>
-                                    {signedInUser.isCook && (
-                                        <Menu.Item>
-                                            {({ active }) => (
-                                                <Link
-                                                    href="/profile"
-                                                    className={classNames(
-                                                        active ? 'bg-gray-100' : '',
-                                                        'block px-4 py-2 text-sm text-gray-700',
-                                                    )}
-                                                >
-                                                    Kochprofil
-                                                </Link>
-                                            )}
-                                        </Menu.Item>
-                                    )}
                                     {signedInUser.isAdmin && (
                                         <Menu.Item>
                                             {({ active }) => (

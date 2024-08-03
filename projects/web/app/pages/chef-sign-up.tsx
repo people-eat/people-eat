@@ -84,7 +84,7 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
             <PEAlert
                 open={showSuccessAlertForNewUser}
                 title="Deine Registirung war erfolgreich"
-                subtitle="Überprüfe deine Email Postfach um deine E-Mail Adresse zu bestätigen und Zugriff auf dein Kochprofil zu erhalten. Dort gibt es einiges zu entdecken. Erstelle Gerichte und Menüs um die Aufmerksamkeit von potentiellen Kunden zu gewinnen."
+                subtitle="Überprüfe dein Email Postfach um deine E-Mail Adresse zu bestätigen und Zugriff auf dein Kochprofil zu erhalten. Dort gibt es einiges zu entdecken. Erstelle Gerichte und Menüs um die Aufmerksamkeit von potentiellen Kunden zu gewinnen."
                 primaryButton={{ title: 'Zur Anmeldung', onClick: () => router.push('/sign-in') }}
             />
 
