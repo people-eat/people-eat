@@ -11,12 +11,13 @@ import {
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
+import { setup } from '../components/meta-pixel/setup';
 
 const cookProfilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
 
@@ -71,6 +72,16 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
 
     const showSuccessAlertForNewUser = createUserData?.users.success ?? false;
     const showSuccessAlertForExistingUser = createCookData?.cooks.success ?? false;
+
+    const abc = setup()
+        ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
+        ?.pageView();
+
+    useEffect(() => {
+        if (showSuccessAlertForNewUser || showSuccessAlertForExistingUser) {
+            abc?.$fbq('trackCustom', 'CookRegistration');
+        }
+    }, [showSuccessAlertForNewUser, showSuccessAlertForExistingUser, abc]);
 
     return (
         <>

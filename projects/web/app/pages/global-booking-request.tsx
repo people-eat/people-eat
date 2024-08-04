@@ -161,7 +161,7 @@ export default function GlobalBookingRequestPage({
             <AnalyticsClarity enabled={cookieSettings?.clarity} />
 
             <Head>
-                <title>Privatkoch für einen Abend buchen </title>
+                <title>Privatkoch für einen Abend buchen</title>
                 <meta
                     name="description"
                     content="Buchen Sie Deutschlandweit private Köche bei PeopleEat. Individuelle Anfragen für Halal, Kosher, vegetarische und vegane Gerichte sowie verschiedene internationale Küchen. Perfekt für besondere Anlässe, maßgeschneiderte kulinarische Erlebnisse und spezielle diätetische Bedürfnisse."
