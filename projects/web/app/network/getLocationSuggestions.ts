@@ -21,7 +21,7 @@ export default function getLocationSuggestions(searchText: string, onComplete: (
             '/google-places-api/place/textsearch/json?type=address&query="' +
                 searchText +
                 '"&key=' +
-                'AIzaSyCMfp2U9V3WfEbqd9u1UR0qgfk-1uVIit8',
+                process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ?? 'no-google-places-api-key',
         ),
     )
         .then((response) => response.json())

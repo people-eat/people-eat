@@ -4,10 +4,12 @@ import { PEAlert, PELabelLink } from '@people-eat/web-core-components';
 import { CreateOneUserByEmailAddressDocument, GetPageDataDocument } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
 import { createApolloClient } from '../network/apolloClients';
+import { setup } from '../components/meta-pixel/setup';
 
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
 
@@ -50,6 +52,18 @@ export default function SignUpPage({ cookieSettings }: ServerSideProps) {
 
     const showCreateUserSuccessAlert = data?.users.success ?? false;
     const showCreatesUerFailedAlert = data ? !data.users.success : false;
+
+    console.log({ metaPixel: process.env.NEXT_PUBLIC_META_PIXEL_ID });
+    const abc = setup()
+        ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
+        ?.pageView();
+
+    useEffect(() => {
+        if (showCreateUserSuccessAlert) {
+            console.log('triggered meta pixel track');
+            abc?.$fbq('track', 'CompleteRegistration');
+        }
+    }, [showCreateUserSuccessAlert, abc]);
 
     return (
         <>
