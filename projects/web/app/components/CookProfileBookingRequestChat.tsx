@@ -102,11 +102,14 @@ export function CookProfileBookingRequestChat({
                 {(status === 'PENDING' || status === 'COMPLETED') && (
                     <form
                         autoComplete="off"
-                        onSubmit={handleSubmit(({ message }) => {
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') e.preventDefault();
+                        }}
+                        onSubmit={handleSubmit(({ message }) =>
                             send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
                                 ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),
-                            );
-                        })}
+                            ),
+                        )}
                         className="flex gap-4 items-center"
                     >
                         <PETextField
