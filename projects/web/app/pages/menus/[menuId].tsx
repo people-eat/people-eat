@@ -54,6 +54,7 @@ import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
+import { setup } from '../../components/meta-pixel/setup';
 
 const publicMenusRedirect = { redirect: { permanent: false, destination: '/menus' } };
 
@@ -432,6 +433,10 @@ export default function PublicMenuPage({
             .finally(() => setLoading(false));
     }
 
+    const abc = setup()
+        ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
+        ?.pageView();
+
     useEffect(() => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
@@ -543,7 +548,10 @@ export default function PublicMenuPage({
                         costBreakdown={costBreakdown}
                         searchButton={{
                             title: 'Anfrage senden',
-                            onClick: () => (signedInUser ? onBook() : setAuthDialogOpen(true)),
+                            onClick: () => {
+                                signedInUser ? onBook() : setAuthDialogOpen(true);
+                                abc?.$fbq('trackCustom', 'SendMenuBookingRequest');
+                            },
                         }}
                         allergies={{
                             allergyOptions: allergies,
@@ -692,7 +700,10 @@ export default function PublicMenuPage({
                             costBreakdown={costBreakdown}
                             searchButton={{
                                 title: 'Anfrage senden',
-                                onClick: () => (signedInUser ? onBook() : setAuthDialogOpen(true)),
+                                onClick: () => {
+                                    signedInUser ? onBook() : setAuthDialogOpen(true);
+                                    abc?.$fbq('trackCustom', 'SendMenuBookingRequest');
+                                },
                             }}
                             allergies={{
                                 allergyOptions: allergies,

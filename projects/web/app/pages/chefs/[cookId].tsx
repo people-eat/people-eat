@@ -27,7 +27,7 @@ import { Globe, HandPlatter, MapPin, MinusIcon, PlusIcon, ShoppingBasket, Sparkl
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
@@ -36,6 +36,7 @@ import Head from 'next/head';
 import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
 import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
+import { setup } from '../../components/meta-pixel/setup';
 
 const publicCooksRedirect = { redirect: { permanent: false, destination: '/chefs' } };
 
@@ -253,6 +254,17 @@ export default function PublicCookPage({
 
     const showSuccessAlert = data?.users.globalBookingRequests.success ?? false;
     const showFailedAlert = data ? !data.users.globalBookingRequests.success : false;
+
+    const abc = setup()
+        ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
+        ?.pageView();
+
+    useEffect(() => {
+        if (showSuccessAlert) {
+            console.log('triggered meta pixel track');
+            abc?.$fbq('trackCustom', 'SendGlobalBookingRequestFromCookPage');
+        }
+    }, [showSuccessAlert, abc]);
 
     return (
         <>

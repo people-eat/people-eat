@@ -53,7 +53,6 @@ export default function SignUpPage({ cookieSettings }: ServerSideProps) {
     const showCreateUserSuccessAlert = data?.users.success ?? false;
     const showCreatesUerFailedAlert = data ? !data.users.success : false;
 
-    console.log({ metaPixel: process.env.NEXT_PUBLIC_META_PIXEL_ID });
     const abc = setup()
         ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
         ?.pageView();

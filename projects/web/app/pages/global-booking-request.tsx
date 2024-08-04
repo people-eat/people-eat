@@ -20,13 +20,14 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
 import { PEAuthDialog } from '../components/PEAuthDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
+import { setup } from '../components/meta-pixel/setup';
 
 interface ServerSideProps {
     initialSignedInUser: SignedInUser | null;
@@ -142,6 +143,17 @@ export default function GlobalBookingRequestPage({
 
     const showSuccessAlert = data?.users.globalBookingRequests.success ?? false;
     const showFailedAlert = data ? !data.users.globalBookingRequests.success : false;
+
+    const abc = setup()
+        ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
+        ?.pageView();
+
+    useEffect(() => {
+        if (showSuccessAlert) {
+            console.log('triggered meta pixel track');
+            abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
+        }
+    }, [showSuccessAlert, abc]);
 
     return (
         <>
