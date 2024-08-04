@@ -19,7 +19,7 @@ export function Payment({
 
     const [payLoading, setPayLoading] = useState(false);
 
-    const [confirmPaymentSetup, { loading }] = useMutation(UserBookingRequestConfirmPaymentSetupDocument, {
+    const [confirmPaymentSetup, { createMutationLoading: loading }] = useMutation(UserBookingRequestConfirmPaymentSetupDocument, {
         variables: { userId, bookingRequestId },
     });
 

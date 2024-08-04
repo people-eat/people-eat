@@ -3,11 +3,8 @@ import { CreateAddressForm, CreateAddressFormInputs, LoadingDialog } from '@peop
 import { PEDialog } from '@people-eat/web-core-components';
 import { CreateOneUserAddressDocument } from '@people-eat/web-domain';
 import classNames from 'classnames';
-
-function randomIntFromInterval(min: number, max: number) {
-    // min and max included
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
+import getLocationSuggestions from '../network/getLocationSuggestions';
+import { useState } from 'react';
 
 export interface CreateAddressDialogProps {
     userId: string;
@@ -17,26 +14,37 @@ export interface CreateAddressDialogProps {
 }
 
 export function CreateAddressDialog({ userId, open, onAbort, onComplete }: CreateAddressDialogProps) {
-    const [create, { loading }] = useMutation(CreateOneUserAddressDocument);
+    const [create, { loading: createMutationLoading }] = useMutation(CreateOneUserAddressDocument);
+    const [googleMapsLoading, setGoogleMapsLoading] = useState(false);
+    const loading = createMutationLoading || googleMapsLoading;
 
     function onCreate({ title, postCode, city, street, houseNumber, country }: CreateAddressFormInputs) {
-        create({
-            variables: {
-                userId,
-                address: {
-                    title,
-                    postCode,
-                    city,
-                    street,
-                    houseNumber,
-                    country,
-                    location: { latitude: randomIntFromInterval(40, 50), longitude: randomIntFromInterval(6, 9) },
+        setGoogleMapsLoading(true);
+        getLocationSuggestions(`${postCode} ${city}, ${street} ${houseNumber}, ${country}`, ([firstResult]) => {
+            setGoogleMapsLoading(false);
+            console.log({ query: `${postCode} ${city}, ${street} ${houseNumber}, ${country}`, firstResult });
+            if (!firstResult) return;
+
+            const { latitude, longitude } = firstResult;
+
+            create({
+                variables: {
+                    userId,
+                    address: {
+                        title,
+                        postCode,
+                        city,
+                        street,
+                        houseNumber,
+                        country,
+                        location: { latitude, longitude },
+                    },
                 },
-            },
-        }).then(({ data }) => {
-            if (data?.users.addresses.success) {
-                onComplete();
-            }
+            }).then(({ data }) => {
+                if (data?.users.addresses.success) {
+                    onComplete();
+                }
+            });
         });
     }
 
