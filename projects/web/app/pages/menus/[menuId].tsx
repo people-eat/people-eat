@@ -455,9 +455,7 @@ export default function PublicMenuPage({
             <AnalyticsClarity enabled={cookieSettings?.clarity} />
 
             <Head>
-                <title>
-                    Fine Dining Menü {menu.title} von Koch {menu.cook.user.firstName}
-                </title>
+                <title>{`Fine Dining Menü ${menu.title} von Koch ${menu.cook.user.firstName}`}</title>
                 <meta
                     name="description"
                     content="Entdecke eine Vielfalt an Menüs für dein Zuhause bei PeopleEat. Buche einen Privatkoch und genieße Gourmet-, vegetarische, vegane und internationale Menüs, die nach deinen Wünschen zubereitet werden. Perfekt für besondere Anlässe und unvergessliche kulinarische Erlebnisse."
