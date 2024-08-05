@@ -45,7 +45,7 @@ function isButtonMealCard(props: MealCardProps): props is MealCardButtonProps {
 export type MealCardProps = MealCardSimpleProps | MealCardSelectionProps | MealCardButtonProps;
 
 export function MealCard(props: MealCardProps) {
-    const { title, imageUrl, onInfoClick, className } = props;
+    const { title, description, imageUrl, onInfoClick, className } = props;
 
     return (
         <li className={classNames('flex flex-col lg:flex-row-reverse rounded-xl shadow-md bg-white', className)}>
@@ -59,11 +59,11 @@ export function MealCard(props: MealCardProps) {
             <div className="p-4 flex flex-col gap-2 flex-1">
                 <div className="flex flex-col gap-2 flex-1">
                     <div className="flex justify-between items-center gap-4">
-                        <p className="pointer-events-none line-clamp-4 text-md md:text-xl font-semibold text-gray-900">{title}</p>
+                        <p className="pointer-events-none line-clamp-2 text-md font-semibold text-gray-900">{title}</p>
                     </div>
-                    {/* <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-normal text-black">
-                        {description === '' ? 'Ohne Beschreibung' : description}
-                    </p> */}
+                    {description !== '' && (
+                        <p className="pointer-events-none text-md line-clamp-1 md:line-clamp-2 font-normal text-black">{description}</p>
+                    )}
                 </div>
 
                 <div className="flex gap-2">
