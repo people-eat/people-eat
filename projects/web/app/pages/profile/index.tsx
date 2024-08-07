@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, PEImagePicker, PEProfileNavigation } from '@people-eat/web-components';
-import { PEAlert, PEButton, PELabelMultiSelection, PELink, PESlider, PETextArea } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PELabelMultiSelection, PESlider, PETextArea } from '@people-eat/web-core-components';
 import {
     AddOneCookLanguageDocument,
     CookGetStripeDashboardUrlDocument,
@@ -18,6 +18,7 @@ import {
     UpdateCookTravelExpensesDocument,
     UpdateUserProfilePictureDocument,
 } from '@people-eat/web-domain';
+import classNames from 'classnames';
 import { MinusIcon, PlusIcon, Users } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -30,7 +31,6 @@ import { PEEditPasswordCard } from '../../components/PEEditPasswordCard';
 import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
 import { createApolloClient } from '../../network/apolloClients';
-import classNames from 'classnames';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
@@ -264,11 +264,6 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
                         <div className="flex flex-col gap-2">
                             <span className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">Hallo {profile.firstName}!</span>
                         </div>
-                        {!profile.isCook && (
-                            <div>
-                                <PELink type="primary" title="Als Koch registrieren" href="/chef-sign-up" />
-                            </div>
-                        )}
                     </div>
 
                     <div className="flex gap-8 flex-col lg:flex-row">

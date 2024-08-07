@@ -113,6 +113,21 @@ export function PEHeader({ signedInUser, className, onOpenNewsletter }: PEHeader
                                             )}
                                         </Menu.Item>
                                     )}
+                                    {!signedInUser.isCook && (
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <Link
+                                                    href="/chef-sign-up"
+                                                    className={classNames(
+                                                        active ? 'bg-gray-100' : '',
+                                                        'block px-4 py-2 text-sm text-gray-700',
+                                                    )}
+                                                >
+                                                    Als Koch registrieren
+                                                </Link>
+                                            )}
+                                        </Menu.Item>
+                                    )}
                                     <Menu.Item>
                                         {({ active }) => (
                                             <button
