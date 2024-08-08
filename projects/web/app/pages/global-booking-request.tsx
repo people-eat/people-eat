@@ -20,14 +20,14 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
+import { setup } from '../components/meta-pixel/setup';
 import { PEAuthDialog } from '../components/PEAuthDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
-import { setup } from '../components/meta-pixel/setup';
 
 interface ServerSideProps {
     initialSignedInUser: SignedInUser | null;
@@ -148,12 +148,12 @@ export default function GlobalBookingRequestPage({
         ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
         ?.pageView();
 
-    useEffect(() => {
-        if (showSuccessAlert) {
-            console.log('triggered meta pixel track');
-            abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
-        }
-    }, [showSuccessAlert, abc]);
+    // useEffect(() => {
+    //     if (showSuccessAlert) {
+    //         console.log('triggered meta pixel track');
+    //         abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
+    //     }
+    // }, [showSuccessAlert, abc]);
 
     return (
         <>
@@ -235,7 +235,10 @@ export default function GlobalBookingRequestPage({
                                     setOccasion={setOccasion}
                                     searchButton={{
                                         title: 'Anfrage senden',
-                                        onClick: () => (signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true)),
+                                        onClick: () => {
+                                            abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
+                                            signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true);
+                                        },
                                     }}
                                     categories={{
                                         categoryOptions: categories,
