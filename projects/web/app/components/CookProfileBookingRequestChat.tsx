@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery, useSubscription } from '@apollo/client';
 import { LoadingDialog } from '@people-eat/web-components';
 import { PEAlert, PEButton, PETextField } from '@people-eat/web-core-components';
 import {
@@ -6,9 +6,11 @@ import {
     ChatMessage,
     CookBookingRequestAcceptDocument,
     CookBookingRequestDeclineDocument,
+    CookGetStripeOnboardingUrlDocument,
     CreateOneCookBookingRequestChatMessageDocument,
     FindManyCookBookingRequestChatMessagesDocument,
     GetCookProfileBookingsPageDataQuery,
+    UpdateCookHasStripePayoutMethodActivatedDocument,
 } from '@people-eat/web-domain';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -88,6 +90,28 @@ export function CookProfileBookingRequestChat({
     sortedChatMessages.sort(
         (chatMessageA, chatMessageB) => new Date(chatMessageA.createdAt).getTime() - new Date(chatMessageB.createdAt).getTime(),
     );
+
+    const [getStripeOnboardingUrl, { loading: loadingStripeOnboardingUrl }] = useLazyQuery(CookGetStripeOnboardingUrlDocument, {
+        variables: { cookId, returnBookingId: bookingRequestId },
+    });
+
+    const [
+        requestHasStripePayoutMethodActivatedUpdate,
+        { loading: walletUpdateLoading, reset: resetUpdateWallet, data: updateWalletData },
+    ] = useMutation(UpdateCookHasStripePayoutMethodActivatedDocument, { variables: { cookId } });
+
+    const updateWalletStatus = typeof router.query['update-wallet-status'] === 'string';
+
+    function updateHasStripePayoutMethodActivated() {
+        requestHasStripePayoutMethodActivatedUpdate()
+            // .then(() => router.replace({ query: { bookingItems: router.query.bookingItems } }, undefined, { scroll: false }))
+            .then(onRequireUpdate);
+    }
+
+    useEffect(() => {
+        if (updateWalletStatus) updateHasStripePayoutMethodActivated();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="flex flex-col gap-2 flex-1 overflow-hidden pb-4">
@@ -187,8 +211,12 @@ export function CookProfileBookingRequestChat({
                 primaryButton={{
                     title: 'Wallet einrichten',
                     onClick: () => {
-                        router.push('/profile');
                         setStripeNotSetupDialog(false);
+                        void getStripeOnboardingUrl()
+                            .then(({ data: sData }) => {
+                                if (sData?.cooks.getStripeOnboardingUrl) router.push(sData.cooks.getStripeOnboardingUrl);
+                            })
+                            .catch((e) => console.error(e));
                     },
                 }}
                 secondaryButton={{

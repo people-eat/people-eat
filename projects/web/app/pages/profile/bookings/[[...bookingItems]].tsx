@@ -164,7 +164,9 @@ export default function ProfileBookingsPage({
         updatedBookingRequests.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setBookingRequests(updatedBookingRequests);
 
-        setSelectedBookingRequest(data?.users.bookingRequests.findOne ?? null);
+        const selectedUserBookingRequest = data?.users.bookingRequests.findOne ?? null;
+        const selectedCookBookingRequest = data?.cooks.bookingRequests.findOne ?? null;
+        setSelectedBookingRequest(selectedUserBookingRequest ?? selectedCookBookingRequest);
         setGlobalBookingRequests(data?.users.globalBookingRequests.findMany ?? []);
         setSelectedGlobalBookingRequest(data?.users.globalBookingRequests.findOne ?? null);
     }

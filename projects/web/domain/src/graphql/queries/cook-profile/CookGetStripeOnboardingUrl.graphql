@@ -1,5 +1,5 @@
-query CookGetStripeOnboardingUrl($cookId: String!) {
+query CookGetStripeOnboardingUrl($cookId: String!, $returnBookingId: String) {
     cooks {
-        getStripeOnboardingUrl(cookId: $cookId)
+        getStripeOnboardingUrl(cookId: $cookId, returnBookingId: $returnBookingId)
     }
 }
