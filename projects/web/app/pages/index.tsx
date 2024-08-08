@@ -1,10 +1,12 @@
 import { useMutation } from '@apollo/client';
-import { Disclosure } from '@headlessui/react';
-import { PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
+import { Disclosure, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
+import { CookCard, PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
     CreateOneSearchRequestDocument,
-    GetPageDataDocument,
+    geoDistance,
+    GetHomePageDataDocument,
+    GetHomePageDataQuery,
     LocationSearchResult,
     SearchMode,
     SearchParams,
@@ -32,66 +34,13 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
 import { NewsletterDialog } from '../components/NewsletterDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
-import { Fragment } from 'react';
-// import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-
-// const tabs = [
-//     {
-//         name: 'Design',
-//         features: [
-//             {
-//                 name: 'Adaptive and modular',
-//                 description:
-//                     'The Organize base set allows you to configure and evolve your setup as your items and habits change. The included trays and optional add-ons are easily rearranged to achieve that perfect setup.',
-//                 imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-feature-06-detail-01.jpg',
-//                 imageAlt: 'Maple organizer base with slots, supporting white polycarbonate trays of various sizes.',
-//             },
-//         ],
-//     },
-//     {
-//         name: 'Material',
-//         features: [
-//             {
-//                 name: 'Natural wood options',
-//                 description:
-//                     'Organize has options for rich walnut and bright maple base materials. Accent your desk with a contrasting material, or match similar woods for a calm and cohesive look. Every base is hand sanded and finished.',
-//                 imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-feature-06-detail-02.jpg',
-//                 imageAlt: 'Walnut organizer base with pen, sticky note, phone, and bin trays, next to modular drink coaster attachment.',
-//             },
-//         ],
-//     },
-//     {
-//         name: 'Considerations',
-//         features: [
-//             {
-//                 name: 'Helpful around the home',
-//                 description:
-//                     "Our customers use Organize throughout the house to bring efficiency to many daily routines. Enjoy Organize in your workspace, kitchen, living room, entry way, garage, and more. We can't wait to see how you'll use it!",
-//                 imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-feature-06-detail-03.jpg',
-//                 imageAlt: 'Walnut organizer base with white polycarbonate trays in the kitchen with various kitchen utensils.',
-//             },
-//         ],
-//     },
-//     {
-//         name: 'Included',
-//         features: [
-//             {
-//                 name: "Everything you'll need",
-//                 description:
-//                     'The Organize base set includes the pen, phone, small, and large trays to help you group all your essential items. Expand your set with the drink coaster and headphone stand add-ons.',
-//                 imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-feature-06-detail-04.jpg',
-//                 imageAlt: 'Walnut organizer system on black leather desk mat on top of white desk.',
-//             },
-//         ],
-//     },
-// ];
 
 const faqs = [
     {
@@ -259,6 +208,8 @@ interface ServerSideProps {
     signedInUser: SignedInUser | null;
     searchParams: SearchParams;
     cookieSettings: CookieSettings | null;
+    heroMenuGroups: GetHomePageDataQuery['publicMenus']['findHeroGroups'];
+    heroCookGroups: GetHomePageDataQuery['publicCooks']['findHeroGroups'];
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
@@ -266,7 +217,10 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const searchParams = toValidatedSearchParams(query);
 
     try {
-        const { data } = await apolloClient.query({ query: GetPageDataDocument });
+        const { data } = await apolloClient.query({ query: GetHomePageDataDocument });
+
+        const heroMenuGroups = data.publicMenus.findHeroGroups;
+        const heroCookGroups = data.publicCooks.findHeroGroups;
 
         return {
             props: {
@@ -278,6 +232,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,
                       }
                     : null,
+                heroMenuGroups,
+                heroCookGroups,
             },
         };
     } catch (error) {
@@ -286,7 +242,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function HomePage({ signedInUser, searchParams, cookieSettings }: ServerSideProps) {
+export default function HomePage({ signedInUser, searchParams, cookieSettings, heroMenuGroups, heroCookGroups }: ServerSideProps) {
     const router = useRouter();
 
     const [searchMode, setSearchMode] = useState<SearchMode>('MENUS');
@@ -340,66 +296,6 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings }:
                 <PEHeader signedInUser={signedInUser} onOpenNewsletter={() => setNewsletterOpen(true)} />
 
                 <NewsletterDialog open={newsletterOpen} />
-
-                {/* <div className="bg-white">
-                    <section aria-labelledby="features-heading" className="mx-auto max-w-7xl py-32 sm:px-2 lg:px-8">
-                        <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
-                            <div className="max-w-3xl">
-                                <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                                    Technical Specifications
-                                </h2>
-                                <p className="mt-4 text-gray-500">
-                                    The Organize modular system offers endless options for arranging your favorite and most used items. Keep
-                                    everything at reach and in its place, while dressing up your workspace.
-                                </p>
-                            </div>
-
-                            <TabGroup className="mt-4">
-                                <div className="-mx-4 flex overflow-x-auto sm:mx-0">
-                                    <div className="flex-auto border-b border-gray-200 px-4 sm:px-0">
-                                        <TabList className="-mb-px flex space-x-10">
-                                            {tabs.map((tab) => (
-                                                <Tab
-                                                    key={tab.name}
-                                                    className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 data-[selected]:border-indigo-500 data-[selected]:text-indigo-600"
-                                                >
-                                                    {tab.name}
-                                                </Tab>
-                                            ))}
-                                        </TabList>
-                                    </div>
-                                </div>
-
-                                <TabPanels as={Fragment}>
-                                    {tabs.map((tab) => (
-                                        <TabPanel key={tab.name} className="space-y-16 pt-10 lg:pt-16">
-                                            {tab.features.map((feature) => (
-                                                <div
-                                                    key={feature.name}
-                                                    className="flex flex-col-reverse lg:grid lg:grid-cols-12 lg:gap-x-8"
-                                                >
-                                                    <div className="mt-6 lg:col-span-5 lg:mt-0">
-                                                        <h3 className="text-lg font-medium text-gray-900">{feature.name}</h3>
-                                                        <p className="mt-2 text-sm text-gray-500">{feature.description}</p>
-                                                    </div>
-                                                    <div className="lg:col-span-7">
-                                                        <div className="aspect-h-1 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 sm:aspect-h-2 sm:aspect-w-5">
-                                                            <img
-                                                                alt={feature.imageAlt}
-                                                                src={feature.imageSrc}
-                                                                className="object-cover object-center"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </TabPanel>
-                                    ))}
-                                </TabPanels>
-                            </TabGroup>
-                        </div>
-                    </section>
-                </div> */}
 
                 <div>
                     <div className="relative bg-gray-900">
@@ -487,7 +383,72 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings }:
                     </div>
                 </div>
 
-                <div className="py-24 sm:py-32">
+                <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8 py-24 sm:py-32">
+                    <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
+                        <div className="max-w-3xl">
+                            <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                Meistgesuchte Köche
+                            </h2>
+                        </div>
+
+                        <TabGroup className="mt-4">
+                            <div className="-mx-4 flex overflow-x-auto sm:mx-0">
+                                <div className="flex-auto border-b border-gray-200 px-4 sm:px-0">
+                                    <TabList className="-mb-px flex space-x-10">
+                                        {heroCookGroups.map((heroCookGroup) => (
+                                            <Tab
+                                                key={heroCookGroup.displayName}
+                                                className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 data-[selected]:border-orange-500 data-[selected]:text-orange-600"
+                                            >
+                                                {heroCookGroup.displayName}
+                                            </Tab>
+                                        ))}
+                                    </TabList>
+                                </div>
+                            </div>
+
+                            <TabPanels as={Fragment}>
+                                {heroCookGroups.map((heroCookGroup) => (
+                                    <TabPanel key={heroCookGroup.displayName} className="space-y-16 pt-10 lg:pt-16">
+                                        <ul
+                                            role="list"
+                                            className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 m-4"
+                                        >
+                                            {heroCookGroup.cooks.map(({ cookId, user, rank, city, location, menuCount }) => (
+                                                <Link
+                                                    key={cookId}
+                                                    href={{
+                                                        pathname: '/chefs/' + cookId,
+                                                        query: toQueryParams({ selectedLocation, date, adults, children }),
+                                                    }}
+                                                >
+                                                    <CookCard
+                                                        user={{
+                                                            firstName: user.firstName,
+                                                            profilePictureUrl: user.profilePictureUrl ?? null,
+                                                        }}
+                                                        rank={rank}
+                                                        menuCount={menuCount}
+                                                        cityName={city}
+                                                        travelDistance={
+                                                            selectedLocation
+                                                                ? geoDistance({ location1: selectedLocation, location2: location }).toFixed(
+                                                                      0,
+                                                                  )
+                                                                : undefined
+                                                        }
+                                                    />
+                                                </Link>
+                                            ))}
+                                        </ul>
+                                    </TabPanel>
+                                ))}
+                            </TabPanels>
+                        </TabGroup>
+                    </div>
+                </section>
+
+                <div>
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">

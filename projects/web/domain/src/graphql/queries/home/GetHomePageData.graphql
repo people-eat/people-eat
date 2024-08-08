@@ -4,6 +4,13 @@ query GetHomePageData {
             ...SignedInUser
         }
     }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
     publicCooks {
         findHeroGroups {
             displayName
@@ -22,6 +29,7 @@ query GetHomePageData {
                 }
                 city
                 travelExpenses
+                menuCount
                 createdAt
             }
         }
