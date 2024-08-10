@@ -97,7 +97,7 @@ export function BookBar({
     coupon,
 }: BookBarProps) {
     return (
-        <div className="sticky top-4 float-none h-full hidden lg:flex flex-col gap-4 shadow-lg shadow-orange-500/20 rounded-2xl p-6 w-96">
+        <div className="sticky top-4 float-none h-full hidden lg:flex flex-col gap-4 shadow-lg shadow-orange-500/20 rounded-2xl p-6 w-96 bg-white">
             <div>
                 <h1 className="font-bold text-xl">{title}</h1>
                 {subtitle && <h2 className="text-lg font-light">{subtitle}</h2>}

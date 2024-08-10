@@ -1,9 +1,10 @@
 import { useMutation } from '@apollo/client';
 import { Disclosure, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { CookCard, PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
+import { CookCard, MenuCard, PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
 import { PELink } from '@people-eat/web-core-components';
 import {
     CreateOneSearchRequestDocument,
+    formatPrice,
     geoDistance,
     GetHomePageDataDocument,
     GetHomePageDataQuery,
@@ -383,7 +384,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                     </div>
                 </div>
 
-                <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8 py-24 sm:py-32">
+                {/* <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8 pt-24 sm:py-32">
                     <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
                         <div className="max-w-3xl">
                             <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -448,11 +449,77 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                     </div>
                 </section>
 
+                <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8 pb-24 sm:py-32">
+                    <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
+                        <div className="max-w-3xl">
+                            <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                                Beliebte Menüs
+                            </h2>
+                        </div>
+
+                        <TabGroup className="mt-4">
+                            <div className="-mx-4 flex overflow-x-auto sm:mx-0">
+                                <div className="flex-auto border-b border-gray-200 px-4 sm:px-0">
+                                    <TabList className="-mb-px flex space-x-10">
+                                        {heroCookGroups.map((heroCookGroup) => (
+                                            <Tab
+                                                key={heroCookGroup.displayName}
+                                                className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 data-[selected]:border-orange-500 data-[selected]:text-orange-600"
+                                            >
+                                                {heroCookGroup.displayName}
+                                            </Tab>
+                                        ))}
+                                    </TabList>
+                                </div>
+                            </div>
+
+                            <TabPanels as={Fragment}>
+                                {heroMenuGroups.map((heroMenuGroup) => (
+                                    <TabPanel key={heroMenuGroup.displayName} className="space-y-16 pt-10 lg:pt-16">
+                                        <ul
+                                            role="list"
+                                            className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4"
+                                        >
+                                            {heroMenuGroup.menus.map(
+                                                ({ menuId, title, imageUrl, kitchen, cook, categories, courseCount, totalPrice }) => (
+                                                    <Link
+                                                        key={menuId}
+                                                        href={{
+                                                            pathname: '/menus/' + menuId,
+                                                            query: toQueryParams({ selectedLocation, date, adults, children }),
+                                                        }}
+                                                    >
+                                                        <MenuCard
+                                                            title={title}
+                                                            imageUrls={imageUrl ? [imageUrl] : []}
+                                                            kitchenTitle={kitchen?.title}
+                                                            cook={{
+                                                                firstName: cook.user.firstName,
+                                                                profilePictureUrl: cook.user.profilePictureUrl ?? null,
+                                                            }}
+                                                            courseCount={courseCount}
+                                                            pricePerPerson={formatPrice({
+                                                                amount: totalPrice.amount / (searchParams.adults + searchParams.children),
+                                                                currencyCode: '€',
+                                                            })}
+                                                            categoryTitles={categories.map(({ title }) => title)}
+                                                        />
+                                                    </Link>
+                                                ),
+                                            )}
+                                        </ul>
+                                    </TabPanel>
+                                ))}
+                            </TabPanels>
+                        </TabGroup>
+                    </div>
+                </section> */}
+
                 <div>
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                                Spare deine Zeit und Energie auf der Suche nach deinem Privatkoch
+                                Spare dir Zeit und Energie auf der Suche nach deinem Privatkoch
                             </h2>
                             <p className="mt-6 text-lg leading-8 text-gray-600">
                                 Bringe die talentiertesten Köche und ihre Menüs aus ganz Deutschland ganz einfach und bequem zu dir

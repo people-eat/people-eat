@@ -63,6 +63,12 @@ query GetHomePageData {
                 pricePerAdult
                 pricePerChild
                 currencyCode
+
+                courseCount
+                totalPrice(adults: 4, children: 0) {
+                    amount
+                    currencyCode
+                }
             }
         }
     }
