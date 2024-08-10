@@ -384,7 +384,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                     </div>
                 </div>
 
-                {/* <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8 pt-24 sm:py-32">
+                <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8 mt-16">
                     <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
                         <div className="max-w-3xl">
                             <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -449,7 +449,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                     </div>
                 </section>
 
-                <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8 pb-24 sm:py-32">
+                <section aria-labelledby="features-heading" className="mx-auto max-w-7xl sm:px-2 lg:px-8">
                     <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
                         <div className="max-w-3xl">
                             <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -513,9 +513,9 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                             </TabPanels>
                         </TabGroup>
                     </div>
-                </section> */}
+                </section>
 
-                <div>
+                <div className="py-24 sm:py-32">
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:mx-0">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
