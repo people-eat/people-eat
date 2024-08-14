@@ -652,7 +652,7 @@ export default function PublicMenuPage({
                                         className={classNames(
                                             'overflow-x-auto',
                                             'grid grid-flow-col auto-cols-min gap-4 p-4',
-                                            'lg:grid lg:grid-flow-row lg:grid-cols-1 2xl:grid-cols-2 lg:gap-x-4 lg:gap-y-8 xl:gap-x-8',
+                                            'lg:grid lg:grid-flow-row lg:grid-cols-1 xl:grid-cols-2 lg:gap-x-4 lg:gap-y-8 xl:gap-x-8',
                                         )}
                                     >
                                         {mealOptions.map(({ index, meal }) => (

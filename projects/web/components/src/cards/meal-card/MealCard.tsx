@@ -48,7 +48,19 @@ export function MealCard(props: MealCardProps) {
     const { title, description, imageUrl, onInfoClick, className } = props;
 
     return (
-        <li className={classNames('flex flex-col lg:flex-row-reverse rounded-xl shadow-md bg-white', className)}>
+        <li
+            className={classNames('flex flex-col lg:flex-row-reverse rounded-xl shadow-md bg-white', className, {
+                'cursor-pointer hover:opacity-65': onInfoClick,
+            })}
+            onClick={
+                onInfoClick
+                    ? (event) => {
+                          onInfoClick();
+                          event.stopPropagation();
+                      }
+                    : undefined
+            }
+        >
             <Image
                 src={imageUrl ? imageUrl + '?el=720' : '/placeholders/meal.png'}
                 alt=""
@@ -111,7 +123,14 @@ export function MealCard(props: MealCardProps) {
                                         'px-2.5 py-1 sm:px-2.5 sm:py-1 md:px-3 md:py-1.5 lg:px-3.5 lg:py-2 xl:px-4 xl:py-2.5',
                                         'text-xs sm:text-sm',
                                     )}
-                                    onClick={props.onSelect}
+                                    onClick={
+                                        props.onSelect
+                                            ? (event) => {
+                                                  props.onSelect();
+                                                  event.stopPropagation();
+                                              }
+                                            : undefined
+                                    }
                                 >
                                     <span>Auswählen</span>
                                     <Circle className="-mr-0.5 h-5 w-5" aria-hidden="true" />
@@ -120,7 +139,7 @@ export function MealCard(props: MealCardProps) {
                         </>
                     )}
 
-                    {onInfoClick && (
+                    {/* {onInfoClick && (
                         <button
                             type="button"
                             onClick={onInfoClick}
@@ -130,10 +149,10 @@ export function MealCard(props: MealCardProps) {
                                 'text-gray-500',
                             )}
                         >
-                            {/* <InfoIcon strokeWidth={1} className="text-xs md:text-sm" /> */}
+                            was commented -> <InfoIcon strokeWidth={1} className="text-xs md:text-sm" />
                             Info
                         </button>
-                    )}
+                    )} */}
                 </div>
             </div>
         </li>
