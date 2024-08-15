@@ -5,7 +5,7 @@ export interface PECheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
     label?: {
         title: string;
-        description?: string;
+        description?: JSX.Element | string;
     };
     errorMessage?: string;
 }

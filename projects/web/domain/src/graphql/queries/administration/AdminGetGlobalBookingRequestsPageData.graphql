@@ -19,6 +19,18 @@ query AdminGetGlobalBookingRequestsPageData {
                 userId
                 firstName
                 profilePictureUrl
+
+                emailAddress
+                phoneNumber
+
+                emailAddressUpdate {
+                    emailAddress
+                    createdAt
+                }
+                phoneNumberUpdate {
+                    phoneNumber
+                    createdAt
+                }
             }
             createdAt
         }
