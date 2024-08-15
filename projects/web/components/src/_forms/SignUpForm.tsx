@@ -1,4 +1,5 @@
 import { PEButton, PECheckbox, PETextField } from '@people-eat/web-core-components';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
 export interface SignUpFormInputs {
@@ -104,7 +105,15 @@ export function SignUpForm({ completeTitle, onSignUp, onSignIn }: SignUpFormProp
                         id="accepted-terms-and-conditions"
                         label={{
                             title: 'Allgemeine Geschäftsbedingungen',
-                            description: 'Ich habe die allgemeinen Geschäftsbedingungen gelesen und akzeptiere sie',
+                            description: (
+                                <>
+                                    'Ich habe die{' '}
+                                    <Link href="/terms-and-conditions" className="text-orange-500">
+                                        allgemeinen Geschäftsbedingungen
+                                    </Link>{' '}
+                                    gelesen und akzeptiere sie'
+                                </>
+                            ),
                         }}
                         errorMessage={errors.acceptedTermsAndConditions?.message}
                         {...register('acceptedTermsAndConditions', {
@@ -115,7 +124,15 @@ export function SignUpForm({ completeTitle, onSignUp, onSignIn }: SignUpFormProp
                         id="accepted-privacy-policy"
                         label={{
                             title: 'Datenschutzerklärung',
-                            description: 'Ich habe die Datenschutzerklärung gelesen und akzeptiere sie',
+                            description: (
+                                <>
+                                    Ich habe die{' '}
+                                    <Link href="/privacy-policy" className="text-orange-500">
+                                        Datenschutzerklärung
+                                    </Link>{' '}
+                                    gelesen und akzeptiere sie
+                                </>
+                            ),
                         }}
                         errorMessage={errors.acceptedPrivacyPolicy?.message}
                         {...register('acceptedPrivacyPolicy', {
