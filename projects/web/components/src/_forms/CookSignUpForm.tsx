@@ -285,11 +285,11 @@ export function CookSignUpForm({
                             title: 'Allgemeine Geschäftsbedingungen',
                             description: (
                                 <>
-                                    'Ich habe die{' '}
+                                    Ich habe die{' '}
                                     <Link href="/terms-and-conditions" className="text-orange-500">
                                         allgemeinen Geschäftsbedingungen
                                     </Link>{' '}
-                                    gelesen und akzeptiere sie'
+                                    gelesen und akzeptiere sie
                                 </>
                             ),
                         }}

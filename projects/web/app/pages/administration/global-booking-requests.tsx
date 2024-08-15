@@ -81,6 +81,9 @@ export default function AdministrationGlobalBookingRequestsPage({
                                     <div className="absolute inset-y-0 left-0 -z-10 w-screen border-b border-b-gray-200" />
                                 </th>
                                 <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
+                                    Telefonnummer
+                                </th>
+                                <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
                                     Teilnehmer
                                 </th>
                                 <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
@@ -108,6 +111,13 @@ export default function AdministrationGlobalBookingRequestsPage({
                                         {globalBookingRequest.user.firstName}
                                         <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />
                                         <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
+                                    </td>
+                                    <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">
+                                        {globalBookingRequest.user.phoneNumber ??
+                                            (globalBookingRequest.user.phoneNumberUpdate?.phoneNumber
+                                                ? `${globalBookingRequest.user.phoneNumberUpdate.phoneNumber}` //  (nicht bestätigt)
+                                                : undefined) ??
+                                            'Keine Angabe'}
                                     </td>
                                     <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">
                                         {globalBookingRequest.adultParticipants + globalBookingRequest.children}
