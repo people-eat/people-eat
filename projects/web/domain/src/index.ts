@@ -231,24 +231,39 @@ const weekDays: Record<number, string> = {
     6: 'Samstag',
 };
 
-const months: Record<number, string> = {
-    0: 'Januar',
-    1: 'Februar',
-    2: 'März',
-    3: 'April',
-    4: 'Mai',
-    5: 'Juni',
-    6: 'Juli',
-    7: 'August',
-    8: 'September',
-    9: 'Oktober',
-    10: 'November',
-    11: 'Dezember',
+// const monthsWords: Record<number, string> = {
+//     0: 'Januar',
+//     1: 'Februar',
+//     2: 'März',
+//     3: 'April',
+//     4: 'Mai',
+//     5: 'Juni',
+//     6: 'Juli',
+//     7: 'August',
+//     8: 'September',
+//     9: 'Oktober',
+//     10: 'November',
+//     11: 'Dezember',
+// };
+
+const monthsNumbers: Record<number, string> = {
+    0: '1.',
+    1: '2.',
+    2: '3.',
+    3: '4.',
+    4: '5.',
+    5: '6.',
+    6: '7.',
+    7: '8.',
+    8: '9.',
+    9: '10.',
+    10: '11.',
+    11: '12.',
 };
 
 export function toTranslatedFormattedDate(date: Date): string {
     date = new Date(date);
-    return `${weekDays[date.getDay()]}, ${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
+    return `${weekDays[date.getDay()]}, ${date.getDate()}.${monthsNumbers[date.getMonth()]}${date.getFullYear()}`;
 }
 
 export function dateDistanceInDays(date1: Date, date2: Date): number {
