@@ -1,4 +1,4 @@
-import { Combobox } from '@headlessui/react';
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Label } from '@headlessui/react';
 import classNames from 'classnames';
 import { CheckIcon } from 'lucide-react';
 import { ForwardedRef, forwardRef } from 'react';
@@ -30,12 +30,12 @@ function PEAutoComplete<T>(
 ) {
     return (
         <Combobox as="div" value={selectedOption} onChange={onSelectedOptionChange} className="flex flex-col gap-2">
-            <Combobox.Label className="ml-px block text-md font-medium leading-6 text-gray-900">{title}</Combobox.Label>
+            <Label className="ml-px block text-md font-medium leading-6 text-gray-900">{title}</Label>
             <div className="relative">
-                <Combobox.Input
+                <ComboboxInput
                     defaultValue={selectedOption ? getLabel(selectedOption) : ('' as T)}
                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-orange-600"
-                    displayValue={(selection: T) => getLabel(selection)}
+                    displayValue={(selection: T) => (selection ? getLabel(selection) : '')}
                     placeholder="Wo?"
                     ref={ref}
                     {...rest}
@@ -44,9 +44,9 @@ function PEAutoComplete<T>(
                 {errorMessage && <span className="ml-4 mt-1 text-sm text-red-600">{errorMessage}</span>}
 
                 {options.length > 0 && (
-                    <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {options.map((option: T) => (
-                            <Combobox.Option
+                            <ComboboxOption
                                 key={getOptionIdentifier(option)}
                                 value={option}
                                 className={({ active }) =>
@@ -56,27 +56,26 @@ function PEAutoComplete<T>(
                                     )
                                 }
                             >
-                                {({ active, selected }) => (
-                                    <>
-                                        <div className="flex">
-                                            <span className={classNames('truncate', selected && 'font-semibold')}>{getLabel(option)}</span>
-                                        </div>
+                                <div className="flex">
+                                    <span className={classNames('truncate', option === selectedOption && 'font-semibold')}>
+                                        {getLabel(option)}
+                                    </span>
+                                </div>
 
-                                        {selected && (
-                                            <span
-                                                className={classNames(
-                                                    'absolute inset-y-0 right-0 flex items-center pr-4',
-                                                    active ? 'text-white' : 'text-orange-500',
-                                                )}
-                                            >
-                                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                            </span>
+                                {option === selectedOption && (
+                                    <span
+                                        className={classNames(
+                                            'absolute inset-y-0 right-0 flex items-center pr-4',
+                                            'text-white',
+                                            'data-[focus]:text-orange-500',
                                         )}
-                                    </>
+                                    >
+                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                    </span>
                                 )}
-                            </Combobox.Option>
+                            </ComboboxOption>
                         ))}
-                    </Combobox.Options>
+                    </ComboboxOptions>
                 )}
             </div>
         </Combobox>
