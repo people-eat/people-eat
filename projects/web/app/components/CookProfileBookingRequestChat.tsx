@@ -9,7 +9,7 @@ import {
     CookGetStripeOnboardingUrlDocument,
     CreateOneCookBookingRequestChatMessageDocument,
     FindManyCookBookingRequestChatMessagesDocument,
-    GetCookProfileBookingsPageDataQuery,
+    GetProfileBookingsPageDataQuery,
     UpdateCookHasStripePayoutMethodActivatedDocument,
 } from '@people-eat/web-domain';
 import { useRouter } from 'next/router';
@@ -20,7 +20,7 @@ import { PEChatMessage } from './PEChatMessage';
 export interface CookProfileBookingRequestChatProps {
     cookId: string;
     hasStripePayoutMethodActivated: boolean;
-    bookingRequest: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
+    bookingRequest: NonNullable<GetProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
     onRequireUpdate: () => void;
 }
 
