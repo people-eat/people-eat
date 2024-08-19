@@ -125,7 +125,7 @@ export function geoDistance({ location1, location2 }: GeoDistanceProps): number 
 //
 
 export const formatPrice = (price: Price, withDecimals?: boolean): string =>
-    Math.round(price.amount / 100).toFixed(withDecimals ? 2 : 0) + ' ' + price.currencyCode;
+    (price.amount / 100).toFixed(withDecimals ? 2 : 0) + ' ' + price.currencyCode;
 
 //
 
@@ -221,15 +221,15 @@ export const mealTypeTranslations: Record<MealType, string> = {
 
 export { priceClassRanges, translatedPriceClasses } from './priceClass';
 
-const weekDays: Record<number, string> = {
-    0: 'Sonntag',
-    1: 'Montag',
-    2: 'Dienstag',
-    3: 'Mittwoch',
-    4: 'Donnerstag',
-    5: 'Freitag',
-    6: 'Samstag',
-};
+// const weekDays: Record<number, string> = {
+//     0: 'Sonntag',
+//     1: 'Montag',
+//     2: 'Dienstag',
+//     3: 'Mittwoch',
+//     4: 'Donnerstag',
+//     5: 'Freitag',
+//     6: 'Samstag',
+// };
 
 const monthsWords: Record<number, string> = {
     0: 'Januar',
