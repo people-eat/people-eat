@@ -229,32 +229,34 @@ export default function ProfileBookingsPage({
                                         }
                                     />
                                 ))}
-                                {bookingRequests.map(({ bookingRequestId, occasion, dateTime, status, price, configuredMenu, ...br }) => (
-                                    <BookingRequestRow
-                                        key={bookingRequestId}
-                                        status={status}
-                                        occasion={occasion}
-                                        dateTime={dateTime}
-                                        selected={
-                                            bookingRequestId === selectedBookingRequest?.bookingRequestId &&
-                                            (('user' in br && 'user' in selectedBookingRequest) ||
-                                                ('cook' in br && 'cook' in selectedBookingRequest))
-                                        }
-                                        price={price}
-                                        configuredMenuTitle={configuredMenu?.title}
-                                        name={'user' in br ? br.user.firstName : br.cook.user.firstName}
-                                        onSelect={() =>
-                                            router.push(
-                                                'user' in br
-                                                    ? `/profile/bookings/r/${bookingRequestId}`
-                                                    : `/profile/bookings/s/${bookingRequestId}`,
-                                                undefined,
-                                                { scroll: false },
-                                            )
-                                        }
-                                        mode={'user' in br ? 'RECEIVED' : 'SENT'}
-                                    />
-                                ))}
+                                {bookingRequests.map(
+                                    ({ bookingRequestId, occasion, dateTime, status, totalPriceCustomer, configuredMenu, ...br }) => (
+                                        <BookingRequestRow
+                                            key={bookingRequestId}
+                                            status={status}
+                                            occasion={occasion}
+                                            dateTime={dateTime}
+                                            selected={
+                                                bookingRequestId === selectedBookingRequest?.bookingRequestId &&
+                                                (('user' in br && 'user' in selectedBookingRequest) ||
+                                                    ('cook' in br && 'cook' in selectedBookingRequest))
+                                            }
+                                            price={totalPriceCustomer}
+                                            configuredMenuTitle={configuredMenu?.title}
+                                            name={'user' in br ? br.user.firstName : br.cook.user.firstName}
+                                            onSelect={() =>
+                                                router.push(
+                                                    'user' in br
+                                                        ? `/profile/bookings/r/${bookingRequestId}`
+                                                        : `/profile/bookings/s/${bookingRequestId}`,
+                                                    undefined,
+                                                    { scroll: false },
+                                                )
+                                            }
+                                            mode={'user' in br ? 'RECEIVED' : 'SENT'}
+                                        />
+                                    ),
+                                )}
                             </ul>
                         )}
 

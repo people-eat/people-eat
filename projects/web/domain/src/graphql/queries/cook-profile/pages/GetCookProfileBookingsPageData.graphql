@@ -28,7 +28,7 @@ query GetCookProfileBookingsPageData($cookId: String!, $bookingRequestId: String
                 kitchenId
                 occasion
                 preparationTime
-                price {
+                totalPriceCustomer {
                     amount
                     currencyCode
                 }
@@ -63,7 +63,7 @@ query GetCookProfileBookingsPageData($cookId: String!, $bookingRequestId: String
                 kitchenId
                 occasion
                 preparationTime
-                price {
+                totalPriceCustomer {
                     amount
                     currencyCode
                 }
