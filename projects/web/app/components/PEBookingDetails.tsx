@@ -1,4 +1,4 @@
-import { BookingStatusInfoPopover } from '@people-eat/web-components';
+import { BookingStatusInfoPopover, PETooltip } from '@people-eat/web-components';
 import {
     BookingRequestStatus,
     CurrencyCode,
@@ -10,6 +10,7 @@ import {
     translatedBookingRequestStatus,
     translatedPriceClasses,
 } from '@people-eat/web-domain';
+import { Info } from 'lucide-react';
 
 export interface PEBookingDetailsProps {
     status?: BookingRequestStatus;
@@ -19,6 +20,8 @@ export interface PEBookingDetailsProps {
     dateTime: Date;
     location: { text: string };
     price?: Price;
+    payoutPrice?: Price;
+    travelExpenses?: Price;
     priceClass?: {
         type: PriceClass;
         min: number;
@@ -35,6 +38,8 @@ export function PEBookingDetails({
     dateTime,
     location,
     price,
+    payoutPrice,
+    travelExpenses,
     priceClass,
 }: PEBookingDetailsProps) {
     return (
@@ -92,6 +97,21 @@ export function PEBookingDetails({
                         <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Gesamtpreis</dt>
                         <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
                             <div className="text-gray-900">{formatPrice(price, true)}</div>
+                            {payoutPrice && (
+                                <>
+                                    <PETooltip position="left" title={'Auszahlungsbetrag: ' + formatPrice(payoutPrice, true)}>
+                                        <Info />
+                                    </PETooltip>
+                                </>
+                            )}
+                        </dd>
+                    </div>
+                )}
+                {travelExpenses && (
+                    <div className="pt-6 sm:flex">
+                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Reisekosten</dt>
+                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                            <div className="text-gray-900">{formatPrice(travelExpenses, true)}</div>
                         </dd>
                     </div>
                 )}

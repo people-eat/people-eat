@@ -7,7 +7,7 @@ import {
     MealDetailsDialog,
 } from '@people-eat/web-components';
 import { PEAlert, PETabSingleSelection } from '@people-eat/web-core-components';
-import { CreateOneUserSupportRequestDocument, GetCookProfileBookingsPageDataQuery } from '@people-eat/web-domain';
+import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery } from '@people-eat/web-domain';
 import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -44,7 +44,7 @@ export interface PECookProfileBookingRequestDetailsProps {
     userId: string;
     selectedTab: CookProfileBookingRequestDetailsTab;
     hasStripePayoutMethodActivated: boolean;
-    bookingRequest: NonNullable<GetCookProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
+    bookingRequest: NonNullable<GetProfileBookingsPageDataQuery['cooks']['bookingRequests']['findOne']>;
     onRequireUpdate: () => void;
 }
 
@@ -100,7 +100,9 @@ export function PECookProfileBookingRequestDetails({
                     children={bookingRequest.children}
                     dateTime={bookingRequest.dateTime}
                     location={bookingRequest.location}
-                    price={bookingRequest.price}
+                    price={bookingRequest.totalPriceCustomer}
+                    payoutPrice={bookingRequest.totalPriceCook}
+                    // travelExpenses={bookingRequest.travelExpenses}
                 />
             )}
 

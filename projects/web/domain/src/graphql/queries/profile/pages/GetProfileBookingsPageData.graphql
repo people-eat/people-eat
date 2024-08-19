@@ -30,7 +30,7 @@ query GetProfileBookingsPageData(
                 kitchenId
                 occasion
                 preparationTime
-                price {
+                totalPriceCustomer {
                     amount
                     currencyCode
                 }
@@ -63,7 +63,7 @@ query GetProfileBookingsPageData(
                 kitchenId
                 occasion
                 preparationTime
-                price {
+                totalPriceCustomer {
                     amount
                     currencyCode
                 }
@@ -147,10 +147,18 @@ query GetProfileBookingsPageData(
                 kitchenId
                 occasion
                 preparationTime
-                price {
+                totalPriceCustomer {
                     amount
                     currencyCode
                 }
+                totalPriceCook {
+                    amount
+                    currencyCode
+                }
+                # travelExpenses {
+                #     amount
+                #     currencyCode
+                # }
                 location {
                     latitude
                     longitude
@@ -179,10 +187,18 @@ query GetProfileBookingsPageData(
                 kitchenId
                 occasion
                 preparationTime
-                price {
+                totalPriceCustomer {
                     amount
                     currencyCode
                 }
+                totalPriceCook {
+                    amount
+                    currencyCode
+                }
+                # travelExpenses {
+                #     amount
+                #     currencyCode
+                # }
                 location {
                     latitude
                     longitude

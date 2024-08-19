@@ -34,3 +34,4 @@ export { PESearchBar, type PESearchBarProps } from './search-bar/PESearchBar';
 export { SearchModeSwitch } from './search-mode-switch/SearchModeSwitch';
 export { SignInDialog, type SignInDialogProps } from './sign-in-dialog/SignInDialog';
 export { SignUpDialog, type SignUpDialogProps } from './sign-up-dialog/SignUpDialog';
+export { PETooltip, type PETooltipProps as TooltipProps } from './Tooltip';

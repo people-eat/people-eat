@@ -99,7 +99,7 @@ export function PEProfileBookingRequestDetails({
                     children={bookingRequest.children}
                     dateTime={bookingRequest.dateTime}
                     location={bookingRequest.location}
-                    price={bookingRequest.price}
+                    price={bookingRequest.totalPriceCustomer}
                 />
             )}
 
