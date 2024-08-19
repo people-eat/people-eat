@@ -155,7 +155,7 @@ function toCostBreakdown({
     const stripeTransactionPrice = discountAmount
         ? menuPrice + (travelExpenses ?? 0) + customerFee - discountAmount
         : menuPrice + (travelExpenses ?? 0) + customerFee;
-    const finalPrice = (stripeTransactionPrice + 25) / (1 - 0.015);
+    const finalPrice = Math.round((stripeTransactionPrice + 25) / (1 - 0.015));
     const stripeFee = finalPrice - stripeTransactionPrice;
     const serviceFee = stripeFee + customerFee;
 
