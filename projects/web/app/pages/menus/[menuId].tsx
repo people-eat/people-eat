@@ -147,7 +147,7 @@ function toCostBreakdown({
     menu,
     discountAmount,
 }: ToCostBreakdownInput): CostBreakdown {
-    const travelExpenses: number | undefined = distance && distance * menu.cook.travelExpenses * 2;
+    const travelExpenses: number | undefined = distance && Math.round(distance * menu.cook.travelExpenses * 2);
 
     const menuPrice = calculateMenuPrice(adults, children, menu.basePrice, menu.basePriceCustomers, menu.pricePerAdult, menu.pricePerChild);
 
