@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { LoadingDialog } from '@people-eat/web-components';
-import { PEButton, PEDialog } from '@people-eat/web-core-components';
+import { PEButton, PEDialog } from '@people-eat/web-components';
 import { AdminGetCookMenusDocument } from '@people-eat/web-domain';
 import { useState } from 'react';
 import { AdminGlobalBookingRequestCookMenuDialog } from './AdminGlobalBookingRequestCookMenuDialog';

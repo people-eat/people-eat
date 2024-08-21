@@ -1,15 +1,8 @@
-import {
-    PEButton,
-    PECheckbox,
-    PELabelMultiSelection,
-    PELabelSingleSelection,
-    PESlider,
-    PETextField,
-} from '@people-eat/web-core-components';
 import { CookRank, LanguageOption, SignedInUser, cookRanks, translatedCookRanks } from '@people-eat/web-domain';
 import { MinusIcon, PlusIcon, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { PEButton, PECheckbox, PELabelMultiSelection, PELabelSingleSelection, PESlider, PETextField } from '../_core';
 
 export interface CookSignUpFormInputs {
     firstName: string;

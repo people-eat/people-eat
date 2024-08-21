@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, SignInDialog, SignUpDialog } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-core-components';
+import { PEAlert } from '@people-eat/web-components';
 import {
     AssignOneSessionByEmailAddressDocument,
     CreateOneUserByEmailAddressDocument,

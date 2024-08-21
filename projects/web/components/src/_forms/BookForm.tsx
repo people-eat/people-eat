@@ -1,14 +1,4 @@
 import {
-    PEAutoComplete,
-    PEButton,
-    PEDatePicker,
-    PELabelMultiSelection,
-    PELabelSingleSelection,
-    PETextArea,
-    PETextField,
-    PETimePicker,
-} from '@people-eat/web-core-components';
-import {
     AllergyOption,
     CategoryOption,
     CostBreakdown,
@@ -19,6 +9,16 @@ import {
     Time,
 } from '@people-eat/web-domain';
 import { useForm } from 'react-hook-form';
+import {
+    PEAutoComplete,
+    PEButton,
+    PEDatePicker,
+    PELabelMultiSelection,
+    PELabelSingleSelection,
+    PETextArea,
+    PETextField,
+    PETimePicker,
+} from '../_core';
 import { PECostBreakdownPanel } from '../cost-breakdown-panel/PECostBreakdownPanel';
 import { PEPriceClassSelection } from '../price-class-selection/PEPriceClassSelection';
 import { ParticipantsPicker } from '../search-bar/PEParticipantsPicker';

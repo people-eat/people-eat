@@ -1,5 +1,5 @@
-import { PEButton, PETextField } from '@people-eat/web-core-components';
 import { useForm } from 'react-hook-form';
+import { PEButton, PETextField } from '../_core';
 
 export interface CreateAddressFormInputs {
     title: string;

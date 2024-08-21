@@ -11,7 +11,7 @@ import {
     PEHeader,
     Payment,
 } from '@people-eat/web-components';
-import { PEButton, PEDialog, PEFullPageSheet } from '@people-eat/web-core-components';
+import { PEButton, PEDialog, PEFullPageSheet } from '@people-eat/web-components';
 import {
     AllergyOption,
     CostBreakdown,

@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { PEButton } from '@people-eat/web-core-components';
+import { PEButton } from '@people-eat/web-components';
 import { FindCurrentSessionDocument, UpdateSessionCookieSettingsDocument } from '@people-eat/web-domain';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

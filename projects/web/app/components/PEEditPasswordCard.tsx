@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PEButton, PETextField } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PETextField } from '@people-eat/web-components';
 import { UpdateUserPasswordDocument } from '@people-eat/web-domain';
 import { useForm } from 'react-hook-form';
 import { PEProfileCard } from './PEProfileCard';

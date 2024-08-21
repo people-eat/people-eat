@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import { PELink } from '@people-eat/web-core-components';
 import { ExpireCurrentSessionDocument, SignedInUser } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { MenuIcon, XIcon } from 'lucide-react';
@@ -8,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
+import { PELink } from '../_core';
 
 const navigationItems = [
     { name: 'Individuelle Anfrage', href: '/global-booking-request' },

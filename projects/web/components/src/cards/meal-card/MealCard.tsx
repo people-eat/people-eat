@@ -1,7 +1,7 @@
-import { PEButton } from '@people-eat/web-core-components';
 import classNames from 'classnames';
 import { CheckCircleIcon, Circle } from 'lucide-react';
 import Image from 'next/image';
+import { PEButton } from '../../_core';
 
 interface MealCardBaseProps {
     type: MealCardType;

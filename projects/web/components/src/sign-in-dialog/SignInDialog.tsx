@@ -1,6 +1,6 @@
-import { PEDialog } from '@people-eat/web-core-components';
 import Image from 'next/image';
 import { SignInForm, SignInFormInputs } from '../_forms/SignInForm';
+import { PEDialog } from '../_core';
 
 export interface SignInDialogProps {
     open: boolean;

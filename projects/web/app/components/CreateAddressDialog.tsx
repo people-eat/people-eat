@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CreateAddressForm, CreateAddressFormInputs, LoadingDialog } from '@people-eat/web-components';
-import { PEDialog } from '@people-eat/web-core-components';
+import { PEDialog } from '@people-eat/web-components';
 import { CreateOneUserAddressDocument } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import getLocationSuggestions from '../network/getLocationSuggestions';

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-core-components';
+import { PEAlert } from '@people-eat/web-components';
 import { ConfirmOneEmailAddressUpdateDocument } from '@people-eat/web-domain';
 import Head from 'next/head';
 import { useRouter } from 'next/router';

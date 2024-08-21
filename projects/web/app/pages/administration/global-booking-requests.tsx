@@ -1,5 +1,5 @@
 import { PEHeader } from '@people-eat/web-components';
-import { PEButton } from '@people-eat/web-core-components';
+import { PEButton } from '@people-eat/web-components';
 import {
     AdminGetGlobalBookingRequestsPageDataDocument,
     AdminGetGlobalBookingRequestsPageDataQuery,

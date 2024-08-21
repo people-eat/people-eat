@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Disclosure } from '@headlessui/react';
 import { BookBar, BookForm, LoadingDialog, MenuCard, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEAlert, PEButton, PEFullPageSheet } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PEFullPageSheet } from '@people-eat/web-components';
 import {
     AllergyOption,
     CategoryOption,

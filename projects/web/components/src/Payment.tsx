@@ -1,10 +1,10 @@
 import { useMutation } from '@apollo/client';
-import { PEAlert, PEButton } from '@people-eat/web-core-components';
 import { UserBookingRequestConfirmPaymentSetupDocument } from '@people-eat/web-domain';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/router';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
 import { LoadingDialog } from './loading-dialog/LoadingDialog';
+import { PEAlert, PEButton } from './_core';
 
 export function Payment({
     children,

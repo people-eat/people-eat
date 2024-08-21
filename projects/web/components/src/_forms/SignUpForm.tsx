@@ -1,6 +1,6 @@
-import { PEButton, PECheckbox, PETextField } from '@people-eat/web-core-components';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { PEButton, PECheckbox, PETextField } from '../_core';
 
 export interface SignUpFormInputs {
     firstName: string;

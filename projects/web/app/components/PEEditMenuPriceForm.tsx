@@ -1,4 +1,4 @@
-import { PEButton, PENumberTextField, PESingleSelection } from '@people-eat/web-core-components';
+import { PEButton, PENumberTextField, PESingleSelection } from '@people-eat/web-components';
 import { GetCookProfileMenuPageDataQuery, calculateMenuPrice, formatPrice } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { ArrowDown, ArrowUp, Car, HandCoins } from 'lucide-react';

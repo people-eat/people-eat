@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Disclosure, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { CookCard, MenuCard, PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
-import { PELink } from '@people-eat/web-core-components';
+import { PELink } from '@people-eat/web-components';
 import {
     CreateOneSearchRequestDocument,
     formatPrice,

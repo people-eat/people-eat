@@ -10,7 +10,7 @@ import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../../network/apolloClients';
 import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
-import { PEButton } from '@people-eat/web-core-components';
+import { PEButton } from '@people-eat/web-components';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };

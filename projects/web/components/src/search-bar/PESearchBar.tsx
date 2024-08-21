@@ -1,5 +1,5 @@
 import { Combobox, Popover, Transition } from '@headlessui/react';
-import { PEAutoComplete, PEButton, PECalendar, PEFullPageSheet, PEIconButton } from '@people-eat/web-core-components';
+import { PEAutoComplete, PEButton, PECalendar, PEFullPageSheet, PEIconButton } from '../_core';
 import { LocationSearchResult, SearchMode, toTranslatedFormattedDate } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { random } from 'lodash';
