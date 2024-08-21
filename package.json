@@ -7,7 +7,8 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "generate:graphql": "graphql-codegen --config projects/web/domain/codegen.ts",
-        "spell:check": "cspell . --no-progress"
+        "spell:check": "cspell . --no-progress",
+        "storybook:build": "nx build-storybook web-core-components"
     },
     "private": true,
     "devDependencies": {
