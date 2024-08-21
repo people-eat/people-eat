@@ -25,7 +25,7 @@
             "executor": "@nx/storybook:build",
             "outputs": ["{options.outputDir}"],
             "options": {
-                "outputDir": "dist/storybook/web-core-components",
+                "outputDir": "dist/storybook",
                 "configDir": "projects/web/core-components/.storybook"
             },
             "configurations": {
