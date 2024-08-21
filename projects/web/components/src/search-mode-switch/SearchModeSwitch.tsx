@@ -1,5 +1,5 @@
-import { PEButton } from '@people-eat/web-core-components';
 import { SearchMode } from '@people-eat/web-domain';
+import { PEButton } from '../_core';
 
 export interface SearchModeSwitchProps {
     activeMode: SearchMode;

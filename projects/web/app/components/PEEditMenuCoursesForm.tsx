@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CreateMenuCourseForm, MealCard, MealDetailsDialog } from '@people-eat/web-components';
-import { PEButton, PEDialog, PELabelSingleSelection, PETextField } from '@people-eat/web-core-components';
+import { PEButton, PEDialog, PELabelSingleSelection, PETextField } from '@people-eat/web-components';
 import {
     GetCookProfileMenuPageDataQuery,
     Unpacked,

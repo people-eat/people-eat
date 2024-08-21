@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, PEImagePicker, PEProfileNavigation } from '@people-eat/web-components';
-import { PEAlert, PEButton, PELabelMultiSelection, PESlider, PETextArea } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PELabelMultiSelection, PESlider, PETextArea } from '@people-eat/web-components';
 import {
     AddOneCookLanguageDocument,
     CookGetStripeDashboardUrlDocument,

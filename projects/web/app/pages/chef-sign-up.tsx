@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CookSignUpForm, LoadingDialog, PEHeader } from '@people-eat/web-components';
-import { PEAlert, PELabelLink } from '@people-eat/web-core-components';
+import { PEAlert, PELabelLink } from '@people-eat/web-components';
 import {
     CookRank,
     CreateOneCookDocument,

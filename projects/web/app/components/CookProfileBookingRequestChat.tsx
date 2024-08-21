@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation, useQuery, useSubscription } from '@apollo/client';
 import { LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PEButton, PETextField } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PETextField } from '@people-eat/web-components';
 import {
     BookingRequestChatMessageCreationsDocument,
     ChatMessage,

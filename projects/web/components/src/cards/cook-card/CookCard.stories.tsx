@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import { CookCard } from './CookCard';
 
 const meta: Meta<typeof CookCard> = {

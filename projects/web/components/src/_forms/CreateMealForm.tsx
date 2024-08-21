@@ -1,7 +1,7 @@
-import { PEButton, PELabelSingleSelection, PETextArea, PETextField } from '@people-eat/web-core-components';
 import { MealType, mealTypeTranslations, mealTypes } from '@people-eat/web-domain';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { PEButton, PELabelSingleSelection, PETextArea, PETextField } from '../_core';
 import { PEImagePicker } from '../images/PEImagePicker';
 
 export interface CreateMealFormInputs {

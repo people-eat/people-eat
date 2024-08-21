@@ -1,5 +1,5 @@
 import { MealCard, MealDetailsDialog } from '@people-eat/web-components';
-import { PEDialog, PELabelMultiSelection } from '@people-eat/web-core-components';
+import { PEDialog, PELabelMultiSelection } from '@people-eat/web-components';
 import { MealType, mealTypeTranslations, mealTypes } from '@people-eat/web-domain';
 import { useState } from 'react';
 

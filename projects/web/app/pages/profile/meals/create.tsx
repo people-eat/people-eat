@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CreateMealForm, LoadingDialog, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-core-components';
+import { PEAlert } from '@people-eat/web-components';
 import { CreateMealDocument, GetSignedInUserDocument, SignedInUser } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';

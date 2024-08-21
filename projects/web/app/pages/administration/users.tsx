@@ -9,7 +9,7 @@ import {
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../../network/apolloClients';
-import { PEButton } from '@people-eat/web-core-components';
+import { PEButton } from '@people-eat/web-components';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 

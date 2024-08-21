@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { BookForm, LoadingDialog, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-core-components';
+import { PEAlert } from '@people-eat/web-components';
 import {
     AllergyOption,
     CategoryOption,

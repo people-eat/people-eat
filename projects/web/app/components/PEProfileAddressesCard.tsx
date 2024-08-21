@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PEButton } from '@people-eat/web-core-components';
+import { PEAlert, PEButton } from '@people-eat/web-components';
 import { DeleteOneUserAddressDocument, UpdateCookLocationDocument } from '@people-eat/web-domain';
 import { Home, Pin, Trash } from 'lucide-react';
 import { useState } from 'react';

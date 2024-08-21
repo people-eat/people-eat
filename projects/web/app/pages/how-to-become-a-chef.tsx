@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { PEFooter, PEHeader } from '@people-eat/web-components';
-import { PELink } from '@people-eat/web-core-components';
+import { PELink } from '@people-eat/web-components';
 import { GetPageDataDocument, SignedInUser } from '@people-eat/web-domain';
 import { MinusIcon, PlusIcon } from 'lucide-react';
 import { GetServerSideProps } from 'next';

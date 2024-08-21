@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, MealCard, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
-import { PEAlert, PELabelMultiSelection, PELink } from '@people-eat/web-core-components';
+import { PEAlert, PELabelMultiSelection, PELink } from '@people-eat/web-components';
 import {
     DeleteOneCookMealDocument,
     GetCookProfileMealsDocument,

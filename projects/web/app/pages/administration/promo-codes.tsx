@@ -8,7 +8,7 @@ import {
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../../network/apolloClients';
-import { PEButton } from '@people-eat/web-core-components';
+import { PEButton } from '@people-eat/web-components';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };

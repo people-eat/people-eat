@@ -12,7 +12,7 @@ import {
     PESingleSelection,
     PETextArea,
     PETextField,
-} from '@people-eat/web-core-components';
+} from '@people-eat/web-components';
 import {
     ConfirmOneGiftCardDocument,
     CostBreakdown,

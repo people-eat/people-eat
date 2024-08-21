@@ -1,5 +1,5 @@
 import { PEHeader, PEProfileNavigation } from '@people-eat/web-components';
-import { PELink } from '@people-eat/web-core-components';
+import { PELink } from '@people-eat/web-components';
 import {
     GetProfileFavoriteCooksPageDataDocument,
     GetProfileFavoriteCooksPageDataQuery,

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CreateMealForm, LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PEDialog } from '@people-eat/web-core-components';
+import { PEAlert, PEDialog } from '@people-eat/web-components';
 import { CreateMealDocument } from '@people-eat/web-domain';
 
 export interface CreateMealDialogProps {

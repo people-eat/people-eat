@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEHeader, SignInForm } from '@people-eat/web-components';
-import { PEAlert, PEButton, PEDialog, PETextField } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PEDialog, PETextField } from '@people-eat/web-components';
 import {
     AssignOneSessionByEmailAddressDocument,
     CreateOneOneTimeAccessTokenByEmailAddressDocument,

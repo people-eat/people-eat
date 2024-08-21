@@ -1,7 +1,7 @@
-import { PEButton } from '@people-eat/web-core-components';
 import { useRef, useState, type ReactElement, type SyntheticEvent } from 'react';
 import { ReactCrop, centerCrop, makeAspectCrop, type Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
+import { PEButton } from '../_core';
 
 export interface PEImageClipperProps {
     imagePath: string;

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { MenuCard, PEFooter, PEHeader, PESearchBar, SearchModeSwitch } from '@people-eat/web-components';
-import { PELink } from '@people-eat/web-core-components';
+import { PELink } from '@people-eat/web-components';
 import {
     CreateOneSearchRequestDocument,
     GetPublicMenusPageDataDocument,

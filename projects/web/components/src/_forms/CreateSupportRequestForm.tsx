@@ -1,5 +1,5 @@
-import { PEButton, PETextArea, PETextField } from '@people-eat/web-core-components';
 import { useForm } from 'react-hook-form';
+import { PEButton, PETextArea, PETextField } from '../_core';
 
 export interface CreateSupportRequestFormProps {
     onCreate: (data: CreateSupportRequestFormInputs) => void;

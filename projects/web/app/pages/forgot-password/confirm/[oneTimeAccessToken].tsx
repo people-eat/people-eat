@@ -1,6 +1,6 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { LoadingDialog, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEAlert, PEButton, PEDialog, PETextField } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PEDialog, PETextField } from '@people-eat/web-components';
 import { ConfirmOneOneTimeAccessTokenDocument, GetSignedInUserDocument, UpdateUserPasswordDocument } from '@people-eat/web-domain';
 import Head from 'next/head';
 import { useRouter } from 'next/router';

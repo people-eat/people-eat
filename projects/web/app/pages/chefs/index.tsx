@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
-import { PELink } from '@people-eat/web-core-components';
+import { PELink } from '@people-eat/web-components';
 import Head from 'next/head';
 import { NewsletterDialog } from '../../components/NewsletterDialog';
 import { useMutation } from '@apollo/client';

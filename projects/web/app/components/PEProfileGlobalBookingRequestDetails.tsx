@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { CreateSupportRequestForm, CreateSupportRequestFormInputs, LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PETabSingleSelection } from '@people-eat/web-core-components';
+import { PEAlert, PETabSingleSelection } from '@people-eat/web-components';
 import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery, Unpacked } from '@people-eat/web-domain';
 import { ArrowLeft, Headset, LucideIcon, ReceiptText } from 'lucide-react';
 import Link from 'next/link';

@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Dialog, Transition } from '@headlessui/react';
 import { LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PEButton, PETextField } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PETextField } from '@people-eat/web-components';
 import { CreateOneNewsletterSubscriptionDocument } from '@people-eat/web-domain';
 import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';

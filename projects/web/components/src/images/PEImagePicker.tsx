@@ -1,4 +1,4 @@
-import { PEDialog } from '@people-eat/web-core-components';
+import { PEDialog } from '../_core';
 import Compressor from 'compressorjs';
 import { Plus, Trash } from 'lucide-react';
 import Image from 'next/image';

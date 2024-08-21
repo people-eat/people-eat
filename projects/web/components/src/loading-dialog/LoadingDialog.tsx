@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { LoadingSpinner } from '@people-eat/web-core-components';
+import { LoadingSpinner } from '../_core';
 import { Fragment } from 'react';
 
 export interface LoadingDialogProps {

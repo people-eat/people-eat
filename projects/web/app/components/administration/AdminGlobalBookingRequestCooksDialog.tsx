@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PEButton, PEDialog } from '@people-eat/web-core-components';
+import { PEAlert, PEButton, PEDialog } from '@people-eat/web-components';
 import { AdminGetCooksDocument, CreateBookingRequestByGlobalBookingRequestIdDocument } from '@people-eat/web-domain';
 import Router from 'next/router';
 import { useState } from 'react';
