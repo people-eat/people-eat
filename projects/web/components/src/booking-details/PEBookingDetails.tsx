@@ -1,4 +1,3 @@
-import { BookingStatusInfoPopover, PETooltip } from '@people-eat/web-components';
 import {
     BookingRequestStatus,
     CurrencyCode,
@@ -11,6 +10,8 @@ import {
     translatedPriceClasses,
 } from '@people-eat/web-domain';
 import { Info } from 'lucide-react';
+import { BookingStatusInfoPopover } from '../booking-status-info-popover/BookingStatusInfoPopover';
+import { PETooltip } from '../tooltip/PETooltip';
 
 export interface PEBookingDetailsProps {
     status?: BookingRequestStatus;
@@ -98,11 +99,9 @@ export function PEBookingDetails({
                         <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
                             <div className="text-gray-900">{formatPrice(price, true)}</div>
                             {payoutPrice && (
-                                <>
-                                    <PETooltip position="left" title={'Auszahlungsbetrag: ' + formatPrice(payoutPrice, true)}>
-                                        <Info />
-                                    </PETooltip>
-                                </>
+                                <PETooltip position="left" title={'Auszahlungsbetrag: ' + formatPrice(payoutPrice, true)}>
+                                    <Info />
+                                </PETooltip>
                             )}
                         </dd>
                     </div>
@@ -126,20 +125,20 @@ export function PEBookingDetails({
                 <div className="pt-6 sm:flex">
                     <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Allergien</dt>
                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                        <div className="text-gray-900">{'Keine'}</div>
+                        <div className="text-gray-900">Keine</div>
                     </dd>
                 </div>
                 <div className="pt-6 sm:flex">
                     <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Kategorien</dt>
                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                        <div className="text-gray-900">{'Keine'}</div>
+                        <div className="text-gray-900">Keine</div>
                     </dd>
                 </div>
                 {/* Last child has py instead of pb */}
                 <div className="py-6 sm:flex">
                     <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Küche</dt>
                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                        <div className="text-gray-900">{'Keine'}</div>
+                        <div className="text-gray-900">Keine</div>
                     </dd>
                 </div>
             </dl>

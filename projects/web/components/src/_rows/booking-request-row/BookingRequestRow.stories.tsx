@@ -18,7 +18,7 @@ export const Unselected: StoryObj<typeof BookingRequestRow> = {
                         occasion="Jahrestag"
                         dateTime={new Date()}
                         status="OPEN"
-                        price={{ amount: 12.34, currencyCode: '€' }}
+                        price={{ amount: 1234, currencyCode: '€' }}
                         configuredMenuTitle=""
                         name="Maximilian"
                         selected={false}
@@ -41,8 +41,31 @@ export const Selected: StoryObj<typeof BookingRequestRow> = {
                         occasion="Jahrestag"
                         dateTime={new Date()}
                         status="OPEN"
-                        price={{ amount: 12.34, currencyCode: '€' }}
+                        price={{ amount: 1234, currencyCode: '€' }}
                         configuredMenuTitle=""
+                        name="Maximilian"
+                        selected={true}
+                        onSelect={() => undefined}
+                        mode="RECEIVED"
+                    />
+                ))}
+            </ul>
+        );
+    },
+};
+
+export const MenuBooking: StoryObj<typeof BookingRequestRow> = {
+    name: 'Menü Buchung',
+    render: () => {
+        return (
+            <ul className="divide-y divide-gray-100">
+                {[1, 1, 1, 1, 1, 1].map((index) => (
+                    <BookingRequestRow
+                        occasion="Jahrestag"
+                        dateTime={new Date()}
+                        status="OPEN"
+                        price={{ amount: 1234, currencyCode: '€' }}
+                        configuredMenuTitle="Candle Light Dinner"
                         name="Maximilian"
                         selected={false}
                         onSelect={() => undefined}

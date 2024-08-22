@@ -32,5 +32,10 @@ export const Primary: StoryObj<typeof BookBar> = {
             title: 'Jetzt buchen',
             onClick: () => undefined,
         },
+        allergies: {
+            allergyOptions: [{ title: 'Allergie A', allergyId: 'A' }],
+            selectedAllergies: [],
+            onChange: () => undefined,
+        },
     },
 };
