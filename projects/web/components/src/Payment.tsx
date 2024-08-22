@@ -3,8 +3,8 @@ import { UserBookingRequestConfirmPaymentSetupDocument } from '@people-eat/web-d
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useRouter } from 'next/router';
 import { useState, type PropsWithChildren, type ReactElement } from 'react';
-import { LoadingDialog } from './loading-dialog/LoadingDialog';
 import { PEAlert, PEButton } from './_core';
+import { LoadingDialog } from './_dialogs/loading-dialog/LoadingDialog';
 
 export function Payment({
     children,

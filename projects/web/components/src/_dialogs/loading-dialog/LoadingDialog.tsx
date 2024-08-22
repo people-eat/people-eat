@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { LoadingSpinner } from '../_core';
 import { Fragment } from 'react';
+import { LoadingSpinner } from '../../_core';
 
 export interface LoadingDialogProps {
     active: boolean;

@@ -1,8 +1,8 @@
 import { MealType, mealTypeTranslations, mealTypes } from '@people-eat/web-domain';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { MealCard } from '../_cards/meal-card/MealCard';
 import { PEButton, PELabelMultiSelection, PETextField } from '../_core';
-import { MealCard } from '../cards/meal-card/MealCard';
 import { MealDetailsDialog } from '../MealDetailsDialog';
 
 export interface CreateMenuCourseFormProps {

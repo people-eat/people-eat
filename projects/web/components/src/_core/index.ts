@@ -4,7 +4,7 @@ export { PEButton } from './button/PEButton';
 export { PECalendar } from './calendar/PECalendar';
 export { PECheckbox, type PECheckboxProps } from './checkbox/PECheckbox';
 export { PEDatePicker } from './date-picker/PEDatePicker';
-export { PEDialog, type PEDialogProps } from './dialog/PEDialog';
+export { PEDialog, type PEDialogProps } from '../_dialogs/dialog/PEDialog';
 export { PEFullPageSheet } from './full-page-sheet/PEFullPageSheet';
 export { PEIconButton } from './icon-button/PEIconButton';
 export { PELabelButton, type PELabelButtonProps } from './label-button/PELabelButton';

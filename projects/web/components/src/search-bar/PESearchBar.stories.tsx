@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { PESearchBar } from './PESearchBar';
+import { SearchMode } from '@people-eat/web-domain';
 
 const meta: Meta<typeof PESearchBar> = {
     component: PESearchBar,
@@ -26,7 +27,12 @@ export const Primary: StoryObj<typeof PESearchBar> = {
                 setKids={setKids}
                 date={date}
                 setDate={setDate}
-                onSearch={() => undefined}
+                onSearchMenus={() => undefined}
+                onSearchCooks={() => undefined}
+                searchMode="MENUS"
+                setSearchMode={function (changedSearchMode: SearchMode): void {
+                    throw new Error('Function not implemented.');
+                }}
             />
         );
     },
