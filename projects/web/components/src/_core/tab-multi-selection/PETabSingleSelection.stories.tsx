@@ -28,9 +28,24 @@ export const Demo: StoryObj<typeof PETabSingleSelection> = {
 
         return (
             <PETabSingleSelection
+                // options={options}
+                // selectedOptionIndex={selectedOptionIndex}
+                // onSelect={(index) => setSelectedOptionIndex(index)}
+
                 options={options}
-                selectedOptionIndex={selectedOptionIndex}
-                onSelect={(index) => setSelectedOptionIndex(index)}
+                selectedOption={selectedOptionIndex && options[selectedOptionIndex]}
+                selectedOptionChanged={() => undefined}
+                optionTitle={({ title }) => title}
+                optionIdentifier={({ title }) => title}
+
+                // options: T[];
+                // selectedOption?: T;
+                // selectedOptionChanged: (changedSelectedOption?: T) => void;
+
+                // optionTitle: (option: T) => string;
+                // optionIdentifier: (option: T) => string;
+                // optionIcon?: (option: T) => LucideIcon | undefined;
+                // optionNotificationCount?: (option: T) => number | undefined;
             />
         );
     },

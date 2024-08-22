@@ -10,6 +10,7 @@ export default meta;
 
 export const Primary: StoryObj<typeof PEFullPageSheet> = {
     args: {
+        title: 'Title',
         children: <div>Hello world!</div>,
         open: true,
         onClose: () => undefined,

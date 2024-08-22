@@ -1,7 +1,7 @@
 import { BookingRequestStatus, Price, formatPrice, toTranslatedFormattedDate, translatedDateDistanceToToday } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { ChevronRightIcon } from 'lucide-react';
-import { BookingRequestStatusPill } from '../../booking-status-pill/BookingStatusPill';
+import { BookingRequestStatusPill } from '../../booking-status-pill/BookingRequestStatusPill';
 
 export interface BookingRequestRowProps {
     occasion: string;
