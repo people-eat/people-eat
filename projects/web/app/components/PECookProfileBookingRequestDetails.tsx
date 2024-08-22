@@ -5,6 +5,7 @@ import {
     LoadingDialog,
     MealCard,
     MealDetailsDialog,
+    PEBookingDetails,
 } from '@people-eat/web-components';
 import { PEAlert, PETabSingleSelection } from '@people-eat/web-components';
 import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery } from '@people-eat/web-domain';
@@ -13,7 +14,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { CookProfileBookingRequestChat } from './CookProfileBookingRequestChat';
-import { PEBookingDetails } from './PEBookingDetails';
 
 const defaultProfileBookingRequestDetailsTab: CookProfileBookingRequestDetailsTab = 'CHAT';
 

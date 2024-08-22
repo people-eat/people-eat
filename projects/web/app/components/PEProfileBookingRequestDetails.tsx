@@ -5,6 +5,7 @@ import {
     LoadingDialog,
     MealCard,
     MealDetailsDialog,
+    PEBookingDetails,
 } from '@people-eat/web-components';
 import { PEAlert, PETabSingleSelection } from '@people-eat/web-components';
 import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery } from '@people-eat/web-domain';
@@ -12,7 +13,6 @@ import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { PEBookingDetails } from './PEBookingDetails';
 import { ProfileBookingRequestChat } from './ProfileBookingRequestChat';
 
 const defaultProfileBookingRequestDetailsTab: ProfileBookingRequestDetailsTab = 'CHAT';

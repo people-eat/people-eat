@@ -1,11 +1,16 @@
 import { useMutation } from '@apollo/client';
-import { CreateSupportRequestForm, CreateSupportRequestFormInputs, LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PETabSingleSelection } from '@people-eat/web-components';
+import {
+    CreateSupportRequestForm,
+    CreateSupportRequestFormInputs,
+    LoadingDialog,
+    PEAlert,
+    PEBookingDetails,
+    PETabSingleSelection,
+} from '@people-eat/web-components';
 import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery, Unpacked } from '@people-eat/web-domain';
 import { ArrowLeft, Headset, LucideIcon, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { PEBookingDetails } from './PEBookingDetails';
 
 const defaultProfileGlobalBookingRequestDetailsTab: ProfileGlobalBookingRequestDetailsTab = 'EVENT_DETAILS';
 

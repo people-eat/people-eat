@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { SignUpForm, SignUpFormInputs } from '../_forms/SignUpForm';
-import { PEDialog } from '../_core';
+import { PEDialog } from '../dialog/PEDialog';
+import { SignUpForm, SignUpFormInputs } from '../../_forms/SignUpForm';
 
 export interface SignUpDialogProps {
     open: boolean;

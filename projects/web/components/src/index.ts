@@ -4,6 +4,8 @@ export { MenuCard, type MenuCardProps } from './_cards/menu-card/MenuCard';
 export { RatingCard, type RatingCardProps } from './_cards/rating-card/RatingCard';
 export * from './_core';
 export { LoadingDialog, type LoadingDialogProps } from './_dialogs/loading-dialog/LoadingDialog';
+export { SignInDialog, type SignInDialogProps } from './_dialogs/sign-in-dialog/SignInDialog';
+export { SignUpDialog, type SignUpDialogProps } from './_dialogs/sign-up-dialog/SignUpDialog';
 export { BookForm, type BookFormProps } from './_forms/BookForm';
 export { CookSignUpForm, type CookSignUpFormInputs, type CookSignUpFormProps } from './_forms/CookSignUpForm';
 export { CreateAddressForm, type CreateAddressFormInputs, type CreateAddressFormProps } from './_forms/CreateAddressForm';
@@ -20,6 +22,7 @@ export { SignUpForm, type SignUpFormInputs, type SignUpFormProps } from './_form
 export { BookingRequestRow, type BookingRequestRowProps } from './_rows/booking-request-row/BookingRequestRow';
 export { GlobalBookingRequestRow, type GlobalBookingRequestRowProps } from './_rows/global-booking-request-row/GlobalBookingRequestRow';
 export { BookBar, type BookBarProps } from './book-bar/BookBar';
+export { PEBookingDetails, type PEBookingDetailsProps } from './booking-details/PEBookingDetails';
 export { BookingStatusInfoPopover, type BookingStatusInfoPopoverProps } from './booking-status-info-popover/BookingStatusInfoPopover';
 export { BookingRequestStatusPill, type BookingRequestStatusPillProps } from './booking-status-pill/BookingRequestStatusPill';
 export { PECostBreakdownPanel, type PECostBreakdownPanelProps } from './cost-breakdown-panel/PECostBreakdownPanel';
@@ -33,6 +36,4 @@ export { PEPriceClassSelection, type PEPriceClassSelectionProps } from './price-
 export { PEProfileNavigation, type PEProfileNavigationProps } from './profile-navigation/PEProfileNavigation';
 export { PESearchBar, type PESearchBarProps } from './search-bar/PESearchBar';
 export { SearchModeSwitch } from './search-mode-switch/SearchModeSwitch';
-export { SignInDialog, type SignInDialogProps } from './sign-in-dialog/SignInDialog';
-export { SignUpDialog, type SignUpDialogProps } from './sign-up-dialog/SignUpDialog';
-export { PETooltip, type PETooltipProps as TooltipProps } from './Tooltip';
+export { PETooltip, type PETooltipProps } from './tooltip/PETooltip';
