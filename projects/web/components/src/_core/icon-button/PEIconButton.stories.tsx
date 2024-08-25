@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { DoorClosedIcon, SearchIcon } from 'lucide-react';
 import { PEIconButton } from './PEIconButton';
 
+/**
+ *
+ */
 const meta: Meta<typeof PEIconButton> = {
     component: PEIconButton,
     title: 'Buttons/PEIconButton',

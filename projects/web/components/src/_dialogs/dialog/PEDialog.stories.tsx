@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PEDialog } from './PEDialog';
 
+/**
+ *
+ */
 const meta: Meta<typeof PEDialog> = {
     component: PEDialog,
     title: 'Dialoge/Standard',

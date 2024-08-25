@@ -3,6 +3,9 @@ import { PETimePicker } from './PETimePicker';
 import { useState } from 'react';
 import { Time } from '@people-eat/web-domain';
 
+/**
+ *
+ */
 const meta: Meta<typeof PETimePicker> = {
     component: PETimePicker,
     title: 'Time Picker',

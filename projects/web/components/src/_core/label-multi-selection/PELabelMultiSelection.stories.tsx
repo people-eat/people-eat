@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PELabelMultiSelection } from './PELabelMultiSelection';
 import { useState } from 'react';
 
+/**
+ *
+ */
 const meta: Meta<typeof PELabelMultiSelection> = {
     component: PELabelMultiSelection,
     title: 'Selectors/PELabelMultiSelection',

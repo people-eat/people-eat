@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PEButton } from './PEButton';
 
+/**
+ *
+ */
 const meta: Meta<typeof PEButton> = {
     component: PEButton,
     title: 'Buttons/PEButton',
+    tags: ['autodocs'],
 };
 
 export default meta;

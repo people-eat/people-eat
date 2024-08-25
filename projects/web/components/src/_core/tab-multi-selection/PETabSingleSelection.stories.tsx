@@ -3,6 +3,9 @@ import { AlignHorizontalJustifyEnd, PersonStanding, User } from 'lucide-react';
 import { useState } from 'react';
 import { PETabSingleSelection, PETabSingleSelectionOption } from './PETabSingleSelection';
 
+/**
+ *
+ */
 const meta: Meta<typeof PETabSingleSelection> = {
     component: PETabSingleSelection,
     title: 'Selectors/PETabSingleSelection',

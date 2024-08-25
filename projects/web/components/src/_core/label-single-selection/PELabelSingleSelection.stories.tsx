@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PELabelSingleSelection } from './PELabelSingleSelection';
 import { useState } from 'react';
 
+/**
+ *
+ */
 const meta: Meta<typeof PELabelSingleSelection> = {
     component: PELabelSingleSelection,
     title: 'Selectors/PELabelSingleSelection',
