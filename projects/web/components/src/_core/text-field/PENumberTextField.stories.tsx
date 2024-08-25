@@ -2,11 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PENumberTextField } from './PENumberTextField';
 
 /**
- *
+ * Custom component.
+ * Originally copied from TailwindUI.
  */
 const meta: Meta<typeof PENumberTextField> = {
     component: PENumberTextField,
     title: 'PENumberTextField',
+    tags: ['autodocs'],
 };
 
 export default meta;

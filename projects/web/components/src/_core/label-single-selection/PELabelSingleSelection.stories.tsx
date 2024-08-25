@@ -3,11 +3,12 @@ import { PELabelSingleSelection } from './PELabelSingleSelection';
 import { useState } from 'react';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof PELabelSingleSelection> = {
     component: PELabelSingleSelection,
     title: 'Selectors/PELabelSingleSelection',
+    tags: ['autodocs'],
 };
 
 export default meta;

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import PEAutoComplete from './PEAutoComplete';
 
 /**
- *
+ * Depends on Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Label from @headlessui/react
  */
 const meta: Meta<typeof PEAutoComplete> = {
     component: PEAutoComplete,

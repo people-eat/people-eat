@@ -2,7 +2,7 @@ import type { Meta } from '@storybook/react';
 import { LoadingDialog } from './LoadingDialog';
 
 /**
- *
+ * Depends on Dialog, Transition from @headlessui/react.
  */
 const meta: Meta<typeof LoadingDialog> = {
     component: LoadingDialog,

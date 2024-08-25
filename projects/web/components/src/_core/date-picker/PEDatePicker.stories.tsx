@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PEDatePicker } from './PEDatePicker';
 
 /**
- * Internally uses Popover and Transition from @headlessui/react and PECalendar.
+ * Depends on Popover, Transition from @headlessui/react and PECalendar.
  */
 const meta: Meta<typeof PEDatePicker> = {
     component: PEDatePicker,

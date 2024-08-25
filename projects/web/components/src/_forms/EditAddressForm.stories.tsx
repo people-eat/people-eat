@@ -4,6 +4,7 @@ import { EditAddressForm } from './EditAddressForm';
 const meta: Meta<typeof EditAddressForm> = {
     component: EditAddressForm,
     title: 'Formulare/Adresse bearbeiten',
+    tags: ['autodocs'],
 };
 
 export default meta;

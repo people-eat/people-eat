@@ -4,6 +4,7 @@ import { CreateAddressForm } from './CreateAddressForm';
 const meta: Meta<typeof CreateAddressForm> = {
     component: CreateAddressForm,
     title: 'Formulare/Adresse Erstellen',
+    tags: ['autodocs'],
 };
 
 export default meta;

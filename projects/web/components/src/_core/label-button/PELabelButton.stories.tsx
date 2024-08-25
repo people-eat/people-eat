@@ -3,11 +3,12 @@ import { PELabelButton } from './PELabelButton';
 import { useState } from 'react';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof PELabelButton> = {
     component: PELabelButton,
     title: 'Buttons/PELabelButton',
+    tags: ['autodocs'],
 };
 
 export default meta;

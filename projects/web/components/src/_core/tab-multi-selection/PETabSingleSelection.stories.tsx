@@ -4,11 +4,12 @@ import { useState } from 'react';
 import { PETabSingleSelection, PETabSingleSelectionOption } from './PETabSingleSelection';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof PETabSingleSelection> = {
     component: PETabSingleSelection,
     title: 'Selectors/PETabSingleSelection',
+    tags: ['autodocs'],
 };
 
 export default meta;

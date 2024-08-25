@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { SignUpDialog } from './SignUpDialog';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof SignUpDialog> = {
     component: SignUpDialog,

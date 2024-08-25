@@ -4,6 +4,7 @@ import { CookSignUpForm } from './CookSignUpForm';
 const meta: Meta<typeof CookSignUpForm> = {
     component: CookSignUpForm,
     title: 'Formulare/Kochregistrierungsformular',
+    tags: ['autodocs'],
 };
 
 export default meta;

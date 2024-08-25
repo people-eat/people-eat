@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PEButton } from './PEButton';
 
 /**
- *
+ * Custom component.
+ * Originally copied from TailwindUI.
  */
 const meta: Meta<typeof PEButton> = {
     component: PEButton,

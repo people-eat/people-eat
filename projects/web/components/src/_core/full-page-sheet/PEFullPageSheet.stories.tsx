@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PEFullPageSheet } from './PEFullPageSheet';
 
 /**
- * Internally uses Dialog from @headlessui/react.
+ * Depends on Dialog from @headlessui/react.
  */
 const meta: Meta<typeof PEFullPageSheet> = {
     component: PEFullPageSheet,
@@ -21,7 +21,7 @@ export const Primary: StoryObj<typeof PEFullPageSheet> = {
     args: {
         title: 'Title',
         children: <div>Hello world!</div>,
-        open: true,
+        open: false,
         onClose: () => undefined,
     },
 };

@@ -2,11 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { MenuCard } from './MenuCard';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof MenuCard> = {
     component: MenuCard,
     title: 'Cards/Menu Card',
+    tags: ['autodocs'],
 };
 
 export default meta;

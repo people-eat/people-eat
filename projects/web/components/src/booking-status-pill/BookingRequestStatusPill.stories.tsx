@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { BookingRequestStatusPill } from './BookingRequestStatusPill';
 
+/**
+ * Custom component.
+ */
 const meta: Meta<typeof BookingRequestStatusPill> = {
     component: BookingRequestStatusPill,
     title: 'BookingRequestStatusPill',
+    tags: ['autodocs'],
 };
 
 export default meta;

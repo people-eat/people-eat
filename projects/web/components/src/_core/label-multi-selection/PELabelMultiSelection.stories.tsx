@@ -3,11 +3,12 @@ import { PELabelMultiSelection } from './PELabelMultiSelection';
 import { useState } from 'react';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof PELabelMultiSelection> = {
     component: PELabelMultiSelection,
     title: 'Selectors/PELabelMultiSelection',
+    tags: ['autodocs'],
 };
 
 export default meta;
