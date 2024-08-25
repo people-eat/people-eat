@@ -8,7 +8,8 @@
         "format:check": "prettier --check .",
         "generate:graphql": "graphql-codegen --config projects/web/domain/codegen.ts",
         "spell:check": "cspell . --no-progress",
-        "storybook:build": "nx build-storybook web-components"
+        "storybook:build": "nx build-storybook web-components",
+        "storybook:generate-dependencies": "storybook-addon-dependencies"
     },
     "private": true,
     "devDependencies": {
@@ -54,6 +55,7 @@
         "nx": "^19.6.2",
         "postcss": "^8.4.38",
         "prettier": "^3.2.4",
+        "storybook-addon-dependencies": "^8.0.3",
         "tailwindcss": "^3.4.3",
         "ts-jest": "^29.1.2",
         "ts-node": "^10.9.2",
