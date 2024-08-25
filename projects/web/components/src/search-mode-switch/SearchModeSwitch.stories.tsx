@@ -2,7 +2,7 @@ import type { Meta } from '@storybook/react';
 import { SearchModeSwitch } from './SearchModeSwitch';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof SearchModeSwitch> = {
     component: SearchModeSwitch,

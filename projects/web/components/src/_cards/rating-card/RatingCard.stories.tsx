@@ -2,11 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { RatingCard } from './RatingCard';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof RatingCard> = {
     component: RatingCard,
     title: 'Cards/Rating Card',
+    tags: ['autodocs'],
 };
 
 export default meta;

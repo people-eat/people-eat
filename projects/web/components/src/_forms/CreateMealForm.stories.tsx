@@ -4,6 +4,7 @@ import { CreateMealForm } from './CreateMealForm';
 const meta: Meta<typeof CreateMealForm> = {
     component: CreateMealForm,
     title: 'Formulare/Gericht Erstellen',
+    tags: ['autodocs'],
 };
 
 export default meta;

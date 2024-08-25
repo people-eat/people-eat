@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PEBookingDetails } from './PEBookingDetails';
 
+/**
+ * Custom component.
+ * Originally copied from TailwindUI.
+ */
 const meta: Meta<typeof PEBookingDetails> = {
     component: PEBookingDetails,
     title: 'PEBookingDetails',
+    tags: ['autodocs'],
 };
 
 export default meta;

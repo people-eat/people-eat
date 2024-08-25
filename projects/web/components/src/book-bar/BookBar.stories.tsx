@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { BookBar } from './BookBar';
 
+/**
+ * Custom component.
+ */
 const meta: Meta<typeof BookBar> = {
     component: BookBar,
     title: 'BookBar',
+    tags: ['autodocs'],
 };
 
 export default meta;

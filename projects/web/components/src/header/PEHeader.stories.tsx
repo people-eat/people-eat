@@ -9,6 +9,7 @@ import { PEHeader } from './PEHeader';
 const meta: Meta<typeof PEHeader> = {
     component: PEHeader,
     title: 'Header',
+    tags: ['autodocs'],
     render: ({ signedInUser }) => {
         return (
             <MockedProvider>

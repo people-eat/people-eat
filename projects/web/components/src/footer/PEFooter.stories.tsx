@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PEFooter } from './PEFooter';
 
 /**
+ * Custom component.
  * Originally copied from TailwindUI.
  */
 const meta: Meta<typeof PEFooter> = {

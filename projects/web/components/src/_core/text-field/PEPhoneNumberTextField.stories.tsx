@@ -3,11 +3,12 @@ import { PEPhoneNumberTextField } from './PEPhoneNumberTextField';
 import { useForm } from 'react-hook-form';
 
 /**
- *
+ * Depends on Menu, Transition from @headlessui/react.
  */
 const meta: Meta<typeof PEPhoneNumberTextField> = {
     component: PEPhoneNumberTextField,
     title: 'PEPhoneNumberTextField',
+    tags: ['autodocs'],
 };
 
 export default meta;

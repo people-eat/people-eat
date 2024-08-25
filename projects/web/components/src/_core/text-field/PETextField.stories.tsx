@@ -2,11 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PETextField } from './PETextField';
 
 /**
- *
+ * Custom component.
+ * Originally copied from TailwindUI.
  */
 const meta: Meta<typeof PETextField> = {
     component: PETextField,
     title: 'PETextField',
+    tags: ['autodocs'],
 };
 
 export default meta;

@@ -4,16 +4,17 @@ import { useState } from 'react';
 import { Time } from '@people-eat/web-domain';
 
 /**
- *
+ * Depends on Menu, Transition from @headlessui/react.
  */
 const meta: Meta<typeof PETimePicker> = {
     component: PETimePicker,
     title: 'Time Picker',
+    tags: ['autodocs'],
 };
 
 export default meta;
 
-export const DatePicker: StoryObj<typeof PETimePicker> = {
+export const TimePicker: StoryObj<typeof PETimePicker> = {
     render: () => {
         const [value, setValue] = useState<Time>({ hours: 20, minutes: 0 });
 

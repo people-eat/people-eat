@@ -4,6 +4,7 @@ import { CreateSupportRequestForm } from './CreateSupportRequestForm';
 const meta: Meta<typeof CreateSupportRequestForm> = {
     component: CreateSupportRequestForm,
     title: 'Formulare/Supportanfrageformular',
+    tags: ['autodocs'],
 };
 
 export default meta;

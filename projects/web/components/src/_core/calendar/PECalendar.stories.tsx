@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PECalendar } from './PECalendar';
 
 /**
- * Originally copied from TailwindUI, adjusted
+ * Custom component.
+ * Originally copied from TailwindUI.
  */
 const meta: Meta<typeof PECalendar> = {
     component: PECalendar,

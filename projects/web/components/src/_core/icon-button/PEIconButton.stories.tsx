@@ -3,11 +3,12 @@ import { DoorClosedIcon, SearchIcon } from 'lucide-react';
 import { PEIconButton } from './PEIconButton';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof PEIconButton> = {
     component: PEIconButton,
     title: 'Buttons/PEIconButton',
+    tags: ['autodocs'],
 };
 
 export default meta;

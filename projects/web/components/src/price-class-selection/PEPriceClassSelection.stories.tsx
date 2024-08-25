@@ -3,9 +3,13 @@ import { PEPriceClassSelection } from './PEPriceClassSelection';
 import { useState } from 'react';
 import { PriceClass } from '@people-eat/web-domain';
 
+/**
+ * Custom component.
+ */
 const meta: Meta<typeof PEPriceClassSelection> = {
     component: PEPriceClassSelection,
     title: 'Price Class Selection',
+    tags: ['autodocs'],
 };
 
 export default meta;

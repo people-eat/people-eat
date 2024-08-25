@@ -4,6 +4,7 @@ import { CreateMenuCourseForm } from './CreateMenuCourseForm';
 const meta: Meta<typeof CreateMenuCourseForm> = {
     component: CreateMenuCourseForm,
     title: 'Formulare/Menü Gang Erstellen',
+    tags: ['autodocs'],
 };
 
 export default meta;

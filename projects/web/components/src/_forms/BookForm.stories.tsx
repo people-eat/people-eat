@@ -4,6 +4,7 @@ import { BookForm } from './BookForm';
 const meta: Meta<typeof BookForm> = {
     component: BookForm,
     title: 'Formulare/Buchungsformular',
+    tags: ['autodocs'],
 };
 
 export default meta;

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { LoadingSpinner } from './LoadingSpinner';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof LoadingSpinner> = {
     component: LoadingSpinner,

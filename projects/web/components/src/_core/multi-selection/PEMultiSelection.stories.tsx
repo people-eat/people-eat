@@ -3,11 +3,12 @@ import { PEMultiSelection } from './PEMultiSelection';
 import { useState } from 'react';
 
 /**
- *
+ * Depends on Listbox, Transition from @headlessui/react.
  */
 const meta: Meta<typeof PEMultiSelection> = {
     component: PEMultiSelection,
     title: 'Selectors/PEMultiSelection',
+    tags: ['autodocs'],
 };
 
 export default meta;

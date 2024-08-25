@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PESlider } from './PESlider';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof PESlider> = {
     component: PESlider,

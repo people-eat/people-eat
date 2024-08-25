@@ -3,9 +3,13 @@ import { useState } from 'react';
 import { PESearchBar } from './PESearchBar';
 import { SearchMode } from '@people-eat/web-domain';
 
+/**
+ * Depends on Combobox, Popover, Transition from @headlessui/react for mobile dialog.
+ */
 const meta: Meta<typeof PESearchBar> = {
     component: PESearchBar,
     title: 'Search Bar',
+    tags: ['autodocs'],
 };
 
 export default meta;

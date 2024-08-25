@@ -2,11 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PELabelLink } from './PELabelLink';
 
 /**
- *
+ * Custom component.
  */
 const meta: Meta<typeof PELabelLink> = {
     component: PELabelLink,
     title: 'Buttons/PELabelLink',
+    tags: ['autodocs'],
 };
 
 export default meta;

@@ -4,6 +4,7 @@ import { SignUpForm } from './SignUpForm';
 const meta: Meta<typeof SignUpForm> = {
     component: SignUpForm,
     title: 'Formulare/Registrierungsformular',
+    tags: ['autodocs'],
 };
 
 export default meta;
