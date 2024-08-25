@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PEMultiSelection } from './PEMultiSelection';
 import { useState } from 'react';
 
+/**
+ *
+ */
 const meta: Meta<typeof PEMultiSelection> = {
     component: PEMultiSelection,
     title: 'Selectors/PEMultiSelection',

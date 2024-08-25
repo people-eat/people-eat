@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PETextArea } from './PETextArea';
 
+/**
+ *
+ */
 const meta: Meta<typeof PETextArea> = {
     component: PETextArea,
     title: 'PETextArea',
+    tags: ['autodocs'],
 };
 
 export default meta;

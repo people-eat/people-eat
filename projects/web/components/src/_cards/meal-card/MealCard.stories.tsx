@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { MealCard } from './MealCard';
 
+/**
+ *
+ */
 const meta: Meta<typeof MealCard> = {
     component: MealCard,
     title: 'Cards/Meal Card',

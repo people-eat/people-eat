@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PETooltip } from './PETooltip';
 
+/**
+ *
+ */
 const meta: Meta<typeof PETooltip> = {
     component: PETooltip,
     title: 'PETooltip',
@@ -11,6 +14,7 @@ const meta: Meta<typeof PETooltip> = {
             </PETooltip>
         </div>
     ),
+    tags: ['autodocs'],
 };
 
 export default meta;

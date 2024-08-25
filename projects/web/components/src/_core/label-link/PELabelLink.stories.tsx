@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PELabelLink } from './PELabelLink';
 
+/**
+ *
+ */
 const meta: Meta<typeof PELabelLink> = {
     component: PELabelLink,
     title: 'Buttons/PELabelLink',
