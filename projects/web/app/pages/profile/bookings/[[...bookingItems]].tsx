@@ -238,8 +238,8 @@ export default function ProfileBookingsPage({
                                             dateTime={dateTime}
                                             selected={
                                                 bookingRequestId === selectedBookingRequest?.bookingRequestId &&
-                                                (('user' in br && 'user' in selectedBookingRequest) ||
-                                                    ('cook' in br && 'cook' in selectedBookingRequest))
+                                                (('user' in br && 'publicUser' in selectedBookingRequest) ||
+                                                    ('cook' in br && 'publicCook' in selectedBookingRequest))
                                             }
                                             price={totalPriceCustomer}
                                             configuredMenuTitle={configuredMenu?.title}
