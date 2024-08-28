@@ -243,7 +243,7 @@ export default function ProfileBookingsPage({
                                             }
                                             price={totalPriceCustomer}
                                             configuredMenuTitle={configuredMenu?.title}
-                                            name={'user' in br ? br.user.firstName : br.cook.user.firstName}
+                                            name={'publicUser' in br ? br.publicUser.firstName : br.publicCook.user.firstName}
                                             onSelect={() =>
                                                 router.push(
                                                     'user' in br
@@ -281,7 +281,7 @@ export default function ProfileBookingsPage({
                             />
                         )}
 
-                        {selectedBookingRequest && 'cook' in selectedBookingRequest && (
+                        {selectedBookingRequest && 'publicCook' in selectedBookingRequest && (
                             <PEProfileBookingRequestDetails
                                 userId={signedInUser.userId}
                                 selectedTab={tab}
@@ -290,7 +290,7 @@ export default function ProfileBookingsPage({
                             />
                         )}
 
-                        {selectedBookingRequest && 'user' in selectedBookingRequest && (
+                        {selectedBookingRequest && 'publicUser' in selectedBookingRequest && (
                             <PECookProfileBookingRequestDetails
                                 userId={signedInUser.userId}
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
