@@ -1,18 +1,17 @@
 import { useMutation } from '@apollo/client';
 import {
+    ConfiguredMenuPanel,
     CreateSupportRequestForm,
     CreateSupportRequestFormInputs,
     LoadingDialog,
-    MealCard,
-    MealDetailsDialog,
+    PEAlert,
     PEBookingDetails,
+    PETabSingleSelection,
 } from '@people-eat/web-components';
-import { PEAlert, PETabSingleSelection } from '@people-eat/web-components';
 import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery } from '@people-eat/web-domain';
 import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { ProfileBookingRequestChat } from './ProfileBookingRequestChat';
 
 const defaultProfileBookingRequestDetailsTab: ProfileBookingRequestDetailsTab = 'CHAT';
@@ -60,15 +59,6 @@ export function PEProfileBookingRequestDetails({
     const showSuccessAlert = data?.users.supportRequests.createOne ?? false;
     const showFailedAlert = data ? !data.users.supportRequests.createOne : false;
 
-    const [selectedMeal, setSelectedMeal] = useState<
-        | undefined
-        | {
-              title: string;
-              description: string;
-              imageUrl?: string | null;
-          }
-    >(undefined);
-
     return (
         <div className="flex flex-col flex-1">
             <div style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 8 }}>
@@ -108,38 +98,7 @@ export function PEProfileBookingRequestDetails({
             )}
 
             {selectedTab === 'MENU' && bookingRequest.configuredMenu && (
-                <div className="flex flex-col gap-8 overflow-y-auto p-4">
-                    <h2 className="text-2xl font-bold">{bookingRequest.configuredMenu.title}</h2>
-                    {bookingRequest.configuredMenu.description && <h3>{bookingRequest.configuredMenu.description}</h3>}
-                    {bookingRequest.configuredMenu.greetingFromKitchen && bookingRequest.configuredMenu.greetingFromKitchen !== '' && (
-                        <div>{bookingRequest.configuredMenu.greetingFromKitchen}</div>
-                    )}
-                    <div className="flex flex-col gap-4">
-                        {bookingRequest.configuredMenu.courses.map((course) => (
-                            <div key={course.index} className="flex flex-col gap-4 ml-2">
-                                <div>{course.title}</div>
-                                <ul className="grid grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-6 xl:gap-x-8">
-                                    <MealCard
-                                        key={course.index}
-                                        type="SIMPLE"
-                                        title={course.mealTitle}
-                                        description={course.mealDescription}
-                                        imageUrl={course.mealImageUrl ?? undefined}
-                                        onInfoClick={() =>
-                                            setSelectedMeal({
-                                                title: course.mealTitle,
-                                                description: course.mealDescription,
-                                                imageUrl: course.mealImageUrl ?? undefined,
-                                            })
-                                        }
-                                    />
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-
-                    {selectedMeal && <MealDetailsDialog onClose={() => setSelectedMeal(undefined)} meal={selectedMeal} />}
-                </div>
+                <ConfiguredMenuPanel configuredMenu={bookingRequest.configuredMenu} />
             )}
 
             {selectedTab === 'SUPPORT' && (

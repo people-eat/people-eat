@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { MenuCard, PEFooter, PEHeader, PESearchBar, SearchModeSwitch } from '@people-eat/web-components';
-import { PELink } from '@people-eat/web-components';
+import { MenuCard, PEFooter, PEHeader, PELink, PESearchBar, SearchModeSwitch } from '@people-eat/web-components';
 import {
     CreateOneSearchRequestDocument,
     GetPublicMenusPageDataDocument,
@@ -20,12 +19,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { NewsletterDialog } from '../../components/NewsletterDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
-import { CookieSettings } from '../../components/analytics/CookieSettings';
-import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
-import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
@@ -49,9 +48,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             variables: {
                 request: {
                     location,
-                    adultParticipants: 4,
-                    children: 0,
-                    dateTime: new Date(),
+                    adultParticipants: searchParams.adults,
+                    children: searchParams.children,
+                    dateTime: new Date(searchParams.dateString),
                 },
                 location,
                 adults: searchParams.adults,

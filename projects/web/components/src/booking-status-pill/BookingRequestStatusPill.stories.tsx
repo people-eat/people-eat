@@ -17,16 +17,19 @@ export const Canceled: StoryObj<typeof BookingRequestStatusPill> = {
         status: 'CANCELED',
     },
 };
+
 export const Completed: StoryObj<typeof BookingRequestStatusPill> = {
     args: {
         status: 'COMPLETED',
     },
 };
+
 export const Open: StoryObj<typeof BookingRequestStatusPill> = {
     args: {
         status: 'OPEN',
     },
 };
+
 export const Pending: StoryObj<typeof BookingRequestStatusPill> = {
     args: {
         status: 'PENDING',

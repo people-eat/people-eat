@@ -1,4 +1,4 @@
-query AdminGetGlobalBookingRequestsPageData {
+query AdminGetBookingRequestsPageData {
     globalBookingRequests {
         findMany {
             globalBookingRequestId
@@ -6,6 +6,7 @@ query AdminGetGlobalBookingRequestsPageData {
             adultParticipants
             children
             occasion
+            message
             priceClass {
                 type
                 min
@@ -33,6 +34,77 @@ query AdminGetGlobalBookingRequestsPageData {
                 }
             }
             createdAt
+        }
+    }
+    bookingRequests {
+        findMany {
+            bookingRequestId
+            globalBookingRequestId
+            adultParticipants
+            children
+            dateTime
+            status
+            userAccepted
+            cookAccepted
+            kitchenId
+            occasion
+            preparationTime
+            totalPriceCustomer {
+                amount
+                currencyCode
+            }
+            totalPriceCook {
+                amount
+                currencyCode
+            }
+            travelExpenses {
+                amount
+                currencyCode
+            }
+            location {
+                text
+            }
+            duration
+            createdAt
+            cook {
+                cookId
+                rank
+                user {
+                    firstName
+                    profilePictureUrl
+
+                    emailAddress
+                    phoneNumber
+
+                    emailAddressUpdate {
+                        emailAddress
+                        createdAt
+                    }
+                    phoneNumberUpdate {
+                        phoneNumber
+                        createdAt
+                    }
+                }
+            }
+            user {
+                firstName
+                profilePictureUrl
+
+                emailAddress
+                phoneNumber
+
+                emailAddressUpdate {
+                    emailAddress
+                    createdAt
+                }
+                phoneNumberUpdate {
+                    phoneNumber
+                    createdAt
+                }
+            }
+            configuredMenu {
+                ...ConfiguredMenu
+            }
         }
     }
 }

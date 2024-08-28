@@ -1,11 +1,8 @@
 import { useMutation } from '@apollo/client';
-import { Disclosure, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { CookCard, MenuCard, PEFooter, PEHeader, PESearchBar, RatingCard } from '@people-eat/web-components';
-import { PELink } from '@people-eat/web-components';
+import { Disclosure } from '@headlessui/react';
+import { PEFooter, PEHeader, PELink, PESearchBar, RatingCard } from '@people-eat/web-components';
 import {
     CreateOneSearchRequestDocument,
-    formatPrice,
-    geoDistance,
     GetHomePageDataDocument,
     GetHomePageDataQuery,
     LocationSearchResult,
@@ -35,7 +32,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Fragment, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
@@ -306,7 +303,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                                 src="/home/wein-dinner.png"
                                 alt=""
                                 className="h-full w-full object-cover object-center"
-                                width={1400}
+                                width={1200}
                                 height={800}
                             />
                         </div>

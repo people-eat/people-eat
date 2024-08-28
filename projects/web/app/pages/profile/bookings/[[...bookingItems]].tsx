@@ -238,22 +238,22 @@ export default function ProfileBookingsPage({
                                             dateTime={dateTime}
                                             selected={
                                                 bookingRequestId === selectedBookingRequest?.bookingRequestId &&
-                                                (('user' in br && 'user' in selectedBookingRequest) ||
-                                                    ('cook' in br && 'cook' in selectedBookingRequest))
+                                                (('publicUser' in br && 'publicUser' in selectedBookingRequest) ||
+                                                    ('publicCook' in br && 'publicCook' in selectedBookingRequest))
                                             }
                                             price={totalPriceCustomer}
                                             configuredMenuTitle={configuredMenu?.title}
-                                            name={'user' in br ? br.user.firstName : br.cook.user.firstName}
+                                            name={'publicUser' in br ? br.publicUser.firstName : br.publicCook.user.firstName}
                                             onSelect={() =>
                                                 router.push(
-                                                    'user' in br
+                                                    'publicUser' in br
                                                         ? `/profile/bookings/r/${bookingRequestId}`
                                                         : `/profile/bookings/s/${bookingRequestId}`,
                                                     undefined,
                                                     { scroll: false },
                                                 )
                                             }
-                                            mode={'user' in br ? 'RECEIVED' : 'SENT'}
+                                            mode={'publicUser' in br ? 'RECEIVED' : 'SENT'}
                                         />
                                     ),
                                 )}
@@ -281,7 +281,7 @@ export default function ProfileBookingsPage({
                             />
                         )}
 
-                        {selectedBookingRequest && 'cook' in selectedBookingRequest && (
+                        {selectedBookingRequest && 'publicCook' in selectedBookingRequest && (
                             <PEProfileBookingRequestDetails
                                 userId={signedInUser.userId}
                                 selectedTab={tab}
@@ -290,7 +290,7 @@ export default function ProfileBookingsPage({
                             />
                         )}
 
-                        {selectedBookingRequest && 'user' in selectedBookingRequest && (
+                        {selectedBookingRequest && 'publicUser' in selectedBookingRequest && (
                             <PECookProfileBookingRequestDetails
                                 userId={signedInUser.userId}
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
