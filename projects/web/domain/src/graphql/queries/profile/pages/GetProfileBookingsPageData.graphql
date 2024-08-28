@@ -39,7 +39,7 @@ query GetProfileBookingsPageData(
                 }
                 duration
                 createdAt
-                cook {
+                publicCook {
                     cookId
                     rank
                     user {
@@ -74,7 +74,7 @@ query GetProfileBookingsPageData(
                 }
                 duration
                 createdAt
-                cook {
+                publicCook {
                     cookId
                     rank
                     user {
@@ -166,7 +166,7 @@ query GetProfileBookingsPageData(
                 }
                 duration
                 createdAt
-                user {
+                publicUser {
                     userId
                     firstName
                     profilePictureUrl
@@ -206,7 +206,7 @@ query GetProfileBookingsPageData(
                 }
                 duration
                 createdAt
-                user {
+                publicUser {
                     userId
                     firstName
                     profilePictureUrl

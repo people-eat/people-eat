@@ -5,9 +5,10 @@ import {
     LoadingDialog,
     MealCard,
     MealDetailsDialog,
+    PEAlert,
     PEBookingDetails,
+    PETabSingleSelection,
 } from '@people-eat/web-components';
-import { PEAlert, PETabSingleSelection } from '@people-eat/web-components';
 import { CreateOneUserSupportRequestDocument, GetProfileBookingsPageDataQuery } from '@people-eat/web-domain';
 import { ArrowLeft, CookingPot, Headset, LucideIcon, MessageCircle, ReceiptText } from 'lucide-react';
 import Link from 'next/link';

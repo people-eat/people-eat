@@ -2,7 +2,7 @@ import { ChatMessage } from '@people-eat/web-domain';
 import classNames from 'classnames';
 
 export interface PEChatMessageProps {
-    chatMessage: ChatMessage;
+    chatMessage: Pick<ChatMessage, 'message' | 'generated'>;
     isAuthor: boolean;
 }
 
@@ -25,6 +25,7 @@ export function PEChatMessage({ chatMessage, isAuthor }: PEChatMessageProps) {
                         'self-start': isAuthor,
                         'self-end': !isAuthor,
                     })}
+                    // dangerouslySetInnerHTML={{ __html: chatMessage.message }}
                 >
                     {chatMessage.message}
                 </span>
