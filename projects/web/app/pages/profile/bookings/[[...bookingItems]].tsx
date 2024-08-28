@@ -238,22 +238,22 @@ export default function ProfileBookingsPage({
                                             dateTime={dateTime}
                                             selected={
                                                 bookingRequestId === selectedBookingRequest?.bookingRequestId &&
-                                                (('user' in br && 'publicUser' in selectedBookingRequest) ||
-                                                    ('cook' in br && 'publicCook' in selectedBookingRequest))
+                                                (('publicUser' in br && 'publicUser' in selectedBookingRequest) ||
+                                                    ('publicCook' in br && 'publicCook' in selectedBookingRequest))
                                             }
                                             price={totalPriceCustomer}
                                             configuredMenuTitle={configuredMenu?.title}
                                             name={'publicUser' in br ? br.publicUser.firstName : br.publicCook.user.firstName}
                                             onSelect={() =>
                                                 router.push(
-                                                    'user' in br
+                                                    'publicUser' in br
                                                         ? `/profile/bookings/r/${bookingRequestId}`
                                                         : `/profile/bookings/s/${bookingRequestId}`,
                                                     undefined,
                                                     { scroll: false },
                                                 )
                                             }
-                                            mode={'user' in br ? 'RECEIVED' : 'SENT'}
+                                            mode={'publicUser' in br ? 'RECEIVED' : 'SENT'}
                                         />
                                     ),
                                 )}
