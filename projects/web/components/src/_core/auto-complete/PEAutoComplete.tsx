@@ -82,11 +82,12 @@ function PEAutoComplete<T>(
     );
 }
 
+// @todo the first as any was newly added after migrating to node 22
 function fixedForwardRef<T, P>(
     render: (props: P, ref: React.Ref<T>) => React.ReactNode,
 ): (props: P & React.RefAttributes<T>) => React.ReactNode {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return forwardRef(render) as any;
+    return forwardRef(render as any) as any;
 }
 
 export default fixedForwardRef(PEAutoComplete);
