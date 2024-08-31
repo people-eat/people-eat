@@ -84,6 +84,7 @@ export function MealCard(props: MealCardProps) {
                             title={props.button.title}
                             type={props.button.type === 'PRIMARY' ? 'primary' : 'secondary'}
                             onClick={props.button.onClick}
+                            stopEventPropagation={true}
                         />
                     )}
 
