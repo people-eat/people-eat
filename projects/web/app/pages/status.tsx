@@ -11,9 +11,10 @@ interface ServerSideProps {
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
-    const { data } = await apolloClient.query({ query: GetPageDataDocument });
 
     try {
+        const { data } = await apolloClient.query({ query: GetPageDataDocument });
+
         return {
             props: {
                 signedInUser: data.users.signedInUser ?? null,
