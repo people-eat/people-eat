@@ -292,8 +292,8 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey, cook
                         <Image
                             className="h-64 w-full bg-gray-50 object-cover sm:h-80 lg:absolute lg:h-full"
                             src="/gift-cards/Privatkochgutschein.jpg"
-                            width={600}
-                            height={800}
+                            width={1000}
+                            height={1200}
                             alt=""
                         />
                     </div>
