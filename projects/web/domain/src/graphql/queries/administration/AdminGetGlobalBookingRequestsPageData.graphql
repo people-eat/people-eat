@@ -103,7 +103,7 @@ query AdminGetBookingRequestsPageData {
                 }
             }
             configuredMenu {
-                title
+                ...ConfiguredMenu
             }
         }
     }

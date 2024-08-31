@@ -183,10 +183,29 @@ export const defaultSearchParams: SearchParams = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toValidatedSearchParams(query: any): SearchParams {
-    const { locationLatitude, locationLongitude, locationText, dateString, adults, children } = query;
-    if (!locationLatitude || !locationLongitude || !locationText || !dateString || !adults || !children) return defaultSearchParams;
+    const searchParams = defaultSearchParams;
 
-    return { locationLatitude, locationLongitude, locationText, dateString, adults: Number(adults), children: Number(children) };
+    const { locationLatitude, locationLongitude, locationText, dateString, adults, children } = query;
+
+    if (locationLatitude && locationLongitude && locationText) {
+        searchParams.locationLatitude = locationLatitude;
+        searchParams.locationLongitude = locationLongitude;
+        searchParams.locationText = locationText;
+    }
+
+    if (dateString) {
+        searchParams.dateString = dateString;
+    }
+
+    if (adults) {
+        searchParams.adults = Number(adults);
+    }
+
+    if (children) {
+        searchParams.children = Number(children);
+    }
+
+    return searchParams;
 }
 
 export interface ToQueryParamsInput {

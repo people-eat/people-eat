@@ -1,4 +1,4 @@
-import { PEBookingDetails, PEDialog } from '@people-eat/web-components';
+import { ConfiguredMenuPanel, PEBookingDetails, PEDialog, PETabSingleSelection } from '@people-eat/web-components';
 import { AdminGetBookingRequestsPageDataQuery, formatPrice, toTranslatedFormattedDate, Unpacked } from '@people-eat/web-domain';
 import { useState } from 'react';
 
@@ -8,8 +8,19 @@ export interface AdminBookingRequestsTableProps {
     bookingRequests: BookingRequest[];
 }
 
+type AdminBookingRequestTab = 'EVENT_DETAILS' | 'MENU';
+
+const adminBookingRequestTabs: AdminBookingRequestTab[] = ['EVENT_DETAILS', 'MENU'];
+const adminBookingRequestTabsWithoutMenu: AdminBookingRequestTab[] = ['EVENT_DETAILS'];
+
+const adminBookingRequestTabTranslation: Record<AdminBookingRequestTab, string> = {
+    EVENT_DETAILS: 'Veranstaltung',
+    MENU: 'Menü',
+};
+
 export function AdminBookingRequestsTable({ bookingRequests }: AdminBookingRequestsTableProps) {
     const [selectedBookingRequest, setSelectedBookingRequest] = useState<BookingRequest | undefined>();
+    const [selectedTab, setSelectedTab] = useState<AdminBookingRequestTab>('EVENT_DETAILS');
 
     return (
         <table className="w-full text-left">
@@ -88,20 +99,37 @@ export function AdminBookingRequestsTable({ bookingRequests }: AdminBookingReque
                     </tr>
                 ))}
             </tbody>
+
             <PEDialog open={Boolean(selectedBookingRequest)} onClose={() => setSelectedBookingRequest(undefined)} title="Buchungsanfrage">
                 {selectedBookingRequest && (
-                    <PEBookingDetails
-                        status={selectedBookingRequest.status}
-                        occasion={selectedBookingRequest.occasion}
-                        adultParticipants={selectedBookingRequest.adultParticipants}
-                        // eslint-disable-next-line react/no-children-prop
-                        children={selectedBookingRequest.children}
-                        dateTime={selectedBookingRequest.dateTime}
-                        location={selectedBookingRequest.location}
-                        price={selectedBookingRequest.totalPriceCustomer}
-                        payoutPrice={selectedBookingRequest.totalPriceCook}
-                        travelExpenses={selectedBookingRequest.travelExpenses}
-                    />
+                    <>
+                        <PETabSingleSelection
+                            options={selectedBookingRequest.configuredMenu ? adminBookingRequestTabs : adminBookingRequestTabsWithoutMenu}
+                            selectedOption={selectedTab}
+                            selectedOptionChanged={(tab) => tab && setSelectedTab(tab)}
+                            optionTitle={(o) => adminBookingRequestTabTranslation[o]}
+                            optionIdentifier={(o) => o}
+                        />
+
+                        {selectedTab === 'EVENT_DETAILS' && (
+                            <PEBookingDetails
+                                status={selectedBookingRequest.status}
+                                occasion={selectedBookingRequest.occasion}
+                                adultParticipants={selectedBookingRequest.adultParticipants}
+                                // eslint-disable-next-line react/no-children-prop
+                                children={selectedBookingRequest.children}
+                                dateTime={selectedBookingRequest.dateTime}
+                                location={selectedBookingRequest.location}
+                                price={selectedBookingRequest.totalPriceCustomer}
+                                payoutPrice={selectedBookingRequest.totalPriceCook}
+                                travelExpenses={selectedBookingRequest.travelExpenses}
+                            />
+                        )}
+
+                        {selectedTab === 'MENU' && selectedBookingRequest.configuredMenu && (
+                            <ConfiguredMenuPanel configuredMenu={selectedBookingRequest.configuredMenu} />
+                        )}
+                    </>
                 )}
             </PEDialog>
         </table>
