@@ -1,4 +1,5 @@
-import { CookCard, PEFooter, PEHeader, PESearchBar, SearchModeSwitch } from '@people-eat/web-components';
+import { useMutation } from '@apollo/client';
+import { CookCard, PEFooter, PEHeader, PELink, PESearchBar, SearchModeSwitch } from '@people-eat/web-components';
 import {
     CreateOneSearchRequestDocument,
     GetPublicCooksPageDataDocument,
@@ -14,18 +15,16 @@ import {
 } from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { NewsletterDialog } from '../../components/NewsletterDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
-import { PELink } from '@people-eat/web-components';
-import Head from 'next/head';
-import { NewsletterDialog } from '../../components/NewsletterDialog';
-import { useMutation } from '@apollo/client';
-import { CookieSettings } from '../../components/analytics/CookieSettings';
-import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
-import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;
