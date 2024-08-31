@@ -155,6 +155,13 @@ export function addDaysToDate(date: Date, days: number): Date {
 }
 
 export function formatTime(date: Date): string {
+    console.log({
+        from: date,
+        to: new Date(date).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+        }),
+    });
     return new Date(date).toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
