@@ -1,8 +1,8 @@
-import { Combobox, Popover, Transition } from '@headlessui/react';
+import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Label, Popover, Transition } from '@headlessui/react';
 import { LocationSearchResult, SearchMode, toTranslatedFormattedDate } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { random } from 'lodash';
-import { CheckIcon, SearchIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, SearchIcon } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEAutoComplete, PEButton, PECalendar, PEFullPageSheet, PEIconButton } from '../_core';
@@ -85,6 +85,7 @@ export function PESearchBar({
                             searchMode === 'COOKS' ? onSearchCooks() : onSearchMenus();
                             setShowMobileDialog(false);
                         })}
+                        autoComplete="off"
                     >
                         <div className="flex flex-col gap-4">
                             <h2 className="text-lg font-semibold">Wonach suchst du?</h2>
@@ -118,43 +119,56 @@ export function PESearchBar({
             <div className="hidden lg:block w-full pl-4 py-2 pr-2">
                 <div className="flex gap-2">
                     <Combobox
-                        as="div"
                         value={selectedLocation}
                         onChange={setSelectedLocation}
-                        className="flex flex-col items-start px-3 pt-2.5 flex-[3]"
+                        // onClose={() => undefined}
+                        className="px-3 pt-2.5 flex-[3]"
+                        data-element="abcdef"
+                        as="div"
                     >
-                        <Combobox.Label className="text-xs font-medium text-gray-900">Adresse</Combobox.Label>
-                        <div className="relative w-full">
-                            <Combobox.Input
-                                className="border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 w-full"
-                                onChange={(event) => onLocationSearchTextChange(event.target.value)}
-                                displayValue={(person: LocationSearchResult) => person?.text}
-                                placeholder="Wo?"
-                            />
-                            {/* <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                                    <ChevronsUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                </Combobox.Button> */}
+                        <div className="flex">
+                            <div className="flex flex-col items-start w-full">
+                                <Label className="text-xs font-medium text-gray-900">Adresse</Label>
+                                <ComboboxInput
+                                    className="border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 w-full"
+                                    displayValue={(searchResult: LocationSearchResult) => searchResult?.text}
+                                    onChange={(event) => onLocationSearchTextChange(event.target.value)}
+                                    placeholder="Wo?"
+                                    autoComplete="off"
+                                />
+                            </div>
+                            <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
+                                <ChevronDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
+                            </ComboboxButton>
+                        </div>
 
-                            {locationSearchResults.length > 0 && (
-                                <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                    {locationSearchResults.map((location) => (
-                                        <Combobox.Option
-                                            key={location.id}
-                                            value={location}
-                                            className={({ active }) =>
-                                                classNames(
-                                                    'relative cursor-default select-none py-2 pl-3 pr-9',
-                                                    active ? 'bg-orange-400 text-white' : 'text-gray-900',
-                                                )
-                                            }
-                                        >
-                                            {({ active, selected }) => (
-                                                <>
-                                                    <div className="flex">
-                                                        <span className={classNames('truncate', selected && 'font-semibold')}>
-                                                            {location.text}
-                                                        </span>
-                                                        {/* <span
+                        {locationSearchResults.length > 0 && (
+                            <ComboboxOptions
+                                anchor="bottom"
+                                transition
+                                className={classNames(
+                                    'w-[var(--input-width)] rounded-xl border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
+                                    'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0',
+                                )}
+                            >
+                                {locationSearchResults.map((searchResult) => (
+                                    <ComboboxOption
+                                        key={searchResult.id}
+                                        value={searchResult}
+                                        className={({ focus }) =>
+                                            classNames(
+                                                'relative cursor-default select-none py-2 pl-3 pr-9',
+                                                focus ? 'bg-orange-400 text-white' : 'text-gray-900',
+                                            )
+                                        }
+                                    >
+                                        {({ focus, selected }) => (
+                                            <>
+                                                <div className="flex">
+                                                    <span className={classNames('truncate', selected && 'font-semibold')}>
+                                                        {searchResult.text}
+                                                    </span>
+                                                    {/* <span
                                                                 className={classNames(
                                                                     'ml-2 truncate text-gray-500',
                                                                     active ? 'text-indigo-200' : 'text-gray-500',
@@ -162,25 +176,24 @@ export function PESearchBar({
                                                             >
                                                                 {person.secondaryText}
                                                             </span> */}
-                                                    </div>
+                                                </div>
 
-                                                    {selected && (
-                                                        <span
-                                                            className={classNames(
-                                                                'absolute inset-y-0 right-0 flex items-center pr-4',
-                                                                active ? 'text-white' : 'text-orange-500',
-                                                            )}
-                                                        >
-                                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                        </span>
-                                                    )}
-                                                </>
-                                            )}
-                                        </Combobox.Option>
-                                    ))}
-                                </Combobox.Options>
-                            )}
-                        </div>
+                                                {selected && (
+                                                    <span
+                                                        className={classNames(
+                                                            'absolute inset-y-0 right-0 flex items-center pr-4',
+                                                            focus ? 'text-white' : 'text-orange-500',
+                                                        )}
+                                                    >
+                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                    </ComboboxOption>
+                                ))}
+                            </ComboboxOptions>
+                        )}
                     </Combobox>
 
                     <div className="flex-[2] flex gap-2 [&>*]:flex-1">
