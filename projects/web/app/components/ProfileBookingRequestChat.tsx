@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
-import { LoadingDialog } from '@people-eat/web-components';
-import { PEAlert, PEButton, PETextField } from '@people-eat/web-components';
+import { ChatTextArea, LoadingDialog, PEAlert, PEButton } from '@people-eat/web-components';
 import {
     BookingRequestChatMessageCreationsDocument,
     ChatMessage,
@@ -11,7 +10,6 @@ import {
     UserBookingRequestDeclineDocument,
 } from '@people-eat/web-domain';
 import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { PEChatMessage } from './PEChatMessage';
 
 export interface ProfileBookingRequestChatProps {
@@ -37,12 +35,12 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
 
     const [send] = useMutation(CreateOneUserBookingRequestChatMessageDocument);
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm<{ message: string }>();
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     setValue,
+    //     formState: { errors },
+    // } = useForm<{ message: string }>();
 
     const [showAcceptDialog, setShowAcceptDialog] = useState(false);
     const [showDeclineDialog, setShowDeclineDialog] = useState(false);
@@ -80,6 +78,8 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
         (chatMessageA, chatMessageB) => new Date(chatMessageA.createdAt).getTime() - new Date(chatMessageB.createdAt).getTime(),
     );
 
+    const [text, setText] = useState('');
+
     return (
         <div className="flex flex-col gap-2 flex-1 overflow-hidden pb-4">
             <div className="flex flex-col gap-4 flex-1 overflow-y-auto p-4">
@@ -91,27 +91,40 @@ export function ProfileBookingRequestChat({ userId, bookingRequest, onRequireUpd
 
             <div className="ml-4 mr-4">
                 {(status === 'PENDING' || status === 'COMPLETED') && (
-                    <form
-                        autoComplete="off"
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') e.preventDefault();
-                        }}
-                        onSubmit={handleSubmit(({ message }, event) =>
-                            send({ variables: { userId, bookingRequestId, request: { message } } }).then(
-                                ({ data }) => data?.users.bookingRequests.chatMessages.success && setValue('message', ''),
-                            ),
-                        )}
-                        className="flex gap-4 items-center"
-                    >
-                        <PETextField
-                            id="chat-message"
-                            placeholder="Deine Nachricht"
-                            type="text"
-                            errorMessage={errors.message?.message}
-                            {...register('message', { required: true })}
-                        />
-                        <PEButton type="submit" title="Senden" />
-                    </form>
+                    // <form
+                    //     autoComplete="off"
+                    //     onKeyDown={(e) => {
+                    //         if (e.key === 'Enter') e.preventDefault();
+                    //     }}
+                    //     onSubmit={handleSubmit(({ message }, event) =>
+                    //         send({ variables: { userId, bookingRequestId, request: { message } } }).then(
+                    //             ({ data }) => data?.users.bookingRequests.chatMessages.success && setValue('message', ''),
+                    //         ),
+                    //     )}
+                    //     className="flex gap-4 items-center"
+                    // >
+                    //     <PETextField
+                    //         id="chat-message"
+                    //         placeholder="Deine Nachricht"
+                    //         type="text"
+                    //         errorMessage={errors.message?.message}
+                    //         {...register('message', { required: true })}
+                    //     />
+                    //     <PEButton type="submit" title="Senden" />
+                    // </form>
+                    <div className="flex gap-4 items-end">
+                        <ChatTextArea text={text} setText={setText} maxRows={4} placeholder="Deine Nachricht" />
+                        <div>
+                            <PEButton
+                                title="Senden"
+                                onClick={() =>
+                                    send({ variables: { userId, bookingRequestId, request: { message: text } } }).then(
+                                        ({ data }) => data?.users.bookingRequests.chatMessages.success && setText(''),
+                                    )
+                                }
+                            />
+                        </div>
+                    </div>
                 )}
 
                 {status === 'OPEN' && (

@@ -1,0 +1,72 @@
+query GetCityHubPageData(
+    $cooksRequest: FindManyPublicCooksRequest!
+    $menusRequest: FindManyPublicMenusRequest!
+    $location: LocationInput!
+) {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+        }
+    }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
+    publicCooks {
+        findMany(request: $cooksRequest) {
+            cookId
+            user {
+                userId
+                firstName
+                profilePictureUrl
+            }
+            rank
+            biography
+            location {
+                latitude
+                longitude
+            }
+            city
+            travelExpenses
+            createdAt
+            menuCount
+        }
+    }
+    publicMenus {
+        findMany(request: $menusRequest) {
+            menuId
+            title
+            description
+            kitchen {
+                kitchenId
+                title
+            }
+            cook {
+                cookId
+                rank
+                user {
+                    firstName
+                    profilePictureUrl
+                }
+            }
+            categories {
+                categoryId
+                title
+            }
+            imageUrl
+            basePrice
+            basePriceCustomers
+            pricePerAdult
+            pricePerChild
+            currencyCode
+            totalPrice(location: $location, adults: 4, children: 0) {
+                amount
+                currencyCode
+            }
+            courseCount
+        }
+    }
+}

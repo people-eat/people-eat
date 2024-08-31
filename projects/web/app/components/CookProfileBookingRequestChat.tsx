@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation, useQuery, useSubscription } from '@apollo/client';
-import { LoadingDialog } from '@people-eat/web-components';
+import { ChatTextArea, LoadingDialog } from '@people-eat/web-components';
 import { PEAlert, PEButton, PETextField } from '@people-eat/web-components';
 import {
     BookingRequestChatMessageCreationsDocument,
@@ -47,12 +47,12 @@ export function CookProfileBookingRequestChat({
 
     const [send] = useMutation(CreateOneCookBookingRequestChatMessageDocument);
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm<{ message: string }>();
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     setValue,
+    //     formState: { errors },
+    // } = useForm<{ message: string }>();
 
     const [showAcceptDialog, setShowAcceptDialog] = useState(false);
     const [showDeclineDialog, setShowDeclineDialog] = useState(false);
@@ -113,6 +113,8 @@ export function CookProfileBookingRequestChat({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [text, setText] = useState('');
+
     return (
         <div className="flex flex-col gap-2 flex-1 overflow-hidden pb-4">
             <div className="flex flex-col gap-4 flex-1 overflow-y-auto p-4">
@@ -124,27 +126,40 @@ export function CookProfileBookingRequestChat({
 
             <div className="ml-4 mr-4">
                 {(status === 'PENDING' || status === 'COMPLETED') && (
-                    <form
-                        autoComplete="off"
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') e.preventDefault();
-                        }}
-                        onSubmit={handleSubmit(({ message }) =>
-                            send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
-                                ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),
-                            ),
-                        )}
-                        className="flex gap-4 items-center"
-                    >
-                        <PETextField
-                            id="chat-message"
-                            placeholder="Deine Nachricht"
-                            type="text"
-                            errorMessage={errors.message?.message}
-                            {...register('message', { required: true })}
-                        />
-                        <PEButton type="submit" title="Senden" />
-                    </form>
+                    // <form
+                    //     autoComplete="off"
+                    //     onKeyDown={(e) => {
+                    //         if (e.key === 'Enter') e.preventDefault();
+                    //     }}
+                    //     onSubmit={handleSubmit(({ message }) =>
+                    //         send({ variables: { cookId, bookingRequestId, request: { message } } }).then(
+                    //             ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setValue('message', ''),
+                    //         ),
+                    //     )}
+                    //     className="flex gap-4 items-center"
+                    // >
+                    //     <PETextField
+                    //         id="chat-message"
+                    //         placeholder="Deine Nachricht"
+                    //         type="text"
+                    //         errorMessage={errors.message?.message}
+                    //         {...register('message', { required: true })}
+                    //     />
+                    //     <PEButton type="submit" title="Senden" />
+                    // </form>
+                    <div className="flex gap-4 items-end">
+                        <ChatTextArea text={text} setText={setText} maxRows={4} placeholder="Deine Nachricht" />
+                        <div>
+                            <PEButton
+                                title="Senden"
+                                onClick={() =>
+                                    send({ variables: { cookId, bookingRequestId, request: { message: text } } }).then(
+                                        ({ data }) => data?.cooks.bookingRequests.chatMessages.success && setText(''),
+                                    )
+                                }
+                            />
+                        </div>
+                    </div>
                 )}
 
                 {status === 'OPEN' && (

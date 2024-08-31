@@ -23,6 +23,8 @@ export type LanguageOption = LanguageOptionFragment;
 export * from './cookRanks';
 export * from './profileTabs';
 
+export { cityHubs, type CityHub } from './CityHub';
+
 export interface LocationSearchResult {
     id: string;
     text: string;
@@ -190,7 +192,7 @@ export const defaultSearchParams: SearchParams = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toValidatedSearchParams(query: any): SearchParams {
-    const searchParams = defaultSearchParams;
+    const searchParams = JSON.parse(JSON.stringify(defaultSearchParams));
 
     const { locationLatitude, locationLongitude, locationText, dateString, adults, children } = query;
 

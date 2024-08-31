@@ -1,4 +1,4 @@
-import { PEHeader } from '@people-eat/web-components';
+import { PEButton, PEHeader } from '@people-eat/web-components';
 import {
     AdminGetGiftCardPromoCodesPageDataDocument,
     AdminGetGiftCardPromoCodesPageDataQuery,
@@ -7,8 +7,10 @@ import {
     toTranslatedFormattedDate,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
+import { Router, useRouter } from 'next/router';
+import { useState } from 'react';
+import { AdminCreateGiftCardPromoCodeDialog } from '../../components/administration/AdminCreateGiftCardPromoCodeDialog';
 import { createApolloClient } from '../../network/apolloClients';
-import { PEButton } from '@people-eat/web-components';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
@@ -44,6 +46,10 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function AdministrationPromoCodesPage({ signedInUser, initialGiftCardPromoCodes: giftCardPromoCodes }: ServerSideProps) {
+    const router = useRouter();
+
+    const [createDialogOpen, setCreateDialogOpen] = useState(false);
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
@@ -55,10 +61,16 @@ export default function AdministrationPromoCodesPage({ signedInUser, initialGift
                         <p className="mt-2 text-sm text-gray-700">Die Liste aller existierender Promo Codes</p>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <PEButton title="Neuen Code erstellen" onClick={() => undefined} />
+                        <PEButton title="Neuen Code erstellen" onClick={() => setCreateDialogOpen(true)} />
                     </div>
                 </div>
             </div>
+
+            <AdminCreateGiftCardPromoCodeDialog
+                open={createDialogOpen}
+                onCancel={() => setCreateDialogOpen(false)}
+                onCreated={() => router.reload()}
+            />
 
             <div className="mt-8 flow-root overflow-hidden">
                 <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">

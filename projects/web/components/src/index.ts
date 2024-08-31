@@ -25,6 +25,7 @@ export { BookBar, type BookBarProps } from './book-bar/BookBar';
 export { PEBookingDetails, type PEBookingDetailsProps } from './booking-details/PEBookingDetails';
 export { BookingStatusInfoPopover, type BookingStatusInfoPopoverProps } from './booking-status-info-popover/BookingStatusInfoPopover';
 export { BookingRequestStatusPill, type BookingRequestStatusPillProps } from './booking-status-pill/BookingRequestStatusPill';
+export { ChatTextArea, type ChatTextAreaProps } from './chat-text-area/ChatTextArea';
 export { ConfiguredMenuPanel, type ConfiguredMenuPanelProps } from './configured-menu-panel/ConfiguredMenuPanel';
 export { PECostBreakdownPanel, type PECostBreakdownPanelProps } from './cost-breakdown-panel/PECostBreakdownPanel';
 export { PEFooter } from './footer/PEFooter';

@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import { Disclosure } from '@headlessui/react';
 import { PEFooter, PEHeader, PELink, PESearchBar, RatingCard } from '@people-eat/web-components';
 import {
+    cityHubs,
     CreateOneSearchRequestDocument,
     GetHomePageDataDocument,
     GetHomePageDataQuery,
@@ -213,6 +214,8 @@ interface ServerSideProps {
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req, query }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
     const searchParams = toValidatedSearchParams(query);
+
+    // appendFileSync(path.join(process.cwd(), 'tmp/logs.txt'), JSON.stringify(searchParams));
 
     try {
         const { data } = await apolloClient.query({ query: GetHomePageDataDocument });
@@ -890,7 +893,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                     </div>
                 </div>
 
-                <div className="py-24 sm:py-32">
+                <div className="py-24 sm:pb-32 sm:pt-8">
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:max-w-none">
                             <h2 className="text-lg font-semibold leading-8 text-gray-900">Wir werden unterstützt von</h2>
@@ -915,10 +918,53 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                                         height={48}
                                     />
                                 </Link>
+                                <Link href="https://www.deutsche-startups.de" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/partners/deutsche-startups.png"
+                                        alt="Deutsche Startups"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
+                                <Link href="https://www.foundersleague.de" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/partners/founders-league.png"
+                                        alt="Founders League"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <section className="mx-auto max-w-[88rem] sm:px-2 lg:px-8">
+                    <div className="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
+                        <div className="max-w-3xl">
+                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Unsere Städte</h2>
+                        </div>
+
+                        <ul
+                            role="list"
+                            className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4 mt-8"
+                        >
+                            {cityHubs.map((cityHub) => (
+                                <Link
+                                    key={cityHub.pathName}
+                                    href={'/cities/' + cityHub.pathName}
+                                    className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                                >
+                                    Privatkoch in {cityHub.city.name}
+                                </Link>
+                            ))}
+                        </ul>
+                    </div>
+                </section>
 
                 <PEFooter />
             </div>

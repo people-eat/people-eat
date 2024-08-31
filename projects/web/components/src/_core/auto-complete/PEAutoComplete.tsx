@@ -1,7 +1,7 @@
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions, Label } from '@headlessui/react';
 import classNames from 'classnames';
 import { CheckIcon } from 'lucide-react';
-import { ForwardedRef, forwardRef } from 'react';
+import { forwardRef, Ref } from 'react';
 
 export interface PEAutoCompleteProps<T> {
     title: string;
@@ -15,7 +15,9 @@ export interface PEAutoCompleteProps<T> {
     errorMessage?: string;
 }
 
-function PEAutoComplete<T>(
+type GenericComponentType = <T>(props: PEAutoCompleteProps<T> & { ref?: Ref<HTMLInputElement> }) => JSX.Element;
+
+const PEAutoComplete = forwardRef(function GenericComponentInner<T>(
     {
         title,
         options,
@@ -26,7 +28,7 @@ function PEAutoComplete<T>(
         errorMessage,
         ...rest
     }: PEAutoCompleteProps<T>,
-    ref: ForwardedRef<HTMLInputElement>,
+    ref: Ref<HTMLInputElement>,
 ) {
     return (
         <Combobox as="div" value={selectedOption} onChange={onSelectedOptionChange} className="flex flex-col gap-2">
@@ -37,6 +39,7 @@ function PEAutoComplete<T>(
                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset focus:ring-orange-600"
                     displayValue={(selection: T) => (selection ? getLabel(selection) : '')}
                     placeholder="Wo?"
+                    autoComplete="off"
                     ref={ref}
                     {...rest}
                 />
@@ -80,13 +83,16 @@ function PEAutoComplete<T>(
             </div>
         </Combobox>
     );
-}
+}) as GenericComponentType;
 
-function fixedForwardRef<T, P>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactNode,
-): (props: P & React.RefAttributes<T>) => React.ReactNode {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return forwardRef(render) as any;
-}
+// @todo the first as any was newly added after migrating to node 22
+// function fixedForwardRef<T, P>(
+//     render: (props: P, ref: React.Ref<T>) => React.ReactNode,
+// ): (props: P & React.RefAttributes<T>) => React.ReactNode {
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     return forwardRef(render) as any;
+// }
 
-export default fixedForwardRef(PEAutoComplete);
+// export default forwardRef(PEAutoComplete);
+
+export default PEAutoComplete;

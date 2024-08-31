@@ -7,9 +7,10 @@ export interface PEButtonProps {
     onClick?: () => void;
     disabled?: boolean;
     className?: string;
+    stopEventPropagation?: boolean;
 }
 
-export function PEButton({ title, type = 'primary', onClick, disabled, className }: PEButtonProps) {
+export function PEButton({ title, type = 'primary', onClick, disabled, className, stopEventPropagation }: PEButtonProps) {
     if (disabled) {
         return (
             <div className={classNames(disabledButtonClassName, className)} onClick={onClick}>
@@ -24,13 +25,27 @@ export function PEButton({ title, type = 'primary', onClick, disabled, className
 
     if (type === 'secondary')
         return (
-            <button type="button" className={classNames(secondaryButtonClassName, className)} onClick={onClick}>
+            <button
+                type="button"
+                className={classNames(secondaryButtonClassName, className)}
+                onClick={(e) => {
+                    stopEventPropagation && e.stopPropagation();
+                    onClick?.();
+                }}
+            >
                 {title}
             </button>
         );
 
     return (
-        <button type="button" className={classNames(primaryButtonClassName, className)} onClick={onClick}>
+        <button
+            type="button"
+            className={classNames(primaryButtonClassName, className)}
+            onClick={(e) => {
+                stopEventPropagation && e.stopPropagation();
+                onClick?.();
+            }}
+        >
             {title}
         </button>
     );
