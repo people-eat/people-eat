@@ -214,6 +214,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const apolloClient = createApolloClient(req.headers.cookie);
     const searchParams = toValidatedSearchParams(query);
 
+    // appendFileSync(path.join(process.cwd(), 'tmp/logs.txt'), JSON.stringify(searchParams));
+
     try {
         const { data } = await apolloClient.query({ query: GetHomePageDataDocument });
 
