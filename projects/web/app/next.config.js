@@ -30,6 +30,7 @@ const nextConfig = {
             destination: 'https://maps.googleapis.com/maps/api/:path*',
         },
     ],
+    cacheMaxMemorySize: 0, // disable default in-memory caching
 };
 
 const plugins = [
