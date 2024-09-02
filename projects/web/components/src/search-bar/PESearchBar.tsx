@@ -2,7 +2,7 @@ import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOption
 import { LocationSearchResult, SearchMode, toTranslatedFormattedDate } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { random } from 'lodash';
-import { CheckIcon, ChevronDownIcon, SearchIcon } from 'lucide-react';
+import { ChevronDownIcon, SearchIcon } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEAutoComplete, PEButton, PECalendar, PEFullPageSheet, PEIconButton } from '../_core';
@@ -123,7 +123,6 @@ export function PESearchBar({
                         onChange={setSelectedLocation}
                         // onClose={() => undefined}
                         className="px-3 pt-2.5 flex-[3]"
-                        data-element="abcdef"
                         as="div"
                     >
                         <div className="flex">
@@ -144,52 +143,31 @@ export function PESearchBar({
 
                         {locationSearchResults.length > 0 && (
                             <ComboboxOptions
-                                anchor="bottom"
+                                anchor="bottom end"
                                 transition
                                 className={classNames(
                                     'w-[var(--input-width)] rounded-xl border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
                                     'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0',
+                                    'shadow-lg',
                                 )}
                             >
                                 {locationSearchResults.map((searchResult) => (
                                     <ComboboxOption
                                         key={searchResult.id}
                                         value={searchResult}
-                                        className={({ focus }) =>
-                                            classNames(
-                                                'relative cursor-default select-none py-2 pl-3 pr-9',
-                                                focus ? 'bg-orange-400 text-white' : 'text-gray-900',
-                                            )
-                                        }
-                                    >
-                                        {({ focus, selected }) => (
-                                            <>
-                                                <div className="flex">
-                                                    <span className={classNames('truncate', selected && 'font-semibold')}>
-                                                        {searchResult.text}
-                                                    </span>
-                                                    {/* <span
-                                                                className={classNames(
-                                                                    'ml-2 truncate text-gray-500',
-                                                                    active ? 'text-indigo-200' : 'text-gray-500',
-                                                                )}
-                                                            >
-                                                                {person.secondaryText}
-                                                            </span> */}
-                                                </div>
-
-                                                {selected && (
-                                                    <span
-                                                        className={classNames(
-                                                            'absolute inset-y-0 right-0 flex items-center pr-4',
-                                                            focus ? 'text-white' : 'text-orange-500',
-                                                        )}
-                                                    >
-                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                    </span>
-                                                )}
-                                            </>
+                                        className={classNames(
+                                            'relative cursor-default select-none p-2 w-full',
+                                            'hover:bg-orange-400 hover:text-white',
+                                            'focus:bg-orange-400 focus:text-white',
                                         )}
+                                    >
+                                        <div className="flex justify-between items-center w-full">
+                                            <span className="truncate group-data-[selected]:font-semibold text-sm">
+                                                {searchResult.text}
+                                            </span>
+
+                                            {/* <Check className="size-8 text-orange-500 bg-white rounded-full p-1 hidden group-data-[selected]:visible" /> */}
+                                        </div>
                                     </ComboboxOption>
                                 ))}
                             </ComboboxOptions>
