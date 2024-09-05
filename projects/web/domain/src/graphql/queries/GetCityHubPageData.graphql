@@ -1,0 +1,34 @@
+query GetCityHubPageData($request: FindManyPublicCooksRequest!) {
+    users {
+        signedInUser: me {
+            ...SignedInUser
+        }
+    }
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+        }
+    }
+    publicCooks {
+        findMany(request: $request) {
+            cookId
+            user {
+                userId
+                firstName
+                profilePictureUrl
+            }
+            rank
+            biography
+            location {
+                latitude
+                longitude
+            }
+            city
+            travelExpenses
+            createdAt
+            menuCount
+        }
+    }
+}
