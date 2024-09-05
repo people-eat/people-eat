@@ -9,6 +9,8 @@ import {
 import { GetServerSideProps } from 'next';
 import { createApolloClient } from '../../network/apolloClients';
 import { PEButton } from '@people-eat/web-components';
+import { AdminCreateGiftCardPromoCodeDialog } from '../../components/administration/AdminCreateGiftCardPromoCodeDialog';
+import { useState } from 'react';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
@@ -44,6 +46,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function AdministrationPromoCodesPage({ signedInUser, initialGiftCardPromoCodes: giftCardPromoCodes }: ServerSideProps) {
+    const [createDialogOpen, setCreateDialogOpen] = useState(false);
+
     return (
         <div>
             <PEHeader signedInUser={signedInUser} />
@@ -55,10 +59,12 @@ export default function AdministrationPromoCodesPage({ signedInUser, initialGift
                         <p className="mt-2 text-sm text-gray-700">Die Liste aller existierender Promo Codes</p>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <PEButton title="Neuen Code erstellen" onClick={() => undefined} />
+                        <PEButton title="Neuen Code erstellen" onClick={() => setCreateDialogOpen(true)} />
                     </div>
                 </div>
             </div>
+
+            <AdminCreateGiftCardPromoCodeDialog open={createDialogOpen} />
 
             <div className="mt-8 flow-root overflow-hidden">
                 <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
