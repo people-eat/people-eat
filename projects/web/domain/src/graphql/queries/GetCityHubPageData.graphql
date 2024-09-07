@@ -1,4 +1,8 @@
-query GetCityHubPageData($request: FindManyPublicCooksRequest!) {
+query GetCityHubPageData(
+    $cooksRequest: FindManyPublicCooksRequest!
+    $menusRequest: FindManyPublicMenusRequest!
+    $location: LocationInput!
+) {
     users {
         signedInUser: me {
             ...SignedInUser
@@ -12,7 +16,7 @@ query GetCityHubPageData($request: FindManyPublicCooksRequest!) {
         }
     }
     publicCooks {
-        findMany(request: $request) {
+        findMany(request: $cooksRequest) {
             cookId
             user {
                 userId
@@ -29,6 +33,40 @@ query GetCityHubPageData($request: FindManyPublicCooksRequest!) {
             travelExpenses
             createdAt
             menuCount
+        }
+    }
+    publicMenus {
+        findMany(request: $menusRequest) {
+            menuId
+            title
+            description
+            kitchen {
+                kitchenId
+                title
+            }
+            cook {
+                cookId
+                rank
+                user {
+                    firstName
+                    profilePictureUrl
+                }
+            }
+            categories {
+                categoryId
+                title
+            }
+            imageUrl
+            basePrice
+            basePriceCustomers
+            pricePerAdult
+            pricePerChild
+            currencyCode
+            totalPrice(location: $location, adults: 4, children: 0) {
+                amount
+                currencyCode
+            }
+            courseCount
         }
     }
 }
