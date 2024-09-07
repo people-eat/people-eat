@@ -1,4 +1,4 @@
-import { PEHeader } from '@people-eat/web-components';
+import { PEButton, PEHeader } from '@people-eat/web-components';
 import {
     AdminGetGiftCardPromoCodesPageDataDocument,
     AdminGetGiftCardPromoCodesPageDataQuery,
@@ -7,10 +7,10 @@ import {
     toTranslatedFormattedDate,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import { createApolloClient } from '../../network/apolloClients';
-import { PEButton } from '@people-eat/web-components';
-import { AdminCreateGiftCardPromoCodeDialog } from '../../components/administration/AdminCreateGiftCardPromoCodeDialog';
+import { Router, useRouter } from 'next/router';
 import { useState } from 'react';
+import { AdminCreateGiftCardPromoCodeDialog } from '../../components/administration/AdminCreateGiftCardPromoCodeDialog';
+import { createApolloClient } from '../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
@@ -46,6 +46,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 };
 
 export default function AdministrationPromoCodesPage({ signedInUser, initialGiftCardPromoCodes: giftCardPromoCodes }: ServerSideProps) {
+    const router = useRouter();
+
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
     return (
@@ -64,7 +66,11 @@ export default function AdministrationPromoCodesPage({ signedInUser, initialGift
                 </div>
             </div>
 
-            <AdminCreateGiftCardPromoCodeDialog open={createDialogOpen} />
+            <AdminCreateGiftCardPromoCodeDialog
+                open={createDialogOpen}
+                onCancel={() => setCreateDialogOpen(false)}
+                onCreated={() => router.reload()}
+            />
 
             <div className="mt-8 flow-root overflow-hidden">
                 <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
