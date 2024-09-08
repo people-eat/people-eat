@@ -892,7 +892,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                     </div>
                 </div>
 
-                <div className="py-24 sm:py-32">
+                <div className="py-24 sm:pb-32 sm:pt-8">
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:max-w-none">
                             <h2 className="text-lg font-semibold leading-8 text-gray-900">Wir werden unterstützt von</h2>
@@ -913,6 +913,26 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                                         className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
                                         src="/home/startup-verband.png"
                                         alt="Statamic"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
+                                <Link href="https://www.deutsche-startups.de" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/partners/deutsche-startups.png"
+                                        alt="Deutsche Startups"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
+                                <Link href="https://www.foundersleague.de" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/partners/founders-league.png"
+                                        alt="Founders League"
                                         width={158}
                                         height={48}
                                     />

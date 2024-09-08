@@ -1,6 +1,6 @@
-import { CookCard, MenuCard, PEFooter, PEHeader, PELink } from '@people-eat/web-components';
-import { formatPrice, GetCityHubPageDataDocument, GetCityHubPageDataQuery, SignedInUser, toQueryParams } from '@people-eat/web-domain';
-import { CheckCircle } from 'lucide-react';
+import { MenuCard, PEFooter, PEHeader, PELink } from '@people-eat/web-components';
+import { formatPrice, GetCityHubPageDataDocument, GetCityHubPageDataQuery, SignedInUser } from '@people-eat/web-domain';
+import { CheckCircle, LifeBuoyIcon, NewspaperIcon, PhoneIcon } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -9,6 +9,30 @@ import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { createApolloClient } from '../../network/apolloClients';
+
+const supportLinks = [
+    {
+        name: 'Sales',
+        href: '#',
+        description:
+            'Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.',
+        icon: PhoneIcon,
+    },
+    {
+        name: 'Technical Support',
+        href: '#',
+        description:
+            'Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.',
+        icon: LifeBuoyIcon,
+    },
+    {
+        name: 'Media Inquiries',
+        href: '#',
+        description:
+            'Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.',
+        icon: NewspaperIcon,
+    },
+];
 
 const publicCooksRedirect = { redirect: { permanent: false, destination: '/chefs' } };
 
@@ -134,7 +158,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                                 Küche.
                             </p>
                             <div className="mt-6 flex items-center gap-x-6">
-                                <PELink title="Kostenloses Angebot" href="/global-booking-requests" />
+                                <PELink title="Kostenloses Angebot" href="/global-booking-request" />
                                 <a
                                     target="_blank"
                                     href="https://wa.me/message/5ADGYOIYNW2JO1"
@@ -215,6 +239,54 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                     </div>
                 </section>
 
+                <div className="bg-white mt-32">
+                    {/* Header */}
+                    <div className="relative pb-32">
+                        <div className="absolute inset-0">
+                            <Image
+                                alt=""
+                                src="/cities/dinner-table.jpg"
+                                className="h-full w-full object-cover opacity-25"
+                                width={2000}
+                                height={500}
+                            />
+                            {/* <div aria-hidden="true" className="absolute inset-0 bg-gray-300 mix-blend-multiply" /> */}
+                        </div>
+                        <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+                            <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">Wie es funktioniert</h1>
+                            <p className="mt-6 max-w-3xl text-xl">
+                                Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui
+                                laoreet diam sed lacus, fames. Dui, amet, nec sit pulvinar.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Overlapping cards */}
+                    <section aria-labelledby="contact-heading" className="relative z-10 mx-auto -mt-32 max-w-7xl px-6 pb-32 lg:px-8">
+                        <h2 id="contact-heading" className="sr-only">
+                            Contact us
+                        </h2>
+                        <div className="grid grid-cols-1 gap-y-20 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
+                            {supportLinks.map((link) => (
+                                <div key={link.name} className="flex flex-col rounded-2xl bg-white shadow-xl">
+                                    <div className="relative flex-1 px-6 pb-8 pt-16 md:px-8">
+                                        <div className="absolute top-0 inline-block -translate-y-1/2 transform rounded-xl bg-orange-500 p-5 shadow-lg">
+                                            <link.icon aria-hidden="true" className="h-6 w-6 text-white" />
+                                        </div>
+                                        <h3 className="text-xl font-medium text-gray-900">{link.name}</h3>
+                                        <p className="mt-4 text-base text-gray-500">{link.description}</p>
+                                    </div>
+                                    <div className="rounded-bl-2xl rounded-br-2xl bg-gray-50 p-6 md:px-8">
+                                        <a href={link.href} className="text-base font-medium text-orange-600 hover:text-orange-500">
+                                            Contact us<span aria-hidden="true"> &rarr;</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </div>
+
                 <section className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Das sagen unsere Gäste</h2>
@@ -235,7 +307,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                                     </blockquote>
                                     <figcaption className="mt-10 flex items-center gap-x-6">
                                         <div className="text-base">
-                                            <div className="font-semibold text-gray-900">Alice Baranga</div>
+                                            <div className="font-semibold text-gray-900">Alice</div>
                                         </div>
                                     </figcaption>
                                 </figure>
@@ -253,7 +325,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                                     </blockquote>
                                     <figcaption className="mt-10 flex items-center gap-x-6">
                                         <div className="text-base">
-                                            <div className="font-semibold text-gray-900">Lydia Gauer</div>
+                                            <div className="font-semibold text-gray-900">Lydia</div>
                                         </div>
                                     </figcaption>
                                 </figure>
@@ -261,18 +333,6 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                         </div>
                     </div>
                 </section>
-
-                {/* <section className="mx-auto max-w-7xl sm:px-2 lg:px-8 my-16">
-                    <div className="max-w-3xl mb-4">
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Wie es funktioniert</h2>
-                    </div>
-
-                    <div className="flex flex-col gap-8 sm:flex-row">
-                        <div className="rounded-lg shadow-xl flex-1 h-28 p-8">Step 1</div>
-                        <div className="rounded-lg shadow-xl flex-1 h-28 p-8">Step 2</div>
-                        <div className="rounded-lg shadow-xl flex-1 h-28 p-8">Step 3</div>
-                    </div>
-                </section> */}
 
                 {/* <div className="mx-auto max-w-[88rem] items-center justify-between gap-x-6 p-6 lg:px-8 mb-8" aria-label="Global">
                     {cooks.length > 0 && (
