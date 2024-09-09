@@ -202,8 +202,9 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                                 Finde deinen perfekten Privatkoch in {cityHub.city.name}
                             </h1>
                             <p className="mt-6 text-lg leading-8 text-gray-600">
-                                Einzigartiges Dinner-Erlebnis bei dir Zuhause. Mit einem Privatkoch, gourmet Menü und einer blitzsauberen
-                                Küche.
+                                Erlebe ein exklusives Dinner in Heidelberg! Buche deinen Privatkoch für besondere Anlässe wie Geburtstage,
+                                Jubiläen, Familienfeiern oder romantische Abende und genieße ein maßgeschneidertes Menü, direkt bei dir zu
+                                Hause.
                             </p>
                             <div className="mt-6 flex items-center gap-x-6">
                                 <PELink title="Kostenloses Menü anfragen" href="/global-booking-request" />
