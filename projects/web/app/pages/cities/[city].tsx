@@ -10,27 +10,75 @@ import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { createApolloClient } from '../../network/apolloClients';
 
-const supportLinks = [
+const howItWorksSteps = [
     {
-        name: 'Sales',
+        name: 'Unverbindliche Anfrage stellen',
         href: '#',
         description:
-            'Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.',
+            'Teile uns deine kulinarischen Wünsche mit, und wir matchen dich mit dem perfekten Privatkoch – ganz ohne Verpflichtungen.',
         icon: PhoneIcon,
     },
     {
-        name: 'Technical Support',
+        name: 'Personalisierten Menüvorschlag erhalten',
         href: '#',
         description:
-            'Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.',
+            'Erhalte einen individuellen Menüvorschlag, der genau auf deine Vorlieben abgestimmt ist. Wir klären die letzten Details, um dein perfektes Dinner-Erlebnis sicherzustellen.',
         icon: LifeBuoyIcon,
     },
     {
-        name: 'Media Inquiries',
+        name: 'Bezahlung und direkter Kontakt zum Koch',
         href: '#',
         description:
-            'Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui laoreet diam sed lacus, fames.',
+            'Nach der sicheren Online-Bezahlung kannst du über den Chat direkt mit deinem Koch kommunizieren, um letzte Details zu besprechen.',
         icon: NewspaperIcon,
+    },
+];
+
+const faqs = [
+    {
+        id: 1,
+        question: 'Wie funktioniert die Buchung eines Privatkochs über PeopleEat?',
+        answer: 'Die Buchung über PeopleEat ist einfach: Du erstellst eine unverbindliche Anfrage, wir finden den perfekten Koch für dich und du erhältst einen individuellen Menüvorschlag. Nach deiner Bestätigung erfolgt die sichere Bezahlung und du kannst im Chat direkt mit deinem Koch in Kontakt treten.',
+    },
+    {
+        id: 2,
+        question: 'Was kostet ein Privatkoch?',
+        answer: 'Die Kosten für einen Privatkoch hängen von deinen individuellen Wünschen, dem Menü und der Anzahl der Gäste ab. Du erhältst nach der Anfrage ein maßgeschneidertes Angebot, das zu deinem Budget passt und dir ein unvergessliches Erlebnis bietet.',
+    },
+    {
+        id: 3,
+        question: 'Was beinhaltet der Service eines Privatkochs?',
+        answer: 'Der Service umfasst alles: Der Koch bringt die Zutaten mit, bereitet das Menü frisch in deiner Küche zu und serviert es. Nach dem Essen kümmert er sich um das Aufräumen, damit du dich voll und ganz auf dein exklusives kulinarisches Erlebnis konzentrieren kannst.',
+    },
+    {
+        id: 4,
+        question: 'Kann ich das Menü an meine Vorlieben und Diätwünsche anpassen?',
+        answer: 'Ja, dein Menü wird individuell auf deine Vorlieben und diätetischen Anforderungen zugeschnitten. Egal ob vegan, vegetarisch, glutenfrei oder eine besondere Zubereitung – dein Koch gestaltet das Menü nach deinen Wünschen.',
+    },
+    {
+        id: 5,
+        question: 'Wie erfolgt die Bezahlung?',
+        answer: 'Die Bezahlung erfolgt sicher und unkompliziert über unser System. Du kannst aus verschiedenen Zahlungsoptionen wählen, nachdem du das Menü bestätigt hast, und dich auf ein sorgenfreies Erlebnis freuen.',
+    },
+    {
+        id: 6,
+        question: 'Kann ich mit meinem Koch direkt kommunizieren?',
+        answer: 'Ja, über den integrierten Chat kannst du nach der Buchung direkt mit deinem Koch in Kontakt treten, um letzte Details zu besprechen und das Erlebnis auf deine Wünsche abzustimmen.',
+    },
+    {
+        id: 7,
+        question: 'Was passiert, wenn ich meine Buchung stornieren muss?',
+        answer: 'Alle Details zu Stornierungen findest du in unseren AGBs. Dort sind die Fristen und Kosten genau beschrieben, um dir maximale Flexibilität zu bieten.',
+    },
+    {
+        id: 8,
+        question: 'Muss ich etwas vorbereiten?',
+        answer: 'Nein, du musst nichts vorbereiten. Dein Koch bringt alles mit, von den Zutaten bis zum Equipment. Du kannst dich entspannen und das Gourmet-Erlebnis in deinem eigenen Zuhause genießen.',
+    },
+    {
+        id: 9,
+        question: 'Welche Regionen deckt PeopleEat ab?',
+        answer: 'Wir bieten unseren Service in vielen Regionen an. Gib einfach deine Postleitzahl ein, um zu prüfen, ob wir auch in deiner Gegend verfügbar sind, und buche deinen Privatkoch für Zuhause.',
     },
 ];
 
@@ -151,14 +199,14 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                     <div className="mx-auto max-w-7xl px-6 lg:flex lg:items-center lg:gap-x-10 lg:px-8 py-16">
                         <div className="mx-auto max-w-2xl lg:mx-0 lg:flex-auto">
                             <h1 className="mt-10 max-w-lg text-5xl font-bold tracking-tight text-gray-900">
-                                Deine Privatkoch Experience in {cityHub.city.name}
+                                Finde deinen perfekten Privatkoch in {cityHub.city.name}
                             </h1>
                             <p className="mt-6 text-lg leading-8 text-gray-600">
                                 Einzigartiges Dinner-Erlebnis bei dir Zuhause. Mit einem Privatkoch, gourmet Menü und einer blitzsauberen
                                 Küche.
                             </p>
                             <div className="mt-6 flex items-center gap-x-6">
-                                <PELink title="Kostenloses Angebot" href="/global-booking-request" />
+                                <PELink title="Kostenloses Menü anfragen" href="/global-booking-request" />
                                 <a
                                     target="_blank"
                                     href="https://wa.me/message/5ADGYOIYNW2JO1"
@@ -267,7 +315,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                             Contact us
                         </h2>
                         <div className="grid grid-cols-1 gap-y-20 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
-                            {supportLinks.map((link) => (
+                            {howItWorksSteps.map((link) => (
                                 <div key={link.name} className="flex flex-col rounded-2xl bg-white shadow-xl">
                                     <div className="relative flex-1 px-6 pb-8 pt-16 md:px-8">
                                         <div className="absolute top-0 inline-block -translate-y-1/2 transform rounded-xl bg-orange-500 p-5 shadow-lg">
@@ -332,6 +380,22 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                             </div>
                         </div>
                     </div>
+                </section>
+
+                <section className="mx-auto max-w-7xl divide-y divide-gray-900/10 px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
+                    <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+                        FAQ – Alles, was du über die Buchung eines Privatkochs bei PeopleEat wissen musst
+                    </h2>
+                    <dl className="mt-10 space-y-8 divide-y divide-gray-900/10">
+                        {faqs.map((faq) => (
+                            <div key={faq.id} className="pt-8 lg:grid lg:grid-cols-12 lg:gap-8">
+                                <dt className="text-base font-semibold leading-7 text-gray-900 lg:col-span-5">{faq.question}</dt>
+                                <dd className="mt-4 lg:col-span-7 lg:mt-0">
+                                    <p className="text-base leading-7 text-gray-600">{faq.answer}</p>
+                                </dd>
+                            </div>
+                        ))}
+                    </dl>
                 </section>
 
                 {/* <div className="mx-auto max-w-[88rem] items-center justify-between gap-x-6 p-6 lg:px-8 mb-8" aria-label="Global">
