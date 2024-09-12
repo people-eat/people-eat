@@ -954,13 +954,13 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                             className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4 mt-8"
                         >
                             {cityHubs.map((cityHub) => (
-                                <a
+                                <Link
                                     key={cityHub.pathName}
                                     href={'/cities/' + cityHub.pathName}
                                     className="text-sm leading-6 text-gray-600 hover:text-gray-900"
                                 >
                                     {cityHub.city.name}
-                                </a>
+                                </Link>
                             ))}
                         </ul>
                     </div>

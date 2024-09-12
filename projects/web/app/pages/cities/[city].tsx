@@ -297,7 +297,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
 
                 <section className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Das sagen unsere Gäste</h2>
+                        <h2 className="font-bold tracking-tight text-gray-900 text-4xl">Das sagen unsere Gäste</h2>
                         <div className="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                             <div className="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
                                 <figure className="mt-10 flex flex-auto flex-col justify-between">
@@ -343,7 +343,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                 </section>
 
                 <section className="mx-auto max-w-[88rem] divide-y divide-gray-900/10 px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
-                    <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+                    <h2 className="text-4xl font-bold leading-10 tracking-tight text-gray-900">
                         FAQ – Alles, was du über die Buchung eines Privatkochs bei PeopleEat wissen musst
                     </h2>
                     <dl className="mt-10 space-y-8 divide-y divide-gray-900/10">
@@ -401,7 +401,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                 <div className="py-24 sm:pb-32 sm:pt-8">
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:max-w-none">
-                            <h2 className="text-lg font-semibold leading-8 text-gray-900">Wir werden unterstützt von</h2>
+                            <h2 className="text-4xl font-semibold leading-8 text-gray-900">Wir werden unterstützt von</h2>
                             <div className="mx-auto mt-10 grid grid-cols-4 items-start gap-x-8 gap-y-10 sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:grid-cols-5">
                                 <Link href="https://entrepreneurship-centre.fs.de/portfolio/peopleeat" target="_blank">
                                     <Image
@@ -459,13 +459,13 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                             className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8 m-4 mt-8"
                         >
                             {cityHubs.map((cityHub) => (
-                                <a
+                                <Link
                                     key={cityHub.pathName}
                                     href={'/cities/' + cityHub.pathName}
                                     className="text-sm leading-6 text-gray-600 hover:text-gray-900"
                                 >
-                                    {cityHub.city.name}
-                                </a>
+                                    Privatkoch in {cityHub.city.name}
+                                </Link>
                             ))}
                         </ul>
                     </div>
