@@ -23,6 +23,8 @@ export type LanguageOption = LanguageOptionFragment;
 export * from './cookRanks';
 export * from './profileTabs';
 
+export { cityHubs, type CityHub } from './CityHub';
+
 export interface LocationSearchResult {
     id: string;
     text: string;
