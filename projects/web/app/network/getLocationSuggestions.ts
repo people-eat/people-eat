@@ -1,4 +1,5 @@
 import { LocationSearchResult } from '@people-eat/web-domain';
+import { uniqueId } from 'lodash';
 
 export interface GoogleMapsPlacesResult {
     formatted_address: string;
@@ -28,7 +29,7 @@ export default function getLocationSuggestions(searchText: string, onComplete: (
         .then((body: { results: GoogleMapsPlacesResult[] }) =>
             onComplete(
                 body.results.map(({ formatted_address, geometry }) => ({
-                    id: 'placeholder-id',
+                    id: uniqueId(),
                     text: formatted_address,
                     latitude: geometry.location.lat,
                     longitude: geometry.location.lng,

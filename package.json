@@ -68,7 +68,7 @@
     },
     "dependencies": {
         "@apollo/client": "^3.9.5",
-        "@headlessui/react": "^2.1.0",
+        "@headlessui/react": "^2.1.7",
         "@material-tailwind/react": "^2.1.9",
         "@stripe/react-stripe-js": "^2.5.1",
         "@stripe/stripe-js": "^3.0.7",

@@ -2,7 +2,7 @@ import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOption
 import { LocationSearchResult, SearchMode, toTranslatedFormattedDate } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { random } from 'lodash';
-import { ChevronDownIcon, SearchIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon, SearchIcon } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PEAutoComplete, PEButton, PECalendar, PEFullPageSheet, PEIconButton } from '../_core';
@@ -118,60 +118,38 @@ export function PESearchBar({
             {/* Desktop */}
             <div className="hidden lg:block w-full pl-4 py-2 pr-2">
                 <div className="flex gap-2">
-                    <Combobox
-                        value={selectedLocation}
-                        onChange={setSelectedLocation}
-                        // onClose={() => undefined}
-                        className="px-3 pt-2.5 flex-[3]"
-                        as="div"
-                    >
-                        <div className="flex">
-                            <div className="flex flex-col items-start w-full">
+                    <Combobox as="div" value={selectedLocation} onChange={setSelectedLocation} className="px-3 pt-2.5 flex-[3]">
+                        <div className="relative">
+                            <div className="flex flex-col items-start">
                                 <Label className="text-xs font-medium text-gray-900">Adresse</Label>
                                 <ComboboxInput
                                     className="border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 w-full"
-                                    displayValue={(searchResult: LocationSearchResult) => searchResult?.text}
                                     onChange={(event) => onLocationSearchTextChange(event.target.value)}
+                                    onBlur={() => undefined}
+                                    displayValue={(searchResult: LocationSearchResult) => searchResult?.text}
                                     placeholder="Wo?"
                                     autoComplete="off"
                                 />
                             </div>
-                            <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
-                                <ChevronDownIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
-                            </ComboboxButton>
-                        </div>
 
-                        {locationSearchResults.length > 0 && (
-                            <ComboboxOptions
-                                anchor="bottom end"
-                                transition
-                                className={classNames(
-                                    'w-[var(--input-width)] rounded-xl border border-white/5 bg-white p-1 [--anchor-gap:var(--spacing-1)] empty:invisible',
-                                    'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0',
-                                    'shadow-lg',
-                                )}
-                            >
-                                {locationSearchResults.map((searchResult) => (
-                                    <ComboboxOption
-                                        key={searchResult.id}
-                                        value={searchResult}
-                                        className={classNames(
-                                            'relative cursor-default select-none p-2 w-full',
-                                            'hover:bg-orange-400 hover:text-white',
-                                            'focus:bg-orange-400 focus:text-white',
-                                        )}
-                                    >
-                                        <div className="flex justify-between items-center w-full">
-                                            <span className="truncate group-data-[selected]:font-semibold text-sm">
-                                                {searchResult.text}
+                            {locationSearchResults.length > 0 && (
+                                <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                    {locationSearchResults.map((searchResult) => (
+                                        <ComboboxOption
+                                            key={searchResult.id}
+                                            value={searchResult}
+                                            className="group relative select-none py-2 pl-8 pr-4 text-gray-900 data-[focus]:bg-orange-500 data-[focus]:text-white cursor-pointer"
+                                        >
+                                            <span className="block truncate group-data-[selected]:font-semibold">{searchResult.text}</span>
+
+                                            <span className="absolute inset-y-0 left-0 hidden items-center pl-1.5 text-orange-500 group-data-[selected]:flex group-data-[focus]:text-white">
+                                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
                                             </span>
-
-                                            {/* <Check className="size-8 text-orange-500 bg-white rounded-full p-1 hidden group-data-[selected]:visible" /> */}
-                                        </div>
-                                    </ComboboxOption>
-                                ))}
-                            </ComboboxOptions>
-                        )}
+                                        </ComboboxOption>
+                                    ))}
+                                </ComboboxOptions>
+                            )}
+                        </div>
                     </Combobox>
 
                     <div className="flex-[2] flex gap-2 [&>*]:flex-1">
