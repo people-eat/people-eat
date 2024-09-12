@@ -1,6 +1,6 @@
 import { MenuCard, PEFooter, PEHeader, PELink } from '@people-eat/web-components';
 import { formatPrice, GetCityHubPageDataDocument, GetCityHubPageDataQuery, SignedInUser } from '@people-eat/web-domain';
-import { CheckCircle, LifeBuoyIcon, NewspaperIcon, PhoneIcon } from 'lucide-react';
+import { CheckCircle, CircleCheck, FileHeart, SquarePen } from 'lucide-react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -16,21 +16,21 @@ const howItWorksSteps = [
         href: '#',
         description:
             'Teile uns deine kulinarischen Wünsche mit, und wir matchen dich mit dem perfekten Privatkoch – ganz ohne Verpflichtungen.',
-        icon: PhoneIcon,
+        icon: SquarePen,
     },
     {
         name: 'Personalisierten Menüvorschlag erhalten',
         href: '#',
         description:
             'Erhalte einen individuellen Menüvorschlag, der genau auf deine Vorlieben abgestimmt ist. Wir klären die letzten Details, um dein perfektes Dinner-Erlebnis sicherzustellen.',
-        icon: LifeBuoyIcon,
+        icon: FileHeart,
     },
     {
         name: 'Bezahlung und direkter Kontakt zum Koch',
         href: '#',
         description:
             'Nach der sicheren Online-Bezahlung kannst du über den Chat direkt mit deinem Koch kommunizieren, um letzte Details zu besprechen.',
-        icon: NewspaperIcon,
+        icon: CircleCheck,
     },
 ];
 
@@ -304,8 +304,8 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                         <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
                             <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">Wie es funktioniert</h1>
                             <p className="mt-6 max-w-3xl text-xl">
-                                Varius facilisi mauris sed sit. Non sed et duis dui leo, vulputate id malesuada non. Cras aliquet purus dui
-                                laoreet diam sed lacus, fames. Dui, amet, nec sit pulvinar.
+                                Bringe die talentiertesten Köche und ihre Menüs aus ganz Deutschland ganz einfach und bequem zu dir
+                                Nachhause.
                             </p>
                         </div>
                     </div>
@@ -313,7 +313,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                     {/* Overlapping cards */}
                     <section aria-labelledby="contact-heading" className="relative z-10 mx-auto -mt-32 max-w-7xl px-6 pb-32 lg:px-8">
                         <h2 id="contact-heading" className="sr-only">
-                            Contact us
+                            Wie es funktioniert
                         </h2>
                         <div className="grid grid-cols-1 gap-y-20 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
                             {howItWorksSteps.map((link) => (
@@ -325,11 +325,11 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                                         <h3 className="text-xl font-medium text-gray-900">{link.name}</h3>
                                         <p className="mt-4 text-base text-gray-500">{link.description}</p>
                                     </div>
-                                    <div className="rounded-bl-2xl rounded-br-2xl bg-gray-50 p-6 md:px-8">
+                                    {/* <div className="rounded-bl-2xl rounded-br-2xl bg-gray-50 p-6 md:px-8">
                                         <a href={link.href} className="text-base font-medium text-orange-600 hover:text-orange-500">
                                             Contact us<span aria-hidden="true"> &rarr;</span>
                                         </a>
-                                    </div>
+                                    </div> */}
                                 </div>
                             ))}
                         </div>
@@ -438,6 +438,56 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                         </div>
                     )}
                 </div> */}
+
+                <div className="py-24 sm:pb-32 sm:pt-8">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
+                        <div className="mx-auto max-w-2xl lg:max-w-none">
+                            <h2 className="text-lg font-semibold leading-8 text-gray-900">Wir werden unterstützt von</h2>
+                            <div className="mx-auto mt-10 grid grid-cols-4 items-start gap-x-8 gap-y-10 sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:grid-cols-5">
+                                <Link href="https://entrepreneurship-centre.fs.de/portfolio/peopleeat" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/home/frankfurt-school-logo.png"
+                                        alt="Frankfurt Business School of Finance"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
+                                <Link href="https://startupverband.de" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/home/startup-verband.png"
+                                        alt="Statamic"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
+                                <Link href="https://www.deutsche-startups.de" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/partners/deutsche-startups.png"
+                                        alt="Deutsche Startups"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
+                                <Link href="https://www.foundersleague.de" target="_blank">
+                                    <Image
+                                        unoptimized
+                                        className="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1"
+                                        src="/partners/founders-league.png"
+                                        alt="Founders League"
+                                        width={158}
+                                        height={48}
+                                    />
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <PEFooter />
             </div>
