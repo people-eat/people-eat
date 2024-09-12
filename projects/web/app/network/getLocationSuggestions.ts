@@ -22,7 +22,7 @@ export default function getLocationSuggestions(searchText: string, onComplete: (
             '/google-places-api/place/textsearch/json?type=address&query="' +
                 searchText +
                 '"&key=' +
-                process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ?? 'no-google-places-api-key',
+                (process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ?? 'no-google-places-api-key'),
         ),
     )
         .then((response) => response.json())
