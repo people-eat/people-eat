@@ -140,7 +140,9 @@ export function PESearchBar({
                                             value={searchResult}
                                             className="group relative select-none py-2 pl-8 pr-4 text-gray-900 data-[focus]:bg-orange-500 data-[focus]:text-white cursor-pointer"
                                         >
-                                            <span className="block truncate group-data-[selected]:font-semibold">{searchResult.text}</span>
+                                            <span className="block truncate group-data-[selected]:font-semibold flex">
+                                                {searchResult.text}
+                                            </span>
 
                                             <span className="absolute inset-y-0 left-0 hidden items-center pl-1.5 text-orange-500 group-data-[selected]:flex group-data-[focus]:text-white">
                                                 <CheckIcon className="h-5 w-5" aria-hidden="true" />
