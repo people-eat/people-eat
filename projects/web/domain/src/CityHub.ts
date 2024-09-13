@@ -131,20 +131,12 @@ export const cityHubs: CityHub[] = [
         city: { name: 'Augsburg', location: { latitude: 48.3690341, longitude: 10.8979522 } },
     },
     {
-        pathName: 'Schweiz',
-        title: 'Privatkoch in Schweiz - PeopleEat',
-        description:
-            'Finde deinen Privatkoch für einen Abend in Schweiz und genieße exklusive Menüs bei dir zuhause. Buche jetzt einen Koch für zuhause und erlebe unvergessliche Dinner-Erlebnisse mit PeopleEat.',
-        keywords: ['Koch in Schweiz finden', 'Koch Schweiz', 'Mietkoch Schweiz', 'Privatkoch Schweiz'],
-        city: { name: 'Schweiz', location: { latitude: 51.3406321, longitude: 12.3747329 } },
-    },
-    {
         pathName: 'Leipzig',
         title: 'Privatkoch in Leipzig - PeopleEat',
         description:
             'Finde deinen Privatkoch für einen Abend in Leipzig und genieße exklusive Menüs bei dir zuhause. Buche jetzt einen Koch für zuhause und erlebe unvergessliche Dinner-Erlebnisse mit PeopleEat.',
         keywords: ['Koch in Leipzig finden', 'Koch Leipzig', 'Mietkoch Leipzig', 'Privatkoch Leipzig'],
-        city: { name: 'Leipzig', location: { latitude: 53.0758196, longitude: 8.8071646 } },
+        city: { name: 'Leipzig', location: { latitude: 51.3406321, longitude: 12.3747329 } },
     },
     {
         pathName: 'Bremen',

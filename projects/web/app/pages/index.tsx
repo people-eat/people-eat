@@ -959,7 +959,7 @@ export default function HomePage({ signedInUser, searchParams, cookieSettings, h
                                     href={'/cities/' + cityHub.pathName}
                                     className="text-sm leading-6 text-gray-600 hover:text-gray-900"
                                 >
-                                    {cityHub.city.name}
+                                    Privatkoch in {cityHub.city.name}
                                 </Link>
                             ))}
                         </ul>
