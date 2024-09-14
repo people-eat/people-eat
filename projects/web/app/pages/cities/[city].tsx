@@ -1,4 +1,4 @@
-import { MenuCard, PEFooter, PEHeader, PELink } from '@people-eat/web-components';
+import { MenuCard, PEFooter, PEHeader, PELink, RatingCard } from '@people-eat/web-components';
 import { CityHub, cityHubs, formatPrice, GetCityHubPageDataDocument, GetCityHubPageDataQuery, SignedInUser } from '@people-eat/web-domain';
 import { CheckCircle, CircleCheck, FileHeart, SquarePen } from 'lucide-react';
 import { GetServerSideProps } from 'next';
@@ -80,6 +80,29 @@ const faqs = [
         id: 9,
         question: 'Welche Regionen deckt PeopleEat ab?',
         answer: 'Wir bieten unseren Service in vielen Regionen an. Gib einfach deine Postleitzahl ein, um zu prüfen, ob wir auch in deiner Gegend verfügbar sind, und buche deinen Privatkoch für Zuhause.',
+    },
+];
+
+const ratings = [
+    {
+        body: 'Dank Lara, unserem Mietkoch, konnten wir den Abend voll und ganz mit unseren Gästen genießen. Ihr Gourmet Menü war exquisit, jeder Gang wurde perfekt präsentiert. Lara, die Köchin hat uns perfekt versorgt und die einzelnen Gänge vorgestellt. Im Restaurant wäre es wahrscheinlich sogar teurer gewesen. Einen Koch für zuhause mieten ist absolut empfehlenswert!',
+        authorName: 'Thomas K.',
+    },
+    {
+        body: 'Wir haben einen Mietkoch für zuhause gebucht und waren begeistert! Das Gourmet Menü war abwechslungsreich, perfekt zubereitet und toll präsentiert. Die gesamte Erfahrung, einen Privatkoch für einen Abend zu mieten, war absolut fantastisch!',
+        authorName: 'Lucie K.',
+    },
+    {
+        body: 'Unser Mietkoch hat ein exquisites Gourmet Menü für uns gezaubert. Jeder Gang war perfekt abgestimmt und köstlich. Einen Koch für zuhause zu mieten, war die perfekte Wahl für unseren besonderen Anlass. Einfach großartig!',
+        authorName: 'Nikolas L.',
+    },
+    {
+        body: 'Wir haben einen Privatkoch für einen Abend gemietet und waren begeistert! Die Planung war unkompliziert, das Gourmet Menü ein echter Genuss. Der Mietkoch hat alles wunderbar zubereitet und präsentiert – absolut zu empfehlen!',
+        authorName: 'Jana P.',
+    },
+    {
+        body: 'Unser Mietkoch hat uns mit einem beeindruckenden Gourmet Menü verwöhnt. Jeder Gang war ein kulinarisches Highlight. Einen Koch für zuhause zu mieten, hat unsere Feier perfekt gemacht – jederzeit wieder!',
+        authorName: 'Irina H.',
     },
 ];
 
@@ -293,6 +316,22 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                             ))}
                         </div>
                     </section>
+                </div>
+
+                <div className="py-24 sm:py-32">
+                    <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
+                        <div className="max-w-2xl">
+                            <h2 className="text-lg font-semibold leading-8 tracking-tight text-orange-500">Gastgeberstimmen</h2>
+                            <p className="mt-2 font-bold tracking-tight text-gray-900 text-4xl">Das sagen unsere Gäste</p>
+                        </div>
+                        <div className="mx-auto mt-16 flow-root max-w-2xl sm:mt-20 lg:mx-0 lg:max-w-none">
+                            <div className="-mt-8 sm:-mx-4 sm:columns-2 sm:text-[0] lg:columns-3">
+                                {ratings.map((testimonial) => (
+                                    <RatingCard key={testimonial.authorName} authorName={testimonial.authorName} body={testimonial.body} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <section className="bg-white py-24 sm:py-32">
