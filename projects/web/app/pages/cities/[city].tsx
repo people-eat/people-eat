@@ -334,7 +334,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                     </div>
                 </div>
 
-                <section className="bg-white py-24 sm:py-32">
+                {/* <section className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-[88rem] px-6 lg:px-8">
                         <h2 className="font-bold tracking-tight text-gray-900 text-4xl">Das sagen unsere Gäste</h2>
                         <div className="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2">
@@ -379,7 +379,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 <section className="mx-auto max-w-[88rem] divide-y divide-gray-900/10 px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
                     <h2 className="text-4xl font-bold leading-10 tracking-tight text-gray-900">
