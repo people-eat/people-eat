@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
-import { LoadingDialog, PEButton, PEDatePicker, PEDialog, PENumberTextField, PETextField } from '@people-eat/web-components';
-import { CreateOneGIftCardPromoCodeDocument } from '@people-eat/web-domain';
+import { LoadingDialog, PEAlert, PEButton, PEDatePicker, PEDialog, PENumberTextField, PETextField } from '@people-eat/web-components';
+import { CreateOneGiftCardPromoCodeDocument } from '@people-eat/web-domain';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -27,22 +27,16 @@ export function AdminCreateGiftCardPromoCodeDialog({ open, onCancel, onCreated }
 
     const [expiresAt, setExpiresAt] = useState(new Date());
 
-    const [create, { loading }] = useMutation(CreateOneGIftCardPromoCodeDocument, {
+    const [create, { data, loading, reset }] = useMutation(CreateOneGiftCardPromoCodeDocument, {
         variables: { giftCardPromoCode: { balance: { amount: balanceAmount * 100, currencyCode: 'EUR' }, expiresAt, redeemCode } },
     });
 
+    const showSuccessAlert = data?.admins.giftCardPromoCodes.success ?? false;
+    const showFailedAlert = data ? !data.admins.giftCardPromoCodes.success : false;
+
     return (
         <PEDialog title="Neuen Promo Code erstellen" open={open} onClose={onCancel}>
-            <form
-                onSubmit={handleSubmit((_) =>
-                    create().then(({ data }) => {
-                        if (data?.admins.giftCardPromoCodes.success) {
-                            onCreated();
-                        }
-                    }),
-                )}
-                className="flex flex-col gap-4"
-            >
+            <form onSubmit={handleSubmit((_) => create())} className="flex flex-col gap-4">
                 <PETextField
                     id="dsadasdsadasd"
                     labelTitle="Code"
@@ -59,9 +53,37 @@ export function AdminCreateGiftCardPromoCodeDialog({ open, onCancel, onCreated }
                     {...register('balanceAmount', { min: 1, max: 200, valueAsNumber: true })}
                 />
                 <PEDatePicker labelTitle="Ablaufdatum" date={expiresAt} setDate={setExpiresAt} />
-                <PEButton title="Erstellen" type="submit" />
+                <PEButton title="Erstellen" type="submit" disabled={loading} />
             </form>
             <LoadingDialog active={loading} />
+            <PEAlert
+                open={showSuccessAlert}
+                type="SUCCESS"
+                title="Promo Code wurde erfolgreich erstellt"
+                primaryButton={{
+                    title: 'Okay',
+                    onClick: () => {
+                        reset();
+                        onCreated();
+                    },
+                }}
+            />
+            <PEAlert
+                open={showFailedAlert}
+                type="ERROR"
+                title="Promo Code Erstellung fehlgeschlagen"
+                primaryButton={{
+                    title: 'Okay',
+                    onClick: () => reset(),
+                }}
+                secondaryButton={{
+                    title: 'Erneut versuchen',
+                    onClick: () => {
+                        reset();
+                        create();
+                    },
+                }}
+            />
         </PEDialog>
     );
 }
