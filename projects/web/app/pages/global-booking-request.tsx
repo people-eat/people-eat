@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { BookForm, LoadingDialog, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-components';
+import { BookForm, LoadingDialog, PEAlert, PEFooter, PEHeader } from '@people-eat/web-components';
 import {
     AllergyOption,
     CategoryOption,
@@ -14,7 +13,6 @@ import {
     Time,
     toValidatedSearchParams,
 } from '@people-eat/web-domain';
-import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
@@ -147,13 +145,6 @@ export default function GlobalBookingRequestPage({
     const abc = setup()
         ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
         ?.pageView();
-
-    // useEffect(() => {
-    //     if (showSuccessAlert) {
-    //         console.log('triggered meta pixel track');
-    //         abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
-    //     }
-    // }, [showSuccessAlert, abc]);
 
     return (
         <>

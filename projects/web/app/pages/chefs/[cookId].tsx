@@ -270,7 +270,6 @@ export default function PublicCookPage({
 
     useEffect(() => {
         if (showSuccessAlert) {
-            console.log('triggered meta pixel track');
             abc?.$fbq('trackCustom', 'SendGlobalBookingRequestFromCookPage');
         }
     }, [showSuccessAlert, abc]);
