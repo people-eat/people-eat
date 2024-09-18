@@ -71,6 +71,7 @@ query AdminGetBookingRequestsPageData {
                 rank
                 user {
                     firstName
+                    lastName
                     profilePictureUrl
 
                     emailAddress
@@ -88,6 +89,7 @@ query AdminGetBookingRequestsPageData {
             }
             user {
                 firstName
+                lastName
                 profilePictureUrl
 
                 emailAddress
