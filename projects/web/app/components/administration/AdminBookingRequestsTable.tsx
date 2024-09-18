@@ -8,14 +8,16 @@ export interface AdminBookingRequestsTableProps {
     bookingRequests: BookingRequest[];
 }
 
-type AdminBookingRequestTab = 'EVENT_DETAILS' | 'MENU';
+type AdminBookingRequestTab = 'EVENT_DETAILS' | 'MENU' | 'CUSTOMER' | 'COOK';
 
-const adminBookingRequestTabs: AdminBookingRequestTab[] = ['EVENT_DETAILS', 'MENU'];
-const adminBookingRequestTabsWithoutMenu: AdminBookingRequestTab[] = ['EVENT_DETAILS'];
+const adminBookingRequestTabs: AdminBookingRequestTab[] = ['EVENT_DETAILS', 'MENU', 'CUSTOMER', 'COOK'];
+const adminBookingRequestTabsWithoutMenu: AdminBookingRequestTab[] = ['EVENT_DETAILS', 'CUSTOMER', 'COOK'];
 
 const adminBookingRequestTabTranslation: Record<AdminBookingRequestTab, string> = {
     EVENT_DETAILS: 'Veranstaltung',
     MENU: 'Menü',
+    CUSTOMER: 'Kunde',
+    COOK: 'Koch',
 };
 
 export function AdminBookingRequestsTable({ bookingRequests }: AdminBookingRequestsTableProps) {
@@ -128,6 +130,94 @@ export function AdminBookingRequestsTable({ bookingRequests }: AdminBookingReque
 
                         {selectedTab === 'MENU' && selectedBookingRequest.configuredMenu && (
                             <ConfiguredMenuPanel configuredMenu={selectedBookingRequest.configuredMenu} />
+                        )}
+
+                        {selectedTab === 'CUSTOMER' && (
+                            <div className="overflow-y-auto sm:mb-4 pl-4 pr-4">
+                                <dl className="space-y-6 divide-y divide-gray-100 text-sm leading-6">
+                                    <div className="pt-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Vorname</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">{selectedBookingRequest.user.firstName}</div>
+                                        </dd>
+                                    </div>
+                                    <div className="pt-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Nachname</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">{selectedBookingRequest.user.lastName}</div>
+                                        </dd>
+                                    </div>
+                                    <div className="pt-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Email Adresse</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">
+                                                {selectedBookingRequest.user.phoneNumber ??
+                                                    (selectedBookingRequest.user.emailAddressUpdate?.emailAddress
+                                                        ? `${selectedBookingRequest.user.emailAddress}` //  (nicht bestätigt)
+                                                        : undefined) ??
+                                                    'Keine Angabe'}
+                                            </div>
+                                        </dd>
+                                    </div>
+                                    {/* Last child has py instead of pb */}
+                                    <div className="py-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Telefonnummer</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">
+                                                {selectedBookingRequest.user.phoneNumber ??
+                                                    (selectedBookingRequest.user.phoneNumberUpdate?.phoneNumber
+                                                        ? `${selectedBookingRequest.user.phoneNumberUpdate.phoneNumber}` //  (nicht bestätigt)
+                                                        : undefined) ??
+                                                    'Keine Angabe'}
+                                            </div>
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        )}
+
+                        {selectedTab === 'COOK' && (
+                            <div className="overflow-y-auto sm:mb-4 pl-4 pr-4">
+                                <dl className="space-y-6 divide-y divide-gray-100 text-sm leading-6">
+                                    <div className="pt-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Vorname</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">{selectedBookingRequest.cook.user.firstName}</div>
+                                        </dd>
+                                    </div>
+                                    <div className="pt-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Nachname</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">{selectedBookingRequest.cook.user.lastName}</div>
+                                        </dd>
+                                    </div>
+                                    <div className="pt-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Email Adresse</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">
+                                                {selectedBookingRequest.cook.user.phoneNumber ??
+                                                    (selectedBookingRequest.cook.user.emailAddressUpdate?.emailAddress
+                                                        ? `${selectedBookingRequest.cook.user.emailAddress}` //  (nicht bestätigt)
+                                                        : undefined) ??
+                                                    'Keine Angabe'}
+                                            </div>
+                                        </dd>
+                                    </div>
+                                    {/* Last child has py instead of pb */}
+                                    <div className="py-6 sm:flex">
+                                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Telefonnummer</dt>
+                                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                                            <div className="text-gray-900">
+                                                {selectedBookingRequest.cook.user.phoneNumber ??
+                                                    (selectedBookingRequest.cook.user.phoneNumberUpdate?.phoneNumber
+                                                        ? `${selectedBookingRequest.cook.user.phoneNumberUpdate.phoneNumber}` //  (nicht bestätigt)
+                                                        : undefined) ??
+                                                    'Keine Angabe'}
+                                            </div>
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
                         )}
                     </>
                 )}
