@@ -24,7 +24,7 @@ const documents = {
     "mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}": types.ConfirmOneGiftCardDocument,
     "mutation CreateBookingRequestByGlobalBookingRequestId($globalBookingRequestId: String!, $cookId: String!, $configuredMenu: CreateConfiguredMenuRequest, $price: PriceInput) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      success: createOne(\n        globalBookingRequestId: $globalBookingRequestId\n        configuredMenu: $configuredMenu\n        price: $price\n      )\n    }\n  }\n}": types.CreateBookingRequestByGlobalBookingRequestIdDocument,
     "mutation CreateOneCookVisit($cookId: String!) {\n  cookVisits {\n    success: createOne(cookId: $cookId)\n  }\n}": types.CreateOneCookVisitDocument,
-    "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGIftCardPromoCodeDocument,
+    "mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGiftCardPromoCodeDocument,
     "mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}": types.CreateOneGiftCardDocument,
     "mutation CreateOneMenuVisit($menuId: String!) {\n  menuVisits {\n    success: createOne(menuId: $menuId)\n  }\n}": types.CreateOneMenuVisitDocument,
     "mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}": types.CreateOneNewsletterSubscriptionDocument,
@@ -199,7 +199,7 @@ export function gql(source: "mutation CreateOneCookVisit($cookId: String!) {\n  
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"];
+export function gql(source: "mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

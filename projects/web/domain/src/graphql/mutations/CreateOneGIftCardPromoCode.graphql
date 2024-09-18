@@ -1,4 +1,4 @@
-mutation CreateOneGIftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {
+mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {
     admins {
         giftCardPromoCodes {
             success: createOne(giftCardPromoCode: $giftCardPromoCode)
