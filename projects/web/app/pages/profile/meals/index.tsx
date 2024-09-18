@@ -1,6 +1,5 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { LoadingDialog, MealCard, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
-import { PEAlert, PELabelMultiSelection, PELink } from '@people-eat/web-components';
+import { LoadingDialog, MealCard, PEAlert, PEHeader, PELabelMultiSelection, PELink, PEProfileNavigation } from '@people-eat/web-components';
 import {
     DeleteOneCookMealDocument,
     GetCookProfileMealsDocument,
@@ -12,16 +11,16 @@ import {
     mealTypeTranslations,
     mealTypes,
 } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { CookProfileMealDialog } from '../../../components/CookProfileMealDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
+import { redirectTo } from '../../../components/redirectTo';
 import { createApolloClient } from '../../../network/apolloClients';
 
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
-const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
+const howToBecomeAChefRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
@@ -35,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
         const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
 

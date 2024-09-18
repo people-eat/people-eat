@@ -27,9 +27,8 @@ import {
     PEProfileGlobalBookingRequestDetails,
     toProfileGlobalBookingRequestDetailsTab,
 } from '../../../components/PEProfileGlobalBookingRequestDetails';
+import { redirectTo } from '../../../components/redirectTo';
 import { createApolloClient } from '../../../network/apolloClients';
-
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
@@ -75,7 +74,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
         const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         const userId = signedInUser.userId;
 
         const { data } = await apolloClient.query({
@@ -121,7 +120,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         };
     } catch (error) {
         console.error(error);
-        return signInPageRedirect;
+        return redirectTo.signIn({ returnTo: req.url });
     }
 };
 

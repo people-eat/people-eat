@@ -1,10 +1,20 @@
 import { useMutation } from '@apollo/client';
 import { Disclosure } from '@headlessui/react';
-import { BookBar, BookForm, LoadingDialog, MenuCard, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEAlert, PEButton, PEFullPageSheet } from '@people-eat/web-components';
+import {
+    BookBar,
+    BookForm,
+    LoadingDialog,
+    MenuCard,
+    PEAlert,
+    PEButton,
+    PEFooter,
+    PEFullPageSheet,
+    PEHeader,
+} from '@people-eat/web-components';
 import {
     AllergyOption,
     CategoryOption,
+    CreateOneCookVisitDocument,
     CreateOneUserGlobalBookingRequestDocument,
     GetPublicCookPageDataDocument,
     GetPublicCookPageDataQuery,
@@ -17,28 +27,27 @@ import {
     calculateMenuPrice,
     formatPrice,
     geoDistance,
-    translatedCookRanks,
-    toValidatedSearchParams,
     toQueryParams,
-    CreateOneCookVisitDocument,
+    toValidatedSearchParams,
+    translatedCookRanks,
 } from '@people-eat/web-domain';
 import debounce from 'lodash/debounce';
 import { Globe, HandPlatter, MapPin, MinusIcon, PlusIcon, ShoppingBasket, Sparkles } from 'lucide-react';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
+import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
+import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
+import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { setup } from '../../components/meta-pixel/setup';
 import { PEAuthDialog } from '../../components/PEAuthDialog';
 import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import { CookieSettings } from '../../components/analytics/CookieSettings';
-import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
-import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
-import { setup } from '../../components/meta-pixel/setup';
 
-const publicCooksRedirect = { redirect: { permanent: false, destination: '/chefs' } };
+const publicCooksRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/chefs' } };
 
 const faqs = [
     {

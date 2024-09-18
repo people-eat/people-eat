@@ -26,7 +26,7 @@ import {
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import classNames from 'classnames';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Router from 'next/router';
@@ -87,7 +87,7 @@ function PaymentForm({ giftCardId, onSuccess, onFailure }: PaymentFormProps) {
     );
 }
 
-const homePageRedirect = { redirect: { permanent: false, destination: '/' } };
+const homePageRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;

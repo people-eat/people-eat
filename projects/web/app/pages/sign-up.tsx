@@ -1,17 +1,16 @@
 import { useMutation } from '@apollo/client';
-import { LoadingDialog, PEHeader, SignUpForm, SignUpFormInputs } from '@people-eat/web-components';
-import { PEAlert, PELabelLink } from '@people-eat/web-components';
+import { LoadingDialog, PEAlert, PEHeader, PELabelLink, SignUpForm, SignUpFormInputs } from '@people-eat/web-components';
 import { CreateOneUserByEmailAddressDocument, GetPageDataDocument } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
-import { createApolloClient } from '../network/apolloClients';
 import { setup } from '../components/meta-pixel/setup';
+import { createApolloClient } from '../network/apolloClients';
 
-const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
+const profilePageRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/profile' } };
 
 interface ServerSideProps {
     cookieSettings: CookieSettings | null;

@@ -6,7 +6,7 @@ import {
     CreateOneOneTimeAccessTokenByEmailAddressDocument,
     GetPageDataDocument,
 } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
 import { createApolloClient } from '../network/apolloClients';
 
-const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
+const profilePageRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/profile' } };
 
 interface ServerSideProps {
     cookieSettings: CookieSettings | null;
@@ -50,8 +50,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-// todo: rename
-interface SignInFormInputs {
+interface ForgotPasswordFormInputs {
     emailAddress: string;
 }
 
@@ -59,18 +58,20 @@ export default function SignInPage({ cookieSettings }: ServerSideProps) {
     const router = useRouter();
     const [showForgotPasswordAlert, setShowForgotPasswordAlert] = useState(false);
 
+    const redirectToPath: string | undefined = typeof router.query.redirectTo === 'string' ? router.query.redirectTo : undefined;
+
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<SignInFormInputs>();
+    } = useForm<ForgotPasswordFormInputs>();
 
     const [assignOneSessionByEmailAddress, { loading, data, reset }] = useMutation(AssignOneSessionByEmailAddressDocument);
 
     const showFailedAlert = data ? !data.sessions.success : false;
 
     if (data?.sessions.success) {
-        router.push('/profile');
+        router.push(redirectToPath ?? '/profile');
     }
 
     const [createOneTimeAccessToken, { loading: createOneTimeAccessTokenLoading, data: forgotPasswordData, reset: resetForgotPassword }] =

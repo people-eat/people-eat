@@ -1,6 +1,15 @@
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { LoadingDialog, PEHeader, PEImagePicker, PEProfileNavigation } from '@people-eat/web-components';
-import { PEAlert, PEButton, PELabelMultiSelection, PESlider, PETextArea } from '@people-eat/web-components';
+import {
+    LoadingDialog,
+    PEAlert,
+    PEButton,
+    PEHeader,
+    PEImagePicker,
+    PELabelMultiSelection,
+    PEProfileNavigation,
+    PESlider,
+    PETextArea,
+} from '@people-eat/web-components';
 import {
     AddOneCookLanguageDocument,
     CookGetStripeDashboardUrlDocument,
@@ -30,9 +39,8 @@ import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { PEEditPasswordCard } from '../../components/PEEditPasswordCard';
 import { PEProfileAddressesCard } from '../../components/PEProfileAddressesCard';
 import { PEProfileCard } from '../../components/PEProfileCard';
+import { redirectTo } from '../../components/redirectTo';
 import { createApolloClient } from '../../network/apolloClients';
-
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
@@ -49,7 +57,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         const signedInUser = data.users.signedInUser;
         const initialProfile = data.users.me;
 
-        if (!signedInUser || !initialProfile) return signInPageRedirect;
+        if (!signedInUser || !initialProfile) return redirectTo.signIn({ returnTo: req.url });
 
         const languages = data.languages.findAll;
 
@@ -67,7 +75,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         };
     } catch (error) {
-        return signInPageRedirect;
+        return redirectTo.signIn({ returnTo: req.url });
     }
 };
 
