@@ -37,7 +37,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import { CircleUser, HandPlatter, MinusIcon, PlusIcon, ShoppingBasket, Sparkles, Utensils } from 'lucide-react';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -56,7 +56,7 @@ import { createApolloClient } from '../../network/apolloClients';
 import getLocationSuggestions from '../../network/getLocationSuggestions';
 import { setup } from '../../components/meta-pixel/setup';
 
-const publicMenusRedirect = { redirect: { permanent: false, destination: '/menus' } };
+const publicMenusRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/menus' } };
 
 const faqs = [
     {

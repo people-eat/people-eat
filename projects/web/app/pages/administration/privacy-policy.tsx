@@ -1,10 +1,10 @@
 import { PEHeader } from '@people-eat/web-components';
 import { GetSignedInUserDocument, SignedInUser } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import { createApolloClient } from '../../network/apolloClients';
+import { redirectTo } from '../../components/redirectTo';
 
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
-const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
+const profilePageRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/profile' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
         const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isAdmin) return profilePageRedirect;
 
         return {
@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         };
     } catch (error) {
-        return signInPageRedirect;
+        return redirectTo.signIn({ returnTo: req.url });
     }
 };
 

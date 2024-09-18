@@ -1,7 +1,8 @@
 import { MenuCard, PEFooter, PEHeader, PELink, RatingCard } from '@people-eat/web-components';
 import { CityHub, cityHubs, formatPrice, GetCityHubPageDataDocument, GetCityHubPageDataQuery, SignedInUser } from '@people-eat/web-domain';
+import classNames from 'classnames';
 import { CheckCircle, CircleCheck, FileHeart, SquarePen } from 'lucide-react';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +10,6 @@ import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../../components/analytics/CookieSettings';
 import { createApolloClient } from '../../network/apolloClients';
-import classNames from 'classnames';
 
 const howItWorksSteps = [
     {
@@ -106,7 +106,7 @@ const ratings = [
     },
 ];
 
-const publicCooksRedirect = { redirect: { permanent: false, destination: '/chefs' } };
+const publicCooksRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/chefs' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;

@@ -19,7 +19,7 @@ import {
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { ArrowLeft, HandCoins, Rows4, Soup } from 'lucide-react';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -27,6 +27,7 @@ import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { PEEditMenuCommon } from '../../../components/PEEditMenuCommon';
 import { PEEditMenuCoursesForm } from '../../../components/PEEditMenuCoursesForm';
 import { PEEditMenuPriceForm } from '../../../components/PEEditMenuPriceForm';
+import { redirectTo } from '../../../components/redirectTo';
 import { createApolloClient } from '../../../network/apolloClients';
 
 const tabs = [
@@ -35,8 +36,7 @@ const tabs = [
     { name: 'Preis', icon: HandCoins },
 ];
 
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
-const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
+const howToBecomeAChefRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     initialSelectedTab: number;
@@ -58,7 +58,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
         const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
 
@@ -67,7 +67,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                initialSelectedTab: tab ? Number(tab) ?? 0 : 0,
+                initialSelectedTab: tab ? (Number(tab) ?? 0) : 0,
                 signedInUser,
                 categories: data.categories.findAll,
                 kitchens: data.kitchens.findAll,

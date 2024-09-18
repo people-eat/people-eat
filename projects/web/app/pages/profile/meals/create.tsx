@@ -1,16 +1,15 @@
 import { useMutation } from '@apollo/client';
-import { CreateMealForm, LoadingDialog, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-components';
+import { CreateMealForm, LoadingDialog, PEAlert, PEHeader, PEProfileNavigation } from '@people-eat/web-components';
 import { CreateMealDocument, GetSignedInUserDocument, SignedInUser } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import { useRouter } from 'next/router';
 import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { PEProfileCard } from '../../../components/PEProfileCard';
+import { redirectTo } from '../../../components/redirectTo';
 import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
 
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
-const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
+const howToBecomeAChefRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
@@ -23,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
         const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
 
         return {

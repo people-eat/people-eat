@@ -9,7 +9,7 @@ import {
     LanguageOption,
     SignedInUser,
 } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
@@ -19,7 +19,7 @@ import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 import { setup } from '../components/meta-pixel/setup';
 
-const cookProfilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
+const cookProfilePageRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/profile' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser | null;

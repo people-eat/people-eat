@@ -4,17 +4,15 @@ import {
     LoadingDialog,
     MealCard,
     MealDetailsDialog,
-    PEHeader,
-    PEProfileNavigation,
-} from '@people-eat/web-components';
-import {
     PEAlert,
     PEButton,
     PECheckbox,
     PEDialog,
+    PEHeader,
     PELabelMultiSelection,
     PELabelSingleSelection,
     PENumberTextField,
+    PEProfileNavigation,
     PESingleSelection,
     PETextArea,
     PETextField,
@@ -33,7 +31,7 @@ import {
 } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { ArrowDown, ArrowUp, Car, CheckIcon, HandCoins, Plus } from 'lucide-react';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ParticipantsPicker } from 'projects/web/components/src/search-bar/PEParticipantsPicker';
@@ -43,11 +41,11 @@ import { CookieSettings } from '../../../components/analytics/CookieSettings';
 import { CreateMealDialog } from '../../../components/CreateMealDialog';
 import { PEAddMealToCourseDialog } from '../../../components/PEAddMealToCourseDialog';
 import { PEProfileCard } from '../../../components/PEProfileCard';
+import { redirectTo } from '../../../components/redirectTo';
 import { useNotLeave } from '../../../hooks/useNotLeave';
 import { createApolloClient } from '../../../network/apolloClients';
 
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
-const howToBecomeAChefRedirect = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
+const howToBecomeAChefRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/how-to-become-a-chef' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
@@ -63,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const { data } = await apolloClient.query({ query: GetCookProfileMenusCreatePageDataDocument });
         const signedInUser = data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isCook || !signedInUser.cook) return howToBecomeAChefRedirect;
 
         return {

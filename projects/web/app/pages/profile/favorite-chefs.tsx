@@ -1,5 +1,4 @@
-import { PEHeader, PEProfileNavigation } from '@people-eat/web-components';
-import { PELink } from '@people-eat/web-components';
+import { PEHeader, PELink, PEProfileNavigation } from '@people-eat/web-components';
 import {
     GetProfileFavoriteCooksPageDataDocument,
     GetProfileFavoriteCooksPageDataQuery,
@@ -11,9 +10,8 @@ import { GetServerSideProps } from 'next';
 import { AnalyticsClarity } from '../../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../../components/analytics/CookieSettings';
+import { redirectTo } from '../../components/redirectTo';
 import { createApolloClient } from '../../network/apolloClients';
-
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
@@ -27,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
         const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         const userId = signedInUser.userId;
 
         const { data } = await apolloClient.query({ query: GetProfileFavoriteCooksPageDataDocument, variables: { userId } });
@@ -45,7 +43,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             },
         };
     } catch (error) {
-        return signInPageRedirect;
+        return redirectTo.signIn({ returnTo: req.url });
     }
 };
 

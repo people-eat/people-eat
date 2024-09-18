@@ -7,15 +7,15 @@ import {
     toTranslatedFormattedDate,
     Unpacked,
 } from '@people-eat/web-domain';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, Redirect } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { AdminCreateGiftCardPromoCodeDialog } from '../../components/administration/AdminCreateGiftCardPromoCodeDialog';
 import { AdminUpdateGiftCardPromoCodeDialog } from '../../components/administration/AdminUpdateGiftCardPromoCodeDialog';
+import { redirectTo } from '../../components/redirectTo';
 import { createApolloClient } from '../../network/apolloClients';
 
-const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
-const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
+const profilePageRedirect: { redirect: Redirect } = { redirect: { permanent: false, destination: '/profile' } };
 
 type GiftCardPromoCode = Unpacked<AdminGetGiftCardPromoCodesPageDataQuery['admins']['giftCardPromoCodes']['findMany']>;
 
@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
         const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return signInPageRedirect;
+        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isAdmin) return profilePageRedirect;
 
         const result = await apolloClient.query({ query: AdminGetGiftCardPromoCodesPageDataDocument });
@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         };
     } catch (error) {
         console.log(error);
-        return signInPageRedirect;
+        return redirectTo.signIn({ returnTo: req.url });
     }
 };
 
