@@ -1,11 +1,4 @@
-import {
-    ConfiguredMenuPanel,
-    PEBookingDetails,
-    PEDialog,
-    PELabelMultiSelection,
-    PEMultiSelection,
-    PETabSingleSelection,
-} from '@people-eat/web-components';
+import { ConfiguredMenuPanel, PEBookingDetails, PEDialog, PELabelMultiSelection, PETabSingleSelection } from '@people-eat/web-components';
 import { AdminGetBookingRequestsPageDataQuery, formatPrice, toTranslatedFormattedDate, Unpacked } from '@people-eat/web-domain';
 import classNames from 'classnames';
 import { Copy } from 'lucide-react';
