@@ -9,7 +9,7 @@ import {
     translatedBookingRequestStatus,
     translatedPriceClasses,
 } from '@people-eat/web-domain';
-import { Info } from 'lucide-react';
+import { Copy, Info } from 'lucide-react';
 import { BookingStatusInfoPopover } from '../booking-status-info-popover/BookingStatusInfoPopover';
 import { PETooltip } from '../tooltip/PETooltip';
 
@@ -29,6 +29,7 @@ export interface PEBookingDetailsProps {
         max: number;
         currencyCode: CurrencyCode;
     };
+    extraEntries?: { title: string; value?: string; copyButtonAction?: () => void }[];
 }
 
 export function PEBookingDetails({
@@ -42,6 +43,7 @@ export function PEBookingDetails({
     payoutPrice,
     travelExpenses,
     priceClass,
+    extraEntries,
 }: PEBookingDetailsProps) {
     return (
         <div className="overflow-y-auto sm:mb-4 pl-4 pr-4">
@@ -122,6 +124,21 @@ export function PEBookingDetails({
                         </dd>
                     </div>
                 )}
+                {extraEntries?.map(({ title, value, copyButtonAction }) => (
+                    <div className="pt-6 sm:flex">
+                        <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">{title}</dt>
+                        <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                            <div className="text-gray-900 flex justify-between w-full">
+                                <span>{value ?? 'Keine Angabe'}</span>
+                                {copyButtonAction && (
+                                    <button onClick={copyButtonAction}>
+                                        <Copy />
+                                    </button>
+                                )}
+                            </div>
+                        </dd>
+                    </div>
+                ))}
                 <div className="pt-6 sm:flex">
                     <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Allergien</dt>
                     <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">

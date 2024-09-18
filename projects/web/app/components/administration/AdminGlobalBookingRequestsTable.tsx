@@ -1,8 +1,8 @@
+import { PEBookingDetails, PEButton, PEDialog } from '@people-eat/web-components';
 import { AdminGetBookingRequestsPageDataQuery, toTranslatedFormattedDate, translatedPriceClasses, Unpacked } from '@people-eat/web-domain';
 import { useState } from 'react';
-import { AdminGlobalBookingRequestCooksDialog } from './AdminGlobalBookingRequestCooksDialog';
-import { PEBookingDetails, PEButton, PEDialog } from '@people-eat/web-components';
 import { PEChatMessage } from '../PEChatMessage';
+import { AdminGlobalBookingRequestCooksDialog } from './AdminGlobalBookingRequestCooksDialog';
 
 type GlobalBookingRequest = Unpacked<NonNullable<AdminGetBookingRequestsPageDataQuery['globalBookingRequests']['findMany']>>;
 
@@ -17,17 +17,31 @@ export function AdminGlobalBookingRequestsTable({ globalBookingRequests }: Admin
     // for matching
     const [selectedGlobalBookingRequestId, setSelectedGlobalBookingRequestId] = useState<string | undefined>();
 
+    const displayUserEmailAddress =
+        selectedGlobalBookingRequest &&
+        (selectedGlobalBookingRequest.user.emailAddress ??
+            (selectedGlobalBookingRequest.user.emailAddressUpdate?.emailAddress
+                ? `${selectedGlobalBookingRequest.user.emailAddress}` //  (nicht bestätigt)
+                : undefined));
+
+    const displayUserPhoneNumber =
+        selectedGlobalBookingRequest &&
+        (selectedGlobalBookingRequest.user.phoneNumber ??
+            (selectedGlobalBookingRequest.user.phoneNumberUpdate?.phoneNumber
+                ? `${selectedGlobalBookingRequest.user.phoneNumberUpdate.phoneNumber}` //  (nicht bestätigt)
+                : undefined));
+
     return (
         <table className="w-full text-left">
             <thead className="bg-white">
                 <tr>
                     <th scope="col" className="relative isolate py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">
-                        Kunde
+                        Vorname
                         <div className="absolute inset-y-0 right-full -z-10 w-screen border-b border-b-gray-200" />
                         <div className="absolute inset-y-0 left-0 -z-10 w-screen border-b border-b-gray-200" />
                     </th>
                     <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
-                        Telefonnummer
+                        Nachname
                     </th>
                     <th scope="col" className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 md:table-cell">
                         Teilnehmer
@@ -62,12 +76,10 @@ export function AdminGlobalBookingRequestsTable({ globalBookingRequests }: Admin
                             <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />
                             <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
                         </td>
-                        <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">
-                            {globalBookingRequest.user.phoneNumber ??
-                                (globalBookingRequest.user.phoneNumberUpdate?.phoneNumber
-                                    ? `${globalBookingRequest.user.phoneNumberUpdate.phoneNumber}` //  (nicht bestätigt)
-                                    : undefined) ??
-                                'Keine Angabe'}
+                        <td className="relative py-4 pr-3 text-sm font-medium text-gray-900">
+                            {globalBookingRequest.user.lastName}
+                            <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />
+                            <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
                         </td>
                         <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">
                             {globalBookingRequest.adultParticipants + globalBookingRequest.children}
@@ -100,6 +112,22 @@ export function AdminGlobalBookingRequestsTable({ globalBookingRequests }: Admin
                             dateTime={selectedGlobalBookingRequest.dateTime}
                             location={selectedGlobalBookingRequest.location}
                             priceClass={selectedGlobalBookingRequest.priceClass}
+                            extraEntries={[
+                                {
+                                    title: 'Email Adresse',
+                                    value: displayUserEmailAddress,
+                                    copyButtonAction: displayUserEmailAddress
+                                        ? () => navigator.clipboard.writeText(displayUserEmailAddress)
+                                        : undefined,
+                                },
+                                {
+                                    title: 'Telefonnummer',
+                                    value: displayUserPhoneNumber,
+                                    copyButtonAction: displayUserPhoneNumber
+                                        ? () => navigator.clipboard.writeText(displayUserPhoneNumber)
+                                        : undefined,
+                                },
+                            ]}
                         />
 
                         {selectedGlobalBookingRequest.message && (
