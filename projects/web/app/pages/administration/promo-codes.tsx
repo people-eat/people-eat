@@ -5,19 +5,23 @@ import {
     GetSignedInUserDocument,
     SignedInUser,
     toTranslatedFormattedDate,
+    Unpacked,
 } from '@people-eat/web-domain';
 import { GetServerSideProps } from 'next';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { AdminCreateGiftCardPromoCodeDialog } from '../../components/administration/AdminCreateGiftCardPromoCodeDialog';
+import { AdminUpdateGiftCardPromoCodeDialog } from '../../components/administration/AdminUpdateGiftCardPromoCodeDialog';
 import { createApolloClient } from '../../network/apolloClients';
 
 const signInPageRedirect = { redirect: { permanent: false, destination: '/sign-in' } };
 const profilePageRedirect = { redirect: { permanent: false, destination: '/profile' } };
 
+type GiftCardPromoCode = Unpacked<AdminGetGiftCardPromoCodesPageDataQuery['admins']['giftCardPromoCodes']['findMany']>;
+
 interface ServerSideProps {
     signedInUser: SignedInUser;
-    initialGiftCardPromoCodes: AdminGetGiftCardPromoCodesPageDataQuery['admins']['giftCardPromoCodes']['findMany'];
+    initialGiftCardPromoCodes: GiftCardPromoCode[];
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
@@ -49,6 +53,7 @@ export default function AdministrationPromoCodesPage({ signedInUser, initialGift
     const router = useRouter();
 
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
+    const [selectedGiftCardPromoCode, setSelectedGiftCardPromoCode] = useState<GiftCardPromoCode | undefined>();
 
     return (
         <div>
@@ -72,6 +77,13 @@ export default function AdministrationPromoCodesPage({ signedInUser, initialGift
                 onCreated={() => router.reload()}
             />
 
+            <AdminUpdateGiftCardPromoCodeDialog
+                open={Boolean(selectedGiftCardPromoCode)}
+                giftCardPromoCode={selectedGiftCardPromoCode}
+                onCancel={() => setSelectedGiftCardPromoCode(undefined)}
+                onUpdated={() => router.reload()}
+            />
+
             <div className="mt-8 flow-root overflow-hidden">
                 <div className="mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8">
                     <table className="w-full text-left">
@@ -92,7 +104,12 @@ export default function AdministrationPromoCodesPage({ signedInUser, initialGift
                         </thead>
                         <tbody>
                             {giftCardPromoCodes.map((giftCardPromoCode) => (
-                                <tr key={giftCardPromoCode.giftCardPromoCodeId}>
+                                <tr
+                                    key={giftCardPromoCode.giftCardPromoCodeId}
+                                    role="button"
+                                    className="hover:bg-gray-200"
+                                    onClick={() => setSelectedGiftCardPromoCode(giftCardPromoCode)}
+                                >
                                     <td className="relative py-4 pr-3 text-sm font-medium text-gray-900">
                                         {giftCardPromoCode.redeemCode}
                                         <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />

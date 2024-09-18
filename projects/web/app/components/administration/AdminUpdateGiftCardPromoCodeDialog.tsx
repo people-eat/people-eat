@@ -1,41 +1,66 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEAlert, PEButton, PEDatePicker, PEDialog, PENumberTextField, PETextField } from '@people-eat/web-components';
-import { CreateOneGiftCardPromoCodeDocument } from '@people-eat/web-domain';
-import { useState } from 'react';
+import { AdminGetGiftCardPromoCodesPageDataQuery, Unpacked, UpdateOneGiftCardPromoCodeDocument } from '@people-eat/web-domain';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+type GiftCardPromoCode = Unpacked<AdminGetGiftCardPromoCodesPageDataQuery['admins']['giftCardPromoCodes']['findMany']>;
 
 export interface CreateGiftCardPromoCodeFormInputs {
     redeemCode: string;
     balanceAmount: number;
 }
 
-export interface AdminCreateGiftCardPromoCodeDialogProps {
+export interface AdminUpdateGiftCardPromoCodeDialogProps {
     open: boolean;
+    giftCardPromoCode: GiftCardPromoCode | undefined;
     onCancel: () => void;
-    onCreated: () => void;
+    onUpdated: () => void;
 }
 
-export function AdminCreateGiftCardPromoCodeDialog({ open, onCancel, onCreated }: AdminCreateGiftCardPromoCodeDialogProps) {
+export function AdminUpdateGiftCardPromoCodeDialog({
+    open,
+    onCancel,
+    onUpdated,
+    giftCardPromoCode,
+}: AdminUpdateGiftCardPromoCodeDialogProps) {
+    const defaultRedeemCode = giftCardPromoCode?.redeemCode ?? '';
+    const defaultBalanceAmount = (giftCardPromoCode?.balance.amount ?? 0) / 100;
+
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-    } = useForm<CreateGiftCardPromoCodeFormInputs>();
+        setValue,
+    } = useForm<CreateGiftCardPromoCodeFormInputs>({
+        defaultValues: {
+            redeemCode: defaultRedeemCode,
+            balanceAmount: defaultBalanceAmount,
+        },
+    });
+
+    useEffect(() => {
+        setValue('redeemCode', defaultRedeemCode);
+        setValue('balanceAmount', defaultBalanceAmount);
+    }, [setValue, defaultRedeemCode, defaultBalanceAmount]);
 
     const { redeemCode, balanceAmount } = watch();
 
     const [expiresAt, setExpiresAt] = useState(new Date());
 
-    const [create, { data, loading, reset }] = useMutation(CreateOneGiftCardPromoCodeDocument, {
-        variables: { giftCardPromoCode: { balance: { amount: balanceAmount * 100, currencyCode: 'EUR' }, expiresAt, redeemCode } },
+    const [create, { data, loading, reset }] = useMutation(UpdateOneGiftCardPromoCodeDocument, {
+        variables: {
+            giftCardPromoCodeId: giftCardPromoCode?.giftCardPromoCodeId ?? '',
+            giftCardPromoCode: { balance: { amount: balanceAmount * 100, currencyCode: 'EUR' }, expiresAt, redeemCode },
+        },
     });
 
     const showSuccessAlert = data?.admins.giftCardPromoCodes.success ?? false;
     const showFailedAlert = data ? !data.admins.giftCardPromoCodes.success : false;
 
     return (
-        <PEDialog title="Neuen Promo Code erstellen" open={open} onClose={onCancel}>
+        <PEDialog title="Promo Code bearbeiten" open={open} onClose={onCancel}>
             <form onSubmit={handleSubmit((_) => create())} className="flex flex-col gap-4">
                 <PETextField
                     id="redeem-code"
@@ -58,25 +83,25 @@ export function AdminCreateGiftCardPromoCodeDialog({ open, onCancel, onCreated }
                     })}
                 />
                 <PEDatePicker labelTitle="Ablaufdatum" date={expiresAt} setDate={setExpiresAt} />
-                <PEButton title="Erstellen" type="submit" disabled={loading} />
+                <PEButton title="Änderungen speichern" type="submit" disabled={loading} />
             </form>
             <LoadingDialog active={loading} />
             <PEAlert
                 open={showSuccessAlert}
                 type="SUCCESS"
-                title="Promo Code wurde erfolgreich erstellt"
+                title="Änderungen wurden gespeichert"
                 primaryButton={{
                     title: 'Okay',
                     onClick: () => {
                         reset();
-                        onCreated();
+                        onUpdated();
                     },
                 }}
             />
             <PEAlert
                 open={showFailedAlert}
                 type="ERROR"
-                title="Promo Code Erstellung fehlgeschlagen"
+                title="Speichern von Änderungen fehlgeschlagen"
                 primaryButton={{
                     title: 'Okay',
                     onClick: () => reset(),
