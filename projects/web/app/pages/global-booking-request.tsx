@@ -204,78 +204,75 @@ export default function GlobalBookingRequestPage({
                     }}
                 />
 
-                <div className="bg-white">
-                    <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-[88rem] lg:px-8 flex flex-col gap-10">
-                        <div className="flex flex-col gap-4">
-                            <h1 className="font-bold text-3xl tracking-tight text-gray-900">Individuelle Anfrage</h1>
-                            <span className="text-gray-500">
-                                Sende uns eine Anfrage mit deinen individuellen Präferenzen. Wir klären die letzten Einzelheiten mit dir ab
-                                und matchen dich mit deinem perfekten Koch.
-                            </span>
+                <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-[88rem] lg:px-8 flex flex-col gap-10">
+                    <div className="flex flex-col gap-4">
+                        <h1 className="font-bold text-3xl tracking-tight text-gray-900">Individuelle Anfrage</h1>
+                        <span className="text-gray-500">
+                            Sende uns eine Anfrage mit deinen individuellen Präferenzen. Wir klären die letzten Einzelheiten mit dir ab und
+                            matchen dich mit deinem perfekten Koch.
+                        </span>
+                    </div>
+                    <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
+                        <div className="lg:col-span-6 lg:col-start-8">
+                            <BookForm
+                                onLocationSearchTextChange={onLocationSearchTextChange}
+                                locationSearchResults={locationSearchResults}
+                                selectedLocation={selectedLocation}
+                                setSelectedLocation={setSelectedLocation}
+                                isOutOfTravelRadius={false}
+                                adults={adults}
+                                setAdults={setAdults}
+                                kids={children}
+                                setKids={setChildren}
+                                date={date}
+                                setDate={setDate}
+                                time={time}
+                                setTime={setTime}
+                                message={message}
+                                setMessage={setMessage}
+                                occasion={occasion}
+                                setOccasion={setOccasion}
+                                searchButton={{
+                                    title: 'Anfrage senden',
+                                    onClick: () => {
+                                        abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
+                                        signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true);
+                                    },
+                                }}
+                                categories={{
+                                    categoryOptions: categories,
+                                    selectedCategories: selectedCategories,
+                                    onChange: setSelectedCategories,
+                                }}
+                                kitchens={{
+                                    kitchenOptions: kitchens,
+                                    selectedKitchen: selectedKitchen,
+                                    onChange: setSelectedKitchen,
+                                }}
+                                allergies={{
+                                    allergyOptions: allergies,
+                                    selectedAllergies: selectedAllergies,
+                                    onChange: setSelectedAllergies,
+                                }}
+                                priceClass={{
+                                    value: priceClass,
+                                    onChange: setPriceClass,
+                                }}
+                            />
                         </div>
-                        <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
-                            <div className="lg:col-span-6 lg:col-start-8">
-                                <BookForm
-                                    onLocationSearchTextChange={onLocationSearchTextChange}
-                                    locationSearchResults={locationSearchResults}
-                                    selectedLocation={selectedLocation}
-                                    setSelectedLocation={setSelectedLocation}
-                                    isOutOfTravelRadius={false}
-                                    adults={adults}
-                                    setAdults={setAdults}
-                                    kids={children}
-                                    setKids={setChildren}
-                                    date={date}
-                                    setDate={setDate}
-                                    time={time}
-                                    setTime={setTime}
-                                    message={message}
-                                    setMessage={setMessage}
-                                    occasion={occasion}
-                                    setOccasion={setOccasion}
-                                    searchButton={{
-                                        title: 'Anfrage senden',
-                                        onClick: () => {
-                                            abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
-                                            signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true);
-                                        },
-                                    }}
-                                    categories={{
-                                        categoryOptions: categories,
-                                        selectedCategories: selectedCategories,
-                                        onChange: setSelectedCategories,
-                                    }}
-                                    kitchens={{
-                                        kitchenOptions: kitchens,
-                                        selectedKitchen: selectedKitchen,
-                                        onChange: setSelectedKitchen,
-                                    }}
-                                    allergies={{
-                                        allergyOptions: allergies,
-                                        selectedAllergies: selectedAllergies,
-                                        onChange: setSelectedAllergies,
-                                    }}
-                                    priceClass={{
-                                        value: priceClass,
-                                        onChange: setPriceClass,
-                                    }}
-                                />
-                            </div>
+                        <div className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0 hidden md:block">
+                            <h2 className="sr-only">Images</h2>
 
-                            <div className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0 hidden md:block">
-                                <h2 className="sr-only">Images</h2>
-
-                                <Image
-                                    src="/global-booking-request/koch-münchen.png"
-                                    alt=""
-                                    className={classNames('lg:col-span-2 lg:row-span-2 rounded-2xl')}
-                                    width={800}
-                                    height={1000}
-                                />
-                            </div>
+                            <Image
+                                src="/global-booking-request/koch-münchen.png"
+                                alt=""
+                                className="lg:col-span-2 lg:row-span-2 rounded-2xl"
+                                width={800}
+                                height={1000}
+                            />
                         </div>
-                    </main>
-                </div>
+                    </div>
+                </main>
 
                 <PEFooter />
             </div>
