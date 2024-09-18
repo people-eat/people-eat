@@ -24,13 +24,14 @@ const documents = {
     "mutation ConfirmOneGiftCard($giftCardId: String!) {\n  giftCards {\n    success: confirmOne(giftCardId: $giftCardId)\n  }\n}": types.ConfirmOneGiftCardDocument,
     "mutation CreateBookingRequestByGlobalBookingRequestId($globalBookingRequestId: String!, $cookId: String!, $configuredMenu: CreateConfiguredMenuRequest, $price: PriceInput) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      success: createOne(\n        globalBookingRequestId: $globalBookingRequestId\n        configuredMenu: $configuredMenu\n        price: $price\n      )\n    }\n  }\n}": types.CreateBookingRequestByGlobalBookingRequestIdDocument,
     "mutation CreateOneCookVisit($cookId: String!) {\n  cookVisits {\n    success: createOne(cookId: $cookId)\n  }\n}": types.CreateOneCookVisitDocument,
-    "mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGiftCardPromoCodeDocument,
     "mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}": types.CreateOneGiftCardDocument,
     "mutation CreateOneMenuVisit($menuId: String!) {\n  menuVisits {\n    success: createOne(menuId: $menuId)\n  }\n}": types.CreateOneMenuVisitDocument,
     "mutation CreateOneNewsletterSubscription($emailAddress: String!) {\n  newsletterSubscriptions {\n    success: createOne(emailAddress: $emailAddress)\n  }\n}": types.CreateOneNewsletterSubscriptionDocument,
     "mutation CreateOneSearchRequest($request: CreateOneSearchRequestRequest!) {\n  searchRequests {\n    success: createOne(request: $request)\n  }\n}": types.CreateOneSearchRequestDocument,
     "mutation UpdateSessionCookieSettings($request: SessionCookieSettingsInput!) {\n  sessions {\n    success: updateCookieSettings(request: $request)\n  }\n}": types.UpdateSessionCookieSettingsDocument,
     "mutation AdminAssignOneSession($userId: String!) {\n  sessions {\n    success: assignOne(userId: $userId)\n  }\n}": types.AdminAssignOneSessionDocument,
+    "mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}": types.CreateOneGiftCardPromoCodeDocument,
+    "mutation UpdateOneGiftCardPromoCode($giftCardPromoCodeId: String!, $giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: updateOne(\n        giftCardPromoCodeId: $giftCardPromoCodeId\n        giftCardPromoCode: $giftCardPromoCode\n      )\n    }\n  }\n}": types.UpdateOneGiftCardPromoCodeDocument,
     "mutation AssignOneSessionByEmailAddress($request: CreateOneSessionByEmailAddressRequest!) {\n  sessions {\n    success: assignOneByEmailAddress(request: $request)\n  }\n}": types.AssignOneSessionByEmailAddressDocument,
     "mutation CreateOneCook($cookId: String!, $request: CreateOneCookRequest!) {\n  cooks {\n    success: createOne(cookId: $cookId, request: $request)\n  }\n}": types.CreateOneCookDocument,
     "mutation CreateOneUserByEmailAddress($request: CreateOneUserByEmailAddressRequest!, $profilePicture: Upload) {\n  users {\n    success: createOneByEmailAddress(\n      request: $request\n      profilePicture: $profilePicture\n    )\n  }\n}": types.CreateOneUserByEmailAddressDocument,
@@ -199,10 +200,6 @@ export function gql(source: "mutation CreateOneCookVisit($cookId: String!) {\n  
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function gql(source: "mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGiftCard($request: CreateOneGiftCardRequest!) {\n  giftCards {\n    createOne(request: $request) {\n      ... on CreateOneGiftCardSuccessResponse {\n        giftCardId\n        stripeClientSecret\n      }\n      ... on CreateOneGiftCardFailedResponse {\n        failed\n      }\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -224,6 +221,14 @@ export function gql(source: "mutation UpdateSessionCookieSettings($request: Sess
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "mutation AdminAssignOneSession($userId: String!) {\n  sessions {\n    success: assignOne(userId: $userId)\n  }\n}"): (typeof documents)["mutation AdminAssignOneSession($userId: String!) {\n  sessions {\n    success: assignOne(userId: $userId)\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"): (typeof documents)["mutation CreateOneGiftCardPromoCode($giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: createOne(giftCardPromoCode: $giftCardPromoCode)\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "mutation UpdateOneGiftCardPromoCode($giftCardPromoCodeId: String!, $giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: updateOne(\n        giftCardPromoCodeId: $giftCardPromoCodeId\n        giftCardPromoCode: $giftCardPromoCode\n      )\n    }\n  }\n}"): (typeof documents)["mutation UpdateOneGiftCardPromoCode($giftCardPromoCodeId: String!, $giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: updateOne(\n        giftCardPromoCodeId: $giftCardPromoCodeId\n        giftCardPromoCode: $giftCardPromoCode\n      )\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

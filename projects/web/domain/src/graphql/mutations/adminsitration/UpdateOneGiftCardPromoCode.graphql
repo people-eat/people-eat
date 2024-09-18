@@ -1,0 +1,7 @@
+mutation UpdateOneGiftCardPromoCode($giftCardPromoCodeId: String!, $giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {
+    admins {
+        giftCardPromoCodes {
+            success: updateOne(giftCardPromoCodeId: $giftCardPromoCodeId, giftCardPromoCode: $giftCardPromoCode)
+        }
+    }
+}
