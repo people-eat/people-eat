@@ -17,6 +17,7 @@ export {
     type CreateSupportRequestFormProps,
 } from './_forms/CreateSupportRequestForm';
 export { EditAddressForm, type EditAddressFormInputs, type EditAddressFormProps } from './_forms/EditAddressForm';
+export { EditPasswordForm, type EditPasswordFormProps } from './_forms/EditPasswordForm';
 export { SignInForm, type SignInFormInputs, type SignInFormProps } from './_forms/SignInForm';
 export { SignUpForm, type SignUpFormInputs, type SignUpFormProps } from './_forms/SignUpForm';
 export { BookingRequestRow, type BookingRequestRowProps } from './_rows/booking-request-row/BookingRequestRow';

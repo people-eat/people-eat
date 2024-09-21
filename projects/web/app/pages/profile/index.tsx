@@ -445,8 +445,8 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
                                                     const openEvent = window.open('', '_blank');
                                                     void getStripeOnboardingUrl()
                                                         .then(({ data: sData }) => {
-                                                            if (sData?.cooks.getStripeOnboardingUrl)
-                                                                openEvent!.location.href = sData.cooks.getStripeOnboardingUrl;
+                                                            if (sData?.cooks.getStripeOnboardingUrl && openEvent)
+                                                                openEvent.location.href = sData.cooks.getStripeOnboardingUrl;
                                                         })
                                                         .catch((e) => console.error(e));
                                                 }}
@@ -459,8 +459,8 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
                                                     const openEvent = window.open('', '_blank');
                                                     void getStripeDashboardUrl()
                                                         .then(({ data: sData }) => {
-                                                            if (sData?.cooks.getStripeDashboardUrl)
-                                                                openEvent!.location.href = sData.cooks.getStripeDashboardUrl;
+                                                            if (sData?.cooks.getStripeDashboardUrl && openEvent)
+                                                                openEvent.location.href = sData.cooks.getStripeDashboardUrl;
                                                         })
                                                         .catch((e) => console.error(e));
                                                 }}

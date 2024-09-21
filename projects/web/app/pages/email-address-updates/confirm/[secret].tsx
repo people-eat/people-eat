@@ -1,34 +1,45 @@
 import { useMutation } from '@apollo/client';
-import { LoadingDialog, PEFooter, PEHeader } from '@people-eat/web-components';
-import { PEAlert } from '@people-eat/web-components';
-import { ConfirmOneEmailAddressUpdateDocument } from '@people-eat/web-domain';
+import { EditPasswordForm, LoadingDialog, PEAlert, PEFooter, PEHeader } from '@people-eat/web-components';
+import { ConfirmOneEmailAddressUpdateDocument, UpdateUserPasswordDocument } from '@people-eat/web-domain';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function EmailAddressUpdateConfirmationPage() {
     const router = useRouter();
-    const secret = router.query.secret;
+    const secretQueryParam = router.query.secret;
+    const secret: string | undefined = Boolean(secretQueryParam) && typeof secretQueryParam === 'string' ? secretQueryParam : undefined;
 
-    const [state, setState] = useState<'LOADING' | 'FAILED' | 'SUCCESSFUL'>('LOADING');
-
-    const [confirmOneEmailAddressUpdate] = useMutation(ConfirmOneEmailAddressUpdateDocument);
+    const [confirmOneEmailAddressUpdate, { data: confirmEmailAddressUpdateData, loading: confirmEmailAddressUpdateLoading }] = useMutation(
+        ConfirmOneEmailAddressUpdateDocument,
+    );
 
     useEffect(() => {
-        if (!secret || typeof secret !== 'string') {
-            setState('FAILED');
-            return;
-        }
-        confirmOneEmailAddressUpdate({ variables: { secret } })
-            .then(({ data }) => {
-                if (!data?.users.emailAddressUpdate.success) {
-                    setState('FAILED');
-                    return;
-                }
-                setState('SUCCESSFUL');
-            })
-            .catch(() => setState('FAILED'));
+        if (!secret) return;
+        confirmOneEmailAddressUpdate({ variables: { secret } });
     }, [confirmOneEmailAddressUpdate, secret]);
+
+    const confirmEmailAddressUpdateSuccessful = confirmEmailAddressUpdateData?.users.emailAddressUpdate.confirm.success ?? false;
+    const confirmEmailAddressUpdateFailed = confirmEmailAddressUpdateData
+        ? !confirmEmailAddressUpdateData.users.emailAddressUpdate.confirm.success
+        : false;
+
+    const signedInUser =
+        confirmEmailAddressUpdateData?.users.emailAddressUpdate.confirm.__typename ===
+        'UserEmailAddressUpdateMutationConfirmationSuccessResult'
+            ? confirmEmailAddressUpdateData.users.emailAddressUpdate.confirm.user
+            : null;
+
+    const userRequiresPasswordSetup =
+        confirmEmailAddressUpdateData?.users.emailAddressUpdate.confirm.__typename ===
+            'UserEmailAddressUpdateMutationConfirmationSuccessResult' &&
+        !confirmEmailAddressUpdateData.users.emailAddressUpdate.confirm.user.hasPasswordSetUp;
+
+    const [updateUserPassword, { loading: updatePasswordLoading, data: updatePasswordData }] = useMutation(UpdateUserPasswordDocument);
+    const success = updatePasswordData?.users.success ?? false;
+    const failed = updatePasswordData ? !updatePasswordData.users.success : false;
+
+    const loading = confirmEmailAddressUpdateLoading || updatePasswordLoading;
 
     return (
         <>
@@ -43,12 +54,13 @@ export default function EmailAddressUpdateConfirmationPage() {
             </Head>
 
             <div className="w-full min-h-screen flex flex-col gap-16">
-                <PEHeader signedInUser={null} />
+                <PEHeader signedInUser={signedInUser} />
 
-                <LoadingDialog active={state === 'LOADING'} />
+                <LoadingDialog active={loading} />
 
+                {/* confirm email address alerts */}
                 <PEAlert
-                    open={state === 'FAILED'}
+                    open={confirmEmailAddressUpdateFailed}
                     type="ERROR"
                     title="Da ist etwas schief gelaufen"
                     subtitle="Es ist ein unerwarteter Fehler aufgetreten"
@@ -59,7 +71,7 @@ export default function EmailAddressUpdateConfirmationPage() {
                 />
 
                 <PEAlert
-                    open={state === 'SUCCESSFUL'}
+                    open={confirmEmailAddressUpdateSuccessful && !userRequiresPasswordSetup}
                     type="SUCCESS"
                     title="Deine Email Adresse wurde erfolgreich bestätigt"
                     subtitle={undefined}
@@ -68,6 +80,34 @@ export default function EmailAddressUpdateConfirmationPage() {
                         onClick: () => router.push('/profile'),
                     }}
                 />
+
+                {/* update password alerts */}
+                <PEAlert
+                    open={success}
+                    title="Passwort erfolgreich geändert"
+                    primaryButton={{
+                        title: 'Schließen',
+                        onClick: () => undefined,
+                    }}
+                />
+
+                <PEAlert
+                    open={failed}
+                    type="ERROR"
+                    title="Passwort konnte nicht geändert"
+                    primaryButton={{ title: 'Erneut versuchen', onClick: () => undefined }}
+                />
+
+                {userRequiresPasswordSetup && (
+                    <div>
+                        <h1>Ein Password muss vergeben werden.</h1>
+                        <EditPasswordForm
+                            onComplete={(password) =>
+                                signedInUser && updateUserPassword({ variables: { userId: signedInUser.userId, password } })
+                            }
+                        />
+                    </div>
+                )}
 
                 <PEFooter />
             </div>

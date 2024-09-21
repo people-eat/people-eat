@@ -8,10 +8,12 @@ import {
     PriceClass,
     Time,
 } from '@people-eat/web-domain';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import {
     PEAutoComplete,
     PEButton,
+    PECheckbox,
     PEDatePicker,
     PELabelMultiSelection,
     PELabelSingleSelection,
@@ -41,6 +43,13 @@ export interface BookFormProps {
     setMessage: (changedMessage: string) => void;
     occasion: string;
     setOccasion: (changedOccasion: string) => void;
+
+    userData?: {
+        setFirstName: (changedFirstName: string) => void;
+        setLastName: (changedLastName: string) => void;
+        setEmailAddress: (changedEmailAddress: string) => void;
+        setPhoneNumber: (changedPhoneNumber: string) => void;
+    };
 
     costBreakdown?: CostBreakdown;
 
@@ -84,6 +93,13 @@ interface BookFormInputs {
     occasion: string;
     message: string;
     couponCode: string;
+
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+    phoneNumber: string;
+    acceptedTermsAndConditions: boolean;
+    acceptedPrivacyPolicy: boolean;
 }
 
 export function BookForm({
@@ -104,6 +120,7 @@ export function BookForm({
     setMessage,
     occasion,
     setOccasion,
+    userData,
     costBreakdown,
     searchButton,
     categories,
@@ -215,7 +232,7 @@ export function BookForm({
                 {priceClass && (
                     <div className="flex flex-col gap-4">
                         <span className="text-base font-medium">Budget pro Person</span>
-                        <PEPriceClassSelection selectedPriceClass={priceClass.value} onChange={priceClass.onChange} layout="VERTICAL" />
+                        <PEPriceClassSelection selectedPriceClass={priceClass.value} onChange={priceClass.onChange} layout="HORIZONTAL" />
                     </div>
                 )}
 
@@ -250,6 +267,110 @@ export function BookForm({
                 )}
 
                 {costBreakdown && <PECostBreakdownPanel costBreakdown={costBreakdown} />}
+
+                {userData && (
+                    <>
+                        <div className="flex gap-4">
+                            <PETextField
+                                id="first-name"
+                                labelTitle="Vorname"
+                                type="text"
+                                autoComplete="given-name"
+                                errorMessage={errors.firstName?.message}
+                                {...register('firstName', {
+                                    required: 'This field is required',
+                                    onChange: (e) => userData.setFirstName(e.target.value),
+                                })}
+                            />
+
+                            <PETextField
+                                id="last-name"
+                                labelTitle="Nachname"
+                                type="text"
+                                autoComplete="family-name"
+                                errorMessage={errors.lastName?.message}
+                                {...register('lastName', {
+                                    required: 'This field is required',
+                                    onChange: (e) => userData.setLastName(e.target.value),
+                                })}
+                            />
+                        </div>
+
+                        <PETextField
+                            id="email-address"
+                            labelTitle="E-Mail Adresse"
+                            type="email"
+                            autoComplete="email"
+                            errorMessage={errors.emailAddress?.message}
+                            {...register('emailAddress', {
+                                required: 'This field is required',
+                                onChange: (e) => userData.setEmailAddress(e.target.value),
+                            })}
+                        />
+
+                        <PETextField
+                            id="phone-number"
+                            labelTitle="Telefonnummer"
+                            type="tel"
+                            autoComplete="tel"
+                            placeholder="+49"
+                            errorMessage={errors.phoneNumber?.message}
+                            {...register('phoneNumber', {
+                                required: 'This field is required',
+                                pattern: {
+                                    value: /\+49\d+/,
+                                    message: 'Keine gültige Ländervorwahl (z.B +49).',
+                                },
+                                onChange: (event) => {
+                                    const overriddenValue = event.target.value.replaceAll(' ', '');
+                                    event.target.value = overriddenValue;
+                                    userData.setPhoneNumber(overriddenValue);
+                                },
+                            })}
+                        />
+
+                        <fieldset className="space-y-5">
+                            <PECheckbox
+                                id="accepted-terms-and-conditions"
+                                label={{
+                                    title: 'Allgemeine Geschäftsbedingungen',
+                                    description: (
+                                        <>
+                                            Ich habe die{' '}
+                                            <Link href="/terms-and-conditions" className="text-orange-500">
+                                                allgemeinen Geschäftsbedingungen
+                                            </Link>{' '}
+                                            gelesen und akzeptiere sie
+                                        </>
+                                    ),
+                                }}
+                                errorMessage={errors.acceptedTermsAndConditions?.message}
+                                {...register('acceptedTermsAndConditions', {
+                                    required: 'Die allgemeinen Geschäftsbedingungen müssen akzeptiert werden um fortzufahren',
+                                })}
+                            />
+                            <PECheckbox
+                                id="accepted-privacy-policy"
+                                label={{
+                                    title: 'Datenschutzerklärung',
+                                    description: (
+                                        <>
+                                            Ich habe die{' '}
+                                            <Link href="/privacy-policy" className="text-orange-500">
+                                                Datenschutzerklärung
+                                            </Link>{' '}
+                                            gelesen und akzeptiere sie
+                                        </>
+                                    ),
+                                }}
+                                errorMessage={errors.acceptedPrivacyPolicy?.message}
+                                {...register('acceptedPrivacyPolicy', {
+                                    required: 'Die Datenschutzerklärung muss akzeptiert werden um fortzufahren',
+                                })}
+                            />
+                        </fieldset>
+                    </>
+                )}
 
                 <PEButton title={searchButton.title} type="submit" />
             </div>
