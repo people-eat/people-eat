@@ -1,7 +1,18 @@
 mutation ConfirmOneEmailAddressUpdate($secret: String!) {
     users {
         emailAddressUpdate(userId: "") {
-            success: confirm(secret: $secret)
+            confirm(secret: $secret) {
+                ... on UserEmailAddressUpdateMutationConfirmationSuccessResult {
+                    success
+                    user {
+                        ...SignedInUser
+                        hasPasswordSetUp
+                    }
+                }
+                ... on UserEmailAddressUpdateMutationConfirmationFailedResult {
+                    success
+                }
+            }
         }
     }
 }

@@ -3,6 +3,8 @@ import { BookForm, LoadingDialog, PEAlert, PEFooter, PEHeader } from '@people-ea
 import {
     AllergyOption,
     CategoryOption,
+    CreateOneGlobalBookingRequestRequest,
+    CreateOneUserByEmailAddressDocument,
     CreateOneUserGlobalBookingRequestDocument,
     GetGlobalBookingRequestPageDataDocument,
     KitchenOption,
@@ -83,6 +85,11 @@ export default function GlobalBookingRequestPage({
     const [message, setMessage] = useState('');
     const [occasion, setOccasion] = useState('');
 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [emailAddress, setEmailAddress] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+
     const [locationSearchResults, setLocationSearchResults] = useState<LocationSearchResult[]>([]);
     const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | undefined>(
         searchParams.locationText && searchParams.locationLatitude && searchParams.locationLongitude
@@ -111,7 +118,7 @@ export default function GlobalBookingRequestPage({
     dateTime.setHours(time.hours);
     dateTime.setMinutes(time.minutes);
 
-    const request = {
+    const globalBookingRequest: CreateOneGlobalBookingRequestRequest = {
         adultParticipants: adults,
         allergyIds: selectedAllergies.map(({ allergyId }) => allergyId),
         categoryIds: selectedCategories.map(({ categoryId }) => categoryId),
@@ -130,17 +137,24 @@ export default function GlobalBookingRequestPage({
         priceClassType: priceClass,
     };
 
-    const [createOneGlobalBookingRequest, { loading, data, reset }] = useMutation(CreateOneUserGlobalBookingRequestDocument, {
+    const [createOneGlobalBookingRequest, { loading, data, reset }] = useMutation(CreateOneUserByEmailAddressDocument, {
         variables: {
-            userId: signedInUser?.userId ?? '',
-            request,
+            request: {
+                firstName,
+                lastName,
+                emailAddress,
+                phoneNumber,
+                gender: 'NO_INFORMATION',
+                language: 'GERMAN',
+                globalBookingRequest,
+            },
         },
     });
 
-    const [authDialogOpen, setAuthDialogOpen] = useState(false);
+    // const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
-    const showSuccessAlert = data?.users.globalBookingRequests.success ?? false;
-    const showFailedAlert = data ? !data.users.globalBookingRequests.success : false;
+    const showSuccessAlert = data?.users.success ?? false;
+    const showFailedAlert = data ? !data.users.success : false;
 
     const abc = setup()
         ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
@@ -183,7 +197,7 @@ export default function GlobalBookingRequestPage({
 
                 <LoadingDialog active={loading} />
 
-                <PEAuthDialog
+                {/* <PEAuthDialog
                     open={authDialogOpen}
                     onClose={() => setAuthDialogOpen(false)}
                     signInButtonTitle="Anfrage senden"
@@ -191,9 +205,9 @@ export default function GlobalBookingRequestPage({
                     onSignedInUserFetched={(changedSignedInUser) => {
                         setAuthDialogOpen(false);
                         setSignedInUser(changedSignedInUser);
-                        createOneGlobalBookingRequest({ variables: { userId: changedSignedInUser.userId, request } });
+                        createOneGlobalBookingRequest({ variables: { userId: changedSignedInUser.userId, request: globalBookingRequest } });
                     }}
-                />
+                /> */}
 
                 <main className="mx-auto mt-8 max-w-2xl px-4 pb-16 sm:px-6 sm:pb-24 lg:max-w-[88rem] lg:px-8 flex flex-col gap-10">
                     <div className="flex flex-col gap-4">
@@ -227,28 +241,30 @@ export default function GlobalBookingRequestPage({
                                     title: 'Anfrage senden',
                                     onClick: () => {
                                         abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
-                                        signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true);
+                                        createOneGlobalBookingRequest();
+                                        // signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true);
                                     },
                                 }}
-                                categories={{
-                                    categoryOptions: categories,
-                                    selectedCategories: selectedCategories,
-                                    onChange: setSelectedCategories,
-                                }}
-                                kitchens={{
-                                    kitchenOptions: kitchens,
-                                    selectedKitchen: selectedKitchen,
-                                    onChange: setSelectedKitchen,
-                                }}
-                                allergies={{
-                                    allergyOptions: allergies,
-                                    selectedAllergies: selectedAllergies,
-                                    onChange: setSelectedAllergies,
-                                }}
+                                // categories={{
+                                //     categoryOptions: categories,
+                                //     selectedCategories: selectedCategories,
+                                //     onChange: setSelectedCategories,
+                                // }}
+                                // kitchens={{
+                                //     kitchenOptions: kitchens,
+                                //     selectedKitchen: selectedKitchen,
+                                //     onChange: setSelectedKitchen,
+                                // }}
+                                // allergies={{
+                                //     allergyOptions: allergies,
+                                //     selectedAllergies: selectedAllergies,
+                                //     onChange: setSelectedAllergies,
+                                // }}
                                 priceClass={{
                                     value: priceClass,
                                     onChange: setPriceClass,
                                 }}
+                                userData={{ setFirstName, setLastName, setEmailAddress, setPhoneNumber }}
                             />
                         </div>
                         <div className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0 hidden md:block">
