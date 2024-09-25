@@ -213,7 +213,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                                 src="/cities/Privatkoch Frankfurt.jpg"
                                 width={400}
                                 height={800}
-                                alt="Privatkoch Frankfurt"
+                                alt="Tisch Deko-Essen mit Freunden"
                             />
                         </div>
                     </div>
@@ -275,7 +275,7 @@ export default function PublicCookPage({ signedInUser, cookieSettings, cityHub, 
                     <div className="relative pb-32">
                         <div className="absolute inset-0">
                             <Image
-                                alt=""
+                                alt="privatkoch-für-geburtstag-familienfeier-jga-romantisches-dinner"
                                 src="/cities/dinner-table.jpg"
                                 className="h-full w-full object-cover opacity-25"
                                 width={2000}
