@@ -24,7 +24,7 @@ export const cityHubs: CityHub[] = [
         description:
             'Finde deinen Privatkoch für einen Abend in Frankfurt am Main und genieße exklusive Menüs bei dir zuhause. Buche jetzt einen Koch für zuhause und erlebe unvergessliche Dinner-Erlebnisse mit PeopleEat.',
         keywords: ['Koch in Frankfurt finden', 'Koch Frankfurt', 'Mietkoch Frankfurt', 'Privatkoch Frankfurt'],
-        city: { name: 'Frankfurtam Main', location: { latitude: 50.109958, longitude: 8.679098 } },
+        city: { name: 'Frankfurt am Main', location: { latitude: 50.109958, longitude: 8.679098 } },
     },
     {
         pathName: 'Mannheim',
