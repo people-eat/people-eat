@@ -561,7 +561,7 @@ export default function GiftCardsPage({ signedInUser, stripePublishableKey, cook
                                         <div className="flex gap-4">
                                             <PETextField
                                                 id="invoice-address-post-code"
-                                                labelTitle="Postletzahl"
+                                                labelTitle="Postleitzahl"
                                                 type="text"
                                                 // autoComplete=""
                                                 errorMessage={errors.invoiceAddress?.postCode?.message}
