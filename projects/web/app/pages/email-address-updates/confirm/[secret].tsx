@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 export default function EmailAddressUpdateConfirmationPage() {
     const router = useRouter();
     const secretQueryParam = router.query.secret;
+    const returnTo = router.query.returnTo;
     const secret: string | undefined = Boolean(secretQueryParam) && typeof secretQueryParam === 'string' ? secretQueryParam : undefined;
 
     const [confirmOneEmailAddressUpdate, { data: confirmEmailAddressUpdateData, loading: confirmEmailAddressUpdateLoading }] = useMutation(
@@ -87,7 +88,7 @@ export default function EmailAddressUpdateConfirmationPage() {
                     title="Passwort erfolgreich geändert"
                     primaryButton={{
                         title: 'Schließen',
-                        onClick: () => undefined,
+                        onClick: () => router.push(typeof returnTo === 'string' ? returnTo : '/profile'),
                     }}
                 />
 

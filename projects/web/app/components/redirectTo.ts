@@ -8,8 +8,8 @@ const routeBuilders = {
     },
     administration: (_: void) => '/administration',
     profile: (_: void) => '/profile',
-    profileBookingRequests: (_: void) => '/profile/booking-requests',
-    profileBookingRequest: (params: { bookingRequestId: string }) => '/profile/booking-requests/' + params.bookingRequestId,
+    profileBookingRequests: (_: void) => '/profile/bookings',
+    profileBookingRequest: (params: { bookingRequestId: string }) => '/profile/bookings/' + params.bookingRequestId,
 } as const;
 
 type RouteBuilderKey = keyof typeof routeBuilders;
