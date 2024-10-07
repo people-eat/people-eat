@@ -25,7 +25,6 @@ import { AnalyticsClarity } from '../components/analytics/AnalyticsClarity';
 import { AnalyticsGoogle } from '../components/analytics/AnalyticsGoogle';
 import { CookieSettings } from '../components/analytics/CookieSettings';
 import { setup } from '../components/meta-pixel/setup';
-import { PEAuthDialog } from '../components/PEAuthDialog';
 import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 
@@ -137,24 +136,39 @@ export default function GlobalBookingRequestPage({
         priceClassType: priceClass,
     };
 
-    const [createOneGlobalBookingRequest, { loading, data, reset }] = useMutation(CreateOneUserByEmailAddressDocument, {
-        variables: {
-            request: {
-                firstName,
-                lastName,
-                emailAddress,
-                phoneNumber,
-                gender: 'NO_INFORMATION',
-                language: 'GERMAN',
-                globalBookingRequest,
+    const [createUserWithGlobalBookingRequest, { loading: createUserLoading, data: createUserData, reset: resetCreateUser }] = useMutation(
+        CreateOneUserByEmailAddressDocument,
+        {
+            variables: {
+                request: {
+                    firstName,
+                    lastName,
+                    emailAddress,
+                    phoneNumber,
+                    gender: 'NO_INFORMATION',
+                    language: 'GERMAN',
+                    globalBookingRequest,
+                },
             },
         },
-    });
+    );
+
+    const [createGlobalBookingRequest, { loading: createRequestLoading, data: createRequestData, reset: resetCreateRequest }] = useMutation(
+        CreateOneUserGlobalBookingRequestDocument,
+        {
+            variables: {
+                userId: signedInUser?.userId ?? '',
+                request: globalBookingRequest,
+            },
+        },
+    );
 
     // const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
-    const showSuccessAlert = data?.users.success ?? false;
-    const showFailedAlert = data ? !data.users.success : false;
+    const showSuccessAlert = (createUserData?.users.success ?? false) || (createRequestData?.users.globalBookingRequests.success ?? false);
+    const showFailedAlert =
+        (createUserData ? !createUserData.users.success : false) ||
+        (createRequestData ? !createRequestData.users.globalBookingRequests.success : false);
 
     const abc = setup()
         ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
@@ -192,10 +206,16 @@ export default function GlobalBookingRequestPage({
                     open={showFailedAlert}
                     title="Leider ist ein Fehler aufgetreten"
                     subtitle="Bitte versuche es später erneut"
-                    primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
+                    primaryButton={{
+                        title: 'Erneut versuchen',
+                        onClick: () => {
+                            resetCreateUser();
+                            resetCreateRequest();
+                        },
+                    }}
                 />
 
-                <LoadingDialog active={loading} />
+                <LoadingDialog active={createUserLoading || createRequestLoading} />
 
                 {/* <PEAuthDialog
                     open={authDialogOpen}
@@ -241,7 +261,7 @@ export default function GlobalBookingRequestPage({
                                     title: 'Anfrage senden',
                                     onClick: () => {
                                         abc?.$fbq('trackCustom', 'SendGlobalBookingRequest');
-                                        createOneGlobalBookingRequest();
+                                        signedInUser ? createGlobalBookingRequest() : createUserWithGlobalBookingRequest();
                                         // signedInUser ? createOneGlobalBookingRequest() : setAuthDialogOpen(true);
                                     },
                                 }}
@@ -264,7 +284,7 @@ export default function GlobalBookingRequestPage({
                                     value: priceClass,
                                     onChange: setPriceClass,
                                 }}
-                                userData={{ setFirstName, setLastName, setEmailAddress, setPhoneNumber }}
+                                userData={signedInUser ? undefined : { setFirstName, setLastName, setEmailAddress, setPhoneNumber }}
                             />
                         </div>
                         <div className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0 hidden md:block">
