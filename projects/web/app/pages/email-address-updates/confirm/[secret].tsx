@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { EditPasswordForm, LoadingDialog, PEAlert, PEFooter, PEHeader } from '@people-eat/web-components';
 import { ConfirmOneEmailAddressUpdateDocument, UpdateUserPasswordDocument } from '@people-eat/web-domain';
+import classNames from 'classnames';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -100,13 +101,20 @@ export default function EmailAddressUpdateConfirmationPage() {
                 />
 
                 {userRequiresPasswordSetup && (
-                    <div>
-                        <h1>Ein Password muss vergeben werden.</h1>
-                        <EditPasswordForm
-                            onComplete={(password) =>
-                                signedInUser && updateUserPassword({ variables: { userId: signedInUser.userId, password } })
-                            }
-                        />
+                    <div
+                        className={classNames(
+                            'mx-auto max-w-[88rem] items-center justify-between gap-x-6 p-6 lg:px-8 w-full',
+                            'flex flex-col items-start justify-start',
+                        )}
+                    >
+                        <div className="w-full flex flex-col gap-8">
+                            <h1 className="font-bold text-3xl tracking-tight text-gray-900">Ein Password muss vergeben werden.</h1>
+                            <EditPasswordForm
+                                onComplete={(password) =>
+                                    signedInUser && updateUserPassword({ variables: { userId: signedInUser.userId, password } })
+                                }
+                            />
+                        </div>
                     </div>
                 )}
 
