@@ -3,7 +3,7 @@ import { LoadingDialog, SignInDialog, SignUpDialog } from '@people-eat/web-compo
 import { PEAlert } from '@people-eat/web-components';
 import {
     AssignOneSessionByEmailAddressDocument,
-    CreateOneUserByEmailAddressDocument,
+    CreateOneUserDocument,
     GetSignedInUserDocument,
     SignedInUser,
 } from '@people-eat/web-domain';
@@ -32,8 +32,7 @@ export function PEAuthDialog({
     const [assignOneSessionByEmailAddress, { data: signInData, loading: assignSessionLoading, reset: signInReset }] = useMutation(
         AssignOneSessionByEmailAddressDocument,
     );
-    const [createOneUserByEmailAddress, { data: signUpData, loading: createUserLoading, reset: signUpReset }] =
-        useMutation(CreateOneUserByEmailAddressDocument);
+    const [createOneUser, { data: signUpData, loading: createUserLoading, reset: signUpReset }] = useMutation(CreateOneUserDocument);
 
     const [getSignedInUser, { loading: loadingSignedInUser }] = useLazyQuery(GetSignedInUserDocument);
 
@@ -118,7 +117,7 @@ export function PEAuthDialog({
                 }}
                 completeTitle={signUpButtonTitle}
                 onSignUp={({ firstName, lastName, emailAddress, phoneNumber, password }) => {
-                    createOneUserByEmailAddress({
+                    createOneUser({
                         variables: {
                             request: {
                                 firstName,
