@@ -4,7 +4,7 @@ import { PEAlert, PELabelLink } from '@people-eat/web-components';
 import {
     CookRank,
     CreateOneCookDocument,
-    CreateOneUserByEmailAddressDocument,
+    CreateOneUserDocument,
     GetCookSignUpPageDataDocument,
     LanguageOption,
     SignedInUser,
@@ -62,8 +62,8 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
     const [selectedLanguages, setSelectedLanguages] = useState<LanguageOption[]>([]);
     const [rank, setRank] = useState<CookRank>('HOBBY');
 
-    const [createOneUserByEmailAddress, { loading, data: createUserData, reset: resetCreateUser }] =
-        useMutation(CreateOneUserByEmailAddressDocument);
+    const [createOneUser, { loading: createUserLoading, data: createUserData, reset: resetCreateUser }] =
+        useMutation(CreateOneUserDocument);
     const [createOneCook, { loading: createCookLoading, data: createCookData, reset: resetCreateCook }] =
         useMutation(CreateOneCookDocument);
 
@@ -90,7 +90,7 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
 
             <PEHeader signedInUser={signedInUser} />
 
-            <LoadingDialog active={loading || createCookLoading} />
+            <LoadingDialog active={createUserLoading || createCookLoading} />
 
             <PEAlert
                 open={showSuccessAlertForNewUser}
@@ -201,7 +201,7 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
                             if (!firstResult) return;
 
                             const { latitude, longitude } = firstResult;
-                            createOneUserByEmailAddress({
+                            createOneUser({
                                 variables: {
                                     request: {
                                         firstName,

@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { LoadingDialog, PEAlert, PEHeader, PELabelLink, SignUpForm, SignUpFormInputs } from '@people-eat/web-components';
-import { CreateOneUserByEmailAddressDocument, GetPageDataDocument } from '@people-eat/web-domain';
+import { CreateOneUserDocument, GetPageDataDocument } from '@people-eat/web-domain';
 import { GetServerSideProps, Redirect } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 export default function SignUpPage({ cookieSettings }: ServerSideProps) {
     const router = useRouter();
 
-    const [createOneUserByEmailAddress, { loading, data, reset }] = useMutation(CreateOneUserByEmailAddressDocument);
+    const [createOneUser, { loading, data, reset }] = useMutation(CreateOneUserDocument);
 
     const showCreateUserSuccessAlert = data?.users.success ?? false;
     const showCreatesUerFailedAlert = data ? !data.users.success : false;
@@ -113,7 +113,7 @@ export default function SignUpPage({ cookieSettings }: ServerSideProps) {
                 <SignUpForm
                     completeTitle="Registrieren"
                     onSignUp={({ firstName, lastName, emailAddress, phoneNumber, password }: SignUpFormInputs) =>
-                        createOneUserByEmailAddress({
+                        createOneUser({
                             variables: {
                                 request: {
                                     firstName,

@@ -34,7 +34,7 @@ const documents = {
     "mutation UpdateOneGiftCardPromoCode($giftCardPromoCodeId: String!, $giftCardPromoCode: CreateOneGiftCardPromoCodeRequest!) {\n  admins {\n    giftCardPromoCodes {\n      success: updateOne(\n        giftCardPromoCodeId: $giftCardPromoCodeId\n        giftCardPromoCode: $giftCardPromoCode\n      )\n    }\n  }\n}": types.UpdateOneGiftCardPromoCodeDocument,
     "mutation AssignOneSessionByEmailAddress($request: CreateOneSessionByEmailAddressRequest!) {\n  sessions {\n    success: assignOneByEmailAddress(request: $request)\n  }\n}": types.AssignOneSessionByEmailAddressDocument,
     "mutation CreateOneCook($cookId: String!, $request: CreateOneCookRequest!) {\n  cooks {\n    success: createOne(cookId: $cookId, request: $request)\n  }\n}": types.CreateOneCookDocument,
-    "mutation CreateOneUserByEmailAddress($request: CreateOneUserByEmailAddressRequest!, $profilePicture: Upload) {\n  users {\n    success: createOneByEmailAddress(\n      request: $request\n      profilePicture: $profilePicture\n    )\n  }\n}": types.CreateOneUserByEmailAddressDocument,
+    "mutation CreateOneUser($request: CreateOneUserRequest!, $profilePicture: Upload) {\n  users {\n    success: createOne(request: $request, profilePicture: $profilePicture)\n  }\n}": types.CreateOneUserDocument,
     "mutation ExpireCurrentSession($userId: String!) {\n  users {\n    sessions(userId: $userId) {\n      success: expireCurrent\n    }\n  }\n}": types.ExpireCurrentSessionDocument,
     "mutation CookBookingRequestAccept($cookId: String!, $bookingRequestId: String!) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      success: accept(bookingRequestId: $bookingRequestId)\n    }\n  }\n}": types.CookBookingRequestAcceptDocument,
     "mutation CookBookingRequestDecline($bookingRequestId: String!, $cookId: String!) {\n  cooks {\n    bookingRequests(cookId: $cookId) {\n      success: decline(bookingRequestId: $bookingRequestId)\n    }\n  }\n}": types.CookBookingRequestDeclineDocument,
@@ -240,7 +240,7 @@ export function gql(source: "mutation CreateOneCook($cookId: String!, $request: 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "mutation CreateOneUserByEmailAddress($request: CreateOneUserByEmailAddressRequest!, $profilePicture: Upload) {\n  users {\n    success: createOneByEmailAddress(\n      request: $request\n      profilePicture: $profilePicture\n    )\n  }\n}"): (typeof documents)["mutation CreateOneUserByEmailAddress($request: CreateOneUserByEmailAddressRequest!, $profilePicture: Upload) {\n  users {\n    success: createOneByEmailAddress(\n      request: $request\n      profilePicture: $profilePicture\n    )\n  }\n}"];
+export function gql(source: "mutation CreateOneUser($request: CreateOneUserRequest!, $profilePicture: Upload) {\n  users {\n    success: createOne(request: $request, profilePicture: $profilePicture)\n  }\n}"): (typeof documents)["mutation CreateOneUser($request: CreateOneUserRequest!, $profilePicture: Upload) {\n  users {\n    success: createOne(request: $request, profilePicture: $profilePicture)\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

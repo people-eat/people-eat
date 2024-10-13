@@ -1219,7 +1219,7 @@ export type CreateOneUserByEmailAddressRequest = {
   addresses?: InputMaybe<Array<CreateOneAddressRequest>>;
   birthDate?: InputMaybe<Scalars['Date']['input']>;
   cook?: InputMaybe<CreateOneCookRequest>;
-  emailAddress?: InputMaybe<Scalars['EmailAddress']['input']>;
+  emailAddress: Scalars['EmailAddress']['input'];
   firstName: Scalars['String']['input'];
   gender: Gender;
   globalBookingRequest?: InputMaybe<CreateOneGlobalBookingRequestRequest>;
@@ -1252,6 +1252,21 @@ export type CreateOneUserByPhoneNumberRequest = {
   language: UserLanguage;
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
+  phoneNumber: Scalars['PhoneNumber']['input'];
+  profilePictureUrl?: InputMaybe<Scalars['URL']['input']>;
+};
+
+export type CreateOneUserRequest = {
+  addresses?: InputMaybe<Array<CreateOneAddressRequest>>;
+  birthDate?: InputMaybe<Scalars['Date']['input']>;
+  cook?: InputMaybe<CreateOneCookRequest>;
+  emailAddress: Scalars['EmailAddress']['input'];
+  firstName: Scalars['String']['input'];
+  gender: Gender;
+  globalBookingRequest?: InputMaybe<CreateOneGlobalBookingRequestRequest>;
+  language: UserLanguage;
+  lastName: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
   phoneNumber: Scalars['PhoneNumber']['input'];
   profilePictureUrl?: InputMaybe<Scalars['URL']['input']>;
 };
@@ -2454,6 +2469,7 @@ export type UserMutation = {
   acceptLatestTerms: Scalars['Boolean']['output'];
   addresses: UserAddressMutation;
   bookingRequests: UserBookingRequestMutation;
+  createOne: Scalars['Boolean']['output'];
   createOneByEmailAddress: Scalars['Boolean']['output'];
   createOneByIdentityProvider: Scalars['Boolean']['output'];
   createOneByPhoneNumber: Scalars['Boolean']['output'];
@@ -2480,6 +2496,12 @@ export type UserMutationAddressesArgs = {
 
 export type UserMutationBookingRequestsArgs = {
   userId: Scalars['String']['input'];
+};
+
+
+export type UserMutationCreateOneArgs = {
+  profilePicture?: InputMaybe<Scalars['Upload']['input']>;
+  request: CreateOneUserRequest;
 };
 
 
@@ -2913,13 +2935,13 @@ export type CreateOneCookMutationVariables = Exact<{
 
 export type CreateOneCookMutation = { __typename?: 'Mutation', cooks: { __typename?: 'CookMutation', success: boolean } };
 
-export type CreateOneUserByEmailAddressMutationVariables = Exact<{
-  request: CreateOneUserByEmailAddressRequest;
+export type CreateOneUserMutationVariables = Exact<{
+  request: CreateOneUserRequest;
   profilePicture?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
-export type CreateOneUserByEmailAddressMutation = { __typename?: 'Mutation', users: { __typename?: 'UserMutation', success: boolean } };
+export type CreateOneUserMutation = { __typename?: 'Mutation', users: { __typename?: 'UserMutation', success: boolean } };
 
 export type ExpireCurrentSessionMutationVariables = Exact<{
   userId: Scalars['String']['input'];
@@ -3717,7 +3739,7 @@ export const CreateOneGiftCardPromoCodeDocument = {"kind":"Document","definition
 export const UpdateOneGiftCardPromoCodeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateOneGiftCardPromoCode"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCodeId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneGiftCardPromoCodeRequest"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"admins"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"giftCardPromoCodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"updateOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"giftCardPromoCodeId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCodeId"}}},{"kind":"Argument","name":{"kind":"Name","value":"giftCardPromoCode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"giftCardPromoCode"}}}]}]}}]}}]}}]} as unknown as DocumentNode<UpdateOneGiftCardPromoCodeMutation, UpdateOneGiftCardPromoCodeMutationVariables>;
 export const AssignOneSessionByEmailAddressDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AssignOneSessionByEmailAddress"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneSessionByEmailAddressRequest"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"assignOneByEmailAddress"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}}]}]}}]}}]} as unknown as DocumentNode<AssignOneSessionByEmailAddressMutation, AssignOneSessionByEmailAddressMutationVariables>;
 export const CreateOneCookDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOneCook"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cookId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneCookRequest"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"createOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"cookId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cookId"}}},{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}}]}]}}]}}]} as unknown as DocumentNode<CreateOneCookMutation, CreateOneCookMutationVariables>;
-export const CreateOneUserByEmailAddressDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOneUserByEmailAddress"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneUserByEmailAddressRequest"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"profilePicture"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"createOneByEmailAddress"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}},{"kind":"Argument","name":{"kind":"Name","value":"profilePicture"},"value":{"kind":"Variable","name":{"kind":"Name","value":"profilePicture"}}}]}]}}]}}]} as unknown as DocumentNode<CreateOneUserByEmailAddressMutation, CreateOneUserByEmailAddressMutationVariables>;
+export const CreateOneUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOneUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"request"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateOneUserRequest"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"profilePicture"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"createOne"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"request"},"value":{"kind":"Variable","name":{"kind":"Name","value":"request"}}},{"kind":"Argument","name":{"kind":"Name","value":"profilePicture"},"value":{"kind":"Variable","name":{"kind":"Name","value":"profilePicture"}}}]}]}}]}}]} as unknown as DocumentNode<CreateOneUserMutation, CreateOneUserMutationVariables>;
 export const ExpireCurrentSessionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ExpireCurrentSession"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sessions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"expireCurrent"}}]}}]}}]}}]} as unknown as DocumentNode<ExpireCurrentSessionMutation, ExpireCurrentSessionMutationVariables>;
 export const CookBookingRequestAcceptDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CookBookingRequestAccept"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cookId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookingRequestId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookingRequests"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"cookId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cookId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"accept"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"bookingRequestId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookingRequestId"}}}]}]}}]}}]}}]} as unknown as DocumentNode<CookBookingRequestAcceptMutation, CookBookingRequestAcceptMutationVariables>;
 export const CookBookingRequestDeclineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CookBookingRequestDecline"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookingRequestId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cookId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bookingRequests"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"cookId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cookId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"success"},"name":{"kind":"Name","value":"decline"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"bookingRequestId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookingRequestId"}}}]}]}}]}}]}}]} as unknown as DocumentNode<CookBookingRequestDeclineMutation, CookBookingRequestDeclineMutationVariables>;

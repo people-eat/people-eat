@@ -4,7 +4,7 @@ import {
     AllergyOption,
     CategoryOption,
     CreateOneGlobalBookingRequestRequest,
-    CreateOneUserByEmailAddressDocument,
+    CreateOneUserDocument,
     CreateOneUserGlobalBookingRequestDocument,
     GetGlobalBookingRequestPageDataDocument,
     KitchenOption,
@@ -29,7 +29,7 @@ import { createApolloClient } from '../network/apolloClients';
 import getLocationSuggestions from '../network/getLocationSuggestions';
 
 interface ServerSideProps {
-    initialSignedInUser: SignedInUser | null;
+    signedInUser: SignedInUser | null;
     cookieSettings: CookieSettings | null;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
@@ -46,7 +46,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                initialSignedInUser: data.users.signedInUser ?? null,
+                signedInUser: data.users.signedInUser ?? null,
+                // below lists are currently not in use
                 categories: data.categories.findAll,
                 kitchens: data.kitchens.findAll,
                 allergies: data.allergies.findAll,
@@ -64,15 +65,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     }
 };
 
-export default function GlobalBookingRequestPage({
-    initialSignedInUser,
-    categories,
-    kitchens,
-    allergies,
-    searchParams,
-    cookieSettings,
-}: ServerSideProps) {
-    const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
+export default function GlobalBookingRequestPage({ signedInUser, searchParams, cookieSettings }: ServerSideProps) {
+    // const [signedInUser, setSignedInUser] = useState(initialSignedInUser);
 
     const router = useRouter();
 
@@ -101,9 +95,9 @@ export default function GlobalBookingRequestPage({
             : undefined,
     );
 
-    const [selectedCategories, setSelectedCategories] = useState<CategoryOption[]>([]);
-    const [selectedKitchen, setSelectedKitchen] = useState<KitchenOption | undefined>();
-    const [selectedAllergies, setSelectedAllergies] = useState<AllergyOption[]>([]);
+    // const [selectedCategories] = useState<CategoryOption[]>([]);
+    // const [selectedKitchen] = useState<KitchenOption | undefined>();
+    // const [selectedAllergies] = useState<AllergyOption[]>([]);
 
     const [priceClass, setPriceClass] = useState<PriceClass>('FINE');
 
@@ -119,12 +113,12 @@ export default function GlobalBookingRequestPage({
 
     const globalBookingRequest: CreateOneGlobalBookingRequestRequest = {
         adultParticipants: adults,
-        allergyIds: selectedAllergies.map(({ allergyId }) => allergyId),
-        categoryIds: selectedCategories.map(({ categoryId }) => categoryId),
+        // allergyIds: selectedAllergies.map(({ allergyId }) => allergyId),
+        // categoryIds: selectedCategories.map(({ categoryId }) => categoryId),
+        // kitchenId: selectedKitchen?.kitchenId,
         children: children,
         dateTime,
         duration: 0,
-        kitchenId: selectedKitchen?.kitchenId,
         location: {
             latitude: selectedLocation?.latitude ?? 0,
             longitude: selectedLocation?.longitude ?? 0,
@@ -137,7 +131,7 @@ export default function GlobalBookingRequestPage({
     };
 
     const [createUserWithGlobalBookingRequest, { loading: createUserLoading, data: createUserData, reset: resetCreateUser }] = useMutation(
-        CreateOneUserByEmailAddressDocument,
+        CreateOneUserDocument,
         {
             variables: {
                 request: {
