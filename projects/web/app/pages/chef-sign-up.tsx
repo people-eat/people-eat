@@ -132,10 +132,12 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
 
                     <h1 className="text-2xl font-bold mb-4">Registrierung</h1>
 
-                    <div className="mb-8 flex gap-2">
-                        <PELabelLink href="/sign-up" title="Als Gastgeber" selected={false} />
-                        <PELabelLink href="" title="Als Koch" selected />
-                    </div>
+                    {!signedInUser && (
+                        <div className="mb-8 flex gap-2">
+                            <PELabelLink href="/sign-up" title="Als Gastgeber" selected={false} />
+                            <PELabelLink href="" title="Als Koch" selected />
+                        </div>
+                    )}
 
                     <h2 className="text-xl font-bold leading-9 tracking-tight text-gray-900">Einen Kochaccount erstellen</h2>
                 </div>
