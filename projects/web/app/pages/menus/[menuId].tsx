@@ -393,7 +393,7 @@ export default function PublicMenuPage({
                 duration: 120,
                 location: {
                     latitude: selectedLocation?.latitude ?? 0,
-                    longitude: selectedLocation?.latitude ?? 0,
+                    longitude: selectedLocation?.longitude ?? 0,
                     text: selectedLocation?.text,
                 },
                 occasion,
