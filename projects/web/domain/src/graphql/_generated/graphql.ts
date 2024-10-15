@@ -165,7 +165,7 @@ export type AdminQuery = {
 
 
 export type AdminQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -353,7 +353,7 @@ export type CookBookingRequestChatMessageQuery = {
 
 
 export type CookBookingRequestChatMessageQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type CookBookingRequestMutation = {
@@ -378,9 +378,9 @@ export type CookBookingRequestMutationChatMessagesArgs = {
 
 
 export type CookBookingRequestMutationCreateOneArgs = {
-  configuredMenu: InputMaybe<CreateConfiguredMenuRequest>;
+  configuredMenu?: InputMaybe<CreateConfiguredMenuRequest>;
   globalBookingRequestId: Scalars['String']['input'];
-  price: InputMaybe<PriceInput>;
+  price?: InputMaybe<PriceInput>;
 };
 
 
@@ -409,7 +409,7 @@ export type CookBookingRequestQueryChatMessagesArgs = {
 
 
 export type CookBookingRequestQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -431,7 +431,7 @@ export type CookCookVisitQuery = {
 
 
 export type CookCookVisitQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type CookFollowingQuery = {
@@ -448,7 +448,7 @@ export type CookGlobalBookingRequestQuery = {
 
 
 export type CookGlobalBookingRequestQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -469,7 +469,7 @@ export type CookMealMutation = {
 
 
 export type CookMealMutationCreateOneArgs = {
-  image: InputMaybe<Scalars['Upload']['input']>;
+  image?: InputMaybe<Scalars['Upload']['input']>;
   meal: CreateOneMealRequest;
 };
 
@@ -486,7 +486,7 @@ export type CookMealMutationUpdateDescriptionArgs = {
 
 
 export type CookMealMutationUpdateImageArgs = {
-  image: InputMaybe<Scalars['Upload']['input']>;
+  image?: InputMaybe<Scalars['Upload']['input']>;
   mealId: Scalars['String']['input'];
 };
 
@@ -511,7 +511,7 @@ export type CookMealQuery = {
 
 
 export type CookMealQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -553,7 +553,7 @@ export type CookMenuCourseMealOptionQuery = {
 
 
 export type CookMenuCourseMealOptionQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type CookMenuCourseMutation = {
@@ -661,7 +661,7 @@ export type CookMenuMutationUpdateDescriptionArgs = {
 
 
 export type CookMenuMutationUpdateGreetingFromKitchenArgs = {
-  greetingFromKitchen: InputMaybe<Scalars['String']['input']>;
+  greetingFromKitchen?: InputMaybe<Scalars['String']['input']>;
   menuId: Scalars['String']['input'];
 };
 
@@ -673,13 +673,13 @@ export type CookMenuMutationUpdateIsVisibleArgs = {
 
 
 export type CookMenuMutationUpdateKeyMealOptionArgs = {
-  keyMealOption: InputMaybe<UpdateOneMenuKeyMealOptionRequest>;
+  keyMealOption?: InputMaybe<UpdateOneMenuKeyMealOptionRequest>;
   menuId: Scalars['String']['input'];
 };
 
 
 export type CookMenuMutationUpdateKitchenIdArgs = {
-  kitchenId: InputMaybe<Scalars['String']['input']>;
+  kitchenId?: InputMaybe<Scalars['String']['input']>;
   menuId: Scalars['String']['input'];
 };
 
@@ -698,7 +698,7 @@ export type CookMenuMutationUpdatePricePerAdultArgs = {
 
 export type CookMenuMutationUpdatePricePerChildArgs = {
   menuId: Scalars['String']['input'];
-  pricePerChild: InputMaybe<Scalars['UnsignedInt']['input']>;
+  pricePerChild?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 
@@ -723,7 +723,7 @@ export type CookMenuQueryCoursesArgs = {
 
 
 export type CookMenuQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -739,7 +739,7 @@ export type CookMenuVisitQuery = {
 
 
 export type CookMenuVisitQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type CookMutation = {
@@ -829,31 +829,31 @@ export type CookMutationUpdateLocationArgs = {
 
 export type CookMutationUpdateMaximumParticipantsArgs = {
   cookId: Scalars['String']['input'];
-  maximumParticipants: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumParticipants?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 
 export type CookMutationUpdateMaximumPriceArgs = {
   cookId: Scalars['String']['input'];
-  maximumPrice: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumPrice?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 
 export type CookMutationUpdateMaximumTravelDistanceArgs = {
   cookId: Scalars['String']['input'];
-  maximumTravelDistance: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumTravelDistance?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 
 export type CookMutationUpdateMinimumParticipantsArgs = {
   cookId: Scalars['String']['input'];
-  minimumParticipants: InputMaybe<Scalars['UnsignedInt']['input']>;
+  minimumParticipants?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 
 export type CookMutationUpdateMinimumPriceArgs = {
   cookId: Scalars['String']['input'];
-  minimumPrice: InputMaybe<Scalars['UnsignedInt']['input']>;
+  minimumPrice?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 
@@ -918,7 +918,7 @@ export type CookQueryGetStripeDashboardUrlArgs = {
 
 export type CookQueryGetStripeOnboardingUrlArgs = {
   cookId: Scalars['String']['input'];
-  returnBookingId: InputMaybe<Scalars['String']['input']>;
+  returnBookingId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -981,7 +981,7 @@ export type CookSpecificFeeQuery = {
 
 
 export type CookSpecificFeeQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -1048,8 +1048,8 @@ export type Course = {
 };
 
 export type CreateBookingRequestRequest = {
-  cook: InputMaybe<CreateCookBookingRequestRequest>;
-  menu: InputMaybe<CreateMenuBookingRequestRequest>;
+  cook?: InputMaybe<CreateCookBookingRequestRequest>;
+  menu?: InputMaybe<CreateMenuBookingRequestRequest>;
 };
 
 export type CreateChatMessageRequest = {
@@ -1072,7 +1072,7 @@ export type CreateCookBookingRequestRequest = {
   cookId: Scalars['String']['input'];
   dateTime: Scalars['DateTime']['input'];
   duration: Scalars['UnsignedInt']['input'];
-  kitchenId: InputMaybe<Scalars['String']['input']>;
+  kitchenId?: InputMaybe<Scalars['String']['input']>;
   location: LocationInput;
   message: Scalars['String']['input'];
   occasion: Scalars['String']['input'];
@@ -1088,7 +1088,7 @@ export type CreateMenuBookingRequestRequest = {
   cookId: Scalars['String']['input'];
   dateTime: Scalars['DateTime']['input'];
   duration: Scalars['UnsignedInt']['input'];
-  giftCardPromoCodeId: InputMaybe<Scalars['String']['input']>;
+  giftCardPromoCodeId?: InputMaybe<Scalars['String']['input']>;
   location: LocationInput;
   message: Scalars['String']['input'];
   occasion: Scalars['String']['input'];
@@ -1113,20 +1113,20 @@ export type CreateOneAdminRequest = {
 export type CreateOneCookRequest = {
   biography: Scalars['String']['input'];
   isVisible: Scalars['Boolean']['input'];
-  languageIds: InputMaybe<Array<Scalars['String']['input']>>;
+  languageIds?: InputMaybe<Array<Scalars['String']['input']>>;
   location: LocationInput;
-  maximumParticipants: InputMaybe<Scalars['UnsignedInt']['input']>;
-  maximumPrice: InputMaybe<Scalars['UnsignedInt']['input']>;
-  maximumTravelDistance: InputMaybe<Scalars['UnsignedInt']['input']>;
-  minimumParticipants: InputMaybe<Scalars['UnsignedInt']['input']>;
-  minimumPrice: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumParticipants?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumPrice?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumTravelDistance?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  minimumParticipants?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  minimumPrice?: InputMaybe<Scalars['UnsignedInt']['input']>;
   rank: CookRank;
   travelExpenses: Scalars['UnsignedInt']['input'];
 };
 
 export type CreateOneCourseRequest = {
   index: Scalars['UnsignedInt']['input'];
-  mealOptions: InputMaybe<Array<CreateOneMealOptionRequest>>;
+  mealOptions?: InputMaybe<Array<CreateOneMealOptionRequest>>;
   title: Scalars['String']['input'];
 };
 
@@ -1148,14 +1148,14 @@ export type CreateOneGiftCardPromoCodeRequest = {
 
 export type CreateOneGiftCardRequest = {
   balance: Scalars['UnsignedInt']['input'];
-  buyer: InputMaybe<CreateOneGiftCardRequestBuyer>;
+  buyer?: InputMaybe<CreateOneGiftCardRequestBuyer>;
   /** The day the recipient should be notified about him receiving the gift card */
-  deliveryDate: InputMaybe<Scalars['DateTime']['input']>;
+  deliveryDate?: InputMaybe<Scalars['DateTime']['input']>;
   invoiceAddress: CreateOneGiftCardRequestInvoiceAddress;
   message: Scalars['String']['input'];
   occasion: Scalars['String']['input'];
   recipient: GiftCardRecipient;
-  userId: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateOneGiftCardRequestBuyer = {
@@ -1182,16 +1182,16 @@ export type CreateOneGiftCardSuccessResponse = {
 
 export type CreateOneGlobalBookingRequestRequest = {
   adultParticipants: Scalars['UnsignedInt']['input'];
-  allergyIds: InputMaybe<Array<Scalars['String']['input']>>;
-  categoryIds: InputMaybe<Array<Scalars['String']['input']>>;
+  allergyIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  categoryIds?: InputMaybe<Array<Scalars['String']['input']>>;
   children: Scalars['UnsignedInt']['input'];
   dateTime: Scalars['DateTime']['input'];
   duration: Scalars['UnsignedInt']['input'];
-  kitchenId: InputMaybe<Scalars['String']['input']>;
+  kitchenId?: InputMaybe<Scalars['String']['input']>;
   location: LocationInput;
   message: Scalars['String']['input'];
   occasion: Scalars['String']['input'];
-  phoneNumber: InputMaybe<Scalars['PhoneNumber']['input']>;
+  phoneNumber?: InputMaybe<Scalars['PhoneNumber']['input']>;
   priceClassType: GlobalBookingRequestPriceClassType;
 };
 
@@ -1209,24 +1209,24 @@ export type CreateOneMealRequest = {
 export type CreateOneMenuRequest = {
   basePrice: Scalars['UnsignedInt']['input'];
   basePriceCustomers: Scalars['UnsignedInt']['input'];
-  categoryIds: InputMaybe<Array<Scalars['String']['input']>>;
-  courses: InputMaybe<Array<CreateOneCourseRequest>>;
+  categoryIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  courses?: InputMaybe<Array<CreateOneCourseRequest>>;
   currencyCode: CurrencyCode;
   description: Scalars['String']['input'];
-  greetingFromKitchen: InputMaybe<Scalars['String']['input']>;
+  greetingFromKitchen?: InputMaybe<Scalars['String']['input']>;
   isVisible: Scalars['Boolean']['input'];
-  keyMealOptionCourseIndex: InputMaybe<Scalars['UnsignedInt']['input']>;
-  keyMealOptionIndex: InputMaybe<Scalars['UnsignedInt']['input']>;
-  kitchenId: InputMaybe<Scalars['String']['input']>;
+  keyMealOptionCourseIndex?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  keyMealOptionIndex?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  kitchenId?: InputMaybe<Scalars['String']['input']>;
   preparationTime: Scalars['UnsignedInt']['input'];
   pricePerAdult: Scalars['UnsignedInt']['input'];
-  pricePerChild: InputMaybe<Scalars['UnsignedInt']['input']>;
+  pricePerChild?: InputMaybe<Scalars['UnsignedInt']['input']>;
   title: Scalars['String']['input'];
 };
 
 export type CreateOneNotificationRequest = {
   message: Scalars['String']['input'];
-  url: InputMaybe<Scalars['URL']['input']>;
+  url?: InputMaybe<Scalars['URL']['input']>;
 };
 
 export type CreateOnePrivacyPolicyUpdateRequest = {
@@ -1246,7 +1246,7 @@ export type CreateOneSessionByEmailAddressRequest = {
   emailAddress: Scalars['EmailAddress']['input'];
   password: Scalars['String']['input'];
   platform: Platform;
-  pushToken: InputMaybe<Scalars['String']['input']>;
+  pushToken?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
@@ -1261,12 +1261,12 @@ export type CreateOneSessionByPhoneNumberRequest = {
   password: Scalars['String']['input'];
   phoneNumber: Scalars['String']['input'];
   platform: Platform;
-  pushToken: InputMaybe<Scalars['String']['input']>;
+  pushToken?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
 
 export type CreateOneSupportRequest = {
-  bookingRequestId: InputMaybe<Scalars['String']['input']>;
+  bookingRequestId?: InputMaybe<Scalars['String']['input']>;
   message: Scalars['String']['input'];
   subject: Scalars['String']['input'];
 };
@@ -1277,59 +1277,59 @@ export type CreateOneTermsUpdateRequest = {
 };
 
 export type CreateOneUserByEmailAddressRequest = {
-  addresses: InputMaybe<Array<CreateOneAddressRequest>>;
-  birthDate: InputMaybe<Scalars['Date']['input']>;
-  cook: InputMaybe<CreateOneCookRequest>;
+  addresses?: InputMaybe<Array<CreateOneAddressRequest>>;
+  birthDate?: InputMaybe<Scalars['Date']['input']>;
+  cook?: InputMaybe<CreateOneCookRequest>;
   emailAddress: Scalars['EmailAddress']['input'];
   firstName: Scalars['String']['input'];
   gender: Gender;
-  globalBookingRequest: InputMaybe<CreateOneGlobalBookingRequestRequest>;
+  globalBookingRequest?: InputMaybe<CreateOneGlobalBookingRequestRequest>;
   language: UserLanguage;
   lastName: Scalars['String']['input'];
-  password: InputMaybe<Scalars['String']['input']>;
-  phoneNumber: InputMaybe<Scalars['PhoneNumber']['input']>;
-  profilePictureUrl: InputMaybe<Scalars['URL']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['PhoneNumber']['input']>;
+  profilePictureUrl?: InputMaybe<Scalars['URL']['input']>;
 };
 
 export type CreateOneUserByIdentityProviderRequest = {
-  birthDate: InputMaybe<Scalars['Date']['input']>;
-  cook: InputMaybe<CreateOneCookRequest>;
+  birthDate?: InputMaybe<Scalars['Date']['input']>;
+  cook?: InputMaybe<CreateOneCookRequest>;
   firstName: Scalars['String']['input'];
   gender: Gender;
-  globalBookingRequest: InputMaybe<CreateOneGlobalBookingRequestRequest>;
+  globalBookingRequest?: InputMaybe<CreateOneGlobalBookingRequestRequest>;
   idToken: Scalars['String']['input'];
   identityProvider: IdentityProvider;
   language: UserLanguage;
   lastName: Scalars['String']['input'];
-  profilePictureUrl: InputMaybe<Scalars['URL']['input']>;
+  profilePictureUrl?: InputMaybe<Scalars['URL']['input']>;
 };
 
 export type CreateOneUserByPhoneNumberRequest = {
-  birthDate: InputMaybe<Scalars['Date']['input']>;
-  cook: InputMaybe<CreateOneCookRequest>;
+  birthDate?: InputMaybe<Scalars['Date']['input']>;
+  cook?: InputMaybe<CreateOneCookRequest>;
   firstName: Scalars['String']['input'];
   gender: Gender;
-  globalBookingRequest: InputMaybe<CreateOneGlobalBookingRequestRequest>;
+  globalBookingRequest?: InputMaybe<CreateOneGlobalBookingRequestRequest>;
   language: UserLanguage;
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phoneNumber: Scalars['PhoneNumber']['input'];
-  profilePictureUrl: InputMaybe<Scalars['URL']['input']>;
+  profilePictureUrl?: InputMaybe<Scalars['URL']['input']>;
 };
 
 export type CreateOneUserRequest = {
-  addresses: InputMaybe<Array<CreateOneAddressRequest>>;
-  birthDate: InputMaybe<Scalars['Date']['input']>;
-  cook: InputMaybe<CreateOneCookRequest>;
+  addresses?: InputMaybe<Array<CreateOneAddressRequest>>;
+  birthDate?: InputMaybe<Scalars['Date']['input']>;
+  cook?: InputMaybe<CreateOneCookRequest>;
   emailAddress: Scalars['EmailAddress']['input'];
   firstName: Scalars['String']['input'];
   gender: Gender;
-  globalBookingRequest: InputMaybe<CreateOneGlobalBookingRequestRequest>;
+  globalBookingRequest?: InputMaybe<CreateOneGlobalBookingRequestRequest>;
   language: UserLanguage;
   lastName: Scalars['String']['input'];
-  password: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
   phoneNumber: Scalars['PhoneNumber']['input'];
-  profilePictureUrl: InputMaybe<Scalars['URL']['input']>;
+  profilePictureUrl?: InputMaybe<Scalars['URL']['input']>;
 };
 
 export type CurrencyCode =
@@ -1355,7 +1355,7 @@ export type CustomerFeeUpdateQuery = {
 
 
 export type CustomerFeeUpdateQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -1404,34 +1404,34 @@ export type FeatureToggle = {
 
 export type FindManyPublicCooksRequest = {
   adultParticipants: Scalars['UnsignedInt']['input'];
-  categoryIds: InputMaybe<Array<Scalars['String']['input']>>;
-  children: InputMaybe<Scalars['UnsignedInt']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  children?: InputMaybe<Scalars['UnsignedInt']['input']>;
   dateTime: Scalars['DateTime']['input'];
-  kitchenIds: InputMaybe<Array<Scalars['String']['input']>>;
-  location: InputMaybe<LocationInput>;
-  price: InputMaybe<PriceInput>;
-  searchText: InputMaybe<Scalars['String']['input']>;
-  skip: InputMaybe<Scalars['UnsignedInt']['input']>;
-  take: InputMaybe<Scalars['UnsignedInt']['input']>;
+  kitchenIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  location?: InputMaybe<LocationInput>;
+  price?: InputMaybe<PriceInput>;
+  searchText?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  take?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 export type FindManyPublicMenusRequest = {
   adultParticipants: Scalars['UnsignedInt']['input'];
-  categoryIds: InputMaybe<Array<Scalars['String']['input']>>;
-  children: InputMaybe<Scalars['UnsignedInt']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  children?: InputMaybe<Scalars['UnsignedInt']['input']>;
   dateTime: Scalars['DateTime']['input'];
-  kitchenIds: InputMaybe<Array<Scalars['String']['input']>>;
-  location: InputMaybe<LocationInput>;
-  price: InputMaybe<PriceInput>;
-  searchText: InputMaybe<Scalars['String']['input']>;
-  skip: InputMaybe<Scalars['UnsignedInt']['input']>;
-  take: InputMaybe<Scalars['UnsignedInt']['input']>;
+  kitchenIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  location?: InputMaybe<LocationInput>;
+  price?: InputMaybe<PriceInput>;
+  searchText?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  take?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 export type FindManyRequest = {
-  searchText: InputMaybe<Scalars['String']['input']>;
-  skip: InputMaybe<Scalars['UnsignedInt']['input']>;
-  take: InputMaybe<Scalars['UnsignedInt']['input']>;
+  searchText?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['UnsignedInt']['input']>;
+  take?: InputMaybe<Scalars['UnsignedInt']['input']>;
 };
 
 export type Following = {
@@ -1496,7 +1496,7 @@ export type GiftCardQueryFindOneArgs = {
 };
 
 export type GiftCardRecipient = {
-  deliveryInformation: InputMaybe<GiftCardRecipientDeliveryInformation>;
+  deliveryInformation?: InputMaybe<GiftCardRecipientDeliveryInformation>;
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
 };
@@ -1611,7 +1611,7 @@ export type Location = {
 export type LocationInput = {
   latitude: Scalars['Latitude']['input'];
   longitude: Scalars['Longitude']['input'];
-  text: InputMaybe<Scalars['String']['input']>;
+  text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Meal = {
@@ -1936,7 +1936,7 @@ export type PublicMenu = {
 export type PublicMenuTotalPriceArgs = {
   adults: Scalars['UnsignedInt']['input'];
   children: Scalars['UnsignedInt']['input'];
-  location: InputMaybe<LocationInput>;
+  location?: InputMaybe<LocationInput>;
 };
 
 export type PublicMenuQuery = {
@@ -2090,9 +2090,9 @@ export type SessionCookieSettings = {
 };
 
 export type SessionCookieSettingsInput = {
-  clarity: InputMaybe<Scalars['Boolean']['input']>;
-  googleAnalytics: InputMaybe<Scalars['Boolean']['input']>;
-  sessionCookie: InputMaybe<Scalars['Boolean']['input']>;
+  clarity?: InputMaybe<Scalars['Boolean']['input']>;
+  googleAnalytics?: InputMaybe<Scalars['Boolean']['input']>;
+  sessionCookie?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SessionMutation = {
@@ -2175,7 +2175,7 @@ export type SupportRequestQuery = {
 
 
 export type SupportRequestQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -2293,7 +2293,7 @@ export type UserAddressQuery = {
 
 
 export type UserAddressQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type UserBookingRequestChatMessageMutation = {
@@ -2317,7 +2317,7 @@ export type UserBookingRequestChatMessageQuery = {
 
 
 export type UserBookingRequestChatMessageQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type UserBookingRequestMutation = {
@@ -2377,7 +2377,7 @@ export type UserBookingRequestQueryChatMessagesArgs = {
 
 
 export type UserBookingRequestQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 
@@ -2399,7 +2399,7 @@ export type UserCookVisitQuery = {
 
 
 export type UserCookVisitQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type UserCreateOneBookingRequestResponse = {
@@ -2538,7 +2538,7 @@ export type UserMenuVisitQuery = {
 
 
 export type UserMenuVisitQueryFindManyArgs = {
-  request: InputMaybe<FindManyRequest>;
+  request?: InputMaybe<FindManyRequest>;
 };
 
 export type UserMetricCountType =
@@ -2590,13 +2590,13 @@ export type UserMutationBookingRequestsArgs = {
 
 
 export type UserMutationCreateOneArgs = {
-  profilePicture: InputMaybe<Scalars['Upload']['input']>;
+  profilePicture?: InputMaybe<Scalars['Upload']['input']>;
   request: CreateOneUserRequest;
 };
 
 
 export type UserMutationCreateOneByEmailAddressArgs = {
-  profilePicture: InputMaybe<Scalars['Upload']['input']>;
+  profilePicture?: InputMaybe<Scalars['Upload']['input']>;
   request: CreateOneUserByEmailAddressRequest;
 };
 
@@ -2675,7 +2675,7 @@ export type UserMutationUpdatePasswordArgs = {
 
 
 export type UserMutationUpdateProfilePictureArgs = {
-  profilePicture: InputMaybe<Scalars['Upload']['input']>;
+  profilePicture?: InputMaybe<Scalars['Upload']['input']>;
   userId: Scalars['String']['input'];
 };
 
@@ -2938,8 +2938,8 @@ export type ConfirmOneGiftCardMutation = { __typename?: 'Mutation', giftCards: {
 export type CreateBookingRequestByGlobalBookingRequestIdMutationVariables = Exact<{
   globalBookingRequestId: Scalars['String']['input'];
   cookId: Scalars['String']['input'];
-  configuredMenu: InputMaybe<CreateConfiguredMenuRequest>;
-  price: InputMaybe<PriceInput>;
+  configuredMenu?: InputMaybe<CreateConfiguredMenuRequest>;
+  price?: InputMaybe<PriceInput>;
 }>;
 
 
@@ -3026,7 +3026,7 @@ export type CreateOneCookMutation = { __typename?: 'Mutation', cooks: { __typena
 
 export type CreateOneUserMutationVariables = Exact<{
   request: CreateOneUserRequest;
-  profilePicture: InputMaybe<Scalars['Upload']['input']>;
+  profilePicture?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
@@ -3154,7 +3154,7 @@ export type UpdateCookLocationMutation = { __typename?: 'Mutation', cooks: { __t
 
 export type UpdateCookMaximumParticipantsMutationVariables = Exact<{
   cookId: Scalars['String']['input'];
-  maximumParticipants: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumParticipants?: InputMaybe<Scalars['UnsignedInt']['input']>;
 }>;
 
 
@@ -3169,7 +3169,7 @@ export type UpdateCookMaximumPriceMutation = { __typename?: 'Mutation', cooks: {
 
 export type UpdateCookMaximumTravelDistanceMutationVariables = Exact<{
   cookId: Scalars['String']['input'];
-  maximumTravelDistance: InputMaybe<Scalars['UnsignedInt']['input']>;
+  maximumTravelDistance?: InputMaybe<Scalars['UnsignedInt']['input']>;
 }>;
 
 
@@ -3255,7 +3255,7 @@ export type CreateOneEmailAddressUpdateMutation = { __typename?: 'Mutation', use
 export type CreateMealMutationVariables = Exact<{
   meal: CreateOneMealRequest;
   cookId: Scalars['String']['input'];
-  image: InputMaybe<Scalars['Upload']['input']>;
+  image?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
@@ -3281,7 +3281,7 @@ export type UpdateCookMealDescriptionMutation = { __typename?: 'Mutation', cooks
 export type UpdateCookMealImageMutationVariables = Exact<{
   mealId: Scalars['String']['input'];
   cookId: Scalars['String']['input'];
-  image: InputMaybe<Scalars['Upload']['input']>;
+  image?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
@@ -3408,7 +3408,7 @@ export type UpdateCookMenuDescriptionMutation = { __typename?: 'Mutation', cooks
 export type UpdateCookMenuGreetingFromKitchenMutationVariables = Exact<{
   menuId: Scalars['String']['input'];
   cookId: Scalars['String']['input'];
-  greetingFromKitchen: InputMaybe<Scalars['String']['input']>;
+  greetingFromKitchen?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -3426,7 +3426,7 @@ export type UpdateCookMenuIsVisibleMutation = { __typename?: 'Mutation', cooks: 
 export type UpdateCookMenuKeyMealOptionMutationVariables = Exact<{
   menuId: Scalars['String']['input'];
   cookId: Scalars['String']['input'];
-  keyMealOption: InputMaybe<UpdateOneMenuKeyMealOptionRequest>;
+  keyMealOption?: InputMaybe<UpdateOneMenuKeyMealOptionRequest>;
 }>;
 
 
@@ -3435,7 +3435,7 @@ export type UpdateCookMenuKeyMealOptionMutation = { __typename?: 'Mutation', coo
 export type UpdateCookMenuKitchenIdMutationVariables = Exact<{
   menuId: Scalars['String']['input'];
   cookId: Scalars['String']['input'];
-  kitchenId: InputMaybe<Scalars['String']['input']>;
+  kitchenId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -3462,7 +3462,7 @@ export type UpdateCookMenuPricePerAdultMutation = { __typename?: 'Mutation', coo
 export type UpdateCookMenuPricePerChildMutationVariables = Exact<{
   menuId: Scalars['String']['input'];
   cookId: Scalars['String']['input'];
-  pricePerChild: InputMaybe<Scalars['UnsignedInt']['input']>;
+  pricePerChild?: InputMaybe<Scalars['UnsignedInt']['input']>;
 }>;
 
 
@@ -3516,7 +3516,7 @@ export type UpdateUserPasswordMutation = { __typename?: 'Mutation', users: { __t
 
 export type UpdateUserProfilePictureMutationVariables = Exact<{
   userId: Scalars['String']['input'];
-  profilePicture: InputMaybe<Scalars['Upload']['input']>;
+  profilePicture?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
@@ -3661,7 +3661,7 @@ export type GetPublicMenuPageDataQuery = { __typename?: 'Query', stripePublishab
 
 export type GetPublicMenusPageDataQueryVariables = Exact<{
   request: FindManyPublicMenusRequest;
-  location: InputMaybe<LocationInput>;
+  location?: InputMaybe<LocationInput>;
   adults: Scalars['UnsignedInt']['input'];
   children: Scalars['UnsignedInt']['input'];
 }>;
@@ -3701,7 +3701,7 @@ export type CookGetStripeDashboardUrlQuery = { __typename?: 'Query', cooks: { __
 
 export type CookGetStripeOnboardingUrlQueryVariables = Exact<{
   cookId: Scalars['String']['input'];
-  returnBookingId: InputMaybe<Scalars['String']['input']>;
+  returnBookingId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
