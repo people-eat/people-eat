@@ -1,14 +1,11 @@
 query GetSignedInUser {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
-    # @todo: remove this - only needed for one create page in cook profile
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
             }
         }
     }

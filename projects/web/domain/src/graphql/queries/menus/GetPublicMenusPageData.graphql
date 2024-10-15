@@ -4,15 +4,13 @@ query GetPublicMenusPageData(
     $adults: UnsignedInt!
     $children: UnsignedInt!
 ) {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
             }
         }
     }

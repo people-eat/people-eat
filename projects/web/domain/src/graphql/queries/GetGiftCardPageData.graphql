@@ -1,28 +1,26 @@
 query GetGiftCardPageData {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-
-            addresses {
-                addressId
-                title
-                country
-                city
-                postCode
-                street
-                houseNumber
-                location {
-                    latitude
-                    longitude
-                }
-                createdAt
-            }
-        }
-    }
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
+
+                addresses {
+                    addressId
+                    title
+                    country
+                    city
+                    postCode
+                    street
+                    houseNumber
+                    location {
+                        latitude
+                        longitude
+                    }
+                    createdAt
+                }
             }
         }
     }

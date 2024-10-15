@@ -119,8 +119,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
         return {
             props: {
-                signedInUser: data.users.signedInUser ?? null,
-                cookieSettings: data.sessions.current?.cookieSettings
+                signedInUser: data.sessions.current.user ?? null,
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

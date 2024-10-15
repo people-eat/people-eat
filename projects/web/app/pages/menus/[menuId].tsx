@@ -230,7 +230,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         });
 
         const menu = data.publicMenus.findOne;
-        const initialSignedInUser = data.users.signedInUser ?? null;
+        const initialSignedInUser = data.sessions.current.user ?? null;
 
         if (!menu) return publicMenusRedirect;
 
@@ -247,7 +247,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 allergies: data.allergies.findAll,
                 searchParams,
                 stripePublishableKey: data.stripePublishableKey ?? null,
-                cookieSettings: data.sessions.current?.cookieSettings
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

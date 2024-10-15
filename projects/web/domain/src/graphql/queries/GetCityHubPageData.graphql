@@ -3,15 +3,13 @@ query GetCityHubPageData(
     $menusRequest: FindManyPublicMenusRequest!
     $location: LocationInput!
 ) {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
             }
         }
     }

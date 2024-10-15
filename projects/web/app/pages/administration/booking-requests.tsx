@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const apolloClient = createApolloClient(req.headers.cookie);
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
-        const signedInUser = userData.data.users.signedInUser;
+        const signedInUser = userData.data.sessions.current.user;
         if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isAdmin) return profilePageRedirect;
 

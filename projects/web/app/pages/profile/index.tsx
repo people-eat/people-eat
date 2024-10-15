@@ -44,7 +44,7 @@ import { createApolloClient } from '../../network/apolloClients';
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
-    initialProfile: NonNullable<GetProfilePersonalInformationPageDataQuery['users']['me']>;
+    initialProfile: NonNullable<GetProfilePersonalInformationPageDataQuery['sessions']['current']['user']>;
     cookieSettings: CookieSettings | null;
     languages: NonNullable<GetProfilePersonalInformationPageDataQuery['languages']['findAll']>;
 }
@@ -54,8 +54,8 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
     try {
         const { data } = await apolloClient.query({ query: GetProfilePersonalInformationPageDataDocument });
-        const signedInUser = data.users.signedInUser;
-        const initialProfile = data.users.me;
+        const signedInUser = data.sessions.current.user;
+        const initialProfile = data.sessions.current.user;
 
         if (!signedInUser || !initialProfile) return redirectTo.signIn({ returnTo: req.url });
 
@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 signedInUser,
                 initialProfile,
                 languages,
-                cookieSettings: data.sessions.current?.cookieSettings
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,
@@ -92,11 +92,13 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
     const userId = signedInUser.userId;
     const [profile, setProfile] = useState(initialProfile);
 
-    const [getUpdatedProfile, { loading: loadingUpdatedProfile }] = useLazyQuery(GetProfilePersonalInformationDocument);
+    const [getUpdatedProfile, { loading: loadingUpdatedProfile }] = useLazyQuery(GetProfilePersonalInformationDocument, {
+        variables: { userId },
+    });
 
     function updateProfile() {
         getUpdatedProfile().then(({ data }) => {
-            const userProfile = data?.users.me;
+            const userProfile = data?.users.findOne;
             if (!userProfile) return;
             setProfile(userProfile);
         });
@@ -124,7 +126,7 @@ export default function ProfilePersonalInformationPage({ signedInUser, initialPr
 
     function updateCookProfile() {
         getUpdatedProfile().then(({ data }) => {
-            const cook = data?.users.me;
+            const cook = data?.users.findOne;
             if (!cook) return;
             setProfile(cook);
         });

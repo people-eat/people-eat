@@ -25,6 +25,7 @@ const config: CodegenConfig = {
             config: {
                 typesPrefix: 'GQL',
                 maybeValue: 'T | null',
+                avoidOptionals: true,
                 enumsAsTypes: true,
                 scalars: {
                     Date: 'string',

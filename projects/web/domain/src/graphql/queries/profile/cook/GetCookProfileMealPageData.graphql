@@ -1,13 +1,11 @@
 query GetCookProfileMealPageData($cookId: String!, $mealId: String!) {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
             }
         }
     }

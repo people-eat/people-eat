@@ -1,13 +1,11 @@
 query GetPublicCooksPageData($request: FindManyPublicCooksRequest!) {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
             }
         }
     }

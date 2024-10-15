@@ -4,20 +4,19 @@ query GetCookProfileMenusCreatePageData {
             cookieSettings {
                 ...CookieSettings
             }
-        }
-    }
-    users {
-        signedInUser: me {
-            ...SignedInUser
-            cook {
-                meals {
-                    mealId
-                    cookId
-                    title
-                    type
-                    description
-                    imageUrl
-                    createdAt
+            user {
+                ...SignedInUser
+
+                cook {
+                    meals {
+                        mealId
+                        cookId
+                        title
+                        type
+                        description
+                        imageUrl
+                        createdAt
+                    }
                 }
             }
         }
