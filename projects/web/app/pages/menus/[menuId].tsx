@@ -230,17 +230,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         });
 
         const menu = data.publicMenus.findOne;
+        const initialSignedInUser = data.users.signedInUser ?? null;
 
         if (!menu) return publicMenusRedirect;
 
-        apolloClient
-            .mutate({ mutation: CreateOneMenuVisitDocument, variables: { menuId } })
-            .then(() => undefined)
-            .catch(() => undefined);
+        if (!initialSignedInUser || (initialSignedInUser && !initialSignedInUser.isAdmin))
+            apolloClient
+                .mutate({ mutation: CreateOneMenuVisitDocument, variables: { menuId } })
+                .then(() => undefined)
+                .catch(() => undefined);
 
         return {
             props: {
-                initialSignedInUser: data.users.signedInUser ?? null,
+                initialSignedInUser,
                 menu,
                 allergies: data.allergies.findAll,
                 searchParams,
