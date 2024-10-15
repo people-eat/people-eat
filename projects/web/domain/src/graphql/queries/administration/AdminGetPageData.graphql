@@ -1,0 +1,66 @@
+query AdminGetPageData {
+    sessions {
+        current {
+            cookieSettings {
+                ...CookieSettings
+            }
+            user {
+                ...SignedInUser
+
+                admin {
+                    metrics {
+                        count {
+                            totalUserCreationsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: USER)
+                            totalUserCreations2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: USER)
+                            totalUserCreations3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: USER)
+                            totalUserCreations4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: USER)
+
+                            totalCustomerCreationsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: CUSTOMER)
+                            totalCustomerCreations2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: CUSTOMER)
+                            totalCustomerCreations3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: CUSTOMER)
+                            totalCustomerCreations4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: CUSTOMER)
+
+                            totalCookCreationsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: COOK)
+                            totalCookCreations2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: COOK)
+                            totalCookCreations3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: COOK)
+                            totalCookCreations4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: COOK)
+
+                            totalADMINIn0WeeksAgo: totalIn(timeUnit: WEEKS, value: 0, type: ADMIN)
+                            totalADMINIn1WeeksAgo: totalIn(timeUnit: WEEKS, value: 1, type: ADMIN)
+                            totalADMINIn2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: ADMIN)
+
+                            totalSessionsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: SESSIONS)
+                            totalSessions2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: SESSIONS)
+                            totalSessions3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: SESSIONS)
+                            totalSessions4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: SESSIONS)
+
+                            totalUSER_SESSIONSIn0WeeksAgo: totalIn(timeUnit: WEEKS, value: 0, type: USER_SESSIONS)
+                            totalUSER_SESSIONSIn1WeeksAgo: totalIn(timeUnit: WEEKS, value: 1, type: USER_SESSIONS)
+                            totalUSER_SESSIONSIn2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: USER_SESSIONS)
+
+                            totalSearchRequestsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: SEARCH_REQUESTS)
+                            totalSearchRequests2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: SEARCH_REQUESTS)
+                            totalSearchRequests3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: SEARCH_REQUESTS)
+                            totalSearchRequests4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: SEARCH_REQUESTS)
+
+                            totalHomeSearchRequestsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: HOME_SEARCH_REQUEST)
+                            totalHomeSearchRequests2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: HOME_SEARCH_REQUEST)
+                            totalHomeSearchRequests3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: HOME_SEARCH_REQUEST)
+                            totalHomeSearchRequests4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: HOME_SEARCH_REQUEST)
+
+                            totalCookSearchRequestsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: COOK_SEARCH_REQUEST)
+                            totalCookSearchRequests2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: COOK_SEARCH_REQUEST)
+                            totalCookSearchRequests3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: COOK_SEARCH_REQUEST)
+                            totalCookSearchRequests4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: COOK_SEARCH_REQUEST)
+
+                            totalMenuSearchRequestsLastWeek: totalIn(timeUnit: WEEKS, value: 1, type: MENU_SEARCH_REQUESTS)
+                            totalMenuSearchRequests2WeeksAgo: totalIn(timeUnit: WEEKS, value: 2, type: MENU_SEARCH_REQUESTS)
+                            totalMenuSearchRequests3WeeksAgo: totalIn(timeUnit: WEEKS, value: 3, type: MENU_SEARCH_REQUESTS)
+                            totalMenuSearchRequests4WeeksAgo: totalIn(timeUnit: WEEKS, value: 4, type: MENU_SEARCH_REQUESTS)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
