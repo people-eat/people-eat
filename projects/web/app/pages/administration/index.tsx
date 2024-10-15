@@ -69,41 +69,35 @@ export default function AdministrationPage({ signedInUser, countMetrics }: Serve
                     width="100%"
                     options={{
                         title: 'Benutzer Erstellungen',
+                        // vAxis: { title: 'Anzahl' },
+                        // hAxis: { title: 'Zeit' },
                     }}
                     data={[
-                        ['Element', 'Anzahl', { role: 'style' }],
-                        ['vor 4 Wochen', countMetrics.totalUserCreations4WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 3 Wochen', countMetrics.totalUserCreations3WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 2 Wochen', countMetrics.totalUserCreations2WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['letzte Woche', countMetrics.totalUserCreationsLastWeek, 'rgb(51, 102, 204)'],
-                    ]}
-                />
-                <Chart
-                    chartType="ColumnChart"
-                    width="100%"
-                    options={{
-                        title: 'Kunden Profil Erstellungen',
-                    }}
-                    data={[
-                        ['Element', 'Anzahl', { role: 'style' }],
-                        ['vor 4 Wochen', countMetrics.totalCustomerCreations4WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 3 Wochen', countMetrics.totalCustomerCreations3WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 2 Wochen', countMetrics.totalCustomerCreations2WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['letzte Woche', countMetrics.totalCustomerCreationsLastWeek, 'rgb(51, 102, 204)'],
-                    ]}
-                />
-                <Chart
-                    chartType="ColumnChart"
-                    width="100%"
-                    options={{
-                        title: 'Koch Profil Erstellungen',
-                    }}
-                    data={[
-                        ['Element', 'Anzahl', { role: 'style' }],
-                        ['vor 4 Wochen', countMetrics.totalCookCreations4WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 3 Wochen', countMetrics.totalCookCreations3WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 2 Wochen', countMetrics.totalCookCreations2WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['letzte Woche', countMetrics.totalCookCreationsLastWeek, 'rgb(51, 102, 204)'],
+                        ['Element', 'Alle', 'Kunden Profile', 'Köche Profile'],
+                        [
+                            'vor 4 Wochen',
+                            countMetrics.totalUserCreations4WeeksAgo,
+                            countMetrics.totalCustomerCreations4WeeksAgo,
+                            countMetrics.totalCookCreations4WeeksAgo,
+                        ],
+                        [
+                            'vor 3 Wochen',
+                            countMetrics.totalUserCreations3WeeksAgo,
+                            countMetrics.totalCustomerCreations3WeeksAgo,
+                            countMetrics.totalCookCreations3WeeksAgo,
+                        ],
+                        [
+                            'vor 2 Wochen',
+                            countMetrics.totalUserCreations2WeeksAgo,
+                            countMetrics.totalCustomerCreations2WeeksAgo,
+                            countMetrics.totalCookCreations2WeeksAgo,
+                        ],
+                        [
+                            'letzte Woche',
+                            countMetrics.totalUserCreationsLastWeek,
+                            countMetrics.totalCustomerCreationsLastWeek,
+                            countMetrics.totalCookCreationsLastWeek,
+                        ],
                     ]}
                 />
                 <Chart
@@ -113,11 +107,35 @@ export default function AdministrationPage({ signedInUser, countMetrics }: Serve
                         title: 'Suchanfragen',
                     }}
                     data={[
-                        ['Element', 'Anzahl', { role: 'style' }],
-                        ['vor 4 Wochen', countMetrics.totalSearchRequests4WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 3 Wochen', countMetrics.totalSearchRequests3WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['vor 2 Wochen', countMetrics.totalSearchRequests2WeeksAgo, 'rgb(51, 102, 204)'],
-                        ['letzte Woche', countMetrics.totalSearchRequestsLastWeek, 'rgb(51, 102, 204)'],
+                        ['Element', 'Alle', 'Home Seite', 'Menü Seite', 'Köche Seite'],
+                        [
+                            'vor 4 Wochen',
+                            countMetrics.totalSearchRequests4WeeksAgo,
+                            countMetrics.totalHomeSearchRequests4WeeksAgo,
+                            countMetrics.totalMenuSearchRequests4WeeksAgo,
+                            countMetrics.totalCookSearchRequests4WeeksAgo,
+                        ],
+                        [
+                            'vor 3 Wochen',
+                            countMetrics.totalSearchRequests3WeeksAgo,
+                            countMetrics.totalHomeSearchRequests3WeeksAgo,
+                            countMetrics.totalMenuSearchRequests3WeeksAgo,
+                            countMetrics.totalCookSearchRequests3WeeksAgo,
+                        ],
+                        [
+                            'vor 2 Wochen',
+                            countMetrics.totalSearchRequests2WeeksAgo,
+                            countMetrics.totalHomeSearchRequests2WeeksAgo,
+                            countMetrics.totalMenuSearchRequests2WeeksAgo,
+                            countMetrics.totalCookSearchRequests2WeeksAgo,
+                        ],
+                        [
+                            'letzte Woche',
+                            countMetrics.totalSearchRequestsLastWeek,
+                            countMetrics.totalHomeSearchRequestsLastWeek,
+                            countMetrics.totalMenuSearchRequestsLastWeek,
+                            countMetrics.totalCookSearchRequestsLastWeek,
+                        ],
                     ]}
                 />
                 <Chart
