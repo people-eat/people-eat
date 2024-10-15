@@ -1,40 +1,37 @@
-query GetCookProfileMenusPageData($cookId: String!) {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
+query GetCookProfileMenusPageData {
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
             }
-        }
-    }
-    cooks {
-        menus(cookId: $cookId) {
-            findMany {
-                menuId
-                title
-                description
-                basePrice
-                basePriceCustomers
-                createdAt
-                currencyCode
-                preparationTime
-                pricePerAdult
-                pricePerChild
-                isVisible
-                categories {
-                    categoryId
-                    title
+            user {
+                ...SignedInUser
+
+                cook {
+                    menus {
+                        menuId
+                        title
+                        description
+                        basePrice
+                        basePriceCustomers
+                        createdAt
+                        currencyCode
+                        preparationTime
+                        pricePerAdult
+                        pricePerChild
+                        isVisible
+                        categories {
+                            categoryId
+                            title
+                        }
+                        kitchen {
+                            kitchenId
+                            title
+                        }
+                        imageUrl
+                        courseCount
+                    }
                 }
-                kitchen {
-                    kitchenId
-                    title
-                }
-                imageUrl
-                courseCount
             }
         }
     }

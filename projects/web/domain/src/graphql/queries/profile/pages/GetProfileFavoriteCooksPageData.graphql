@@ -1,29 +1,26 @@
-query GetProfileFavoriteCooksPageData($userId: String!) {
+query GetProfileFavoriteCooksPageData {
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
             }
-        }
-    }
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-        followings(userId: $userId) {
-            findAll {
-                cookId
-                cook {
-                    user {
-                        firstName
-                        profilePictureUrl
-                    }
-                    rank
-                    city
-                    location {
-                        text
-                        longitude
-                        latitude
+            user {
+                ...SignedInUser
+
+                followings {
+                    cookId
+                    cook {
+                        user {
+                            firstName
+                            profilePictureUrl
+                        }
+                        rank
+                        city
+                        location {
+                            text
+                            longitude
+                            latitude
+                        }
                     }
                 }
             }

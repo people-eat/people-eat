@@ -15,8 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const { data } = await apolloClient.query({ query: GetPageDataDocument });
 
     res.status(200).json({
-        signedInUser: data.users.signedInUser ?? null,
-        cookieSettings: data.sessions.current?.cookieSettings
+        signedInUser: data.sessions.current.user ?? null,
+        cookieSettings: data.sessions.current.cookieSettings
             ? {
                   googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                   clarity: data.sessions.current.cookieSettings.clarity ?? null,

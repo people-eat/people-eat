@@ -25,7 +25,7 @@ interface PEEditMenuCoursesFormInputs {
 export interface PEEditMenuCoursesFormProps {
     cookId: string;
     menu: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>;
-    meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['users']['signedInUser']>['cook']>['meals'];
+    meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['sessions']['current']['user']>['cook']>['meals'];
     onCreateCourse: (data: CreateMenuCourseFormInputs, index: number) => void;
     onRemoveCourse: (courseId: string) => void;
     onAddMealToCourse: (courseId: string, mealOption: { mealId: string; index: number }) => void;

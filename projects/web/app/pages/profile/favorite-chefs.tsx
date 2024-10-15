@@ -2,7 +2,6 @@ import { PEHeader, PELink, PEProfileNavigation } from '@people-eat/web-component
 import {
     GetProfileFavoriteCooksPageDataDocument,
     GetProfileFavoriteCooksPageDataQuery,
-    GetSignedInUserDocument,
     SignedInUser,
     Unpacked,
 } from '@people-eat/web-domain';
@@ -15,7 +14,7 @@ import { createApolloClient } from '../../network/apolloClients';
 
 interface ServerSideProps {
     signedInUser: SignedInUser;
-    favoriteCooks: Unpacked<NonNullable<GetProfileFavoriteCooksPageDataQuery['users']['followings']['findAll']>>[];
+    favoriteCooks: Unpacked<NonNullable<NonNullable<GetProfileFavoriteCooksPageDataQuery['sessions']['current']['user']>['followings']>>[];
     cookieSettings: CookieSettings | null;
 }
 
@@ -23,18 +22,15 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const userData = await apolloClient.query({ query: GetSignedInUserDocument });
-        const signedInUser = userData.data.users.signedInUser;
+        const { data } = await apolloClient.query({ query: GetProfileFavoriteCooksPageDataDocument });
+        const signedInUser = data.sessions.current.user;
         if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
-        const userId = signedInUser.userId;
-
-        const { data } = await apolloClient.query({ query: GetProfileFavoriteCooksPageDataDocument, variables: { userId } });
 
         return {
             props: {
                 signedInUser,
-                favoriteCooks: data.users.followings.findAll ?? [],
-                cookieSettings: data.sessions.current?.cookieSettings
+                favoriteCooks: signedInUser.followings,
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

@@ -4,75 +4,71 @@ query GetProfilePersonalInformationPageData {
             cookieSettings {
                 ...CookieSettings
             }
-        }
-    }
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
+            user {
+                ...SignedInUser
 
-        me {
-            userId
-            firstName
-            lastName
-            profilePictureUrl
-            birthDate
-            gender
-            acceptedTerms
-            acceptedPrivacyPolicy
-            emailAddress
-            phoneNumber
-            createdAt
-
-            isCook
-            isAdmin
-
-            addresses {
-                addressId
-                title
-                country
-                city
-                postCode
-                street
-                houseNumber
-                location {
-                    latitude
-                    longitude
-                }
-                createdAt
-            }
-
-            emailAddressUpdate {
+                userId
+                firstName
+                lastName
+                profilePictureUrl
+                birthDate
+                gender
+                acceptedTerms
+                acceptedPrivacyPolicy
                 emailAddress
-                createdAt
-            }
-            phoneNumberUpdate {
                 phoneNumber
                 createdAt
-            }
 
-            cook {
-                languages {
-                    languageId
+                isCook
+                isAdmin
+
+                addresses {
+                    addressId
                     title
+                    country
+                    city
+                    postCode
+                    street
+                    houseNumber
+                    location {
+                        latitude
+                        longitude
+                    }
+                    createdAt
                 }
-                isLocked
-                isVisible
-                biography
-                location {
-                    latitude
-                    longitude
+
+                emailAddressUpdate {
+                    emailAddress
+                    createdAt
                 }
-                maximumParticipants
-                maximumPrice
-                maximumTravelDistance
-                minimumParticipants
-                minimumPrice
-                rank
-                travelExpenses
-                ratingAverage
-                ratingCount
-                hasStripePayoutMethodActivated
+                phoneNumberUpdate {
+                    phoneNumber
+                    createdAt
+                }
+
+                cook {
+                    languages {
+                        languageId
+                        title
+                    }
+                    isLocked
+                    isVisible
+                    biography
+                    location {
+                        latitude
+                        longitude
+                    }
+                    maximumParticipants
+                    maximumPrice
+                    maximumTravelDistance
+                    minimumParticipants
+                    minimumPrice
+                    rank
+                    travelExpenses
+                    ratingAverage
+                    ratingCount
+                    hasStripePayoutMethodActivated
+                }
             }
         }
     }

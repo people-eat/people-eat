@@ -1,6 +1,6 @@
-query GetProfilePersonalInformation {
+query GetProfilePersonalInformation($userId: String!) {
     users {
-        me {
+        findOne(userId: $userId) {
             userId
             firstName
             lastName

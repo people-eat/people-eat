@@ -2,7 +2,6 @@ import { MenuCard, PEHeader, PELink, PEProfileNavigation } from '@people-eat/web
 import {
     GetCookProfileMenusPageDataDocument,
     GetCookProfileMenusPageDataQuery,
-    GetSignedInUserDocument,
     SignedInUser,
     calculateMenuPrice,
     formatPrice,
@@ -20,26 +19,23 @@ const howToBecomeAChefRedirect: { redirect: Redirect } = { redirect: { permanent
 interface ServerSideProps {
     signedInUser: SignedInUser;
     cookieSettings: CookieSettings | null;
-    initialMenus: GetCookProfileMenusPageDataQuery['cooks']['menus']['findMany'];
+    initialMenus: NonNullable<NonNullable<GetCookProfileMenusPageDataQuery['sessions']['current']['user']>['cook']>['menus'];
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ req }) => {
     const apolloClient = createApolloClient(req.headers.cookie);
 
     try {
-        const userData = await apolloClient.query({ query: GetSignedInUserDocument });
-        const signedInUser = userData.data.users.signedInUser;
-        if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
-        if (!signedInUser.isCook) return howToBecomeAChefRedirect;
-        const cookId = signedInUser.userId;
-
-        const { data } = await apolloClient.query({ query: GetCookProfileMenusPageDataDocument, variables: { cookId } });
+        const { data } = await apolloClient.query({ query: GetCookProfileMenusPageDataDocument });
+        const user = data.sessions.current.user;
+        if (!user) return redirectTo.signIn({ returnTo: req.url });
+        if (!user.cook) return howToBecomeAChefRedirect;
 
         return {
             props: {
-                signedInUser,
-                initialMenus: data.cooks.menus.findMany,
-                cookieSettings: data.sessions.current?.cookieSettings
+                signedInUser: user,
+                initialMenus: user.cook.menus,
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

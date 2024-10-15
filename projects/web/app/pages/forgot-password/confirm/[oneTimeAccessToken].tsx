@@ -106,7 +106,7 @@ export default function ForgotPasswordConfirmPage() {
         }, 1000);
     }, [confirmOneTimeAccessToken, getSignedInUser]);
 
-    const signedInUserId = profileData?.users.signedInUser?.userId;
+    const signedInUserId = profileData?.sessions.current.user?.userId;
 
     function onSavePassword({ password }: SignUpFormInputs): void {
         if (!signedInUserId) return;

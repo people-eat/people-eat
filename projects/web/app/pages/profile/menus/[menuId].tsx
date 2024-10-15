@@ -44,7 +44,7 @@ interface ServerSideProps {
     cookieSettings: CookieSettings | null;
     categories: CategoryOption[];
     kitchens: KitchenOption[];
-    meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['users']['signedInUser']>['cook']>['meals'];
+    meals: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['sessions']['current']['user']>['cook']>['meals'];
     menu: NonNullable<NonNullable<GetCookProfileMenuPageDataQuery['cooks']['menus']>['findOne']>;
 }
 
@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
-        const signedInUser = userData.data.users.signedInUser;
+        const signedInUser = userData.data.sessions.current.user;
         if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
@@ -71,9 +71,9 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 signedInUser,
                 categories: data.categories.findAll,
                 kitchens: data.kitchens.findAll,
-                meals: data.users.signedInUser?.cook?.meals ?? [],
+                meals: data.sessions.current.user?.cook?.meals ?? [],
                 menu,
-                cookieSettings: data.sessions.current?.cookieSettings
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

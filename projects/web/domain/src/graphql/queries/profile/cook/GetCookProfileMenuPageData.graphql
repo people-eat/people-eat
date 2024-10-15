@@ -1,24 +1,23 @@
 query GetCookProfileMenuPageData($menuId: String!, $cookId: String!) {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-            cook {
-                meals {
-                    mealId
-                    cookId
-                    title
-                    type
-                    description
-                    imageUrl
-                    createdAt
-                }
-            }
-        }
-    }
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
+
+                cook {
+                    meals {
+                        mealId
+                        cookId
+                        title
+                        type
+                        description
+                        imageUrl
+                        createdAt
+                    }
+                }
             }
         }
     }

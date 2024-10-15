@@ -219,20 +219,16 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
     try {
         const { data } = await apolloClient.query({ query: GetHomePageDataDocument });
+        const { cookieSettings, user: signedInUser } = data.sessions.current;
 
         const heroMenuGroups = data.publicMenus.findHeroGroups;
         const heroCookGroups = data.publicCooks.findHeroGroups;
 
         return {
             props: {
-                signedInUser: data.users.signedInUser ?? null,
+                signedInUser,
                 searchParams,
-                cookieSettings: data.sessions.current?.cookieSettings
-                    ? {
-                          googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
-                          clarity: data.sessions.current.cookieSettings.clarity ?? null,
-                      }
-                    : null,
+                cookieSettings,
                 heroMenuGroups,
                 heroCookGroups,
             },

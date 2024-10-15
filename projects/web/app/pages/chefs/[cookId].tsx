@@ -147,7 +147,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         });
 
         const cook = data.publicCooks.findOne;
-        const initialSignedInUser = data.users.signedInUser ?? null;
+        const initialSignedInUser = data.sessions.current.user ?? null;
 
         if (!cook) return publicCooksRedirect;
 
@@ -165,7 +165,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
                 kitchens: data.kitchens.findAll,
                 allergies: data.allergies.findAll,
                 searchParams,
-                cookieSettings: data.sessions.current?.cookieSettings
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

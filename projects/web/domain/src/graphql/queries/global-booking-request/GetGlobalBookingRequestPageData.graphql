@@ -1,13 +1,11 @@
 query GetGlobalBookingRequestPageData {
-    users {
-        signedInUser: me {
-            ...SignedInUser
-        }
-    }
     sessions {
         current {
             cookieSettings {
                 ...CookieSettings
+            }
+            user {
+                ...SignedInUser
             }
         }
     }

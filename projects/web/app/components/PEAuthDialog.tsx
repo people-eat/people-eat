@@ -79,8 +79,8 @@ export function PEAuthDialog({
                         onSignInSuccessful?.();
                         getSignedInUser()
                             .then((result) =>
-                                result.data?.users.signedInUser
-                                    ? onSignedInUserFetched?.(result.data.users.signedInUser)
+                                result.data?.sessions.current.user
+                                    ? onSignedInUserFetched?.(result.data?.sessions.current.user)
                                     : setShowSignIn(true),
                             )
                             .catch(() => setShowSignIn(true));

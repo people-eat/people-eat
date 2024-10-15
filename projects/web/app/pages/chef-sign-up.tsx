@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
     try {
         const { data } = await apolloClient.query({ query: GetCookSignUpPageDataDocument });
 
-        const signedInUser = data.users.signedInUser;
+        const signedInUser = data.sessions.current.user;
 
         if (signedInUser?.isCook) {
             return cookProfilePageRedirect;
@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             props: {
                 signedInUser: signedInUser ?? null,
                 languages: data.languages.findAll,
-                cookieSettings: data.sessions.current?.cookieSettings
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

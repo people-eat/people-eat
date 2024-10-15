@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
 
     try {
         const userData = await apolloClient.query({ query: GetSignedInUserDocument });
-        const signedInUser = userData.data.users.signedInUser;
+        const signedInUser = userData.data.sessions.current.user;
         if (!signedInUser) return redirectTo.signIn({ returnTo: req.url });
         if (!signedInUser.isCook) return howToBecomeAChefRedirect;
         const cookId = signedInUser.userId;
@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
             props: {
                 signedInUser,
                 initialMeals: data.cooks.meals.findMany,
-                cookieSettings: data.sessions.current?.cookieSettings
+                cookieSettings: data.sessions.current.cookieSettings
                     ? {
                           googleAnalytics: data.sessions.current.cookieSettings.googleAnalytics ?? null,
                           clarity: data.sessions.current.cookieSettings.clarity ?? null,

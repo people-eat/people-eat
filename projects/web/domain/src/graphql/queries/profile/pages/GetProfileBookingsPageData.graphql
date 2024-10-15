@@ -11,12 +11,12 @@ query GetProfileBookingsPageData(
             cookieSettings {
                 ...CookieSettings
             }
+            user {
+                ...SignedInUser
+            }
         }
     }
     users {
-        signedInUser: me {
-            ...SignedInUser
-        }
         bookingRequests(userId: $userId) {
             findMany {
                 bookingRequestId
