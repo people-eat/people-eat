@@ -147,17 +147,19 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({ 
         });
 
         const cook = data.publicCooks.findOne;
+        const initialSignedInUser = data.users.signedInUser ?? null;
 
         if (!cook) return publicCooksRedirect;
 
-        apolloClient
-            .mutate({ mutation: CreateOneCookVisitDocument, variables: { cookId } })
-            .then(() => undefined)
-            .catch(() => undefined);
+        if (!initialSignedInUser || (initialSignedInUser && !initialSignedInUser.isAdmin))
+            apolloClient
+                .mutate({ mutation: CreateOneCookVisitDocument, variables: { cookId } })
+                .then(() => undefined)
+                .catch(() => undefined);
 
         return {
             props: {
-                initialSignedInUser: data.users.signedInUser ?? null,
+                initialSignedInUser,
                 cook,
                 categories: data.categories.findAll,
                 kitchens: data.kitchens.findAll,
