@@ -1,0 +1,15 @@
+mutation CreateOneUser($request: CreateOneUserRequest!, $profilePicture: Upload) {
+    users {
+        createOne(request: $request, profilePicture: $profilePicture) {
+            ... on CreateOneUserSuccessResult {
+                succeeded
+            }
+            ... on CreateOneUserFailedResult {
+                failed
+            }
+            ... on CreateOneUserFailedAlreadyExistsResult {
+                alreadyExists
+            }
+        }
+    }
+}
