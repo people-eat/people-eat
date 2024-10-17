@@ -68,9 +68,10 @@ export default function ChefSignUpPage({ signedInUser, languages, cookieSettings
         useMutation(CreateOneCookDocument);
 
     const showFailedAlert =
-        (createUserData ? !createUserData.users.success : false) || (createCookData ? !createCookData.cooks.success : false);
+        createUserData?.users.createOne.__typename === 'CreateOneUserFailedResult' ||
+        (createCookData ? !createCookData.cooks.success : false);
 
-    const showSuccessAlertForNewUser = createUserData?.users.success ?? false;
+    const showSuccessAlertForNewUser = createUserData?.users.createOne.__typename === 'CreateOneUserSuccessResult';
     const showSuccessAlertForExistingUser = createCookData?.cooks.success ?? false;
 
     const abc = setup()

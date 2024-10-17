@@ -1,5 +1,0 @@
-mutation CreateOneUser($request: CreateOneUserRequest!, $profilePicture: Upload) {
-    users {
-        success: createOne(request: $request, profilePicture: $profilePicture)
-    }
-}

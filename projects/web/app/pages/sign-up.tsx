@@ -49,8 +49,9 @@ export default function SignUpPage({ cookieSettings }: ServerSideProps) {
 
     const [createOneUser, { loading, data, reset }] = useMutation(CreateOneUserDocument);
 
-    const showCreateUserSuccessAlert = data?.users.success ?? false;
-    const showCreatesUerFailedAlert = data ? !data.users.success : false;
+    const showCreateUserSuccessAlert = data?.users.createOne.__typename === 'CreateOneUserSuccessResult';
+    const showCreatesUserFailedAlert = data?.users.createOne.__typename === 'CreateOneUserFailedResult';
+    const showAlreadyExistsAlert = data?.users.createOne.__typename === 'CreateOneUserFailedAlreadyExistsResult';
 
     const abc = setup()
         ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
@@ -84,10 +85,22 @@ export default function SignUpPage({ cookieSettings }: ServerSideProps) {
 
             <PEAlert
                 type="ERROR"
-                open={showCreatesUerFailedAlert}
+                open={showCreatesUserFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"
                 primaryButton={{ title: 'Erneut versuchen', onClick: () => reset() }}
+            />
+
+            <PEAlert
+                type="ERROR"
+                open={showAlreadyExistsAlert}
+                title="Es existiert bereits ein Benutzer mit der von dir angegebenen Email Adresse"
+                subtitle="Anstatt dich zu registrieren, melde dich bitte an. Solltest du dein Passwort vergessen haben, wähle 'Passwort vergessen?'"
+                primaryButton={{
+                    title: 'Zur Anmeldung',
+                    onClick: () => router.push('/sign-in'),
+                }}
+                secondaryButton={{ title: 'Passwort vergessen?', onClick: () => undefined }}
             />
 
             <div className="bg-white rounded-xl flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 gap-4">

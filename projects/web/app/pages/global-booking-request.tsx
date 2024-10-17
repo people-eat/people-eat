@@ -159,10 +159,13 @@ export default function GlobalBookingRequestPage({ signedInUser, searchParams, c
 
     // const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
-    const showSuccessAlert = (createUserData?.users.success ?? false) || (createRequestData?.users.globalBookingRequests.success ?? false);
+    const showSuccessAlert =
+        createUserData?.users.createOne.__typename === 'CreateOneUserSuccessResult' ||
+        (createRequestData?.users.globalBookingRequests.success ?? false);
     const showFailedAlert =
-        (createUserData ? !createUserData.users.success : false) ||
+        createUserData?.users.createOne.__typename === 'CreateOneUserFailedResult' ||
         (createRequestData ? !createRequestData.users.globalBookingRequests.success : false);
+    const showAlreadyExistsAlert = createUserData?.users.createOne.__typename === 'CreateOneUserFailedAlreadyExistsResult';
 
     const abc = setup()
         ?.init(process.env.NEXT_PUBLIC_META_PIXEL_ID ?? 'no-meta-pixel-id')
@@ -206,6 +209,17 @@ export default function GlobalBookingRequestPage({ signedInUser, searchParams, c
                             resetCreateUser();
                             resetCreateRequest();
                         },
+                    }}
+                />
+
+                <PEAlert
+                    type="ERROR"
+                    open={showAlreadyExistsAlert}
+                    title="Es existiert bereits ein Benutzer mit der von dir angegebenen Email Adresse"
+                    subtitle="Anstatt dich zu registrieren, melde dich bitte an."
+                    primaryButton={{
+                        title: 'Zur Anmeldung',
+                        onClick: () => router.push('/sign-in'),
                     }}
                 />
 

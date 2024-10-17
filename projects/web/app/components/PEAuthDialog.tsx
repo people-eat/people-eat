@@ -46,8 +46,9 @@ export function PEAuthDialog({
         }
     }, [open]);
 
-    const showCreateUserSuccessAlert = signUpData?.users.success ?? false;
-    const showCreatesUerFailedAlert = signUpData ? !signUpData.users.success : false;
+    const showCreateUserSuccessAlert = signUpData?.users.createOne.__typename === 'CreateOneUserSuccessResult';
+    const showCreatesUserFailedAlert = signUpData?.users.createOne.__typename === 'CreateOneUserFailedResult';
+    const showAlreadyExistsAlert = signUpData?.users.createOne.__typename === 'CreateOneUserFailedAlreadyExistsResult';
 
     const showSignInFailedAlert = signInData ? !signInData.sessions.success : false;
 
@@ -153,10 +154,26 @@ export function PEAuthDialog({
 
             <PEAlert
                 type="ERROR"
-                open={showCreatesUerFailedAlert}
+                open={showCreatesUserFailedAlert}
                 title="Leider ist ein Fehler aufgetreten"
                 subtitle="Du kannst es erneut versuchen"
                 primaryButton={{ title: 'Erneut versuchen', onClick: () => signUpReset() }}
+            />
+
+            <PEAlert
+                type="ERROR"
+                open={showAlreadyExistsAlert}
+                title="Es existiert bereits ein Benutzer mit der von dir angegebenen Email Adresse"
+                subtitle="Anstatt dich zu registrieren, melde dich bitte an. Solltest du dein Passwort vergessen haben, wähle 'Passwort vergessen?'"
+                primaryButton={{
+                    title: 'Zur Anmeldung',
+                    onClick: () => {
+                        setShowSignIn(true);
+                        setShowSignUp(false);
+                        signUpReset();
+                    },
+                }}
+                secondaryButton={{ title: 'Passwort vergessen?', onClick: () => undefined }}
             />
 
             {/* Fetch signed in user */}
